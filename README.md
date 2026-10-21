@@ -217,6 +217,9 @@ What the tools are built from and tested on:
 - [iPerUDT](https://github.com/royakabiri/iPerUDT): Roya Kabiri, Simin Karimi and Mihai Surdeanu, [Informal Persian Universal Dependency Treebank](https://aclanthology.org/2022.lrec-1.766/), LREC 2022.
 - Charles Elkan and Keith Noto, [Learning Classifiers from Only Positive and Unlabeled Data](https://cseweb.ucsd.edu/~elkan/posonly.pdf), KDD 2008. The learned ezāfe classifier on the `dev` branch.
 
+- L. P. Elwell-Sutton, *The Persian Metres*. Cambridge University Press, 1976.
+- Aso Mahmudi and Hadi Veisi, [Automatic Meter Classification of Kurdish Poems](https://arxiv.org/abs/2102.12109), 2021: the same design as `aruz` (enumerate weight readings, score over the poem), for Kurdish.
+
 Other Persian tools and data I found useful:
 
 - [Hazm](https://github.com/roshan-research/hazm), [Parsivar](https://github.com/ICTRC/Parsivar), [DadmaTools](https://github.com/Dadmatech/DadmaTools) and [Stanza](https://github.com/stanfordnlp/stanza): normalisation, tokenisation, tagging and parsing.
@@ -224,3 +227,7 @@ Other Persian tools and data I found useful:
 - [PARSEME shared task data](https://gitlab.com/parseme/sharedtask-data), including Persian multiword expressions.
 - [ParsMap](https://huggingface.co/datasets/sbunlp/ParsMap): formal and informal Persian pairs.
 - [farhangestan](https://github.com/5j9/farhangestan): the Academy's approved terms as data.
+- [Shekar](https://github.com/amirivojdan/shekar): an Academy-guided normaliser and spell checker, the closest toolkit to this one.
+- Pegah Nourian et al., [On the Importance of Ezafe Construction in Persian Parsing](https://aclanthology.org/P15-2144/), ACL 2015, an ezāfe layer on the dependency treebank; and Ehsan Doostmohammadi et al., [Persian Ezafe Recognition Using Transformers and Its Role in Part-Of-Speech Tagging](https://arxiv.org/abs/2009.09474), 2020.
+- [GE2PE](https://github.com/Sharif-SLPL/GE2PE) and [HomoRich](https://huggingface.co/datasets/MahtaFetrat/HomoRich-G2P-Persian): Persian G2P with ezāfe and homograph sets.
+- [PerLex](https://aclanthology.org/L10-1486/), a morphological lexicon, and [PersPred](https://aclanthology.org/W13-1002/), light-verb constructions.
