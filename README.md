@@ -51,7 +51,7 @@ scanner reaches his exact weights for 494 of them.
 ```sh
 ghazal-nlp ganjoor <snapshot> > poems.jsonl
 ghazal-nlp aruz-eval poems.jsonl [--no-lexicon] [--stripped]
-ghazal-nlp aruz-derive poems.jsonl   # rebuilds metres.tsv and weights.tsv
+ghazal-nlp aruz-derive poems.jsonl --out ghazal_nlp/data
 ```
 
 ### `verb`: verb analysis and generation
@@ -73,8 +73,8 @@ Tested on every VERB and AUX word in the UD Persian treebanks:
 | | Seraji | PerDT | iPerUDT (informal) |
 |---|---:|---:|---:|
 | verbs | 17,680 | 72,817 | 8,911 |
-| analysed | 82.2% | 89.0% | 55.4% |
-| features agree, when analysed | 99.3% | 98.8% | 97.8% |
+| analysed | 82.6% | 89.3% | 59.0% |
+| features agree, when analysed | 99.4% | 98.9% | 97.9% |
 | readings per analysed verb | 1.14 | 1.14 | 1.13 |
 | می‌ and نمی‌ forms analysed | 99.2% | 98.9% | 70.3% |
 
@@ -107,7 +107,7 @@ each reading occurs. `data/vowels-review.tsv` lists the words with more than
 one reading.
 
 ```sh
-ghazal-nlp vowels-derive poems.jsonl
+ghazal-nlp vowels-derive poems.jsonl --out ghazal_nlp/data
 ```
 
 ### `ezafe`: the ezāfe after a silent ه
@@ -198,9 +198,15 @@ ghazal-nlp arabic "چنانکه گفته‌اند الحمد لله رب الع�
 
 ## Data
 
-The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0; each file's
+The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0; each TSV's
 header says where it comes from. Ganjoor and the treebanks are only read for
 testing and aren't included.
+
+`ezafe-written-dev.jsonl` and `ezafe-junctions-dev.jsonl` are my labels on
+silent-ه junctions, one site per line: the text around it with the junction's
+mark removed (`neutralized_text`, `neutral_head_span`, `neutral_next_span`),
+the mark that was there (`observed_mark_class`), `blind` (my label without
+seeing the mark) and `revised` (my final label). Many sites are in both files.
 
 ## References
 

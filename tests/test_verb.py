@@ -28,7 +28,7 @@ def test_what_it_refuses():
     assert all(r.person == 3 and r.number == "sing" for r in A.analyze("می‌گوید").readings)
     assert {"شدن", "شستن"} <= lemmas("می‌شود")
     assert A.analyze("کتاب").abstention == "unknown_stem"
-    assert A.analyze("بینداز").abstention == "epenthesis_not_modelled"
+    assert A.analyze("").abstention == "empty"
     assert A.analyze("می‌توان").readings and A.analyze("نمی‌توان").readings
     assert not A.analyze("توان").readings and not A.analyze("می‌نوش").readings
     assert not A.analyze("می‌آرد").readings and not A.analyze("آرد").readings and "آوردن" in lemmas("می‌آورد")
@@ -56,8 +56,11 @@ def test_conjugation_round_trips(infinitive, kwargs, expected):
 
 
 def test_generation():
-    assert A.conjugate("آمدن", mood="subjunctive", person=1) is None
     assert A.conjugate("رفتن", person=4) is None
+    assert A.conjugate("گفتن", tense="past", mood="subjunctive") is None
+    assert A.conjugate("گفتن", mood="imperative", person=3) is None
+    assert A.conjugate("رفتن", aspect="imperfective_perfect") is None
+    assert A.conjugate("گفتن", mood="subjunctive", aspect="imperfective") is None
     for person in (1, 2, 3):
         for number in ("sing", "plur"):
             form = A.conjugate("رفتن", tense="past", person=person, number=number)
@@ -88,7 +91,7 @@ def test_preverb_ambiguity_and_omitted_b():
 @pytest.mark.parametrize("token", [
     "در", "بر", "در خانه", "بر میز", "در می‌خواند", "بر می‌خواند", "درکشتن", "درداشتن", "سرکشتن", "بازکشتن",
     "درمی‌خواند", "برمی‌پژوهد", "وامی‌رود", "برمی‌ناشناختهد", "می‌ناشناخته", "نمی‌ناشناخته",
-    "بایدن", "درایدن", "می‌بایدن", "درمی‌بایدن", "بر‌می‌‌دارد", "بر می‌دارد", "درنیامد", "برنیفتاد",
+    "بایدن", "درایدن", "می‌بایدن", "درمی‌بایدن", "بر‌می‌‌دارد", "بر می‌دارد",
 ])
 def test_abstains(token):
     assert not A.analyze(token).readings
@@ -206,7 +209,7 @@ def test_constructions(text, kind, aspect, mood, person):
 
 def test_construction_limits():
     assert not A.analyze("باش").readings and not A.analyze("است").readings
-    assert {r.mood for r in A.analyze("باشد").readings} == {"indicative"}
+    assert {r.mood for r in A.analyze("باشد").readings} == {"indicative", "subjunctive"}
     assert not constructions(A.analyze("رفته‌است"), A.analyze("بود"))
     assert {r.mood for r in constructions(A.analyze("رفته"), A.analyze("باشید"))} == {"subjunctive", "imperative"}
     r, = constructions(A.analyze("نخواهیم"), A.analyze("رفت"))
@@ -232,3 +235,29 @@ def test_ud_scoring(tmp_path):
     r = verb_eval.evaluate([path], A)
     assert (r["verbs"], r["analysed"], r["lemma_among_readings"], r["features_when_analysed"]) == (2, 0.5, 0.5, 1.0)
     assert r["mi_words"] == 1 and r["mi_analysed"] == 1.0
+
+
+@pytest.mark.parametrize("form,lemma,person,number", [
+    ("بیاید", "آمدن", 3, "sing"), ("بیایم", "آمدن", 1, "sing"), ("بیایید", "آمدن", 2, "plur"), ("نیامد", "آمدن", 3, "sing"),
+    ("بیفتد", "افتادن", 3, "sing"), ("نینداخت", "انداختن", 3, "sing"), ("بیاورد", "آوردن", 3, "sing"),
+    ("درنیامد", "درآمدن", 3, "sing"),
+])
+def test_the_glide_after_b_and_n(form, lemma, person, number):
+    assert (lemma, person, number) in {(r.lemma, r.person, r.number) for r in A.analyze(form).readings}
+    assert not any(r.person == 2 and r.number == "plur" for r in A.analyze("بیاید").readings)
+
+
+@pytest.mark.parametrize("infinitive,kwargs,expected", [
+    ("آمدن", {"mood": "subjunctive", "person": 1}, "بیایم"), ("آمدن", {"mood": "imperative", "person": 2}, "بیا"),
+    ("آمدن", {"mood": "imperative", "person": 2, "number": "plur"}, "بیایید"),
+    ("انداختن", {"mood": "imperative", "person": 2}, "بینداز"), ("آمدن", {"tense": "past", "polarity": "neg"}, "نیامد"),
+])
+def test_generation_writes_the_glide(infinitive, kwargs, expected):
+    assert A.conjugate(infinitive, **kwargs) == expected
+
+
+@pytest.mark.parametrize("written,lemma", [
+    ("میرود", "رفتن"), ("نمیخواهد", "خواستن"), ("دانستهاند", "دانستن"), ("مي‌رود", "رفتن"), ("ﻣﻲ‌رود", "رفتن"),
+])
+def test_other_encodings_and_a_missing_zwnj(written, lemma):
+    assert lemma in lemmas(written)

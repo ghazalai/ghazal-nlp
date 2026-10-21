@@ -15,6 +15,13 @@ def lines(a) -> list[str]:
     return a.text or sys.stdin.read().splitlines()
 
 
+def snapshot(a):
+    if not (a.snapshot / "cat").is_dir():
+        sys.exit(f"ghazal-nlp: {a.snapshot} is not a Ganjoor API snapshot (no cat/ folder)")
+    for poem in ganjoor.poems(a.snapshot):
+        print(json.dumps(poem, ensure_ascii=False))
+
+
 def scan(a):
     scanner = aruz.Scanner(lexicon=None if a.no_lexicon else aruz.WeightLexicon.load(), marks=None if a.stripped else aruz.Marks())
     if a.poem:
@@ -34,16 +41,15 @@ def aruz_scores(a):
     scanner = aruz.Scanner(lexicon=None if a.no_lexicon else aruz.WeightLexicon.load(), marks=None if a.stripped else aruz.Marks())
     poems = aruz_eval.load_gold(a.gold)
     report = aruz_eval.evaluate(poems, scanner, split=a.split, limit=a.limit)
-    report["readings"] = {name: aruz_eval.score_readings(aruz_eval.load_readings(aruz.DATA / name), scanner)
-                          for name in ("readings-thiesen.tsv", "readings-drafted.tsv")}
+    report["thiesen"] = aruz_eval.score_readings(aruz_eval.load_readings(aruz.DATA / "readings-thiesen.tsv"), scanner)
     dump(report)
 
 
 def aruz_derive(a):
     poems = aruz_eval.load_gold(a.gold)
-    aruz_eval.write_inventory(aruz_eval.build_inventory(poems))
-    weights, report = aruz_eval.derive_weights(poems, aruz.Inventory.load())
-    aruz_eval.write_weights(weights, report)
+    aruz_eval.write_inventory(aruz_eval.build_inventory(poems), a.out / "metres.tsv")
+    weights, report = aruz_eval.derive_weights(poems, aruz.Inventory.load(a.out / "metres.tsv"))
+    aruz_eval.write_weights(weights, report, a.out / "weights.tsv")
     dump(report)
 
 
@@ -74,7 +80,7 @@ def vocalise(a):
 
 def vowels_derive(a):
     lex, queue, report = vowels.derive(a.gold)
-    vowels.write(lex, queue, report)
+    vowels.write(lex, queue, report, a.out)
     dump(report)
 
 
@@ -156,8 +162,7 @@ def main() -> None:
     c.add_argument("--no-lexicon", action="store_true", help="the unsupervised scanner")
     c.add_argument("--stripped", action="store_true", help="ignore the editor's marks")
     c.add_argument("--json", action="store_true")
-    c = command("ganjoor", lambda a: [print(json.dumps(x, ensure_ascii=False)) for x in ganjoor.poems(a.snapshot)],
-                "poems from a Ganjoor API snapshot, as JSON lines")
+    c = command("ganjoor", snapshot, "poems from a Ganjoor API snapshot, as JSON lines")
     c.add_argument("snapshot", type=Path)
     c = command("aruz-eval", aruz_scores, "score the scanner on the Ganjoor gold set and the reading sets")
     c.add_argument("gold", type=Path, help="the output of `ganjoor`")
@@ -165,8 +170,9 @@ def main() -> None:
     c.add_argument("--limit", type=int, default=2000)
     c.add_argument("--no-lexicon", action="store_true")
     c.add_argument("--stripped", action="store_true")
-    c = command("aruz-derive", aruz_derive, "rebuild the metre inventory and weight lexicon")
+    c = command("aruz-derive", aruz_derive, "rebuild metres.tsv and weights.tsv")
     c.add_argument("gold", type=Path)
+    c.add_argument("--out", type=Path, default=Path("."), help="where to write them")
     c = command("verb", analyse, "every reading of verb tokens")
     c.add_argument("text", nargs="*")
     c.add_argument("--json", action="store_true")
@@ -183,8 +189,9 @@ def main() -> None:
     c.add_argument("conllu", nargs="+", type=Path)
     c = command("vowels", vocalise, "the readings editors wrote for each word")
     c.add_argument("text", nargs="*")
-    c = command("vowels-derive", vowels_derive, "rebuild the vowel lexicon and review queue")
+    c = command("vowels-derive", vowels_derive, "rebuild vowels-lexicon.tsv and vowels-review.tsv")
     c.add_argument("gold", type=Path, help="the output of `ganjoor`")
+    c.add_argument("--out", type=Path, default=Path("."), help="where to write them")
     c = command("ezafe", junctions, "each silent-ه junction and whether it carries an ezāfe")
     c.add_argument("text", nargs="*")
     command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on the development rulings")
@@ -209,7 +216,10 @@ def main() -> None:
     c.add_argument("--quran", type=Path, action="append", default=[], help="a Tanzil copy, sura|aya|text lines")
     c.add_argument("--json", action="store_true")
     a = p.parse_args()
-    a.run(a)
+    try:
+        a.run(a)
+    except OSError as e:
+        sys.exit(f"ghazal-nlp: {e}")
 
 
 if __name__ == "__main__":

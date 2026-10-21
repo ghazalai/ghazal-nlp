@@ -6,8 +6,9 @@ from __future__ import annotations
 import hashlib
 import json
 import random
+import re
 from collections import Counter, defaultdict
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import date
 from pathlib import Path
 
@@ -43,8 +44,17 @@ def load_gold(path: Path) -> list[GoldPoem]:
         for line in f:
             p = json.loads(line)
             if p["metre_status"] == "single" and p["text"] and p["metre"]:
-                out.append(GoldPoem(p["id"], p["metre"], p["text"], held_out(p["id"])))
-    return out
+                out.append(GoldPoem(p["id"], tidy(p["metre"]), p["text"], held_out(p["id"])))
+    named = Counter(p.metre for p in out if not p.held_out and "(" in p.metre)
+    names = {}
+    for label, _ in named.most_common():
+        names.setdefault(label.split(" (")[0], label)
+    return [replace(p, metre=names.get(p.metre, p.metre)) for p in out]
+
+
+def tidy(label: str) -> str:
+    """One space between words and before the name."""
+    return re.sub(r"\s*\(", " (", " ".join(label.split()))
 
 
 def rubai_variants(pattern: str) -> list[str]:

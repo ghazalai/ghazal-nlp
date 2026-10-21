@@ -10,13 +10,15 @@ the licences each reading needed.
 from __future__ import annotations
 
 import re
-import unicodedata
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 from functools import lru_cache
 from pathlib import Path
 
+from .text import fold
+
 SHORT, LONG = "u", "-"
+MIN_POEMS = 1
 DATA = Path(__file__).parent / "data"
 
 # Each foot scans as its own pronunciation. Ganjoor drops the final damma of the
@@ -129,7 +131,7 @@ def _kept_marks(raw: str, ch: str, initial: bool, final: bool, word: str, sel: M
 
 def prepare(line: str, *, marks: Marks | None = None) -> Skeleton:
     """Fold, strip and split a line; with ``marks``, keep them beside the letters."""
-    text = unicodedata.normalize("NFC", line)
+    text = fold(line)
     if marks is not None:
         text = text.replace("ۀ", "ه" + HAMZA)
     text = text.translate(FOLD)
@@ -664,10 +666,13 @@ class Inventory:
         return len(self.label_patterns)
 
     @classmethod
-    def load(cls, path: Path = DATA / "metres.tsv") -> Inventory:
+    def load(cls, path: Path = DATA / "metres.tsv", min_poems: int = MIN_POEMS) -> Inventory:
+        """The metres at least ``min_poems`` development poems carry: a label on
+        one or two poems is as likely a typo as a metre."""
         rows = [line.split("\t") for line in path.read_text(encoding="utf-8").splitlines()
                 if line.strip() and not line.startswith("#")]
-        return cls(MetreEntry(label, pattern, source, int(poems)) for label, pattern, source, poems in rows)
+        return cls(MetreEntry(label, pattern, source, int(poems)) for label, pattern, source, poems in rows
+                   if int(poems) >= min_poems)
 
 
 @dataclass
@@ -818,8 +823,9 @@ VOTE_MARGIN = 6  # a line votes for every metre within this many licences of its
 
 
 def hemistichs(text: str) -> list[str]:
-    """One hemistich per line; lines under six letters carry no metre."""
-    lines = [line.strip() for line in text.splitlines()]
+    """One hemistich per line, or per side of a tab or a wider space; lines
+    under six letters carry no metre."""
+    lines = [half.strip() for line in fold(text).splitlines() for half in re.split(r"\t|\s{3,}", line)]
     return [line for line in lines if sum(c in LETTERS for c in line) >= 6]
 
 

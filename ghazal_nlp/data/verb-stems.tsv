@@ -1,6 +1,6 @@
 # Verb stems: infinitive, past stems, present stems; alternates split by "|".
-# Where a present stem changes after ب، ن or می (دستور خطّ فارسی، صص ۳۸–۳۹) the
-# written alternate is listed too: آمدن has آ and یا.
+# After ب and ن the analyser writes آ as یا and ا as ی itself (بیاید، بیفتد,
+# دستور خطّ فارسی، صص ۳۸–۳۹); other alternates are listed (بنداز، میفتد).
 # Sources: the standard paradigm tables; John Mace, Persian Grammar, Appendix I;
 # and the class rules (ـیدن، ـاندن، ـودن، ـاختن/ـیختن/ـوختن) with their exceptions.
 # Each stem was checked against a corpus for present forms its past stem can't make.
@@ -10,14 +10,14 @@
 کردن	کرد	کن
 داشتن	داشت	دار
 رفتن	رفت	رو
-آمدن	آمد	آ|آی|یا
+آمدن	آمد	آ|آی
 دادن	داد	ده
 گفتن	گفت	گو|گوی
 دیدن	دید	بین
 خواستن	خواست	خواه
 توانستن	توانست	توان
 گرفتن	گرفت	گیر
-آوردن	آورد	آور|یاور
+آوردن	آورد	آور
 یافتن	یافت	یاب
 دانستن	دانست	دان
 زدن	زد	زن
@@ -49,7 +49,7 @@
 کشتن	کشت	کش
 پذیرفتن	پذیرفت	پذیر
 فرستادن	فرستاد	فرست
-آموختن	آموخت	آموز|یاموز
+آموختن	آموخت	آموز
 اندیشیدن	اندیشید	اندیش
 رساندن	رساند	رسان
 گرداندن	گرداند	گردان

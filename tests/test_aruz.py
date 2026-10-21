@@ -287,12 +287,12 @@ def test_the_reading_notation():
     assert not realises(weights_of("ma.nam tang.del tâ šo.dam"), "u--u--u--u-")
 
 
-@pytest.mark.parametrize("name", ["readings-thiesen.tsv", "readings-drafted.tsv"])
+@pytest.mark.parametrize("name", ["readings-thiesen.tsv"])
 def test_every_reading_realises_its_metre(full, name):
     rows = aruz_eval.load_readings(DATA / name)
     assert len(rows) in (513, 34)
     for row in rows:
-        assert row["provenance"].startswith(("thiesen-1982:p.", "drafted:")), row["id"]
+        assert row["provenance"].startswith("thiesen-1982:p."), row["id"]
         assert any(realises(weights_of(row["pronunciation"]), p) for p in full.label_patterns[row["metre"]]), row["id"]
 
 

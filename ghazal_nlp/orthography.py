@@ -130,6 +130,7 @@ class AffixZwnj:
     lexical_exceptions: frozenset[str] = frozenset()
     require_host_in: frozenset[str] | None = None
     host_exceptions: frozenset[str] = frozenset()
+    solid_hosts: str | None = None
     free_form: bool = False
     min_host: int = 3
     space_severity: str = "violation"
@@ -177,6 +178,7 @@ class AffixZwnj:
                 )
 
     def _scan_solid(self, tokens):
+        hosts = closed_list(self.solid_hosts) if self.solid_hosts else None
         for token in tokens:
             if ZWNJ in token.text:
                 continue
@@ -193,6 +195,8 @@ class AffixZwnj:
                 if host and not self._exempt(word):
                     if len(host) < self.min_host or not PERSIAN.match(host):
                         yield Abstention(self.rule_id, "host_too_short_to_decide", (token.start, token.end), word)
+                    elif hosts is not None and host not in hosts:
+                        yield Abstention(self.rule_id, "host_not_attested", (token.start, token.end), word)
                     else:
                         yield Finding(
                             self.rule_id, self.layer, "solid_where_zwnj", (token.start, token.end), word,
@@ -264,7 +268,7 @@ def closed_list(name: str) -> dict[str, str]:
                 if (wrong := _spell(first, second, other)) != right:
                     table.setdefault(wrong, right)
         else:
-            table[cells[0]] = cells[1]
+            table[cells[0]] = cells[1] if len(cells) > 1 else ""
     return table
 
 
@@ -699,7 +703,11 @@ class RuleBase:
 
     def check(self, text: str, *, registers: Sequence[str] = ("formal_written",),
               min_confidence: str = "medium") -> Analysis:
-        floor = CONFIDENCE.get(min_confidence, 1)
+        if min_confidence not in CONFIDENCE:
+            raise ValueError(f"min_confidence is one of {sorted(CONFIDENCE)}")
+        if unknown := set(registers) - REGISTERS:
+            raise ValueError(f"unknown registers {sorted(unknown)}")
+        floor = CONFIDENCE[min_confidence]
         rules = self.for_registers(registers)
         findings, abstentions = [], []
         for rule in rules:

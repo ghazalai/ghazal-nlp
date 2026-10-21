@@ -29,20 +29,15 @@ source.page = 39
 source.locator = "بند «می و همی»"
 source.retrieved = "2026-08-04"
 source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
-detector.type = "affix_zwnj"
-detector.affix = "می"
-detector.variants = ["نمی"]
-detector.position = "prefix"
-detector.detect_space = true
-detector.detect_solid = false
-detector.free_form = true
-detector.min_host = 3
-examples.ok = ["می\u200cرود", "نمی\u200cنویسد", "کتاب را می\u200cخوانم"]
+detector.type = "verb_prefix"
+detector.exceptions = "ghazal-mi-words.tsv"
+examples.ok = ["می\u200cرود", "نمی\u200cنویسد", "کتاب را می\u200cخوانم", "میدان", "می ناب"]
 examples.violations = [
+  { text = "میرود", expect = "می\u200cرود" },
   { text = "می رود", expect = "می\u200cرود" },
   { text = "نمی گوید", expect = "نمی\u200cگوید" },
 ]
-notes = "Solid forms (میرود) aren't checked, since میدان، میهن، میوه start the same way; verb.py's stems could decide them. Medium confidence on spaces because می is also 'wine', and not run on verse for that reason."
+notes = "The verb analyser decides, so میدان and می (wine) are left alone; a verb it doesn't know isn't flagged."
 
 [[rule]]
 id = "academy.bi_prefix"
@@ -169,11 +164,12 @@ detector.detect_solid = true
 detector.free_form = true
 detector.min_host = 3
 detector.solid_exceptions = ["بهتر", "کهتر", "مهتر", "بیشتر", "کمتر", "کلانتر"]
+detector.solid_hosts = "comparative-hosts.tsv"
 detector.lexical_exceptions = [
   "دختر", "دفتر", "بستر", "اختر", "کبوتر", "پوستر", "شتر", "چتر", "تئاتر", "مستر", "دکتر",
   "انتر", "اکثر", "معتبر", "منتظر", "دلاور",
 ]
-examples.ok = ["بزرگ\u200cتر", "بهتر", "دختر", "زیبا\u200cترین"]
+examples.ok = ["بزرگ\u200cتر", "بهتر", "دختر", "زیبا\u200cترین", "کامپیوتر", "کیلومتر", "فیلتر"]
 examples.violations = [
   { text = "بزرگ تر", expect = "بزرگ\u200cتر" },
   { text = "بزرگتر", expect = "بزرگ\u200cتر" },

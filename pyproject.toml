@@ -1,11 +1,22 @@
 [project]
 name = "ghazal-nlp"
 version = "0.1.0"
-description = "Persian rules as small deterministic tools"
+description = "Small deterministic tools for Persian: metre, verbs, vowels, ezāfe, spelling"
 readme = "README.md"
-license = "MIT"
+license = "MIT AND CC-BY-4.0"
+license-files = ["LICENSE", "ghazal_nlp/data/LICENSE"]
+authors = [{ name = "Ali Julaee Rad" }]
 requires-python = ">=3.11"
 dependencies = []
+keywords = ["persian", "farsi", "nlp", "prosody", "aruz", "morphology", "orthography"]
+classifiers = [
+  "Natural Language :: Persian",
+  "Programming Language :: Python :: 3",
+  "Topic :: Text Processing :: Linguistic",
+]
+
+[project.urls]
+Source = "https://github.com/alijulaeerad/ghazal-nlp"
 
 [project.scripts]
 ghazal-nlp = "ghazal_nlp.__main__:main"

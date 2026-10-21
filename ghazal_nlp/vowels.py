@@ -19,6 +19,8 @@ from datetime import date
 from functools import lru_cache
 from pathlib import Path
 
+from .text import fold
+
 DATA = Path(__file__).parent / "data"
 SNAPSHOT = "Ganjoor API snapshot api-2026-08-03, every poem's text with the editors' marks (ganjoor.poems)"
 
@@ -174,7 +176,7 @@ class Lexicon(dict):
     """Skeleton to Entry, for every skeleton an editor marked."""
 
     def lookup(self, token: str) -> Entry | None:
-        return self.get(skeleton(split_terminal(canonicalise(token))[0]))
+        return self.get(skeleton(split_terminal(canonicalise(fold(token)))[0]))
 
     def settled(self) -> list[Entry]:
         return [e for e in self.values() if e.settled]
