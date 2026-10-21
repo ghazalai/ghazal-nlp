@@ -4,7 +4,7 @@ NLP tools for Farsi and its variations, python standard library were possible.
 
 ```sh
 pip install git+https://github.com/alijulaeerad/ghazal-nlp
-ghazal-nlp scan "طبعِ چون آب و غزل‌هایِ روان ما را بس"
+ghazal-nlp scan "یار با ماست، چه حاجت که زیادت طلبیم"
 ghazal-nlp verb "نمی‌گفتند برمی‌دارد"
 ghazal-nlp conjugate گفتن --tense past --aspect imperfective --person 1 --number plur
 ghazal-nlp check "آنها کتاب ها را میخوانند"
@@ -25,7 +25,7 @@ fit.
 
 ```python
 from ghazal_nlp import aruz
-s = aruz.scanner().scan("طبعِ چون آب و غزل‌هایِ روان ما را بس")
+s = aruz.scanner().scan("یار با ماست، چه حاجت که زیادت طلبیم")
 s.metres, s.weights, s.devices, s.candidates
 aruz.scan_poem("بشنو این نی چون شکایت می‌کند\nاز جدایی‌ها حکایت می‌کند").metres
 ```
