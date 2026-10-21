@@ -45,6 +45,8 @@ The weight lexicon (`data/weights.tsv`) is learned from the labels of the
 other four fifths, so that column is supervised. The rules-only column isn't.
 With the editors' marks removed (`--stripped`), a poem gets exactly the gold
 metre 83.5% of the time with rules only and 94.3% with the lexicon.
+Holding out whole poets instead of poems (`--by poet`, 2,000 poems by poets
+the lexicon never saw), that's 80.9% and 93.1%.
 
 On single couplets with no poem around them it's much weaker. On the 12,713
 couplets of [Ganjoor-Rhythm-Bench](https://huggingface.co/datasets/farbodbij/Ganjoor-Rhythm-Bench)
