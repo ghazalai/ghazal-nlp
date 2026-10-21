@@ -210,7 +210,9 @@ pronunciation has the vowels it marks.
 
 The readings are Ganjoor's, so a miss is often verse against prose (حَرَکت,
 نَمی, خَیلی). On the homographs the commonest reading is no better than a
-random one.
+random one. The two sets aren't independent: 71 of SentenceBench's 88 Common
+Voice sentences and at least 45 of its 100 ManaTTS ones are in HomoRich word for
+word.
 
 ```sh
 ghazal-nlp vowels-derive poems.jsonl --out ghazal_nlp/data
@@ -252,8 +254,9 @@ take none, reduplication), so it counts as dev for `junction`. A second batch
 is held out for that. `written` doesn't beat always saying ezāfe on held-out
 text. `junction` mostly errs by finding an ezāfe that isn't there, since
 without a noun and adjective lexicon it treats any word it can't place as a
-noun. On HomoRich, about 40% of whose sentences GPT-4o wrote, the junction
-gets 10,107 false ezāfe against 1,137 missed.
+noun. HomoRich's ezāfe marks were added automatically (a POS tagger and a
+dictionary, per its paper), and about 40% of its sentences GPT-4o wrote, so its
+rows measure agreement with that tagging, not with people.
 
 ```sh
 ghazal-nlp ezafe-eval
