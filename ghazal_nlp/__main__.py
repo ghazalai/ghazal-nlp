@@ -71,7 +71,7 @@ def conjugate(a):
                                     polarity=a.polarity, aspect=a.aspect) or "no such form")
 
 
-def vocalise(a):
+def vocalize(a):
     lex = vowels.lexicon()
     for token in vowels.tokens("\n".join(lines(a))):
         e = lex.lookup(token)
@@ -86,10 +86,8 @@ def vowels_derive(a):
 
 def junctions(a):
     for line in lines(a):
-        for site in ezafe.sites({"text": line}):
-            text, (h0, _), (_, n1) = site["neutralized_text"], site["neutral_head_span"], site["neutral_next_span"]
-            reading = ezafe.written(site) if site["marked"] else ezafe.junction(site)
-            print(text[h0:n1], site["observed_mark_class"], reading.label, reading.reason, sep="\t")
+        for j in ezafe.junctions(line):
+            print(line[slice(*j.span)], j.mark, j.label, j.reason, sep="\t")
 
 
 def ezafe_scores(a):
@@ -187,7 +185,7 @@ def main() -> None:
     c = command("verb-eval", lambda a: dump(verb_eval.evaluate(a.conllu, verb.analyzer())),
                 "score the verb analyser on UD treebank files")
     c.add_argument("conllu", nargs="+", type=Path)
-    c = command("vowels", vocalise, "the readings editors wrote for each word")
+    c = command("vowels", vocalize, "the readings editors wrote for each word")
     c.add_argument("text", nargs="*")
     c = command("vowels-derive", vowels_derive, "rebuild vowels-lexicon.tsv and vowels-review.tsv")
     c.add_argument("gold", type=Path, help="the output of `ganjoor`")

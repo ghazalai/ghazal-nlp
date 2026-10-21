@@ -6,7 +6,7 @@ import pytest
 from ghazal_nlp import vowels
 from ghazal_nlp.vowels import (
     DAMMA, DAMMATAN, FATHA, FATHATAN, HAMZA, KASRA, SHADDA, SUKUN, TATWEEL, ZWNJ, Lexicon, build_lexicon,
-    canonicalise, measure, readings_of, refusal_census, review_queue, skeleton, split_terminal,
+    canonicalize, measure, readings_of, refusal_census, review_queue, skeleton, split_terminal,
 )
 
 KARM, KARAM = "ک" + FATHA + "ر" + SUKUN + "م", "ک" + FATHA + "ر" + FATHA + "م"
@@ -28,21 +28,21 @@ def test_nfd_would_turn_persian_heh_into_kurdish_ae():
     assert unicodedata.normalize("NFD", "ۀ") == "ە" + HAMZA
     assert unicodedata.normalize("NFC", "ە" + HAMZA) != "ه" + HAMZA
     assert unicodedata.normalize("NFC", "ه" + HAMZA) == "ه" + HAMZA
-    assert canonicalise("خانۀ") == canonicalise("خانه" + HAMZA) == "خانه" + HAMZA
-    assert canonicalise("دیدە" + HAMZA) == "دیده" + HAMZA
+    assert canonicalize("خانۀ") == canonicalize("خانه" + HAMZA) == "خانه" + HAMZA
+    assert canonicalize("دیدە" + HAMZA) == "دیده" + HAMZA
 
 
 def test_canonicalisation():
-    assert canonicalise("ش" + DAMMA + DAMMA + "کر") == "ش" + DAMMA + "کر"
-    assert canonicalise("شک" + SHADDA + FATHA + "ر") == canonicalise("شک" + FATHA + SHADDA + "ر") == "شک" + FATHA + SHADDA + "ر"
-    assert canonicalise("فِي") == "فِی" and canonicalise("كتاب") == "کتاب"
-    assert canonicalise("کـتاب") == "کتاب" and canonicalise(TATWEEL) == TATWEEL
-    assert canonicalise("دل" + ZWNJ + KASRA) == "دل" + KASRA
-    assert canonicalise("ام" + ZWNJ + DAMMA + SHADDA + "الخبائث") == "ام" + DAMMA + SHADDA + ZWNJ + "الخبائث"
-    assert canonicalise(KASRA + "سر") == "سر" and canonicalise("کتاب" + ZWNJ) == "کتاب"
-    assert canonicalise("مسا" + HAMZA + "له") == "مسأله"
-    assert canonicalise(KASRA) == KASRA and canonicalise(ZWNJ) == ZWNJ
-    assert canonicalise("شا" + ZWNJ + HAMZA + "ن" + KASRA) == "شأ" + ZWNJ + "ن" + KASRA
+    assert canonicalize("ش" + DAMMA + DAMMA + "کر") == "ش" + DAMMA + "کر"
+    assert canonicalize("شک" + SHADDA + FATHA + "ر") == canonicalize("شک" + FATHA + SHADDA + "ر") == "شک" + FATHA + SHADDA + "ر"
+    assert canonicalize("فِي") == "فِی" and canonicalize("كتاب") == "کتاب"
+    assert canonicalize("کـتاب") == "کتاب" and canonicalize(TATWEEL) == TATWEEL
+    assert canonicalize("دل" + ZWNJ + KASRA) == "دل" + KASRA
+    assert canonicalize("ام" + ZWNJ + DAMMA + SHADDA + "الخبائث") == "ام" + DAMMA + SHADDA + ZWNJ + "الخبائث"
+    assert canonicalize(KASRA + "سر") == "سر" and canonicalize("کتاب" + ZWNJ) == "کتاب"
+    assert canonicalize("مسا" + HAMZA + "له") == "مسأله"
+    assert canonicalize(KASRA) == KASRA and canonicalize(ZWNJ) == ZWNJ
+    assert canonicalize("شا" + ZWNJ + HAMZA + "ن" + KASRA) == "شأ" + ZWNJ + "ن" + KASRA
 
 
 @pytest.mark.parametrize("token", [
@@ -50,14 +50,14 @@ def test_canonicalisation():
     "ام" + ZWNJ + DAMMA + SHADDA + "الخبائث", TATWEEL, "شا" + ZWNJ + HAMZA + "ن" + KASRA,
 ])
 def test_canonicalise_is_idempotent(token):
-    assert canonicalise(canonicalise(token)) == canonicalise(token)
+    assert canonicalize(canonicalize(token)) == canonicalize(token)
 
 
 def test_what_canonicalisation_refuses():
-    assert SHADDA in canonicalise("ش" + SHADDA + "کر")
+    assert SHADDA in canonicalize("ش" + SHADDA + "کر")
     assert len(readings(KARM, KARAM)) == 2 and len(readings(KARM.replace(SUKUN, ""), KARAM)) == 1
     for left, right in [("رحمة", "رحمه"), ("مسأله", "مساله"), ("آرد", "ارد"), ("می" + ZWNJ + "رود", "میرود")]:
-        assert skeleton(canonicalise(left)) != skeleton(canonicalise(right))
+        assert skeleton(canonicalize(left)) != skeleton(canonicalize(right))
 
 
 def test_only_different_vowels_on_one_letter_make_two_readings():
@@ -78,12 +78,12 @@ def test_a_partial_form_joins_the_reading_that_carries_its_marks():
 
 
 def test_final_letter_marks_are_syntax():
-    assert split_terminal(canonicalise("سر" + KASRA)) == ("سر", KASRA)
-    assert split_terminal(canonicalise("خانۀ")) == ("خانه", HAMZA)
-    assert split_terminal(canonicalise("حق" + SHADDA + KASRA)) == ("حق" + SHADDA, KASRA)
+    assert split_terminal(canonicalize("سر" + KASRA)) == ("سر", KASRA)
+    assert split_terminal(canonicalize("خانۀ")) == ("خانه", HAMZA)
+    assert split_terminal(canonicalize("حق" + SHADDA + KASRA)) == ("حق" + SHADDA, KASRA)
     assert split_terminal("و" + FATHA) == ("و" + FATHA, "")
-    assert split_terminal(canonicalise("اصلا" + FATHATAN)) == ("اصلا" + FATHATAN, "")
-    assert split_terminal(canonicalise("س" + KASRA + "ر" + SHADDA + DAMMATAN)) == ("س" + KASRA + "ر" + SHADDA, DAMMATAN)
+    assert split_terminal(canonicalize("اصلا" + FATHATAN)) == ("اصلا" + FATHATAN, "")
+    assert split_terminal(canonicalize("س" + KASRA + "ر" + SHADDA + DAMMATAN)) == ("س" + KASRA + "ر" + SHADDA, DAMMATAN)
     assert [vowels.TERMINAL[m] for m in KASRA + HAMZA + DAMMATAN + SUKUN] == ["ezafe", "ezafe_he", "i3rab", "pausal"]
 
 

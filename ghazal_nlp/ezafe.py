@@ -3,7 +3,7 @@
 ``sites`` finds every word ending in a proven silent ه followed by another
 word, records how the junction is written (هٔ، ۀ، ه‌ی، هی، ه ی، or nothing), and
 returns the text with only that junction's mark removed. The two classifiers
-read only that neutralised text: ``written`` decides whether a written mark is
+read only that neutralized text: ``written`` decides whether a written mark is
 an ezāfe, and ``junction`` whether an unmarked junction carries one.
 """
 
@@ -28,6 +28,7 @@ COPULAS = frozenset("است هست نیست هستم هستی هستیم هست�
                     "بود بودم بودی بودیم بودید بودند باشد باشم باشی باشیم باشید باشند".split())
 PRONOUNS = frozenset("من تو او ما شما ایشان آنان آنها آن‌ها وی خود خودش خودم خودت خودمان خودتان خودشان "
                      "خویش همدیگر یکدیگر".split())
+CLITICS = frozenset("ای ام ات اش ایم اید اند".split())
 PREPOSITIONS = frozenset("از به با در بر برای بدون بی تا جز نزد پیش پس چون مانند همچون سوی زیر روی میان "
                          "اندر ز کز".split())
 
@@ -40,7 +41,7 @@ def inventory() -> dict[str, dict[str, int]]:
 
 @lru_cache(maxsize=65536)
 def bare(token: str) -> str:
-    return vowels.skeleton(vowels.canonicalise(token)).replace(ZWJ, "")
+    return vowels.skeleton(vowels.canonicalize(token)).replace(ZWJ, "")
 
 
 def has_letter(word: str) -> bool:
@@ -115,7 +116,7 @@ def _parts(site: dict):
 
 
 @dataclass(frozen=True, slots=True)
-class Reading:
+class Decision:
     label: str
     reason: str
 
@@ -127,7 +128,7 @@ SIMILE = frozenset("چون همچون".split())
 HARD_PUNCTUATION = frozenset("،,.;؛:!?؟…)]}»”")
 
 
-def written(site: dict, arm: str = "closed") -> Reading:
+def written(site: dict, arm: str = "closed") -> Decision:
     """Is the written هٔ، ۀ or ه‌ی at ``site`` an ezāfe? Yes, unless the next thing
     is the end, hard punctuation, a connector, a simple preposition, a simile word
     or a copula (or, in arm ``closed+verb``, a finite verb). The other readings are
@@ -137,16 +138,16 @@ def written(site: dict, arm: str = "closed") -> Reading:
     _, _, gap, nxt, _ = _parts(site)
     nxt = bare(nxt)
     if not nxt:
-        return Reading("not_ezafe", "end")
+        return Decision("not_ezafe", "end")
     if any(c in HARD_PUNCTUATION for c in gap) or "\n" in gap:
-        return Reading("not_ezafe", "punctuation")
+        return Decision("not_ezafe", "punctuation")
     for reason, words in (("connector", CONNECTORS), ("preposition", WRITTEN_PREPOSITIONS),
                           ("simile", SIMILE), ("copula", COPULAS)):
         if nxt in words:
-            return Reading("not_ezafe", reason)
+            return Decision("not_ezafe", reason)
     if arm == "closed+verb" and any(r.verb_form != "participle" for r in readings(nxt).readings):
-        return Reading("not_ezafe", "verb_reading")
-    return Reading("ezafe", "default")
+        return Decision("not_ezafe", "verb_reading")
+    return Decision("ezafe", "default")
 
 
 @lru_cache(maxsize=32768)
@@ -155,7 +156,7 @@ def word_class(token: str) -> str:
     if not word:
         return "end"
     for name, words in (("connector", CONNECTORS | {"چون"}), ("preposition", PREPOSITIONS), ("pronoun", PRONOUNS),
-                        ("copula", COPULAS)):
+                        ("copula", COPULAS), ("clitic", CLITICS)):
         if word in words:
             return name
     rs = readings(word).readings
@@ -166,7 +167,7 @@ def word_class(token: str) -> str:
     return "content_unknown" if has_letter(word) else "nonword"
 
 
-def junction(site: dict) -> Reading:
+def junction(site: dict) -> Decision:
     """Does the junction carry an ezāfe? ``ezafe``, ``none`` or ``abstain``.
 
     None across punctuation, before a participle's auxiliary, a connector, a
@@ -176,15 +177,15 @@ def junction(site: dict) -> Reading:
     """
     _, head, gap, nxt, _ = _parts(site)
     if not bare(nxt) or any(unicodedata.category(c)[0] in "PS" for c in gap):
-        return Reading("none", "boundary")
+        return Decision("none", "boundary")
     if verb.constructions(readings(head), readings(nxt), separator=gap):
-        return Reading("none", "participle_auxiliary")
+        return Decision("none", "participle_auxiliary")
     cls = word_class(nxt)
-    if cls in ("connector", "preposition", "copula", "verb_reading"):
-        return Reading("none", cls)
+    if cls in ("connector", "preposition", "copula", "clitic", "verb_reading"):
+        return Decision("none", cls)
     if cls in ("pronoun", "participle_reading", "content_unknown"):
-        return Reading("ezafe", cls)
-    return Reading("abstain", "unknown")
+        return Decision("ezafe", cls)
+    return Decision("abstain", "unknown")
 
 
 def score(rows, classify, target: str) -> dict:
@@ -198,3 +199,24 @@ def score(rows, classify, target: str) -> dict:
     right = sum(n for k, n in confusion.items() if k.split("->")[0] == k.split("->")[1])
     return {"sites": total, "agree": right, "accuracy": round(right / total, 4) if total else 0.0,
             "confusion": dict(sorted(confusion.items()))}
+
+
+@dataclass(frozen=True, slots=True)
+class Junction:
+    head: str
+    next: str
+    span: tuple[int, int]
+    mark: str
+    label: str
+    reason: str
+
+
+def junctions(text: str) -> list[Junction]:
+    """Every silent-ه junction in ``text``: ``ezafe``, ``none`` or ``abstain``, and why.
+    A written mark is judged by ``written``, an unmarked junction by ``junction``."""
+    out = []
+    for site in sites({"text": text}):
+        d = written(site) if site["marked"] else junction(site)
+        out.append(Junction(site["head"], text[slice(*site["next_span"])], (site["head_span"][0], site["next_span"][1]),
+                            site["observed_mark_class"], "none" if d.label == "not_ezafe" else d.label, d.reason))
+    return out

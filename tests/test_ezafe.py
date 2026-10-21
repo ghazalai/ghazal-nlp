@@ -24,7 +24,7 @@ def site(text, head, nxt):
 def test_every_spelling_neutralises_to_one_junction(text, mark):
     row, = ezafe.sites(segment(text))
     assert (row["neutralized_text"], row["observed_mark_class"], row["original_junction"]) == ("خانه من", mark, text[:-2])
-    assert ezafe.junction(row) == ezafe.Reading("ezafe", "pronoun")
+    assert ezafe.junction(row) == ezafe.Decision("ezafe", "pronoun")
 
 
 def test_offsets_address_the_original_text():
@@ -56,7 +56,7 @@ def test_what_counts_as_a_site():
     ("جامه", "جامه", "", "end"),
 ])
 def test_a_written_mark_that_is_not_an_ezafe(text, head, nxt, reason):
-    assert ezafe.written(site(text, head, nxt)) == ezafe.Reading("not_ezafe", reason)
+    assert ezafe.written(site(text, head, nxt)) == ezafe.Decision("not_ezafe", reason)
 
 
 @pytest.mark.parametrize("text,head,nxt", [
@@ -93,5 +93,12 @@ def test_the_development_rulings():
     junctions = [json.loads(line) for line in open(DATA / "ezafe-junctions-dev.jsonl", encoding="utf-8")]
     assert ezafe.score(written, ezafe.written, "blind")["agree"] == 118
     assert ezafe.score(written, ezafe.written, "revised")["agree"] == 122
-    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 149
-    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 147
+    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 150
+    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 148
+
+
+def test_junctions_in_plain_text():
+    found = ezafe.junctions("نامه را نوشتم و خانهٔ زیبا و خانه ای دیدم")
+    assert [(j.head, j.next, j.mark, j.label) for j in found] == [
+        ("نامه", "را", "unmarked", "none"), ("خانه", "زیبا", "heh_hamza", "ezafe"), ("خانه", "ای", "unmarked", "none")]
+    assert found[1].span == (16, 26)

@@ -21,6 +21,11 @@ MI, NEG_MI, SUBJ, NEG = "می", "نمی", "ب", "ن"
 PRESENT_ENDINGS = {"م": (1, "sing"), "ی": (2, "sing"), "د": (3, "sing"), "یم": (1, "plur"), "ید": (2, "plur"), "ند": (3, "plur")}
 PAST_ENDINGS = {"م": (1, "sing"), "ی": (2, "sing"), "": (3, "sing"), "یم": (1, "plur"), "ید": (2, "plur"), "ند": (3, "plur")}
 COPULA = {"ام": (1, "sing"), "ای": (2, "sing"), "است": (3, "sing"), "ایم": (1, "plur"), "اید": (2, "plur"), "اند": (3, "plur")}
+SPOKEN_PRESENT = {**PRESENT_ENDINGS, "ه": (3, "sing"), "ین": (2, "plur"), "ن": (3, "plur")}
+SPOKEN_PAST = {**PAST_ENDINGS, "ین": (2, "plur"), "ن": (3, "plur")}
+# The copula and its negative; هست + ending is the present of بودن.
+COPULAS = {"است": (3, "sing", "pos"), "هست": (3, "sing", "pos"), "نیست": (3, "sing", "neg"),
+           **{"نیست" + e: (*v, "neg") for e, v in PRESENT_ENDINGS.items() if e != "د"}}
 
 # A bare present stem is an imperative or a noun, never a finite verb, except
 # the impersonal می‌توان, which has no personal subject.
@@ -77,7 +82,7 @@ class Analysis:
     abstention: str | None = None
 
 
-class Lexicon:
+class Stems:
     def __init__(self, verbs=()):
         self.verbs = list(verbs)
         self.by_past: dict[str, list[Verb]] = {}
@@ -94,10 +99,11 @@ class Lexicon:
         return len(self.verbs)
 
     @classmethod
-    def load(cls, path: Path = DATA / "verb-stems.tsv") -> Lexicon:
+    def load(cls, path: Path = DATA / "verb-stems.tsv") -> Stems:
         rows = [line.split("\t") for line in path.read_text(encoding="utf-8").splitlines()
                 if line.strip() and not line.startswith("#")]
-        return cls(Verb(i.strip(), tuple(p.strip().split("|")), tuple(s.strip().split("|"))) for i, p, s in rows)
+        split = lambda cell: tuple(x for x in cell.strip().split("|") if x != "-")
+        return cls(Verb(i.strip(), split(p), split(s)) for i, p, s in rows)
 
 
 def load_preverbs(path: Path = DATA / "verb-preverbs.tsv") -> list[tuple[str, str]]:
@@ -138,11 +144,15 @@ def _stem_allowed(stem: str, alternates, *, prefixed: bool) -> bool:
 
 
 class Analyzer:
-    def __init__(self, lexicon: Lexicon | None = None, preverbs=None):
-        self.lexicon = lexicon if lexicon is not None else Lexicon.load()
+    def __init__(self, stems: Stems | None = None, preverbs=None, spoken: Stems | None = None):
+        self.stems = stems if stems is not None else Stems.load()
+        spoken = spoken if spoken is not None else Stems.load(DATA / "verb-colloquial.tsv")
+        self.spoken = Stems([*self.stems.verbs, *(Verb(v.infinitive, *(tuple(s.lstrip("+") for s in x) for x in (v.past, v.present)))
+                                                  for v in spoken.verbs)])
+        self.prefix_only = {s[1:] for v in spoken.verbs for s in (*v.past, *v.present) if s.startswith("+")}
         self.preverbs: dict[str, set[str]] = {}
         for preverb, base in load_preverbs() if preverbs is None else preverbs:
-            if base in self.lexicon.by_infinitive:
+            if base in self.stems.by_infinitive:
                 self.preverbs.setdefault(preverb, set()).add(base)
 
     def analyze(self, token: str) -> Analysis:
@@ -151,17 +161,26 @@ class Analyzer:
         token = fold(token.strip())
         if not token:
             return Analysis(token, (), "empty")
+        if token in COPULAS:
+            person, number, polarity = COPULAS[token]
+            return Analysis(token, (Reading(token, "بودن", "هست", "present", "present", None, "indicative", person, number,
+                                            polarity, rules=("copula",)),))
         found = self._analyze(token)
-        if found.readings or ZWNJ in token:
+        if found.readings:
             return found
-        for joined in self._unjoined(token):
-            if (again := self._analyze(joined)).readings:
-                return Analysis(token, tuple(replace(r, token=token, rules=(*r.rules, "zwnj_missing"))
-                                             for r in again.readings))
+        for spoken in (False, True):
+            readings = [replace(r, token=token, rules=(*r.rules, *(("zwnj_missing",) if form != token else ()),
+                                                        *(("colloquial",) if spoken else ())))
+                        for form in (*self._unjoined(token), *((token,) if spoken else ()))
+                        for r in self._analyze(form, spoken).readings]
+            if readings:
+                return Analysis(token, tuple(dict.fromkeys(readings)))
         return found
 
     @staticmethod
     def _unjoined(token: str):
+        if ZWNJ in token:
+            return
         for prefix in (NEG_MI, MI):
             if token.startswith(prefix) and len(token) > len(prefix) + 1:
                 yield prefix + ZWNJ + token[len(prefix):]
@@ -171,10 +190,10 @@ class Analyzer:
             if token.endswith(copula) and copula != "است" and head.endswith("ه") and len(head) > 2:
                 yield head + ZWNJ + copula
 
-    def _analyze(self, token: str) -> Analysis:
+    def _analyze(self, token: str, spoken: bool = False) -> Analysis:
         readings = [r for polarity, aspect, mood, body in self._prefixes(token)
-                    for r in self._body(token, body, polarity, aspect, mood, prefixed=body != token)]
-        readings += self._compounds(token)
+                    for r in self._body(token, body, polarity, aspect, mood, prefixed=body != token, spoken=spoken)]
+        readings += () if spoken else self._compounds(token)
         if readings:
             readings = list(dict.fromkeys(readings))
             readings.sort(key=lambda r: (r.lemma, r.tense, r.mood, r.person or 0))
@@ -218,9 +237,13 @@ class Analyzer:
             yield "neg", None, "indicative", token[1:]
             yield "neg", None, "subjunctive", token[1:]
 
-    def _body(self, token, body, polarity, aspect, mood, *, prefixed=False, bare_imperative=False):
-        past, present = self.lexicon.by_past, self.lexicon.by_present
-        lookup = _epenthetic if prefixed and aspect is None else lambda table, stem: ((stem, v) for v in table.get(stem, ()))
+    def _body(self, token, body, polarity, aspect, mood, *, prefixed=False, bare_imperative=False, spoken=False):
+        stems = self.spoken if spoken else self.stems
+        past, present = stems.by_past, stems.by_present
+        present_endings, past_endings = (SPOKEN_PRESENT, SPOKEN_PAST) if spoken else (PRESENT_ENDINGS, PAST_ENDINGS)
+        plain = (lambda table, stem: ((stem, v) for v in table.get(stem, ()) if prefixed or stem not in self.prefix_only)) \
+            if spoken else (lambda table, stem: ((stem, v) for v in table.get(stem, ())))
+        lookup = _epenthetic if prefixed and aspect is None and not spoken else plain
         if ZWNJ in body:  # the perfect: رفته‌ام
             head, _, tail = body.rpartition(ZWNJ)
             if tail in COPULA and head.endswith("ه"):
@@ -236,23 +259,24 @@ class Analyzer:
                               "imperfective_perfect" if aspect else "perfect", mood, None, None, polarity,
                               "participle", rules=("mi_participle" if aspect else "past_participle",))
         if mood != "subjunctive":  # ب does not attach to a past stem
-            for written, ending in _split_ending(body, PAST_ENDINGS):
+            for written, ending in _split_ending(body, past_endings):
                 for stem, verb in lookup(past, written):
                     yield Reading(token, verb.infinitive, stem, "past", "past", aspect or "perfective",
-                                  "indicative", *PAST_ENDINGS[ending], polarity)
-        for written, ending in _split_ending(body, PRESENT_ENDINGS):
+                                  "indicative", *past_endings[ending], polarity)
+        for written, ending in _split_ending(body, present_endings):
             for stem, verb in lookup(present, written):
                 # A stem with a glide alternate takes it before ی: می‌گوید is گوی+د, not گو+ید.
                 if not _stem_allowed(stem, verb.present, prefixed=prefixed) or (
                         ending.startswith("ی") and stem + "ی" in verb.present):
                     continue
-                yield Reading(token, verb.infinitive, stem, "present", "present", aspect, mood,
-                              *PRESENT_ENDINGS[ending], polarity)
+                if not (spoken and aspect is None and mood == "indicative" and verb.infinitive != "داشتن"):  # spoken: کنه is only a subjunctive
+                    yield Reading(token, verb.infinitive, stem, "present", "present", aspect, mood,
+                                  *present_endings[ending], polarity)
                 if aspect is None and mood == "indicative" and polarity == "pos" and not prefixed:
                     # A bare present is also the subjunctive without ب: باشد، کار کند.
                     yield Reading(token, verb.infinitive, stem, "present", "present", None, "subjunctive",
-                                  *PRESENT_ENDINGS[ending], polarity, rules=("bare_subjunctive",))
-                if ending == "ید" and aspect is None and (mood == "subjunctive" or bare_imperative):
+                                  *present_endings[ending], polarity, rules=("bare_subjunctive",))
+                if ending in ("ید", "ین") and aspect is None and (mood == "subjunctive" or bare_imperative):
                     yield Reading(token, verb.infinitive, stem, "present", "present", None, "imperative",
                                   2, "plur", polarity, rules=("imperative",))
         if body in IMPERSONAL and aspect is not None:
@@ -267,7 +291,7 @@ class Analyzer:
     def conjugate(self, infinitive: str, *, tense="present", mood="indicative", person=3, number="sing",
                   polarity="pos", aspect=None) -> str | None:
         """A finite form, or None when the paradigm has no such cell."""
-        verb = self.lexicon.by_infinitive.get(infinitive)
+        verb = self.stems.by_infinitive.get(infinitive)
         if verb is None:
             for preverb, bases in self.preverbs.items():
                 base = infinitive.removeprefix(preverb)

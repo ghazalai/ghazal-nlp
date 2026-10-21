@@ -652,7 +652,7 @@ def load_rules(paths: Sequence[Path] | None = None) -> tuple[list[Rule], dict[st
 
 
 @dataclass(frozen=True, slots=True)
-class Analysis:
+class Check:
     findings: tuple[Finding, ...]
     abstentions: tuple[Abstention, ...]
     rules_run: int
@@ -702,7 +702,7 @@ class RuleBase:
         }
 
     def check(self, text: str, *, registers: Sequence[str] = ("formal_written",),
-              min_confidence: str = "medium") -> Analysis:
+              min_confidence: str = "medium") -> Check:
         if min_confidence not in CONFIDENCE:
             raise ValueError(f"min_confidence is one of {sorted(CONFIDENCE)}")
         if unknown := set(registers) - REGISTERS:
@@ -720,7 +720,7 @@ class RuleBase:
                     if not i or (f.span, f.suggestion) != (findings[i - 1].span, findings[i - 1].suggestion)]
         findings.sort(key=lambda f: (f.span[0], f.rule_id))
         abstentions.sort(key=lambda a: (a.span[0], a.rule_id))
-        return Analysis(tuple(findings), tuple(abstentions), len(rules), tuple(registers))
+        return Check(tuple(findings), tuple(abstentions), len(rules), tuple(registers))
 
     def profile(self, texts: Iterable[str], *, registers: Sequence[str] = ("formal_written",)) -> dict:
         """Coverage over a document set. The abstention histogram names the next

@@ -2,7 +2,7 @@
 
 A written hemistich admits a set of syllabifications, because Persian does not
 write short vowels, the ezāfe or gemination. A metre is admitted when some
-syllabification realises its weight pattern. The scanner reports one metre,
+syllabification realizes its weight pattern. The scanner reports one metre,
 several (the writing is ambiguous), or an abstention with a reason, and names
 the licences each reading needed.
 """
@@ -18,7 +18,7 @@ from pathlib import Path
 from .text import fold
 
 SHORT, LONG = "u", "-"
-MIN_POEMS = 1
+MIN_POEMS = 5
 DATA = Path(__file__).parent / "data"
 
 # Each foot scans as its own pronunciation. Ganjoor drops the final damma of the
@@ -635,7 +635,7 @@ class MetreEntry:
 
 
 class Inventory:
-    """Weight patterns and the labels that realise them."""
+    """Weight patterns and the labels that realize them."""
 
     def __init__(self, entries):
         self.entries = tuple(entries)
@@ -702,14 +702,14 @@ class Scanner:
         cheapest = min(cost for cost, _, _ in hits.values())
         labels, weights, patterns, candidates, mask = [], [], [], {}, 0
         for index in sorted(hits, key=lambda k: (hits[k][0], self.trie.patterns[k])):
-            cost, realised, used = hits[index]
+            cost, realized, used = hits[index]
             pattern = self.trie.patterns[index]
             found = self.inventory.pattern_labels[pattern]
             for label in found:
                 candidates.setdefault(label, cost)
             if cost == cheapest:
                 patterns.append(pattern)
-                weights.append(realised)
+                weights.append(realized)
                 mask |= used
                 labels.extend(found)
         return Scansion(line, tuple(dict.fromkeys(labels)), tuple(patterns), tuple(weights[:self.max_weights]),
@@ -769,18 +769,18 @@ class Scanner:
             for weights, nxt, dev in _moves(skel, i, devices):
                 if allowed is not None and (weights, nxt) not in allowed:
                     continue
-                for realised, licence in _pattern_slots(weights, i, devices):
+                for realized, licence in _pattern_slots(weights, i, devices):
                     extra = COST[dev] + COST[licence]
                     for node, (cost, sofar, mask) in nodes.items():
                         if licence and _slot_blocked(licence, trie.depth[node], devices):
                             continue
-                        path = (cost + extra, sofar + realised, mask | dev | licence)
-                        landed = trie.walk(node, realised)
+                        path = (cost + extra, sofar + realized, mask | dev | licence)
+                        landed = trie.walk(node, realized)
                         if landed is not None:
                             offer(frontier[nxt], landed, path)
                         if nxt != n:
                             if trie.caesura and skel.word[nxt] != skel.word[nxt - 1]:
-                                spilled = trie.spill(node, realised)
+                                spilled = trie.spill(node, realized)
                                 if spilled is not None:
                                     offer(frontier[nxt], spilled, path)
                             continue

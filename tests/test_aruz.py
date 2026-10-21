@@ -8,7 +8,7 @@ from ghazal_nlp.aruz import (
     DATA, Devices, Inventory, Marks, MetreEntry, Scanner, Scansion, WeightEntry, WeightLexicon,
     dowri_half, pattern_for_label, prepare, scan_poem,
 )
-from ghazal_nlp.aruz_eval import classify, readings, realises, weights_of
+from ghazal_nlp.aruz_eval import classify, readings, realizes, weights_of
 
 HAZAJ = "مفاعیلن مفاعیلن مفاعیلن مفاعیلن (هزج مثمن سالم)"
 DOBEYTI = "مفاعیلن مفاعیلن فعولن (هزج مسدس محذوف)"
@@ -107,7 +107,7 @@ def test_a_device_off_abstains_rather_than_guesses(small):
 
 
 def test_the_inventory(full):
-    assert len(full) > 100
+    assert len(full) == 65 and len(Inventory.load(min_poems=1)) == 139
     for e in full.entries:
         assert set(e.pattern) <= {"u", "-"} and e.provenance in {"arkan", "derived", "unexpanded"}
         if e.provenance == "arkan":
@@ -283,8 +283,8 @@ def test_the_reading_notation():
     assert weights_of("mey mowj") == r("- S")
     with pytest.raises(ValueError):
         weights_of("xt")
-    assert realises(weights_of("ma.nam tang.del tâ šo.dam tang.dast"), "u--u--u--u-")
-    assert not realises(weights_of("ma.nam tang.del tâ šo.dam"), "u--u--u--u-")
+    assert realizes(weights_of("ma.nam tang.del tâ šo.dam tang.dast"), "u--u--u--u-")
+    assert not realizes(weights_of("ma.nam tang.del tâ šo.dam"), "u--u--u--u-")
 
 
 @pytest.mark.parametrize("name", ["readings-thiesen.tsv"])
@@ -293,7 +293,7 @@ def test_every_reading_realises_its_metre(full, name):
     assert len(rows) in (513, 34)
     for row in rows:
         assert row["provenance"].startswith("thiesen-1982:p."), row["id"]
-        assert any(realises(weights_of(row["pronunciation"]), p) for p in full.label_patterns[row["metre"]]), row["id"]
+        assert any(realizes(weights_of(row["pronunciation"]), p) for p in full.label_patterns[row["metre"]]), row["id"]
 
 
 def test_the_scanner_reaches_the_readings():

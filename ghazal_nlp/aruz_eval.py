@@ -150,19 +150,19 @@ def _live_graph(skel, trie: Trie, devices: Devices):
                 edges[i][at] = (*edge, cost)
 
         for weights, nxt, dev in _moves(skel, i, devices):
-            for realised, licence in _pattern_slots(weights, i, devices):
+            for realized, licence in _pattern_slots(weights, i, devices):
                 extra = COST[dev] + COST[licence]
                 for node in nodes:
                     if licence and _slot_blocked(licence, trie.depth[node], devices):
                         continue
-                    landed = trie.walk(node, realised)
+                    landed = trie.walk(node, realized)
                     if landed is not None:
                         forward[nxt].add(landed)
                         relax(fcost[nxt], landed, fc[node] + extra)
                         add((node, landed, nxt, weights), extra)
                     if nxt != n:
                         if trie.caesura and skel.word[nxt] != skel.word[nxt - 1]:
-                            spilled = trie.spill(node, realised)
+                            spilled = trie.spill(node, realized)
                             if spilled is not None:
                                 forward[nxt].add(spilled)
                                 relax(fcost[nxt], spilled, fc[node] + extra)
@@ -424,7 +424,7 @@ def weights_of(pronunciation: str) -> tuple[str, ...]:
     return tuple(out)
 
 
-def realises(weights, pattern: str) -> bool:
+def realizes(weights, pattern: str) -> bool:
     """Do these weights fill the pattern, with the scanner's position licences?"""
     def go(i, j):
         if i == len(weights):
@@ -439,7 +439,7 @@ def realises(weights, pattern: str) -> bool:
 
 
 def readings(skel, patterns, devices: Devices, caesuras=None, cap: int = 50_000):
-    """Every weight sequence of ``skel`` realising one of ``patterns``; None past ``cap``."""
+    """Every weight sequence of ``skel`` realizing one of ``patterns``; None past ``cap``."""
     trie = Trie(sorted(set(patterns)), caesuras if devices.caesura else None)
     n, memo, total = len(skel), {}, 0
 
@@ -462,10 +462,10 @@ def readings(skel, patterns, devices: Devices, caesuras=None, cap: int = 50_000)
         for start, prefix in starts:
             for weights, nxt, dev in _moves(skel, i, devices):
                 head = prefix + tokens(weights, dev)
-                for realised, licence in _pattern_slots(weights, i, devices):
+                for realized, licence in _pattern_slots(weights, i, devices):
                     if licence and _slot_blocked(licence, trie.depth[start], devices):
                         continue
-                    landed = trie.walk(start, realised)
+                    landed = trie.walk(start, realized)
                     if nxt == n:
                         if (landed is not None and trie.terminal[landed] is not None) or any(
                             trie.terminal[c] is not None and c != landed for c in trie.children[start].values()
@@ -475,7 +475,7 @@ def readings(skel, patterns, devices: Devices, caesuras=None, cap: int = 50_000)
                     if landed is not None:
                         out.update(head + tail for tail in go(nxt, landed))
                     if trie.caesura and skel.word[nxt] != skel.word[nxt - 1]:
-                        spilled = trie.spill(start, realised)
+                        spilled = trie.spill(start, realized)
                         if spilled is not None:
                             out.update(head + tail for tail in go(nxt, spilled))
                 total += 1

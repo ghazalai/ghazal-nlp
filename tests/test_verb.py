@@ -3,7 +3,7 @@ import glob
 import pytest
 
 from ghazal_nlp import verb_eval
-from ghazal_nlp.verb import ZWNJ, Analyzer, Lexicon, Reading, Verb, analyzer, constructions
+from ghazal_nlp.verb import ZWNJ, Analyzer, Stems, Reading, Verb, analyzer, constructions
 
 A = analyzer()
 
@@ -116,7 +116,7 @@ def test_alternates_need_a_prefix():
     simple = Analyzer(preverbs=())
     assert not simple.analyze("یای").readings and not simple.analyze("فتند").readings
     assert all(simple.analyze(t).readings for t in ("نیای", "نفتند", "گویید", "هستم"))
-    assert Analyzer(Lexicon([Verb("test", ("test-past",), ("یا",))]), preverbs=()).analyze("یای").readings
+    assert Analyzer(Stems([Verb("test", ("test-past",), ("یا",))]), preverbs=()).analyze("یای").readings
 
 
 @pytest.mark.parametrize("token,lemma", [
@@ -166,12 +166,12 @@ def test_participles_keep_their_homographs():
     rs = A.analyze("برده").readings
     assert any(r.lemma == "بردن" and r.verb_form == "participle" for r in rs)
     assert any(r.lemma == "بردادن" and r.mood == "imperative" for r in rs)
-    rs = Analyzer(Lexicon([Verb("part", ("آزمود",), ("آزما",)), Verb("finite", ("آزموده",), ("تست",)),
+    rs = Analyzer(Stems([Verb("part", ("آزمود",), ("آزما",)), Verb("finite", ("آزموده",), ("تست",)),
                            Verb("imperative", ("آزمودید",), ("آزموده",))]), preverbs=()).analyze("نآزموده").readings
     assert {"part", "finite", "imperative"} <= {r.lemma for r in rs}
-    rs = Analyzer(Lexicon([Verb("الف", ("آزمود",), ("آزما",)), Verb("بیتا", ("آزموده",), ("تست",))]), preverbs=()).analyze("می‌آزموده").readings
+    rs = Analyzer(Stems([Verb("الف", ("آزمود",), ("آزما",)), Verb("بیتا", ("آزموده",), ("تست",))]), preverbs=()).analyze("می‌آزموده").readings
     assert {r.verb_form for r in rs} == {"participle", None}
-    assert not Analyzer(Lexicon(), preverbs=()).analyze("رفته").readings
+    assert not Analyzer(Stems(), preverbs=()).analyze("رفته").readings
     assert not Analyzer(preverbs=()).analyze("برداشته").readings
 
 
@@ -208,7 +208,7 @@ def test_constructions(text, kind, aspect, mood, person):
 
 
 def test_construction_limits():
-    assert not A.analyze("باش").readings and not A.analyze("است").readings
+    assert not A.analyze("باش").readings and [r.rules for r in A.analyze("است").readings] == [("copula",)]
     assert {r.mood for r in A.analyze("باشد").readings} == {"indicative", "subjunctive"}
     assert not constructions(A.analyze("رفته‌است"), A.analyze("بود"))
     assert {r.mood for r in constructions(A.analyze("رفته"), A.analyze("باشید"))} == {"subjunctive", "imperative"}
@@ -223,7 +223,7 @@ def test_construction_limits():
 
 
 def test_inventory():
-    assert len(A.lexicon) == 251 and "برداشتن" not in A.lexicon.by_infinitive
+    assert len(A.stems) == 251 and "برداشتن" not in A.stems.by_infinitive
     r = Reading("رفت", "رفتن", "رفت", "past", "past", "perfective", "indicative", 3, "sing", "pos")
     assert r.features() == "Tense=Past|Aspect=Perf|Mood=Indicative|Person=3|Number=Sing|Polarity=Pos"
 
@@ -233,7 +233,7 @@ def test_ud_scoring(tmp_path):
     path.write_text("1\tمی‌روم\tرفت#رو\tVERB\t_\tNumber=Sing|Person=1|Tense=Pres\t0\troot\t_\t_\n"
                     "2\tکتاب\tکتاب\tNOUN\t_\t_\t1\tobj\t_\t_\n3\tاست\tاست\tAUX\t_\tTense=Pres\t1\tcop\t_\t_\n", encoding="utf-8")
     r = verb_eval.evaluate([path], A)
-    assert (r["verbs"], r["analysed"], r["lemma_among_readings"], r["features_when_analysed"]) == (2, 0.5, 0.5, 1.0)
+    assert (r["verbs"], r["analysed"], r["lemma_among_readings"], r["features_when_analysed"]) == (2, 1.0, 0.5, 1.0)
     assert r["mi_words"] == 1 and r["mi_analysed"] == 1.0
 
 
@@ -261,3 +261,19 @@ def test_generation_writes_the_glide(infinitive, kwargs, expected):
 ])
 def test_other_encodings_and_a_missing_zwnj(written, lemma):
     assert lemma in lemmas(written)
+
+
+@pytest.mark.parametrize("form,lemma,mood,person,number", [
+    ("میشه", "شدن", "indicative", 3, "sing"), ("کنه", "کردن", "subjunctive", 3, "sing"), ("داره", "داشتن", "indicative", 3, "sing"),
+    ("میاد", "آمدن", "indicative", 3, "sing"), ("اومدم", "آمدن", "indicative", 1, "sing"), ("میگم", "گفتن", "indicative", 1, "sing"),
+    ("نمیدونم", "دانستن", "indicative", 1, "sing"), ("کنین", "کردن", "subjunctive", 2, "plur"), ("میره", "رفتن", "indicative", 3, "sing"),
+])
+def test_colloquial(form, lemma, mood, person, number):
+    rs = A.analyze(form).readings
+    assert (lemma, mood, person, number) in {(r.lemma, r.mood, r.person, r.number) for r in rs}
+    assert all("colloquial" in r.rules for r in rs)
+
+
+def test_colloquial_only_when_formal_fails():
+    assert not any("colloquial" in r.rules for r in A.analyze("می‌رود").readings)
+    assert not A.analyze("یاد").readings and not A.analyze("یار").readings

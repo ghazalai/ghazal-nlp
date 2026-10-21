@@ -1,6 +1,6 @@
 """مصوت‌گذاری: the vowels Persian editors write on each consonant skeleton.
 
-Tokens are canonicalised mechanically, merging only encodings of one spelling.
+Tokens are canonicalized mechanically, merging only encodings of one spelling.
 The marks on a token's last letter are syntax (the ezāfe, an Arabic case
 ending, a pausal sukun) and are split off. The remaining marked forms of a
 skeleton group into readings: two forms are two readings only when they write
@@ -89,7 +89,7 @@ def is_marked(form: str) -> bool:
     return any(ch in HARAKAT for ch in form)
 
 
-def canonicalise(token: str) -> str:
+def canonicalize(token: str) -> str:
     """One encoding per spelling: tatweel dropped, marks typed after a ZWNJ moved
     onto their letter, ۀ and hamza carriers as above, Arabic yeh and kaf folded,
     marks in Unicode canonical order and each once, edge ZWNJs dropped. Sukun, ة,
@@ -176,7 +176,7 @@ class Lexicon(dict):
     """Skeleton to Entry, for every skeleton an editor marked."""
 
     def lookup(self, token: str) -> Entry | None:
-        return self.get(skeleton(split_terminal(canonicalise(fold(token)))[0]))
+        return self.get(skeleton(split_terminal(canonicalize(fold(token)))[0]))
 
     def settled(self) -> list[Entry]:
         return [e for e in self.values() if e.settled]
@@ -207,7 +207,7 @@ def attested(counts: dict[str, int]):
     for token, count in counts.items():
         if not is_persian(token):
             continue
-        lexical, terminal = split_terminal(canonicalise(token))
+        lexical, terminal = split_terminal(canonicalize(token))
         if not (key := skeleton(lexical)):
             continue
         total[key] += count
@@ -229,7 +229,7 @@ def measure(counts: dict[str, int], lex: Lexicon, min_evidence: int = 1) -> dict
     ambiguous_keys = {e.skeleton for e in lex.ambiguous(min_evidence)}
     n = Counter()
     for token, count in counts.items():
-        if is_persian(token) and (key := skeleton(split_terminal(canonicalise(token))[0])):
+        if is_persian(token) and (key := skeleton(split_terminal(canonicalize(token))[0])):
             n["tokens"] += count
             n["ambiguous" if key in ambiguous_keys else "settled" if key in lex else "unattested"] += count
     total, decided = n["tokens"], n["ambiguous"] + n["settled"]
@@ -242,7 +242,7 @@ def mark_census(counts: dict[str, int]) -> dict[str, int]:
     """Where the marks go: lexical, the ezāfe, or the other final-letter classes."""
     census = Counter()
     for token, count in counts.items():
-        canonical = canonicalise(token)
+        canonical = canonicalize(token)
         census["harakat_raw"] += sum(ch in HARAKAT for ch in token) * count
         census["harakat_canonical"] += sum(ch in HARAKAT for ch in canonical) * count
         lexical, terminal = split_terminal(canonical)
@@ -325,7 +325,7 @@ def write(lex: Lexicon, queue, report: dict, data: Path = DATA) -> None:
                   f"# derived: {date.today().isoformat()}"]
     header = [
         "# Persian vowel readings: each consonant skeleton and the vocalizations editors",
-        "# wrote on it, after canonicalising the marks and removing those on the last letter.",
+        "# wrote on it, after canonicalizing the marks and removing those on the last letter.",
         "# reading: the most vowelled spelling of a group of forms that never write different",
         "# vowels on one letter. count: its attestations; variants: spellings merged into it;",
         "# marked, total, ezafe: the skeleton's marked, all and ezāfe-carrying attestations.",
