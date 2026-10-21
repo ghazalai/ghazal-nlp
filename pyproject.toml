@@ -1,0 +1,18 @@
+[project]
+name = "ghazal-nlp"
+version = "0.1.0"
+description = "Persian rules as small deterministic tools"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+ghazal-nlp = "ghazal_nlp.__main__:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

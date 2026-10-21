@@ -1,0 +1,2565 @@
+# Skeletons with more than one reading, the most attested second reading first.
+# malformed_attestation: a letter carries two vowels. impossible_initial_shadda: a
+# reading has shadda on the first letter. hapax_reading, rare_reading: the second
+# reading is attested once, or two to four times. attested_homograph: five or more.
+# source: Ganjoor API snapshot api-2026-08-03, every poem's text with the editors' marks (ganjoor.poems)
+# split: all poems; nothing here is scored on held-out text
+# derived: 2026-10-21
+# skeleton	reason	minority	readings
+سر	attested_homograph	584	سِرّ=2597 / سَر=584 / سُر=5
+در	attested_homograph	460	دُر=2003 / دَر=460 / دٌرّ=2 / دِر=1
+گل	attested_homograph	371	گِل=610 / گُل=371 / گَل=5
+پر	attested_homograph	329	پُر=862 / پَر=329 / پِر=8 / پْر=1
+و	attested_homograph	313	وَ=552 / وُ=313 / وِ=6 / وٰ=1
+گرد	attested_homograph	273	گِرَد=350 / گَرْد=273 / گُرد=90 / گِرْد=8 / گِرِد=2
+که	attested_homograph	259	کِه=262 / کُه=259 / کَه=27
+من	attested_homograph	219	مِن=409 / مَن=219 / مُن=1
+مهر	attested_homograph	195	مُهْر=288 / مِهْر=195 / مَهر=16 / مٌهر=1
+نه	attested_homograph	189	نُه=355 / نِه=189 / نَه=63
+مه	attested_homograph	185	مَه=185 / مِه=185
+برد	attested_homograph	176	بُرَد=353 / بَرَد=176 / بَرْد=7 / بُرْد=4 / بِرَد=3 / بَرِد=1
+ملک	attested_homograph	155	مُلْک=445 / مَلِک=155 / مَلَک=100 / مِلْک=23
+بد	attested_homograph	146	بُد=1628 / بَد=146 / بٌد=3
+شکر	attested_homograph	134	شِکَّر=508 / شُکْر=134 / شَکَّر=37 / شَکِر=3 / شُکِر=1
+خم	attested_homograph	127	خُم=319 / خَم=127
+دم	attested_homograph	111	دَم=301 / دُم=111 / دِم=2
+خرد	attested_homograph	110	خُرد=157 / خِرَد=110 / خَرَد=17 / خِرِد=1
+ترک	attested_homograph	98	تُرْک=166 / تَرَک=98 / تَرْک=4 / ترُک=1
+می	attested_homograph	97	مِی=688 / مَی=97 / مُی=1
+درد	attested_homograph	92	دُرْد=325 / دَرَد=92 / دَرْد=36 / درُد=1
+ده	attested_homograph	89	دِه=212 / دَه=89 / دٍه=1
+بر	malformed_attestation	85	بَر=692 / بِرّ=85 / بُر=27 / بَِر=1
+زهره	attested_homograph	83	زَهره=94 / زُهْرِه=83 / زِهره=2 / زُهرَه=1
+جست	attested_homograph	81	جُست=112 / جَست=81
+ره	malformed_attestation	79	رَه=198 / رِه=79 / رٍَِه=1
+خلق	attested_homograph	77	خُلُق=159 / خَلَق=77 / خَلْق=11 / خُلْق=1
+کشت	attested_homograph	71	کُشْت=115 / کِشَت=71 / کَشَت=2 / کُشَت=1 / کِشْت=1
+کش	attested_homograph	70	کَش=83 / کِش=70 / کُش=26
+عالم	attested_homograph	67	عالَم=117 / عٰالِم=67
+شه	attested_homograph	66	شِه=75 / شَه=66 / شُه=1
+مرد	attested_homograph	59	مُرَد=194 / مَرْد=59 / مرُد=1
+نفس	attested_homograph	56	نَفَس=110 / نَفْس=56 / نَفِس=1 / نِفس=1
+علم	attested_homograph	53	عَلَم=204 / عِلْم=53 / عَلِم=1
+د	attested_homograph	51	دْ=59 / دِ=51 / دَ=8 / دُ=2
+کشته	attested_homograph	48	کُشْته=168 / کِشْتِه=48 / کِشتَه=3
+نبود	malformed_attestation	47	نَبُوَد=323 / نَبْوَد=47 / نبوَْد=1 / نبَوَد=1
+بنه	attested_homograph	43	بُنِه=53 / بِنِه=43 / بٌنه=1
+کند	attested_homograph	43	کُنَد=178 / کَنَد=43 / کُنْد=4 / کٌند=1 / کَنْد=1 / کِنَد=1
+رست	attested_homograph	42	رُسْت=67 / رَست=42
+منت	attested_homograph	42	مِنَّت=308 / مَنَت=42 / مَنْت=2 / منِّت=1
+خور	attested_homograph	41	خَوِر=46 / خُور=41 / خوُر=1
+گرزه	attested_homograph	41	گُرزه=116 / گَرزه=41
+کنه	attested_homograph	40	کِنِه=53 / کُنْه=40 / کَنِه=5
+رخت	attested_homograph	39	رُخَت=127 / رَخْت=39
+مردم	attested_homograph	39	مُردَم=88 / مَرْدِم=39 / مَردُم=25 / مَردَم=5
+نبرد	attested_homograph	39	نَبُرَّد=46 / نَبَرَد=39 / نَبُرْد=2 / نِبَرد=1
+یا	attested_homograph	39	یَا=46 / یٰا=39 / یًا=1
+خورد	attested_homograph	38	خُورَد=86 / خَورَد=38 / خْوَرد=7 / خُورْد=1
+کشد	attested_homograph	37	کُشَد=66 / کِشَد=37 / کَشَد=17
+کی	attested_homograph	37	کِی=143 / کَی=37
+چه	attested_homograph	36	چَه=128 / چِه=36 / چُه=1
+فلک	attested_homograph	34	فُلْک=58 / فَلَک=34 / فَلِک=14 / فِلِک=2
+ای	attested_homograph	33	اِی=40 / اَی=33 / اُی=1
+سحر	attested_homograph	33	سِحْر=101 / سَحَر=33 / سٍحْر=1
+ببرد	attested_homograph	32	بِبُرْد=71 / بِبَرَد=32 / بُبَرد=6 / ببُرَّد=2
+کله	attested_homograph	32	کُلُّه=112 / کُلَه=32 / کِلِّه=17 / کَلّه=6
+دری	attested_homograph	31	دُرٌی=154 / دَری=31
+کرد	attested_homograph	31	کِرْد=128 / کَرْد=31 / کُرد=23
+کنی	attested_homograph	31	کُنی=40 / کِنِی=31 / کَنی=12
+برو	attested_homograph	30	بَرو=32 / بُرَو=30 / بِرُو=6
+حسن	attested_homograph	30	حُسْن=429 / حَسَن=30 / حسُن=1
+بستان	attested_homograph	29	بُسْتان=54 / بِسِتان=29 / بِسْتان=2
+محرم	attested_homograph	29	مُحَرَّم=38 / مَحْرَم=29 / مُحرِم=4
+کشتی	attested_homograph	29	کُشتی=75 / کِشْتی=29 / کَشتی=14
+خود	attested_homograph	28	خَوْد=38 / خُود=28 / خْوَد=13
+ان	attested_homograph	27	اِن=131 / اَن=27 / اُن=1
+ببر	attested_homograph	27	بِبُر=65 / بِبَر=27 / بَبْر=2 / بُبر=1
+بعد	attested_homograph	27	بُعْد=46 / بَعْد=27
+کم	attested_homograph	27	کَم=74 / کِم=27 / کُم=3
+گله	attested_homograph	27	گِلِه=38 / گَله=27 / گُلِه=4
+هم	attested_homograph	26	هَم=37 / هُم=26 / هِم=1
+احد	attested_homograph	25	اُحُد=39 / اَحَد=25
+خمار	attested_homograph	25	خَمَّار=129 / خُمٰار=25
+قدم	attested_homograph	25	قِدَم=67 / قَدَم=25 / قَدِم=6
+نبی	attested_homograph	25	نَبِیّ=66 / نُبِی=25
+کشی	attested_homograph	25	کُشی=46 / کَشی=25 / کِشی=18
+سری	attested_homograph	24	سِرِّی=117 / سَرَیٰ=24 / سُرّی=1
+منه	attested_homograph	24	مِنِه=51 / مِنْه=24 / مَنِه=23
+می‌کشد	attested_homograph	24	می‌کُشَد=37 / می‌کِشَد=24 / می‌کَشَد=4
+بری	attested_homograph	23	بَری=26 / بُرّی=23 / بِرِی=5 / بًرّی=1
+جرم	attested_homograph	23	جُرْم=29 / جِرْم=23
+حله	attested_homograph	23	حِلِّه=70 / حُلّه=23
+لو	attested_homograph	23	لُو=29 / لَو=23
+انا	attested_homograph	22	اَنَا=33 / اِنَّا=22
+او	attested_homograph	22	اَو=25 / اُو=22
+بدان	attested_homograph	22	بَدان=25 / بِدان=22 / بُدان=1
+جد	attested_homograph	22	جَدّ=113 / جِدّ=22 / جُد=3
+درست	attested_homograph	22	دُرُسْت=32 / دَرَست=22 / دُرَّست=7
+رسته	attested_homograph	22	رُسته=49 / رَسْتَه=22
+سیر	attested_homograph	22	سِیْر=62 / سِیَر=22 / سَیْر=14 / سْیر=1
+مردی	attested_homograph	22	مُردی=25 / مَرْدی=22
+هل	attested_homograph	22	هَل=26 / هِل=22
+گردان	attested_homograph	22	گُردان=75 / گَردان=22
+الله	attested_homograph	21	اَلَلّه=758 / اللّٰه=21 / الْلَه=2 / اللْه=1
+بدی	attested_homograph	21	بُدی=301 / بَدی=21 / بِدِی=6
+بماند	attested_homograph	21	بِمانَد=31 / بِمانْد=21
+رفت	attested_homograph	21	رُفت=34 / رَفْت=21
+زلف	attested_homograph	21	زِلْف=57 / زُلْف=21 / زَلْف=1
+مبر	attested_homograph	21	مَبَر=31 / مَبُر=21
+مرکب	attested_homograph	21	مُرَکَّب=22 / مَرْکَب=21
+کرم	attested_homograph	21	کَرَم=90 / کِرَم=21 / کَرِم=3 / کَرْم=2 / کرُم=1 / کِرْم=1
+گرم	attested_homograph	21	گَرَم=45 / گُرم=21 / گَرْم=2 / گِرم=1
+گنه	attested_homograph	21	گِنِه=59 / گُنَه=21 / گَنه=1
+استاد	attested_homograph	20	اِسْتٰاد=21 / اُستاد=20 / اٌستاد=1
+انعام	attested_homograph	20	اِنعام=44 / اَنعام=20
+لب	attested_homograph	20	لَب=20 / لُبّ=20
+رو	attested_homograph	19	رَو=44 / رُو=19
+قبل	attested_homograph	19	قِبَل=40 / قَبْل=19 / قِبِل=1
+نماند	attested_homograph	19	نَمانَد=62 / نَمانْد=19
+آخر	attested_homograph	18	آخِر=64 / آخُر=18 / آخَر=8
+بن	attested_homograph	18	بُن=181 / بِن=18 / بَن=10 / بْن=2
+دور	attested_homograph	18	دَوْر=35 / دُوْر=18 / دوُر=5 / دِوَر=1
+شست	attested_homograph	18	شَسْت=38 / شُست=18 / شِست=1
+مشک	attested_homograph	18	مُشْک=104 / مَشْک=18 / مِشْک=14
+درم	attested_homograph	17	دِرَم=31 / دَرَم=17 / دُرَم=5 / دِرُم=1
+ماند	attested_homograph	17	مانَد=132 / مانْد=17
+مثل	attested_homograph	17	مَثَل=78 / مِثْل=17 / مُثُل=2 / مَثِل=1
+مجره	attested_homograph	17	مَجِرَّه=30 / مَجَرّه=17
+ورد	attested_homograph	17	وَرَد=22 / وِرْد=17
+گره	attested_homograph	17	گُرُه=95 / گِرِه=17
+گلی	attested_homograph	17	گِلی=23 / گُلی=17
+تنگ	attested_homograph	16	تَنْگ=23 / تُنُگ=16
+خفت	attested_homograph	16	خِفَّت=23 / خُفْت=16 / خفٌت=1 / خَفْت=1
+عقد	attested_homograph	16	عِقْد=43 / عَقْد=16 / عُقَد=1
+لعل	attested_homograph	16	لَعَلّ=27 / لَعْل=16
+کن	attested_homograph	16	کُن=143 / کَن=16
+بدر	malformed_attestation	15	بَدْر=22 / بِدَر=15 / بَِدر=2
+حکم	attested_homograph	15	حُکْم=32 / حَکَم=15 / حِکَم=11
+عجب	attested_homograph	15	عُجْب=49 / عَجَب=15 / عُجَب=1
+غیر	attested_homograph	15	غَیَّر=27 / غَیْر=15 / غِیْر=2
+مشت	attested_homograph	15	مَشْت=18 / مُشْت=15
+پی	attested_homograph	15	پِی=48 / پَیٰ=15
+الا	attested_homograph	14	اِلَّا=647 / اَلَا=14 / اِلٰا=4 / الٌا=1 / الُا=1
+برند	attested_homograph	14	بُرند=27 / بَرَنْد=14
+برید	attested_homograph	14	بُرید=36 / بَرید=14
+بورده	attested_homograph	14	بُوِرْدِه=15 / بَوِرْدِه=14
+بکن	attested_homograph	14	بِکَن=18 / بِکُن=14 / بَکِن=3
+تره	attested_homograph	14	تِرِه=24 / تَرِه=14
+مر	attested_homograph	14	مَر=44 / مُر=14 / مِر=2
+مقام	attested_homograph	14	مَقَام=17 / مُقام=14
+مکن	attested_homograph	14	مَکُن=73 / مَکَن=14
+می‌کند	attested_homograph	14	می‌کُنَد=18 / می‌کَنَد=14 / می‌کَنْد=1
+نقل	attested_homograph	14	نُقل=47 / نَقْل=14
+الذی	attested_homograph	13	الَّذَّی=51 / الَّذِی=13 / الَّذُی=1
+بده	attested_homograph	13	بُده=16 / بِدِه=13
+خضر	attested_homograph	13	خِضِر=24 / خَضِر=13 / خِضْر=5 / خَضَر=4 / خُضْر=3 / خِضَر=1
+شمر	attested_homograph	13	شَمَر=19 / شِمُر=13 / شُمَر=12 / شُمُر=1 / شِمْر=1
+غره	attested_homograph	13	غَرِّه=132 / غُرَّه=13 / غِرّه=4
+می‌برد	attested_homograph	13	می‌بَرَد=24 / می‌بُرَد=13 / می‌بِرَد=8
+نفسی	attested_homograph	13	نَفَسی=21 / نَفْسِی=13
+گه	attested_homograph	13	گَه=112 / گُه=13 / گِه=2
+بدم	attested_homograph	12	بُدَم=103 / بَدَم=12 / بِدَم=4 / بدٌم=1 / بُدُم=1
+خیر	attested_homograph	12	خَیْر=22 / خِیْر=12
+دره	attested_homograph	12	دِرّه=24 / دَرِه=12 / دُرّه=5
+رخش	attested_homograph	12	رُخَش=83 / رَخْش=12
+فر	impossible_initial_shadda	12	فَرّ=536 / فًّر=12 / فِر=3
+لطف	attested_homograph	12	لُطْف=13 / لَطَف=12 / لُطُف=1
+منی	attested_homograph	12	مِنیٰ=26 / مَنی=12 / مُنیٰ=6
+هجر	attested_homograph	12	هَجَر=12 / هِجْر=12 / هَجْر=1
+پری	attested_homograph	12	پَری=35 / پُری=12
+کشم	attested_homograph	12	کُشَم=13 / کَشَم=12 / کِشَم=10 / کَشِم=3 / کُشِم=1
+یک	attested_homograph	12	یَک=15 / یِک=12
+آتش	attested_homograph	11	آتَش=18 / آتِش=11
+بدست	attested_homograph	11	بُدَست=23 / بَدَست=11 / بِدَست=3 / بدُست=1
+بوی	impossible_initial_shadda	11	بُوِی=26 / بَوی=11 / بِّوی=2
+جسته	attested_homograph	11	جَسته=16 / جُسته=11
+جل	attested_homograph	11	جَلّ=25 / جُل=11
+درج	attested_homograph	11	دُرْج=134 / دَرَج=11
+زفت	attested_homograph	11	زُفت=12 / زَفت=11 / زِفت=2
+سم	attested_homograph	11	سُم=134 / سَم=11 / سِم=1
+نجست	attested_homograph	11	نَجُست=16 / نَجَست=11
+نرست	attested_homograph	11	نَرُست=17 / نَرَست=11
+همت	attested_homograph	11	هِمَّت=563 / هَمَت=11
+کشتم	attested_homograph	11	کُشْتَم=11 / کِشتم=11
+کشتن	attested_homograph	11	کُشتن=54 / کِشْتِن=11 / کَشتن=1
+کل	attested_homograph	11	کُلّ=514 / کَلّ=11 / کٌل=1
+گرزم	attested_homograph	11	گُرَزْم=19 / گُرزَم=11
+ام	attested_homograph	10	اُمّ=49 / اَم=10
+برم	attested_homograph	10	بَرَم=36 / بُرَّم=10 / بِرَّم=1
+بکند	attested_homograph	10	بِکُنَد=20 / بکَنَد=10 / بکنْد=1
+جیب	attested_homograph	10	جَیْب=25 / جِیْب=10
+خواند	attested_homograph	10	خوانَد=22 / خوانْد=10
+دوم	attested_homograph	10	دُوُم=27 / دَوَم=10 / دُوِم=1
+روی	attested_homograph	10	رَوِی=51 / رُوی=10
+ز	attested_homograph	10	زِ=284 / زَ=10 / زُ=6 / زٍ=1
+ستر	attested_homograph	10	سِتر=11 / سَتَر=10
+سرم	malformed_attestation	10	سِرَّم=11 / سَرَم=10 / سِرٌَم=3
+عالمی	attested_homograph	10	عالَمی=18 / عالِمی=10
+عرق	attested_homograph	10	عِرق=13 / عَرَق=10 / عَرْق=2
+مس	attested_homograph	10	مَس=37 / مِس=10 / مُسّ=1
+مکش	attested_homograph	10	مَکُش=24 / مَکِش=10 / مَکَش=1
+کنم	attested_homograph	10	کُنَم=44 / کَنَم=10 / کِنِم=4 / کُنُم=1
+گردش	attested_homograph	10	گِرْدِش=26 / گِردَش=10 / گَردَش=7 / گَردِش=2
+گرده	attested_homograph	10	گُرده=10 / گِرْدِه=10 / گَرده=3
+گردی	attested_homograph	10	گَردی=19 / گُردی=10 / گِردی=3
+یوسف	attested_homograph	10	یُوسُف=10 / یُوسِف=10
+ببرید	attested_homograph	9	بِبُرید=11 / بُبْرید=9
+بدن	attested_homograph	9	بُدَن=57 / بَدِن=9
+برست	attested_homograph	9	بِرَست=12 / بِرُست=9 / بَرَست=2 / بُرست=2
+بکشد	attested_homograph	9	بِکُشَد=15 / بُکْشَد=9 / بکَشَد=3 / بکِشد=2
+بکشی	attested_homograph	9	بکُشی=12 / بَکِشی=9 / بِکَشی=3 / بَکَشی=2
+ته	attested_homograph	9	تِه=210 / تَه=9
+خدا	attested_homograph	9	خِدٰا=18 / خُدا=9
+خست	attested_homograph	9	خِسَّت=21 / خَست=9
+خورنق	attested_homograph	9	خَوَرْنَق=10 / خُوَرنَق=9
+خوش	attested_homograph	9	خَوش=75 / خُوش=9
+سخن	attested_homograph	9	سُخُن=72 / سِخِن=9 / سَخُن=8 / سُخَن=5
+سلم	attested_homograph	9	سُلَّم=12 / سَلَم=9 / سَلِم=2 / سَلْم=2 / سِلم=2 / سُلُّم=1
+شوی	attested_homograph	9	شُوی=16 / شَوی=9
+صدق	attested_homograph	9	صَدَّق=10 / صِدْق=9
+عدن	attested_homograph	9	عَدَن=12 / عَدْن=9 / عِدْن=1
+قدر	attested_homograph	9	قَدَر=113 / قَدْر=9 / قِدْر=1
+قسم	attested_homograph	9	قِسم=12 / قَسَم=9 / قَسِم=4
+معین	attested_homograph	9	مُعَیَّن=76 / مَعِین=9 / مُعِین=5
+ملکی	attested_homograph	9	مُلْکی=13 / مَلَکی=9 / مَلِکی=7 / مِلکی=2
+منکر	attested_homograph	9	مُنْکَر=10 / مُنْکِر=9
+ورا	attested_homograph	9	وِرا=11 / وُرا=9 / وَرا=3
+بست	attested_homograph	8	بَسَت=12 / بُست=8 / بَسْت=3
+ترش	attested_homograph	8	تُرُش=41 / تَرَش=8 / تُرْش=1
+جور	attested_homograph	8	جَوْر=10 / جُور=8
+حشر	attested_homograph	8	حَشْر=13 / حَشَر=8
+سرت	attested_homograph	8	سِرَت=10 / سَرَت=8 / سرْت=2
+شعری	attested_homograph	8	شَعْری=13 / شِعرَی=8
+عرض	attested_homograph	8	عَرَض=41 / عِرض=8 / عَرِض=3 / عَرْض=2
+فتد	attested_homograph	8	فُتَد=13 / فِتَد=8
+قل	attested_homograph	8	قُل=30 / قَلّ=8
+لله	attested_homograph	8	لِلَّه=71 / لَلِه=8 / لِلّٰه=8 / لِلِّه=1
+مصحف	attested_homograph	8	مُصْحَف=18 / مَصْحَف=8
+مقدم	attested_homograph	8	مُقَدَّم=34 / مَقْدَم=8
+موسی	attested_homograph	8	موسِی=13 / مُوسیٰ=8
+میل	attested_homograph	8	مَیْل=11 / مِیْل=8
+می‌کشی	attested_homograph	8	می‌کُشی=10 / مِی‌کِشی=8 / می‌کَشی=5
+نخست	attested_homograph	8	نُخُست=10 / نَخَست=8 / نَخُست=1
+نهم	attested_homograph	8	نُهُم=8 / نِهَم=8 / نَهَم=4
+هزار	attested_homograph	8	هِزٰار=11 / هَزٰار=8
+هشت	attested_homograph	8	هِشْت=65 / هَشْت=8
+چشم	attested_homograph	8	چَشْم=72 / چِشْم=8 / چِشَم=1
+گردن	attested_homograph	8	گِرْدِن=15 / گَرْدِن=8
+گرسنه	attested_homograph	8	گُرْسِنِه=14 / گُرسَنه=8 / گُرُسْنه=1
+اوی	attested_homograph	7	اُوی=18 / اَوی=7
+بردار	attested_homograph	7	بَرْدار=34 / بُردار=7
+برهان	attested_homograph	7	بُرْهان=13 / بِرْهان=7 / بِرَهان=1
+بسم	attested_homograph	7	بَسَم=11 / بِسْم=7
+بلا	attested_homograph	7	بِلَا=11 / بَلا=7
+بنا	attested_homograph	7	بَنا=8 / بِنَا=7 / بِنٰا=4 / بُنا=3
+بکش	attested_homograph	7	بِکُش=44 / بِکَش=7 / بَکِش=6 / بُکش=1
+جستم	attested_homograph	7	جُسْتَم=30 / جَستَم=7
+جو	attested_homograph	7	جَو=23 / جُو=7
+حدی	attested_homograph	7	حَدَی=23 / حُدَی=7
+حزن	attested_homograph	7	حَزَن=9 / حُزن=7
+حسام	attested_homograph	7	حُسَام=38 / حِسام=7
+حکمت	attested_homograph	7	حُکمَت=15 / حِکْمَت=7
+خلخ	attested_homograph	7	خَلُّخ=43 / خُلُخ=7 / خَلَّخ=2
+دردی	attested_homograph	7	دُردی=214 / دَردی=7
+درو	attested_homograph	7	دُرو=8 / دَرو=7 / دِرَو=7 / دِرُو=3
+دلم	attested_homograph	7	دِلَم=9 / دلِم=7 / دلُم=2
+دمش	attested_homograph	7	دَمَش=17 / دُمش=7
+رستم	attested_homograph	7	رَستَم=19 / رُسْتِم=7 / رُستَم=1
+سبل	attested_homograph	7	سُبُل=10 / سَبَل=7
+طرفه	attested_homograph	7	طُرْفِه=26 / طَرْفِه=7
+طمع	attested_homograph	7	طَمْع=13 / طَمَع=7
+عز	attested_homograph	7	عِزّ=304 / عَزّ=7 / عُز=1
+عقاب	attested_homograph	7	عِقاب=63 / عُقاب=7
+عمر	attested_homograph	7	عُمَر=85 / عُمْر=7 / عَمْر=6
+فرد	attested_homograph	7	فَرُدّ=8 / فَرْد=7 / فُرد=1
+لم	attested_homograph	7	لَم=89 / لِم=7
+مشکین	attested_homograph	7	مُشْکین=25 / مِشْکین=7 / مَشْکین=1
+مگر	attested_homograph	7	مَگَر=11 / مَگِر=7
+نعم	attested_homograph	7	نِعَم=37 / نَعَم=7 / نِعْم=2
+پرست	attested_homograph	7	پُرَست=13 / پَرَست=7
+پشت	attested_homograph	7	پُشْت=35 / پِشْت=7 / پَشت=1
+کان	attested_homograph	7	کَاَنّ=24 / کٰان=7
+کت	attested_homograph	7	کِت=47 / کَت=7 / کُت=2
+کرده	attested_homograph	7	کِرْدِه=18 / کَرْده=7
+کشند	attested_homograph	7	کُشند=18 / کِشند=7
+کنده	attested_homograph	7	کَندَه=12 / کُنده=7
+گو	attested_homograph	7	گُو=12 / گَو=7
+گوهر	attested_homograph	7	گُوُهِر=26 / گَوُهِر=7 / گوهَر=3 / گُوْهِر=1
+یمن	attested_homograph	7	یُمْن=76 / یَمَن=7 / یَمِن=1 / یَمْن=1
+آدم	attested_homograph	6	آدِم=16 / آدَم=6
+إنی	attested_homograph	6	إِنِّی=7 / إِنَّی=6
+ابا	attested_homograph	6	اِبا=22 / اَبَا=6
+ابر	attested_homograph	6	اَبَر=21 / اَبْر=6
+انه	attested_homograph	6	اِنَّه=23 / اَنَّه=6 / اِنِه=4 / اَنِّه=1
+برخ	attested_homograph	6	بُرخ=10 / بَرخ=6
+برده	attested_homograph	6	بُرْدِه=44 / بَرده=6
+برفه	attested_homograph	6	بِرْفِه=7 / بَرْفِه=6
+بل	attested_homograph	6	بَل=19 / بُل=6 / بِل=3
+بهر	attested_homograph	6	بَهْر=29 / بِهَر=6
+جمال	attested_homograph	6	جَمَال=9 / جِمال=6
+ختا	attested_homograph	6	خِتٰا=8 / خَتا=6
+خر	attested_homograph	6	خَر=24 / خِر=6
+خلقان	attested_homograph	6	خُلقان=8 / خَلْقان=6
+خیل	attested_homograph	6	خَیْل=6 / خِیْل=6
+درفشان	attested_homograph	6	دُرْفَشان=36 / دُرفِشان=6 / دِرَفْشان=3 / دَرَفشان=1
+دهون	attested_homograph	6	دِهُون=13 / دُهُوِن=6 / دْهُون=1
+سرا	attested_homograph	6	سِرَاً=15 / سَرَا=6 / سُرا=2 / سِرٰا=1
+سرین	attested_homograph	6	سُرِین=13 / سَرْین=6
+شعر	attested_homograph	6	شَعْر=18 / شِعْر=6
+طی	attested_homograph	6	طَی=36 / طِی=6
+ظلم	attested_homograph	6	ظُلَم=24 / ظَلَم=6 / ظُلْم=3 / ظِلم=1
+عباد	attested_homograph	6	عَبِاد=10 / عِبَاد=6 / عُبّاد=2
+علوی	attested_homograph	6	عِلْوی=13 / عُلْوی=6 / عِلُوی=1
+فکند	attested_homograph	6	فِکَنْد=11 / فِکَنَد=6
+قران	attested_homograph	6	قِران=45 / قَران=6 / قُران=1
+ما	attested_homograph	6	مَا=84 / مٰا=6 / مُا=1
+مبین	attested_homograph	6	مُبَیَّن=22 / مَبین=6 / مُبِین=3
+مرغ	attested_homograph	6	مُرغ=8 / مَرْغ=6 / مِرْغ=4
+معجر	attested_homograph	6	مَعْجَر=6 / مِعجَر=6
+معنی	attested_homograph	6	مُعَنِّی=52 / مَعْنَی=6
+منعم	attested_homograph	6	مُنْعِم=21 / مَنعَم=6 / مُنْعَم=1
+مهرش	attested_homograph	6	مِهرَش=8 / مُهرش=6
+ندهد	attested_homograph	6	نَدَهَد=8 / نَدْهَد=6
+وی	attested_homograph	6	وِی=25 / وَی=6
+کتاب	attested_homograph	6	کُتّاب=9 / کِتَاب=6
+کردی	attested_homograph	6	کِرْدی=14 / کُردی=6
+کفار	attested_homograph	6	کَفَّار=28 / کُفّار=6
+کهن	attested_homograph	6	کُهَن=8 / کُهُن=6 / کَهُن=2 / کُهِن=1
+یارب	attested_homograph	6	یَارَبّ=7 / یٰارَب=6
+آورد	attested_homograph	5	آوَرَد=56 / آوَرْد=5 / آوُرد=2 / آوَرِد=1 / آوِرَد=1
+اذا	attested_homograph	5	اِذَا=71 / اِذٰا=5 / اِذًا=1
+الف	attested_homograph	5	اَلِف=15 / اِلْف=5 / اُلْف=3 / اَلْف=1 / اُلِف=1
+انس	attested_homograph	5	اُنس=17 / اَنَس=5 / اِنس=5
+بجست	attested_homograph	5	بِجَست=28 / بجُست=5
+بخواند	attested_homograph	5	بخوانَد=5 / بِخوانْد=5
+بدو	attested_homograph	5	بِدَو=27 / بَدْو=5
+برفت	attested_homograph	5	بِرَفت=11 / بِرُفْت=5
+بنان	attested_homograph	5	بَنَان=8 / بُنان=5
+بوم	malformed_attestation	5	بُوَم=63 / بَوِّم=5 / بَوْم=1 / بَُوم=1 / بُوْم=1
+بکشت	attested_homograph	5	بِکُشْت=38 / بِکِشت=5
+تبع	attested_homograph	5	تَبَع=7 / تُبٌع=5
+تر	attested_homograph	5	تَر=77 / تِر=5
+جدی	attested_homograph	5	جَدْی=14 / جُدَی=5 / جِدّی=2
+جستی	attested_homograph	5	جُستی=18 / جَستی=5
+جعد	attested_homograph	5	جَعْد=21 / جُعد=5
+خلقی	attested_homograph	5	خَلقی=6 / خُلقی=5
+درش	attested_homograph	5	دُرش=13 / دَرَش=5
+درهم	attested_homograph	5	دِرهم=11 / دَرهَم=5
+دهم	attested_homograph	5	دَهَم=6 / دِهَم=5 / دَهُم=1 / دُهم=1
+دوس	attested_homograph	5	دُوس=24 / دَوِس=5 / دَوْس=3
+دونه	attested_homograph	5	دُونِه=13 / دَوِنِّه=5 / دَوُنه=1
+دیر	attested_homograph	5	دِیْر=49 / دَیْر=5
+رخشان	attested_homograph	5	رَخَشان=5 / رُخِشان=5
+رسد	attested_homograph	5	رَسَد=10 / رِسَد=5
+رسم	attested_homograph	5	رَسَم=18 / رَسْم=5 / رِسَم=3
+زبر	attested_homograph	5	زِبَر=15 / زَبَر=5 / زُبُر=3
+سره	attested_homograph	5	سَرَّه=9 / سِرِه=5 / سِرُّه=1
+سرور	attested_homograph	5	سَروَر=13 / سُرور=5
+سن	attested_homograph	5	سِن=7 / سَن=5 / سُن=1
+شبه	attested_homograph	5	شَبَه=24 / شِبه=5
+شد	attested_homograph	5	شُد=36 / شَد=5
+شربت	attested_homograph	5	شَرْبِت=7 / شَرِبْت=5 / شَربَت=1
+شوم	attested_homograph	5	شَوَم=37 / شُوَم=5
+طیب	attested_homograph	5	طَیِّب=19 / طِیب=5
+علی	attested_homograph	5	عَلَی=186 / عَلِیّ=5 / عُلیٰ=3 / عَلْی=1
+فرق	attested_homograph	5	فِرَق=7 / فَرق=5
+قوس	attested_homograph	5	قَوس=7 / قُوس=5
+محک	attested_homograph	5	مَحَکّ=14 / مِحَک=5
+مدبر	attested_homograph	5	مُدَبَّر=22 / مُدَبِّر=5 / مَدبر=1
+مره	attested_homograph	5	مِرِه=48 / مَرَّه=5 / مُرِّه=2 / مَرِه=1 / مُرَه=1 / مْرَّه=1
+مسلم	attested_homograph	5	مُسَلَّم=137 / مُسْلِم=5
+مظهر	attested_homograph	5	مُظْهِر=10 / مَظْهَر=5
+مل	attested_homograph	5	مُل=45 / مَل=5
+ملا	attested_homograph	5	مُلّا=20 / مَلا=5
+منش	attested_homograph	5	مَنَش=29 / مَنِش=5
+مهری	attested_homograph	5	مُهری=9 / مِهری=5 / مَهری=1
+ناوک	attested_homograph	5	نٰاوَک=11 / نٰاوُک=5
+نتوان	attested_homograph	5	نَتْوان=21 / نَتَوان=5
+نو	attested_homograph	5	نُو=9 / نَو=5
+نیم	attested_homograph	5	نِیَم=102 / نَیَم=5
+ود	attested_homograph	5	وَدّ=7 / وُد=5
+پست	attested_homograph	5	پَسَت=20 / پِست=5
+چل	attested_homograph	5	چَل=19 / چِل=5
+کره	attested_homograph	5	کُره=56 / کَرِه=5 / کِرِه=4 / کِرَه=1
+کس	attested_homograph	5	کَس=160 / کُس=5 / کِس=1
+کنشت	attested_homograph	5	کُنِشْت=8 / کِنِشْت=5
+کنند	attested_homograph	5	کُنَنَد=7 / کَنَند=5
+گزیده	attested_homograph	5	گُزیده=10 / گَزیده=5
+ابی	rare_reading	4	اُبی=8 / اَبَی=4
+استا	rare_reading	4	اُستا=9 / اِسْتٰا=4
+استم	rare_reading	4	اِستم=17 / اَستُم=4
+اسر	rare_reading	4	اَسر=5 / اُسر=4
+الم	rare_reading	4	اَلَم=28 / اِلَم=4 / اُلم=1
+امه	rare_reading	4	اَمِه=4 / اِمِّه=4 / امُّه=1
+انها	rare_reading	4	اِنَّها=7 / اَنَّهَا=4
+اول	rare_reading	4	اَوَّل=793 / اَوِّل=4
+اگر	rare_reading	4	اَگِر=6 / اَگَر=4
+ببرم	rare_reading	4	بِبُرَّم=22 / بِبَرَم=4 / بُبَرم=1
+ببری	rare_reading	4	بِبُری=16 / بِبَری=4 / بُبَری=2
+بخرد	rare_reading	4	بَخِرْد=7 / بِخْرَد=4 / بَخْرِد=1 / بِخَرد=1
+بران	rare_reading	4	بُران=38 / بِران=4 / بَران=1
+بردم	rare_reading	4	بُردَم=25 / بَردَم=4
+برش	rare_reading	4	بَرَش=22 / بَرْش=4 / بُرّش=4
+بستد	rare_reading	4	بِسَتَد=16 / بِستُد=4 / بِسْتَد=1
+بمرد	rare_reading	4	بِمُرد=16 / بَمِرْد=4
+به	rare_reading	4	بِه=758 / بَه=4
+بو	rare_reading	4	بُو=67 / بَو=4
+بکم	rare_reading	4	بِکُم=5 / بُکْم=4 / بَکَم=2
+تند	rare_reading	4	تُند=11 / تَنَد=4 / تٌند=1
+تنش	rare_reading	4	تنْش=4 / تَنَش=4
+ثم	rare_reading	4	ثُم=62 / ثَمّ=4
+جستن	rare_reading	4	جُستن=45 / جَستن=4
+جوی	rare_reading	4	جُوِی=14 / جَوی=4
+حب	rare_reading	4	حُبّ=210 / حَبّ=4
+حل	rare_reading	4	حَلّ=72 / حِلّ=4
+خره	rare_reading	4	خَرِه=5 / خُرُه=4 / خِرِه=2
+خش	rare_reading	4	خِش=33 / خَش=4 / خْش=1
+خلد	rare_reading	4	خُلْد=90 / خَلَد=4 / خِلَد=2
+خلقت	rare_reading	4	خُلقت=8 / خَلقَت=4 / خِلقت=4
+خلل	rare_reading	4	خَلَل=10 / خِلَل=4
+درت	rare_reading	4	دَرَت=9 / دُرّت=4
+دل	rare_reading	4	دِل=161 / دَلّ=4 / دْل=1
+دمه	rare_reading	4	دِمِّه=7 / دَمِه=4 / دِمًه=2
+دمی	rare_reading	4	دَمی=27 / دُمی=4
+دی	rare_reading	4	دِی=11 / دَی=4
+رب	rare_reading	4	رَبّ=232 / رُبّ=4
+رحم	rare_reading	4	رَحِم=10 / رَحْم=4 / رُحَم=1
+رز	rare_reading	4	رَز=25 / رُز=4
+ری	rare_reading	4	رِی=6 / رَی=4
+زر	rare_reading	4	زَر=339 / زِر=4 / زُر=1
+زمرد	rare_reading	4	زُمُرُّد=66 / زُمْرُد=4
+سرش	rare_reading	4	سَرَش=19 / سرْش=4 / سِرَش=2
+سرها	rare_reading	4	سِرّها=21 / سَرها=4
+سلمی	rare_reading	4	سَلْمیٰ=10 / سُلَّمی=4 / سَلُمی=1
+سند	rare_reading	4	سِند=6 / سَنَد=4
+شبان	rare_reading	4	شُبان=5 / شَبان=4
+شحنه	rare_reading	4	شَحنِه=6 / شِحْنِه=4
+شسته	rare_reading	4	شُسته=8 / شِسته=4 / شَسته=1
+شش	rare_reading	4	شَش=5 / شِش=4 / شُش=2
+شکربار	rare_reading	4	شَکّربار=5 / شِکربار=4
+شکرت	rare_reading	4	شِکَّرت=18 / شُکرت=4
+صراحی	rare_reading	4	صُراحی=17 / صِرٰاحی=4
+صرف	rare_reading	4	صِرْف=9 / صَرَّف=4 / صَرْف=1
+طرف	rare_reading	4	طَرْف=45 / طَرَف=4 / طُرَف=2
+ظلمات	rare_reading	4	ظُلُمات=8 / ظِلِمٰات=4 / ظُلْمات=3 / ظُلَمات=1
+عشر	rare_reading	4	عُشْر=17 / عَشْر=4 / عَشَر=1
+عطارد	rare_reading	4	عُطارِد=10 / عَطارُد=4
+عقار	rare_reading	4	عُقَار=11 / عِقٰار=4 / عَقار=1
+عمان	rare_reading	4	عُمّان=78 / عَمّان=4
+عیب	rare_reading	4	عَیْب=6 / عِیْب=4
+عین	rare_reading	4	عَیْن=18 / عِیْن=4
+فتاد	rare_reading	4	فُتاد=6 / فِتاد=4
+فرقت	rare_reading	4	فُرْقِت=15 / فُرقَت=4 / فرَّقْت=1
+فکر	rare_reading	4	فَکَر=5 / فِکَر=4 / فِکْر=2
+قبا	rare_reading	4	قَبا=5 / قُبا=4 / قِبٰا=3
+قلت	rare_reading	4	قُلْت=14 / قِلَّت=4
+قلم	rare_reading	4	قَلَم=8 / قَلِم=4 / قِلم=1
+قمری	rare_reading	4	قُمری=11 / قَمَرِی=4
+قوت	rare_reading	4	قُوَّت=417 / قُوْت=4 / قوُت=3 / قُوِّت=1
+قوی	rare_reading	4	قَوِیّ=6 / قوْی=4
+لکن	rare_reading	4	لٰکِنّ=5 / لَکِن=4 / لَکُن=1
+محبت	rare_reading	4	مَحَبَّت=318 / مُحَبَّت=4 / مُحبِّت=1 / مُحِبَّت=1
+مخبر	rare_reading	4	مَخبَر=6 / مُخَبِّر=4
+مخلص	rare_reading	4	مَخلَص=6 / مُخلِص=4 / مُخَلَّص=3
+مدحت	rare_reading	4	مِدْحَت=8 / مَدْحَت=4
+مراد	rare_reading	4	مُراد=19 / مِرٰاد=4 / مَرّاد=1
+مست	rare_reading	4	مَسْت=17 / مُست=4 / مِسَت=4
+مشمر	rare_reading	4	مُشَمَّر=7 / مَشمُر=4
+معصفر	rare_reading	4	مُعْصَفَر=7 / مُعَصْفَر=4
+معلم	rare_reading	4	مُعَلِّم=24 / مُعْلَم=4 / مَعلَم=1
+ممد	rare_reading	4	مَمَّد=4 / مُمِد=4
+منا	rare_reading	4	مِنَّا=19 / مَنا=4 / مُنا=1 / مِنٰا=1
+منزل	rare_reading	4	مُنْزَل=13 / مِنْزِل=4 / مَنْزَل=2 / مَنزِل=1 / مُنزِل=1
+مهان	rare_reading	4	مِهان=5 / مَهان=4 / مُهان=2
+می‌جست	rare_reading	4	می‌جَست=6 / می‌جُست=4
+می‌کنم	rare_reading	4	می‌کَنَم=5 / می‌کُنَم=4
+نبرده	rare_reading	4	نِبَرده=6 / نَبَرده=4
+نبرم	rare_reading	4	نبُرّم=4 / نَبَرم=4
+نبری	rare_reading	4	نَبَری=5 / نَبُری=4
+نخوت	rare_reading	4	نَخوَت=4 / نِخوَت=4
+ند	rare_reading	4	نَد=6 / نِدّ=4
+نظر	rare_reading	4	نَظَر=9 / نَظِر=4
+نهاد	rare_reading	4	نَهاد=4 / نِهاد=4
+نکشد	rare_reading	4	نَکِشَد=9 / نکُشد=4
+نی	rare_reading	4	نِی=86 / نَی=4
+هدی	rare_reading	4	هُدیٰ=17 / هَدْی=4
+هذا	rare_reading	4	هَذَا=26 / هٰذَا=4 / هَذٰاٰ=2
+هر	rare_reading	4	هَر=104 / هِر=4
+همم	rare_reading	4	هِمَم=6 / هُمَم=4
+هی	rare_reading	4	هِی=23 / هَی=4
+ول	rare_reading	4	وَل=5 / وِل=4
+چادر	rare_reading	4	چادَر=4 / چٰادِر=4
+چرا	rare_reading	4	چَرا=8 / چِرا=4
+چنگل	rare_reading	4	چِنگَل=6 / چَنْگُل=4 / چَنگَل=1
+کاهل	rare_reading	4	کَاهِل=4 / کَاَهْل=4
+کسی	rare_reading	4	کَسی=13 / کُسی=4 / کِسی=1
+گذر	rare_reading	4	گِذِر=9 / گُذَر=4
+گلستان	rare_reading	4	گُلْسِتان=48 / گُلِسْتان=4
+گلم	rare_reading	4	گِلَم=15 / گُلُم=4
+آمنا	rare_reading	3	آمَنَّا=16 / آمِنَا=3
+ا	rare_reading	3	اَ=4 / اِ=3 / اُ=2 / اْ=1
+اجل	rare_reading	3	اَجَل=21 / اَجِل=3 / اَجْل=1
+ارنی	rare_reading	3	اَرَنی=5 / اَرِنِی=3 / اَرْنَی=1
+البر	rare_reading	3	الْبِرّ=4 / البَرّ=3
+اله	rare_reading	3	اِلَه=130 / اِلٰه=3 / اَلّه=1
+اما	rare_reading	3	اَمَّا=272 / اِمّا=3 / اَمّٰا=1
+انسی	rare_reading	3	اُنسی=6 / اِنسی=3
+انگشت	rare_reading	3	اَنگِشت=17 / انگُشت=3 / انگَشت=1
+انی	rare_reading	3	اِنِّی=57 / اَنِّی=3 / انَّی=1
+اولا	rare_reading	3	اولاً=27 / اُولا=3
+اولی	rare_reading	3	اُوْلِی=15 / اَولیٰ=3
+اینت	rare_reading	3	اینْت=13 / اینَت=3
+با	rare_reading	3	بٰا=17 / بَا=3 / بِا=1
+ببرند	rare_reading	3	بِبُرَّند=17 / بِبَرَند=3
+بخت	rare_reading	3	بَخْت=13 / بُخت=3 / بَخِت=1
+بدت	rare_reading	3	بَدَت=3 / بُدت=3
+بدش	rare_reading	3	بُدَش=38 / بَدَش=3 / بُدْش=1
+بروی	rare_reading	3	بِرَوی=8 / بَروی=3
+برکند	rare_reading	3	بَرکَنَد=20 / بَرکُند=3 / بَرکَنْد=1
+برکنم	rare_reading	3	بَرکَنَم=10 / بَرکُنم=3
+برگرد	rare_reading	3	برگَرْد=3 / برگِرَد=3
+بزی	rare_reading	3	بِزِی=8 / بُزی=3 / بَزِی=1
+بلبل	rare_reading	3	بِلْبِل=15 / بُلْبُل=3
+بلغ	rare_reading	3	بَلِّغ=7 / بَلَغ=3
+بنی	rare_reading	3	بُنَی=6 / بَنِیّ=3 / بَنَی=2 / بِنی=2
+بود	rare_reading	3	بُوَد=1990 / بوْد=3 / بٌوَد=2 / بوُد=1 / بْوَد=1
+بووم	rare_reading	3	بَوْوِّم=6 / بَوِّوم=3
+بکرد	rare_reading	3	بَکِرْد=8 / بِکَرْد=3
+بکشتم	rare_reading	3	بکُشتم=4 / بِکِشتم=3
+بکشتند	rare_reading	3	بِکُشتند=9 / بکِشتند=3
+بکشم	rare_reading	3	بِکُشَم=8 / بَکِشِم=3 / بُکشم=1
+تحیر	rare_reading	3	تَحَیَّر=56 / تَحَیُّر=3 / تحُّیر=2
+توام	rare_reading	3	تواَم=121 / تواُم=3
+توان	rare_reading	3	تَوان=3 / تْوان=3
+جنب	rare_reading	3	جُنُب=9 / جَنب=3
+جهد	rare_reading	3	جَهَد=26 / جَهْد=3
+جیش	rare_reading	3	جِیش=5 / جَیش=3
+حر	rare_reading	3	حُر=42 / حَرّ=3
+حرمت	rare_reading	3	حُرمَت=9 / حَرَمَت=3
+حساد	rare_reading	3	حَسّاد=5 / حُسّاد=3
+ختن	rare_reading	3	خُتَن=34 / خَتَن=3 / خُتِن=1 / خِتن=1
+خجل	rare_reading	3	خِجِل=15 / خَجِل=3
+خدمت	rare_reading	3	خَدَمَت=3 / خِدْمَت=3 / خِدْمِت=1
+خدنگ	rare_reading	3	خَدَنگ=5 / خَدِنْگ=3 / خِدَنْگ=2
+خرده	rare_reading	3	خُرده=5 / خِرْدِه=3
+خرم	rare_reading	3	خُرَّم=363 / خَرَم=3 / خرُم=1 / خرْم=1 / خُرِّم=1 / خِرِم=1
+خطه	rare_reading	3	خَطُّه=65 / خِطّه=3
+خلقش	rare_reading	3	خُلقش=7 / خَلقش=3
+خمارم	rare_reading	3	خَمّارم=4 / خُمارم=3
+خماری	rare_reading	3	خُماری=4 / خَمّاری=3
+خمر	rare_reading	3	خَمَّر=23 / خَمْر=3 / خُمر=1
+خمی	rare_reading	3	خُمی=11 / خَمی=3
+خوی	rare_reading	3	خَوی=9 / خُوی=3 / خِوی=3
+دامن	rare_reading	3	دٰامِن=6 / دامَن=3
+دردم	rare_reading	3	دَرْدَم=5 / دردِم=3
+دستور	rare_reading	3	دُستور=18 / دَستور=3
+دق	rare_reading	3	دَق=7 / دِقّ=3
+دلش	rare_reading	3	دلْش=11 / دِلَش=3
+دنی	rare_reading	3	دَنِی=47 / دِنی=3 / دَنَی=1
+دوان	rare_reading	3	دَوان=3 / دُوان=3
+دوست	rare_reading	3	دُوسْت=55 / دَوِسْت=3 / دُوسُت=1
+دولت	rare_reading	3	دُولِت=6 / دَولَت=3 / دَوْلِت=3
+دژم	rare_reading	3	دُژَم=16 / دِژم=3
+دکت	rare_reading	3	دَکِت=20 / دکَت=3 / دَکْت=1
+دیرم	rare_reading	3	دیرِم=8 / دیرُم=3
+ذنب	rare_reading	3	ذَنْب=7 / ذَنَب=3
+رباب	rare_reading	3	رَباب=7 / رُباب=3
+رفتن	rare_reading	3	رُفتن=14 / رَفْتَن=3
+رمان	rare_reading	3	رَمان=3 / رُمّان=3
+روم	rare_reading	3	رَوَم=29 / رُوم=3 / رِوَم=1
+زره	rare_reading	3	زِرِه=10 / زَرِه=3 / زِرَه=1
+زنار	rare_reading	3	زُنّار=298 / زَنّار=3 / زٌنار=1
+زهر	rare_reading	3	زَهر=9 / زُهَر=3 / زِهر=1
+سده	rare_reading	3	سُدَّه=31 / سِدِه=3
+سدی	rare_reading	3	سَدّی=10 / سُدی=3
+سرخه	rare_reading	3	سِرْخِه=8 / سَرْخِه=3
+سرمه	rare_reading	3	سُرْمِه=7 / سِرْمِه=3 / سرمَه=1
+سروش	rare_reading	3	سَروَش=17 / سُروش=3
+سری‌ست	rare_reading	3	سَری‌ست=4 / سِرّی‌ست=3
+سفله	rare_reading	3	سِفْله=14 / سُفله=3
+سنی	rare_reading	3	سُنّی=15 / سَنی=3
+سوار	rare_reading	3	سُوار=14 / سِوار=3
+سوی	rare_reading	3	سِوَی=12 / سُوی=3 / سَوی=2
+سیل	rare_reading	3	سَیْل=4 / سِیل=3
+شرب	rare_reading	3	شُرْب=12 / شَرَب=3 / شَرِب=1 / شِرْب=1
+شکرش	rare_reading	3	شِکَرَش=19 / شَکَّرش=3 / شُکرش=1
+شکری	rare_reading	3	شِکَّری=15 / شُکْری=3 / شَکْری=1
+شی	rare_reading	3	شَی=10 / شِی=3
+شید	rare_reading	3	شَیَّد=3 / شِیْد=3
+صدف	rare_reading	3	صَدِف=11 / صَدَف=3
+طلعت	rare_reading	3	طَلْعَت=8 / طَلَعَت=3
+علا	rare_reading	3	عُلا=4 / عَلَا=3
+غل	rare_reading	3	غُل=32 / غِل=3 / غَلّ=1
+غنی	rare_reading	3	غَنّیٰ=8 / غَنْی=3 / غِنی=1
+فاستقم	rare_reading	3	فاَستَقِم=3 / فَاْسْتَقِم=3
+فتوی	rare_reading	3	فَتوی=3 / فِتویٰ=3
+فردا	rare_reading	3	فَرْداً=4 / فِرْدٰا=3
+فرس	rare_reading	3	فَرَس=19 / فُرُس=3 / فَرِس=1
+فروشد	rare_reading	3	فُروشُد=4 / فروشَد=3
+فعل	rare_reading	3	فِعْل=5 / فَعَل=3
+فهم	rare_reading	3	فَهُم=7 / فَهْم=3
+فی	rare_reading	3	فِی=219 / فَی=3 / فُی=2
+قبله	rare_reading	3	قُبله=5 / قِبْلِه=3 / قَبلِه=2
+قدرت	rare_reading	3	قَدَرَت=10 / قُدرت=3 / قَدْرَت=2
+لخت	rare_reading	3	لَخْت=15 / لُخت=3
+له	rare_reading	3	لَه=52 / لِه=3
+ماهی	rare_reading	3	مَاهِی=5 / مٰاهی=3
+محل	rare_reading	3	مَحَل=54 / مُحل=3 / مَحْل=1
+محمد	rare_reading	3	مَحَمّد=315 / مُحَمّد=3
+مدار	rare_reading	3	مَدار=11 / مِدٰار=3
+مرا	rare_reading	3	مَرا=35 / مُرّاً=3 / مِرا=3
+مردمی	rare_reading	3	مَردُمی=8 / مُردمی=3
+مرده	rare_reading	3	مُرده=58 / مَرده=3 / مِرْدِه=1
+مستی	rare_reading	3	مَسْتی=13 / مُستی=3
+ملی	rare_reading	3	مُلی=6 / مَلی=3
+مهرت	rare_reading	3	مُهرت=3 / مِهرت=3
+مهرم	rare_reading	3	مُهرم=4 / مِهرم=3
+مکرمت	rare_reading	3	مَکرَمَت=3 / مَکْرِمت=3 / مَکرُمت=2 / مُکرِمَت=1
+میت	rare_reading	3	مَیِّت=21 / مِیَت=3 / مَیْت=1
+میسر	rare_reading	3	مُیَسَّر=137 / مَیسِر=3
+می‌برند	rare_reading	3	می‌بُرَند=4 / می‌بَرند=3
+می‌رفت	rare_reading	3	می‌رَفت=3 / می‌رُفت=3
+می‌کنی	rare_reading	3	می‌کَنی=9 / می‌کُنی=3
+نبوی	rare_reading	3	نَبَوی=4 / نَبْوی=3 / نَبُوی=1
+نشاط	rare_reading	3	نَشاط=4 / نِشٰاط=3
+نشست	rare_reading	3	نِشَسْت=7 / نشُست=3
+نشسته	rare_reading	3	نِشَسْتِه=4 / نَشُسته=3
+نشومه	rare_reading	3	نَشُومِّه=4 / نَشُومَه=3
+نفور	rare_reading	3	نَفور=3 / نُفُور=3
+نقاب	rare_reading	3	نِقٰاب=5 / نَقّاب=3
+نماید	rare_reading	3	نُماید=6 / نَماید=3
+نوره	rare_reading	3	نَوِرِه=4 / نُوْرَه=3 / نُورُه=1
+نوشروان	rare_reading	3	نوشِرْوان=8 / نوشْرَوان=3
+نوم	rare_reading	3	نُوَم=23 / نَوْم=3 / نُوْم=1
+نوویی	rare_reading	3	نَوُویی=7 / نُوویی=3
+نوی	rare_reading	3	نَوی=8 / نُوی=3
+همه	rare_reading	3	هَمِه=17 / هِمَّه=3
+وثاق	rare_reading	3	وُثاق=5 / وِثاق=3
+وهم	rare_reading	3	وَهُم=14 / وَهْم=3
+پیرامن	rare_reading	3	پیرامُن=6 / پیرامَن=3
+کشتند	rare_reading	3	کُشتند=18 / کِشتند=3
+کشتیم	rare_reading	3	کِشتیم=6 / کُشتیم=3
+کشیم	rare_reading	3	کُشیَم=6 / کِشیم=3
+کمیت	rare_reading	3	کُمِیْت=14 / کُمَیت=3 / کمیِت=1
+کنون	rare_reading	3	کُنون=10 / کِنُون=3
+کهی	rare_reading	3	کُهی=14 / کِهی=3
+کون	rare_reading	3	کَوْن=76 / کُوْن=3 / کَوَن=1
+گرش	rare_reading	3	گَرَش=8 / گَرْش=3
+گلت	rare_reading	3	گُلت=10 / گِلت=3
+گلش	rare_reading	3	گُلش=8 / گِلش=3
+گل‌ها	rare_reading	3	گِل‌ها=4 / گُل‌ها=3
+گنده	rare_reading	3	گَندَه=9 / گُنده=3 / گِنْدِه=1
+گوی	rare_reading	3	گُوی=4 / گَوی=3
+ء	rare_reading	2	ءٍ=2 / ءِ=2
+آمدش	rare_reading	2	آمَدْش=10 / آمَدَش=2
+آمن	rare_reading	2	آمِن=6 / آمَن=2
+أم	rare_reading	2	أَم=2 / أُمّ=2
+اذن	rare_reading	2	اُذُن=2 / اِذن=2 / اُذْن=1
+ارمن	rare_reading	2	اَرمَن=5 / اِرمن=2
+است	malformed_attestation	2	اَسْت=61 / اُست=2 / اِست=2 / اَُست=1
+اسقنی	rare_reading	2	اِسْقِنی=4 / اَسقِنِی=2
+اشک	rare_reading	2	اَشْک=4 / اِشَک=2
+اعد	rare_reading	2	اَعَدّ=3 / اَعِد=2
+اعراض	rare_reading	2	اَعراض=4 / اِعراض=2
+اعمی	rare_reading	2	اَعْمیٰ=9 / اُعمی=2
+افشاند	rare_reading	2	اَفشانَد=4 / افْشانْد=2
+افکند	rare_reading	2	افکَنَد=11 / اَفْکَنْد=2
+الجد	rare_reading	2	اَلجِدّ=5 / الجَدّ=2
+الحب	rare_reading	2	اَلْحُبّ=27 / الْحِبّ=2
+الحزن	rare_reading	2	الحَزَن=6 / الحُزن=2 / الحَزِن=1
+الحسن	rare_reading	2	الْحُسْن=6 / الْحَسَن=2
+السبیل	rare_reading	2	السَّبیل=2 / السُبِیل=2
+العالمین	rare_reading	2	الْعَالَمِین=8 / الْعَالِمِین=2
+الملک	rare_reading	2	اَلْمُلْک=13 / المَلَک=2 / المَلِک=1
+امت	rare_reading	2	اُمَّت=117 / اَمُت=2
+امرا	rare_reading	2	اُمَرا=3 / اَمراً=2
+انعامتان	rare_reading	2	اَنعامتان=3 / اِنعامتان=2
+اننی	rare_reading	2	اَنَّنِی=5 / اِنَّنی=2
+ایزد	rare_reading	2	ایزِد=4 / ایزَد=2
+اینش	rare_reading	2	اینْش=3 / اینَش=2
+بالله	rare_reading	2	بِاللَّه=37 / بِاللّٰه=2
+بایدت	rare_reading	2	بایدْت=5 / بایَدَت=2
+بجستند	rare_reading	2	بجُستند=3 / بجَستند=2
+بحرم	rare_reading	2	بَحْرُم=3 / بَحَرم=2
+بختی	rare_reading	2	بُختی=12 / بَخْتی=2
+بخل	rare_reading	2	بُخل=13 / بَخل=2
+بدا	rare_reading	2	بَدَا=10 / بِدٰا=2 / بُدا=1
+بدرید	rare_reading	2	بِدَرید=20 / بدْرید=2
+بدل	rare_reading	2	بَدَل=101 / بِدل=2
+بدید	rare_reading	2	بُدید=9 / بِدید=2
+برآورد	rare_reading	2	برآورَد=3 / برآوَرْد=2
+برابر	rare_reading	2	بِرٰابِر=4 / بَرابَر=2
+برافکند	rare_reading	2	برافکنَد=2 / بَراَفکنْد=2
+برای	rare_reading	2	بُرّای=3 / بِرٰای=2 / بَرای=1
+برباید	rare_reading	2	بَرباید=5 / بِرباید=2
+بربود	rare_reading	2	بِرْبود=7 / بِرِبود=2 / برُبود=1
+بردابرد	rare_reading	2	بُردابُرد=3 / بَردابَرد=2
+بردش	rare_reading	2	بُردَش=11 / بَرَدش=2
+برسه	rare_reading	2	بَرِسِه=2 / بَرْسه=2
+برقع	rare_reading	2	بُرقَع=16 / بُرقِع=2
+برکن	rare_reading	2	بَرْکَن=10 / برکُن=2
+بسا	rare_reading	2	بَسا=3 / بِسٰا=2
+بستانی	rare_reading	2	بُستانی=2 / بِسِتانی=2
+بشر	rare_reading	2	بِشْر=6 / بَشَر=2 / بُشر=2
+بشنوسمه	rare_reading	2	بشنُوسْمه=2 / بِشْنُوسِمِّه=2
+بشکفت	rare_reading	2	بِشِکُفْت=2 / بِشْکِفْت=2 / بِشْکُفت=1
+بعدکم	rare_reading	2	بَعَدَکُم=4 / بُعدِکُم=2
+بقم	rare_reading	2	بَقَم=11 / بِقَم=2
+بلیت	rare_reading	2	بَلیَّت=2 / بُلِیت=2
+بنما	rare_reading	2	بَنِمٰا=3 / بِنِمٰا=2 / بِنَما=1 / بِنُما=1 / بِنْما=1
+بهش	rare_reading	2	بِهُش=7 / بُهش=2
+بهم	rare_reading	2	بِهَم=6 / بِهِم=2
+بودش	rare_reading	2	بُوَدَش=14 / بَوَدش=2
+بورد	rare_reading	2	بَوِرْد=12 / بَورِد=2
+بوو	rare_reading	2	بَوُو=7 / بُوو=2
+بکشتی	rare_reading	2	بکُشتی=2 / بکِشتی=2
+بگرفت	rare_reading	2	بِگِرفت=3 / بِگْرِفت=2
+بگشا	rare_reading	2	بُگُشا=4 / بِگُشا=2 / بُگْشا=1
+بین	rare_reading	2	بَیْن=44 / بِین=2
+بی‌دم	rare_reading	2	بی‌دُم=3 / بی‌دَم=2
+تبسم	rare_reading	2	تَبَسُّم=62 / تَبَسَّم=2
+تربت	rare_reading	2	تُربَت=2 / تُرْبِت=2
+ترحم	rare_reading	2	تَرَحُّم=49 / تَرَحَّم=2
+ترنگ	rare_reading	2	تَرَنگ=3 / تُرنگ=2
+ترکت	rare_reading	2	تَرَکْت=2 / تُرکت=2
+ترکش	rare_reading	2	تَرْکِش=7 / تُرکش=2
+ترکی	rare_reading	2	تُرْکی=18 / تَرْکی=2
+تلک	rare_reading	2	تِلْک=8 / تَلَک=2
+تنبل	rare_reading	2	تَنَبُّل=5 / تُنبَل=2 / تُنبُل=2
+تنزل	rare_reading	2	تنزُّل=11 / تَنزِل=2
+تنک	rare_reading	2	تُنُک=32 / تَنُک=2
+تنگی	rare_reading	2	تُنْگی=3 / تَنگی=2
+تهی	rare_reading	2	تُهی=14 / تَهی=2
+جدا	rare_reading	2	جِدٰا=12 / جُدا=2 / جَدا=1
+جر	rare_reading	2	جَرّ=11 / جِر=2
+جستنت	rare_reading	2	جَستنت=2 / جُستنت=2
+جستند	rare_reading	2	جُستند=10 / جَستند=2
+جفت	rare_reading	2	جُفْت=18 / جَفت=2
+جم	rare_reading	2	جَم=25 / جُم=2
+جمل	rare_reading	2	جَمَل=3 / جُمَل=2
+جن	rare_reading	2	جِنّ=26 / جَن=2
+جنة	rare_reading	2	جَنَّة=10 / جُنّة=2
+جنگ	rare_reading	2	جَنْگ=5 / جُنگ=2
+جهان	rare_reading	2	جَهان=27 / جِهان=2 / جْهان=2
+حبه	rare_reading	2	حُبِّه=18 / حَبَّه=2 / حَبِّه=1 / حُبَّه=1
+حجاب	rare_reading	2	حُجّاب=5 / حِجاب=2
+حجت	rare_reading	2	حُجَّت=74 / حَجّت=2 / حِجّت=1
+حجر	rare_reading	2	حَجَر=22 / حِجر=2 / حُجر=1
+حراقه	rare_reading	2	حَرّاقه=4 / حُراقه=2
+حرز	rare_reading	2	حِرز=12 / حَرز=2
+حسان	rare_reading	2	حَسّان=41 / حِسَان=2
+حسب	rare_reading	2	حَسَب=9 / حَسْب=2
+حسنا	rare_reading	2	حُسْناً=20 / حَسْنا=2
+حسنش	rare_reading	2	حُسْنَش=18 / حَسَنش=2
+حشمت	rare_reading	2	حِشْمَت=4 / حَشَمت=2 / حِشْمِت=1
+حقد	rare_reading	2	حِقْد=5 / حُقد=2
+حقه	rare_reading	2	حُقِّه=94 / حَقَّه=2 / حُقْه=1
+حیوان	rare_reading	2	حَیَوان=8 / حِیْوان=2
+خامش	rare_reading	2	خامُش=19 / خامَش=2
+خرام	rare_reading	2	خَرام=4 / خُرام=2 / خِرام=1
+خرامان	rare_reading	2	خُرامان=5 / خِرامان=2 / خَرامان=1
+خردم	rare_reading	2	خِرَدَم=6 / خُردم=2
+خردی	rare_reading	2	خُردی=20 / خِردی=2
+خرمن	rare_reading	2	خَرْمَن=7 / خِرمن=2
+خضاب	rare_reading	2	خَضاب=2 / خِضَاب=2
+خطر	rare_reading	2	خَطَر=2 / خَطِر=2
+خلا	rare_reading	2	خَلَا=3 / خِلّاً=2
+خلاف	rare_reading	2	خِلاف=7 / خَلاف=2
+خلت	rare_reading	2	خُلَّت=13 / خَلَت=2 / خِلّت=1
+خلعت	rare_reading	2	خِلعت=5 / خَلعت=2
+خلف	rare_reading	2	خَلَف=6 / خُلف=2
+خوشی	rare_reading	2	خَوشی=18 / خُوشی=2
+دار	rare_reading	2	دٰار=4 / دَار=2
+دارم	rare_reading	2	دارِم=3 / دارَم=2
+داشتمه	rare_reading	2	دٰاشْتِمِه=19 / داشتْمه=2
+دخش	rare_reading	2	دِخِش=3 / دْخش=2
+دربار	rare_reading	2	دُرّْبار=9 / درِبار=2
+درع	rare_reading	2	دِرْع=23 / دُرع=2
+درمه	rare_reading	2	دَرْمِه=6 / دَرِمِّه=2 / دِرِمِه=1
+درهای	rare_reading	2	دُرهای=31 / دَرهای=2
+درود	rare_reading	2	دِرَوَد=5 / دُرود=2 / دَرود=1
+درک	rare_reading	2	دَرُّک=3 / دَرَک=2
+دعا	rare_reading	2	دُعا=9 / دَعَا=2 / دِعٰا=1
+دله	rare_reading	2	دِلِه=6 / دَله=2
+دمار	rare_reading	2	دَمار=2 / دِمٰار=2
+دمم	rare_reading	2	دَمَم=5 / دُمم=2
+دمن	rare_reading	2	دِمَن=3 / دَمَن=2
+دنیا	rare_reading	2	دُنیا=4 / دِنْیٰا=2 / دَنیّا=1
+دهد	rare_reading	2	دَهَد=16 / دِهَد=2
+دهش	rare_reading	2	دَهَش=3 / دِهَش=2
+دهن	rare_reading	2	دُهن=3 / دَهَن=2
+دهی	rare_reading	2	دِهی=10 / دَهی=2
+دوا	rare_reading	2	دَوا=4 / دِوٰا=2 / دُوا=1
+دوسه	rare_reading	2	دَوِسِّه=5 / دَوْسّه=2
+دکتمه	rare_reading	2	دَکِتْمِه=6 / دَکِتِمِه=2 / دَکْتمه=2 / دِکتمِه=2
+دکفه	rare_reading	2	دَکِفِه=9 / دَکْفه=2 / دْکفه=1
+دیری	rare_reading	2	دَیری=2 / دِیْری=2
+دین	rare_reading	2	دِین=10 / دَین=2
+ذره	rare_reading	2	ذَرِّه=705 / ذِرّه=2
+ذروه	rare_reading	2	ذُروه=6 / ذِروه=2 / ذَروه=1
+ذقن	rare_reading	2	ذَقَن=11 / ذَقِن=2
+ذل	impossible_initial_shadda	2	ذُلّ=66 / ذِّل=2
+ذلک	rare_reading	2	ذَلِک=24 / ذٰلِک=2
+ر	rare_reading	2	رِ=5 / رَ=2
+راند	rare_reading	2	رانَد=12 / رانْد=2
+ربا	rare_reading	2	رُبا=2 / رِبا=2
+ربع	rare_reading	2	رَبع=6 / رُبع=2
+رسته‌ست	rare_reading	2	رُسْته‌ست=10 / رَسته‌ست=2
+رستی	rare_reading	2	رَستی=12 / رُستی=2
+رسن	rare_reading	2	رَسَن=7 / رَسِن=2
+رشت	rare_reading	2	رِشْت=4 / رَشْت=2
+رشد	rare_reading	2	رَشَد=9 / رُشد=2
+رطب	rare_reading	2	رُطَب=4 / رَطب=2
+رنجش	rare_reading	2	رنجَش=2 / رَنجِش=2
+رها	rare_reading	2	رَها=2 / رِهٰا=2
+رواق	rare_reading	2	رَواق=3 / رِواق=2
+روش	rare_reading	2	رَوِش=10 / رُوش=2
+زبون	rare_reading	2	زِبُون=17 / زَبُون=2 / زِبِون=1
+سؤدد	rare_reading	2	سَؤدد=2 / سُؤدَد=2
+سبحه	rare_reading	2	سُبحَه=12 / سَبْحه=2
+سجن	rare_reading	2	سِجن=7 / سَجَن=2
+سحری	rare_reading	2	سِحری=4 / سَحَری=2
+سدره	rare_reading	2	سِدرَه=19 / سِدرِه=2
+سرای	rare_reading	2	سَرای=7 / سُرای=2
+سرخ	rare_reading	2	سُرخ=8 / سِرْخ=2
+سروی	rare_reading	2	سُروی=3 / سَرْوی=2
+سرگردون	rare_reading	2	سَرْگَرْدُون=2 / سَرْگِرْدوُن=2
+سزد	rare_reading	2	سِزَد=26 / سَزد=2
+سفلی	rare_reading	2	سِفلی=4 / سُفلی=2
+سلامت	rare_reading	2	سَلامَت=2 / سِلٰامِت=2
+سماع	rare_reading	2	سَمَاع=14 / سٍماع=2 / سِماع=1
+سنان	rare_reading	2	سِنَان=21 / سَنان=2
+سکران	rare_reading	2	سَکْران=4 / سُکران=2
+سیرت	rare_reading	2	سِیْرت=2 / سیَرَت=2
+شبر	rare_reading	2	شُبَّر=11 / شِبْر=2
+شتا	rare_reading	2	شِتا=3 / شَتا=2
+شداد	rare_reading	2	شَدّاد=13 / شِدَاد=2
+شده	rare_reading	2	شُدِه=3 / شِدَّه=2
+شره	rare_reading	2	شَرَه=6 / شَرُّه=2 / شِرِه=1
+شعرا	rare_reading	2	شَعْرا=2 / شُعرا=2 / شِعرا=1
+شعیب	rare_reading	2	شُعِیْب=4 / شُعَیب=2 / شَعیب=1
+شفقت	rare_reading	2	شَفْقَت=4 / شَفَقّت=2
+شقه	rare_reading	2	شُقّه=18 / شِقّه=2
+شمال	rare_reading	2	شِمال=6 / شَمال=2
+شمه‌ای	rare_reading	2	شَمِّه‌ای=28 / شِمِّه‌ای=2
+شنه	rare_reading	2	شَنِّه=4 / شِنِه=2
+شو	rare_reading	2	شُو=33 / شَو=2
+شکرست	rare_reading	2	شَکَّرست=11 / شُکرست=2 / شِکرست=2
+شکوه	rare_reading	2	شِکْوِه=35 / شُکوه=2 / شِکوَه=1
+صبر	rare_reading	2	صَبَر=6 / صَبْر=2
+صحف	rare_reading	2	صُحْف=16 / صُحُف=2
+صدیق	rare_reading	2	صِدّیق=42 / صَدِیق=2
+صفا	rare_reading	2	صَفٰا=4 / صِفٰا=2
+صلت	rare_reading	2	صِلَت=9 / صُلْت=2
+ضیغم	rare_reading	2	ضِیغَم=8 / ضَیَغم=2
+طراز	rare_reading	2	طَراز=4 / طِراز=2
+طوع	rare_reading	2	طَوع=5 / طُوع=2
+عجل	rare_reading	2	عِجْل=19 / عَجِّل=2
+عدو	rare_reading	2	عَدُوّ=23 / عُدو=2
+عقال	rare_reading	2	عِقْال=3 / عُقّال=2
+عمی	rare_reading	2	عَمیٰ=7 / عُمی=2 / عِمی=1
+عنان	rare_reading	2	عِنَان=19 / عَنان=2
+عیش	rare_reading	2	عَیْش=3 / عِیش=2
+غصه	rare_reading	2	غُصِّه=283 / غِصِّه=2
+غنچه	rare_reading	2	غُنْچِه=8 / غَنْچِه=2
+غو	rare_reading	2	غَو=10 / غُو=2
+غیب	rare_reading	2	غِیْب=5 / غَیب=2
+غیره	rare_reading	2	غَیْرُه=6 / غَیرِه=2
+فارس	rare_reading	2	فٰارِس=18 / فارْس=2
+فدای	rare_reading	2	فِدای=3 / فَدای=2
+فرخش	rare_reading	2	فَرُخّش=6 / فَرَخش=2
+فرش	rare_reading	2	فَرَّش=26 / فُرُش=2
+فعال	rare_reading	2	فَعّال=4 / فِعال=2
+فلان	rare_reading	2	فُلان=3 / فِلان=2
+فمن	rare_reading	2	فَمَن=4 / فَمِن=2
+قتال	rare_reading	2	قَتّال=8 / قِتال=2
+قدح	rare_reading	2	قَدَح=20 / قدْح=2
+قدس	rare_reading	2	قُدْس=10 / قُدُس=2
+قدمت	rare_reading	2	قَدَمَت=5 / قَدِمْت=2
+قلزم	rare_reading	2	قُلْزُم=14 / قُلزَم=2 / قلزِم=1
+قمر	rare_reading	2	قَمِر=14 / قَمَر=2
+لذت	rare_reading	2	لَذَّت=128 / لِذَّت=2
+لر	rare_reading	2	لَر=3 / لُر=2 / لِر=1
+لعب	rare_reading	2	لَعِب=5 / لِعب=2
+لقا	rare_reading	2	لِقا=6 / لَقا=2
+لما	rare_reading	2	لَمَّا=26 / لِمَا=2
+لمعه	rare_reading	2	لَمعه=3 / لُمعه=2
+لنگ	rare_reading	2	لَنْگ=8 / لُنگ=2 / لِنگ=1
+م	rare_reading	2	مَ=3 / مِ=2 / مُ=1 / مٰ=1
+ماسوی	rare_reading	2	ماسِویٰ=8 / ماسَوی=2
+مال	rare_reading	2	مٰال=6 / مَال=2
+مالک	rare_reading	2	مَالِک=4 / مَالَک=2
+مبارک	rare_reading	2	مُبارَک=2 / مُبٰارِک=2 / مِبٰارِک=2 / مٌبارَک=1
+مبصر	rare_reading	2	مُبَصِّر=4 / مُبْصَر=2
+مجمه	rare_reading	2	مِجِّمِه=3 / مَجمّه=2 / مِجْمِه=1
+مجن	rare_reading	2	مِجَن=7 / مِجِن=2
+محاق	rare_reading	2	مُحاق=3 / مَحاق=2
+محال	rare_reading	2	مُحال=13 / مَحال=2 / مِحال=1
+محنت	rare_reading	2	مِحْنَت=10 / مِحْنِت=2
+مد	rare_reading	2	مَدّ=72 / مُد=2
+مرااند	rare_reading	2	مَرااند=2 / مِرااند=2
+مروحه	rare_reading	2	مَروَحه=2 / مِروَحه=2
+مزور	rare_reading	2	مُزَوَّر=40 / مُزَوِّر=2
+مستخف	rare_reading	2	مُسْتَخَف=2 / مُسْتَخِف=2
+مسطر	rare_reading	2	مِسطَر=3 / مَسْطَر=2
+مسلمون	rare_reading	2	مُسَلْمُون=2 / مُسْلِمون=2
+مسه	rare_reading	2	مَسِّه=29 / مَسًه=2 / مَسُّه=1
+مشرق	rare_reading	2	مَشْرِق=5 / مُشْرِق=2
+مشکل	rare_reading	2	مُشْکِل=3 / مُشَکَّل=2
+مشید	rare_reading	2	مُشَیّد=10 / مَشید=2
+مصور	rare_reading	2	مُصَوَّر=77 / مصوٌر=2 / مصوُر=1 / مصوِّر=1
+مطلع	rare_reading	2	مُطَّلِع=17 / مَطْلَع=2
+معبر	rare_reading	2	مُعَبِّر=4 / مَعبَر=2
+معول	rare_reading	2	مُعَوَّل=18 / مُعَوِّل=2
+مفخر	rare_reading	2	مَفخَر=9 / مُفْخَر=2
+مفلسی	rare_reading	2	مُفلسی=2 / مِفْلِسی=2
+ملت	rare_reading	2	مِلَّت=104 / مُلت=2 / مِلْت=1
+ملکا	rare_reading	2	مَلِکا=3 / مُلْکاً=2 / مَلَکا=1
+ملکت	rare_reading	2	مُلْکَت=23 / مَلَکْت=2
+مورد	rare_reading	2	مُوَرَّد=15 / مُورْد=2
+موسم	rare_reading	2	مُوَسَّم=7 / مُوسِم=2
+می‌درد	rare_reading	2	می‌دَرَد=11 / می‌درٌد=2
+می‌کشان	rare_reading	2	مِی‌کَشان=5 / مِی‌کِشان=2
+نار	rare_reading	2	نَار=6 / نٰار=2
+ناکس	rare_reading	2	ناکَس=10 / نٰاکِس=2
+نبد	rare_reading	2	نَبُد=129 / نُبُد=2
+نبردی	rare_reading	2	نبُردی=5 / نَبَردی=2
+نخستین	rare_reading	2	نَخُستین=2 / نُخُستین=2
+ندهی	rare_reading	2	نَدْهی=8 / نَدَهی=2 / نَدِهی=1
+ندومه	rare_reading	2	نَدُوّمِه=21 / نَدوُمَه=2
+نذر	rare_reading	2	نَذَر=2 / نُذُر=2 / نَذْر=1
+نسر	rare_reading	2	نَسر=2 / نُسَرّ=2
+نسپرد	rare_reading	2	نَسپَرد=2 / نَسپُرَد=2
+نشتر	rare_reading	2	نَشْتَر=2 / نِشتر=2
+نشسته‌ای	rare_reading	2	نشُسته‌ای=2 / نِشَسته‌ای=2
+نصب	rare_reading	2	نُصُب=3 / نَصَب=2 / نِصب=1
+نطاق	rare_reading	2	نِطاق=3 / نُطّاق=2
+نظرت	rare_reading	2	نَظَرَت=3 / نَظَرْت=2
+نعمان	rare_reading	2	نُعمان=17 / نَعمَان=2
+نعیم	rare_reading	2	نُعیم=4 / نَعیم=2
+نفسه	rare_reading	2	نَفْسِه=5 / نَفسَه=2 / نَفسُه=1
+نهی	rare_reading	2	نَهیٰ=6 / نِهی=2 / نُهی=1
+نور	rare_reading	2	نُوْر=25 / نَور=2
+نوند	rare_reading	2	نَوَند=2 / نُوَند=2
+نونه	rare_reading	2	نَوِنِه=4 / نَوْنِه=2
+نک	rare_reading	2	نَک=4 / نُک=2
+نکت	rare_reading	2	نُکَت=11 / نَکِت=2
+نکن	rare_reading	2	نَکِن=6 / نَکُن=2
+نکنم	rare_reading	2	نَکُنَم=3 / نَکِنِم=2
+نکنی	rare_reading	2	نَکُنی=6 / نَکَنی=2 / نِکَنّی=2 / نَکْنی=1
+هدا	rare_reading	2	هِدٰا=4 / هُدا=2
+هسمه	rare_reading	2	هَسُمِّه=2 / هَسِّمِه=2
+همال	rare_reading	2	هُمال=3 / هِمال=2 / هَمال=1
+هندستان	rare_reading	2	هِندُستان=4 / هندِستان=2
+هچی	rare_reading	2	هِچّی=16 / هَچی=2
+وار	rare_reading	2	وٰار=9 / وْار=2
+وجد	rare_reading	2	وَجَد=9 / وَجْد=2
+وجهه	rare_reading	2	وَجْهَه=4 / وَجْهِه=2 / وجَهه=1 / وَجْهُه=1
+وجهک	rare_reading	2	وَجْهَک=3 / وَجْهُک=2 / وَجْهِک=2
+ورق	rare_reading	2	وَرَق=9 / وُرق=2
+وره	rare_reading	2	وَرِه=5 / وِرِه=2
+وز	rare_reading	2	وَز=40 / وِز=2
+وزر	rare_reading	2	وَزَر=3 / وِزر=2 / وَزِر=1
+وشت	rare_reading	2	وَشْت=3 / وَشَت=2
+ولا	rare_reading	2	وَلَا=38 / وَلٰا=2
+ولای	rare_reading	2	وِلای=3 / وَلای=2
+ویحک	rare_reading	2	وَیْحَک=4 / وِیْحَک=2
+پرتاب	rare_reading	2	پُرتاب=9 / پَرتاب=2
+پرند	rare_reading	2	پَرَند=4 / پُرند=2
+پرورد	rare_reading	2	پَرْوَرْد=3 / پَروَرَد=2
+پرچین	rare_reading	2	پُرچین=12 / پَرچین=2
+پلی	rare_reading	2	پَلی=4 / پُلی=2
+پهلوی	rare_reading	2	پَهْلُوی=3 / پَهلَوی=2
+پیش	rare_reading	2	پِیَش=15 / پَیَش=2
+چشمم	rare_reading	2	چَشمَم=3 / چَشمِم=2 / چشمُم=1
+چمن	rare_reading	2	چَمَن=7 / چَمِن=2
+چند	rare_reading	2	چَنْد=12 / چِنَد=2
+چنین	rare_reading	2	چُنین=31 / چِنین=2
+چکد	rare_reading	2	چَکَد=2 / چِکَد=2
+کاکل	rare_reading	2	کٰاکُل=15 / کاکِل=2
+کثیر	rare_reading	2	کَثِیر=2 / کَثْیِر=2
+کر	impossible_initial_shadda	2	کَرّ=47 / کُر=2 / کًّر=1 / کٌر=1 / کِرّ=1
+کران	rare_reading	2	کَران=2 / کِران=2
+کرگان	rare_reading	2	کَرگان=2 / کُرّگان=2
+کسری	rare_reading	2	کِسری=4 / کَسری=2
+کشتة	rare_reading	2	کُشتة=3 / کِشتة=2
+کشته‌ای	rare_reading	2	کُشته‌ای=2 / کِشته‌ای=2
+کشش	rare_reading	2	کُشِش=3 / کِشِش=2 / کِشَش=1
+کشف	rare_reading	2	کَشَف=10 / کَشْف=2 / کُشِف=2 / کُشَف=1
+کشید	rare_reading	2	کُشید=9 / کَشید=2 / کِشید=1
+کفت	rare_reading	2	کَفَت=18 / کُفت=2 / کِفت=2
+کلاله	rare_reading	2	کُلاله=8 / کِلٰالِه=2
+کلنه	rare_reading	2	کَلِنِه=2 / کَلْنه=2
+کمر	rare_reading	2	کَمِر=3 / کمَر=2
+کمه	rare_reading	2	کِمِّه=26 / کَمّه=2
+کندم	rare_reading	2	کُنَدَم=6 / کَنْدَم=2
+کنش	rare_reading	2	کُنَش=10 / کَنِش=2 / کُنِش=2 / کِنِش=2
+کنن	rare_reading	2	کِنِن=10 / کَنِن=2
+کنید	rare_reading	2	کُنید=3 / کَنید=2
+کول	rare_reading	2	کوْل=2 / کَوَل=2
+کونی	rare_reading	2	کَوْنی=3 / کُونِی=2
+گرت	rare_reading	2	گَرَت=16 / گرْت=2
+گرداند	rare_reading	2	گردانَد=5 / گَردانْد=2
+گزند	rare_reading	2	گِزَند=3 / گَزَند=2
+گزید	rare_reading	2	گُزید=14 / گَزید=2
+گزیدم	rare_reading	2	گَزیدم=3 / گُزیدم=2
+گزیدند	rare_reading	2	گُزیدَند=4 / گَزیدَند=2
+گشی	rare_reading	2	گَشّی=12 / گُشی=2
+گلست	rare_reading	2	گِلست=8 / گُلَست=2
+گنج	rare_reading	2	گَنْج=8 / گُنج=2
+گنجم	rare_reading	2	گُنجَم=4 / گَنجَم=2
+یبقی	rare_reading	2	یَبْقَی=4 / یُبْقِی=2
+یحیی	rare_reading	2	یَحیَی=5 / یُحیِی=2
+یری	rare_reading	2	یَرَیٰ=5 / یُریٰ=2
+یکی	rare_reading	2	یِکی=45 / یَکی=2
+آبست	hapax_reading	1	آبَست=1 / آبِست=1
+آثارهم	hapax_reading	1	آثَارِهِم=2 / آثَارَهُم=1
+آخربین	hapax_reading	1	آخُربین=2 / آخِربین=1
+آخرت	hapax_reading	1	آخِرَت=4 / آخِرْت=1
+آخرست	hapax_reading	1	آخُرست=1 / آخِرست=1
+آدمی	hapax_reading	1	آدَمی=6 / آدِمی=1
+آردش	hapax_reading	1	آرَدَش=2 / آرَدْش=1
+آزر	hapax_reading	1	آزَر=4 / آزِر=1
+آزور	hapax_reading	1	آزوُر=1 / آزوِر=1
+آستان	hapax_reading	1	آسْتان=3 / آسِتان=1
+آستین	hapax_reading	1	آسِتین=1 / آسْتین=1
+آشنا	hapax_reading	1	آشِنٰا=2 / آشْنا=1
+آشکاره	hapax_reading	1	آشْکارِه=1 / آشکارٍه=1
+آصف	hapax_reading	1	آصِف=6 / آصَف=1 / آصْف=1
+آفرینش	hapax_reading	1	آفرینَش=1 / آفرینِش=1
+آمل	hapax_reading	1	آمِل=3 / آمُل=1
+آنش	hapax_reading	1	آنَش=3 / آنْش=1
+آنک	hapax_reading	1	آنْک=6 / آنَک=1
+آیدش	hapax_reading	1	آیَدْش=4 / آیَدَش=1
+أحصی	hapax_reading	1	أحصَی=1 / أُحْصِی=1
+أخرجوا	hapax_reading	1	أخْرُجوا=1 / أخْرِجُوا=1
+أسلم	hapax_reading	1	أسلَم=1 / أسلِم=1
+أعنی	hapax_reading	1	أعْنی=1 / أَعِنِّی=1
+ألقی	hapax_reading	1	أَلْقَی=3 / أَلقِی=1
+أمد	hapax_reading	1	أمَد=1 / أمُدّ=1
+أموالهم	hapax_reading	1	أموالَهم=1 / أموَالِهِم=1
+أنی	hapax_reading	1	أنَّی=4 / أنِّی=1
+أهدی	hapax_reading	1	أهدَی=1 / أُهدِی=1
+أهل	hapax_reading	1	أهِلّ=1 / أَهْل=1
+أوأدنی	malformed_attestation	1	أَوْأَدْنَی=2 / أَوَْأَدْنَی=1
+أوحی	hapax_reading	1	أوحِی=2 / أوحَی=1
+أولی	hapax_reading	1	أولَی=1 / أُولِی=1
+إله	hapax_reading	1	إِلَه=11 / إِلٰه=1
+اب	hapax_reading	1	اَب=24 / اُب=1
+ابد	hapax_reading	1	اَبَد=8 / ابِد=1
+ابدی	hapax_reading	1	اَبَدِی=2 / اَبدَی=1
+اتا	hapax_reading	1	اَتّٰا=9 / اِتّا=1
+اتباع	hapax_reading	1	اِتّباع=5 / اَتباع=1
+اتر	hapax_reading	1	اتُر=1 / اِتْر=1
+اترک	hapax_reading	1	اَترُک=2 / اُترُک=1
+اتقوا	hapax_reading	1	اتَّقُوا=8 / اتَّقَوا=1
+اتن	hapax_reading	1	اُتُن=1 / اِتن=1
+احب	hapax_reading	1	اُحِبّ=6 / اَحَبّ=1
+احداث	hapax_reading	1	اَحداث=2 / اِحداث=1
+احکم	hapax_reading	1	اَحکُم=2 / اُحْکِم=1
+ادر	hapax_reading	1	اَدِر=3 / اَدْر=1 / اِدر=1
+ار	hapax_reading	1	اَر=68 / اُر=1
+اردی	hapax_reading	1	اُردی=3 / اَردَی=1
+ارز	hapax_reading	1	اَرز=1 / اُرُز=1
+ارزنه	hapax_reading	1	اِرْزِنِه=3 / اَرْزِنه=1
+ارش	hapax_reading	1	اَرَش=3 / اَرِش=1
+ارقم	hapax_reading	1	اَرْقَم=3 / اَرْقِم=1
+اری	hapax_reading	1	اَریٰ=2 / اُری=1
+ازار	hapax_reading	1	اِزار=2 / اَزار=1
+ازل	hapax_reading	1	اَزَل=15 / اَزِل=1
+ازگه	hapax_reading	1	ازِگْه=1 / اَزْگه=1
+استادی	hapax_reading	1	اُستادی=2 / اِستادی=1
+استران	hapax_reading	1	استُران=1 / اَسْتَران=1
+استره	hapax_reading	1	اُستُرِه=2 / اَسْتره=1
+استی	hapax_reading	1	اِستی=2 / اَستی=1
+اسجد	hapax_reading	1	اُسجُد=1 / اِسْجد=1
+اسلم	hapax_reading	1	اَسلَم=4 / اُسَلّم=1
+اسم	hapax_reading	1	اِسْم=3 / اَسْم=1
+اسود	hapax_reading	1	اَسوَد=7 / اُسُود=1
+اسپه	hapax_reading	1	اِسْپِه=1 / اِسپَه=1
+اش	hapax_reading	1	اَش=1 / اُش=1
+اشتر	hapax_reading	1	اُشْتُر=10 / اَشتُر=1 / اِشْتِر=1
+اشکال	hapax_reading	1	اَشکال=5 / اِشکال=1
+اشکم	hapax_reading	1	اِشکَم=7 / اَشکم=1
+اصله	hapax_reading	1	اَصّلِه=4 / اَصلُه=1
+اعرف	hapax_reading	1	اُعرف=2 / اَعْرَف=1 / اَعْرِف=1 / اِعرِف=1
+اعلم	hapax_reading	1	اَعْلَم=4 / اَعلُم=1
+اغر	hapax_reading	1	اُغُر=2 / اَغر=1
+اقبل	hapax_reading	1	اَقبِل=2 / اِقبَل=1
+الاصباح	hapax_reading	1	الاِصباح=1 / الْاَصباح=1
+التقی	hapax_reading	1	التَّقَی=2 / التُّقی=1
+التی	hapax_reading	1	الَّتِی=22 / الَّتُی=1
+الجمال	hapax_reading	1	الْجَمال=3 / الجِمال=1
+الجنان	hapax_reading	1	الجَنان=2 / الجِنَان=1
+الحبک	hapax_reading	1	الْحُبُک=2 / الحبَک=1
+الذنوب	hapax_reading	1	الذُّنُوب=4 / الذُّنْوب=1
+الرجال	hapax_reading	1	الرِّجَال=6 / الرَّجال=1
+الرقاب	hapax_reading	1	الرِّقَاب=4 / الرَّقاب=1
+الروح	hapax_reading	1	الرُّوْح=19 / الرَّوح=1
+السحر	hapax_reading	1	السَّحَر=5 / السِّحر=1
+الصبا	hapax_reading	1	الصَّبَا=6 / الصِّبا=1
+الطول	hapax_reading	1	الطَّوْل=2 / الطُّوْل=1
+العلم	hapax_reading	1	العِلْم=1 / الْعَلَم=1
+العلی	hapax_reading	1	الْعُلیٰ=7 / الْعَلِیّ=1
+العنب	hapax_reading	1	العَنْب=1 / العِنَب=1
+العین	hapax_reading	1	الْعَیْن=8 / العیَن=1
+الغمام	hapax_reading	1	الغَمام=1 / الغِمام=1
+الفراق	hapax_reading	1	الفِراق=2 / الْفَراق=1
+الفعال	hapax_reading	1	الفَعَال=1 / الْفِعال=1
+الفکر	hapax_reading	1	الْفِکْر=2 / الفِکَر=1
+القتال	hapax_reading	1	الْقِتَال=2 / القَتّال=1
+القدر	hapax_reading	1	الْقَدَر=1 / الْقَدْر=1 / الْقِدْر=1
+القدس	hapax_reading	1	الْقُدْس=2 / القُدُس=1
+القرب	hapax_reading	1	الْقَرَب=1 / الْقُرب=1
+القری	hapax_reading	1	القِری=1 / الْقُری=1
+القوم	hapax_reading	1	الْقَوْم=9 / القُوم=1
+اللآلی	hapax_reading	1	اللَّآلی=2 / اللِّآلی=1
+اللطف	hapax_reading	1	اللُّطف=1 / اُللَطْف=1
+الماء	hapax_reading	1	اَلْماء=5 / اِلْماء=1
+المحبوب	hapax_reading	1	الَّمحْبُوب=2 / الْمَحبوب=1
+المدرسه	hapax_reading	1	الْمَدْرِسَه=2 / المدْرَسَه=1
+المعنی	hapax_reading	1	المَعْنَی=2 / المُعَنّیٰ=1
+الموت	hapax_reading	1	الْمَوْت=2 / اَلَموت=1
+المی	hapax_reading	1	اَلَمی=3 / اِلمی=1
+النسیم	hapax_reading	1	النَّسِیْم=2 / النَّسیِم=1
+النوم	hapax_reading	1	اَلنَوْم=5 / النَّوُم=1
+الهون	hapax_reading	1	الهَوْن=1 / الْهُون=1 / الْهِون=1
+الکتاب	hapax_reading	1	الْکِتَاب=12 / الْکِتُاب=1
+الکفار	hapax_reading	1	الْکَفَّار=1 / الکُفّار=1
+الیمن	hapax_reading	1	الیَمَن=1 / الیُمن=1
+اماره	hapax_reading	1	اَمَّاره=13 / اِماره=1
+امام	hapax_reading	1	اِمَام=9 / اَمام=1 / اِمٰام=1
+امساک	hapax_reading	1	اَمساک=1 / اِمساک=1
+امشو	hapax_reading	1	اَمْشُو=2 / اِمْشَو=1
+امل	hapax_reading	1	اَمَل=45 / اَمِل=1
+املی	hapax_reading	1	اُمِلْی=1 / اِملی=1
+انتهی	hapax_reading	1	اَنْتَهی=1 / اِنتَهی=1
+انده	hapax_reading	1	اَنْدُه=79 / انُده=1
+انزل	hapax_reading	1	اَنْزِل=3 / اَنزَل=1 / اُنْزَل=1
+انشا	hapax_reading	1	اَنشا=1 / اِنشا=1
+انشالا	hapax_reading	1	اِنْشٰالّٰا=5 / اَنْشالّا=1
+انعامند	hapax_reading	1	اِنعامند=3 / اَنعامند=1
+انعامی	hapax_reading	1	اَنعامی=2 / اِنعامی=1
+انک	hapax_reading	1	اَنَّک=5 / اِنَک=1
+اورده	hapax_reading	1	اَورَدَه=2 / اُورده=1
+اوستی	hapax_reading	1	اوْستی=2 / اوُسْتی=1
+اونطور	hapax_reading	1	اُونْطُور=12 / اَونْطُور=1
+اونکه	hapax_reading	1	اُونْکِه=4 / اَونکه=1
+اویس	hapax_reading	1	اُوَیْس=2 / اُوِیس=1
+اژدر	hapax_reading	1	اَژْدِر=3 / اژدَر=1
+اگرت	hapax_reading	1	اگرَت=1 / اگرْت=1
+ایام	hapax_reading	1	اَیَّام=280 / ایٌام=1 / ایِّام=1
+ایمن	hapax_reading	1	اَیْمَن=6 / ایمِن=1
+این	hapax_reading	1	اَیْن=27 / ایَن=1
+اینک	hapax_reading	1	اینَک=5 / اینْک=1
+ا‌م	hapax_reading	1	اَ‌م=1 / اِ‌م=1
+بألوان	hapax_reading	1	بَأَلوَان=1 / بِأَلوَان=1
+بئوتن	hapax_reading	1	بَئوُتن=1 / بُئوُتن=1
+بئی	hapax_reading	1	بَئی=3 / بِئی=1
+بابا	hapax_reading	1	بَابَا=2 / بٰابٰا=1
+بادش	hapax_reading	1	بادَش=1 / بادْش=1
+بادم	hapax_reading	1	بادَم=2 / بادْم=1
+بارد	hapax_reading	1	بارَد=3 / بارِد=1
+بارش	hapax_reading	1	بارَش=4 / بارِش=1
+بازجست	hapax_reading	1	بازجَست=1 / بازجُست=1
+باغ	hapax_reading	1	بٰاغ=3 / بَاغ=1
+بال	hapax_reading	1	بٰال=5 / بَال=1
+بالش	hapax_reading	1	بالَش=3 / بالِش=1
+بالغدو	hapax_reading	1	بِالْغُدُوّ=6 / بِالْغُدِوّ=1
+بالهجر	hapax_reading	1	بِالْهَجر=1 / بِالْهِجْر=1
+بایست	hapax_reading	1	بِایست=2 / بٰایِسْت=1
+ببریدم	hapax_reading	1	بُبریدم=2 / بِبُریدم=1
+بتا	hapax_reading	1	بُتا=16 / بِتا=1
+بتاوس	hapax_reading	1	بَتٰاوس=2 / بتٰاوُس=1
+بترکد	hapax_reading	1	بِتَرکَد=1 / بِتْرَکد=1
+بتوان	hapax_reading	1	بِتَوان=2 / بِتْوان=1
+بجستش	hapax_reading	1	بجَستش=1 / بجُستش=1
+بجستم	hapax_reading	1	بجَستم=1 / بجُستم=1
+بجستی	hapax_reading	1	بجَستی=3 / بجُستی=1
+بجهد	hapax_reading	1	بِجَهَد=4 / بِجْهَد=1
+بحار	hapax_reading	1	بِحار=8 / بُحار=1
+بخار	hapax_reading	1	بُخار=4 / بِخار=1
+بختم	hapax_reading	1	بَختم=2 / بِختم=1
+بخر	hapax_reading	1	بخَر=1 / بَخِر=1
+بخردمه	hapax_reading	1	بَخِرْدِمه=1 / بَخِرْدْمِه=1
+بخشش	hapax_reading	1	بَخشَش=3 / بخشِش=1
+بخفت	hapax_reading	1	بخَفت=2 / بخُفت=1
+بخور	hapax_reading	1	بُخور=8 / بِخور=1
+بدانست	hapax_reading	1	بدانَست=1 / بدانِست=1 / بدانْسْت=1
+بدایت	hapax_reading	1	بِدایت=2 / بَدایت=1
+بدرام	hapax_reading	1	بَدرام=1 / بِدرام=1
+بدراند	hapax_reading	1	بِدَرّاند=4 / بِدِراند=1
+بدرد	hapax_reading	1	بِدَرَّد=60 / بَدَرَّد=1
+بدره	hapax_reading	1	بَدرَه=6 / بَدرُه=1
+بدستی	hapax_reading	1	بُدَستی=3 / بَدَستی=1 / بِدَسْتی=1
+بدسگال	hapax_reading	1	بدسَگال=4 / بدسِگال=1
+بدمه	hapax_reading	1	بَدِمِه=2 / بِدَمه=1
+بدند	hapax_reading	1	بُدَند=141 / بَدند=1
+بدوره	hapax_reading	1	بدوُره=1 / بَدوَره=1
+بدیم	hapax_reading	1	بُدیم=25 / بَدیم=1
+براهیم	hapax_reading	1	بَراهیم=2 / بِراهیم=1
+بربای	hapax_reading	1	بِرُبای=2 / بِرْبای=1
+برجست	hapax_reading	1	بَرجَست=10 / بُرجست=1
+برداری	hapax_reading	1	بَرداری=9 / بُرداری=1
+بردشان	hapax_reading	1	بَرَدشان=1 / بُردشان=1
+بردی	hapax_reading	1	بُردی=25 / بَرَدی=1
+برزند	hapax_reading	1	بَرزَند=3 / بُرزند=1
+برس	hapax_reading	1	بَرِس=2 / بَرْس=1 / بِرِس=1
+برسان	hapax_reading	1	بِرَسان=2 / بَرسان=1 / بِرِسان=1
+برستم	hapax_reading	1	بِرَستم=5 / برُستم=1
+برستی	hapax_reading	1	بِرَستی=2 / برُستی=1
+برشان	hapax_reading	1	برْشان=1 / بَرِشان=1
+برف	hapax_reading	1	برِف=1 / بِرَف=1
+برممه	hapax_reading	1	بَرْممّه=1 / بِرْمِمِّه=1
+برنایی	hapax_reading	1	بُرنایی=8 / بَرنایی=1
+برنج	hapax_reading	1	برَنج=1 / برِنج=1
+برنجه	hapax_reading	1	برَنجه=1 / بَرِنْجِه=1
+برندت	hapax_reading	1	بَرَنْدَت=1 / بُرندت=1
+برندش	hapax_reading	1	بُرَندش=4 / بَرَندش=1
+برنکنم	hapax_reading	1	بَرْنَکَنَم=2 / برنکُنم=1
+بره	hapax_reading	1	بَرَه=46 / بَرِه=1 / بِرَه=1
+برهاند	hapax_reading	1	برْهاند=3 / بِرَهانْد=1
+برهمن	hapax_reading	1	بَرْهَمَن=3 / بَرَهمَن=1 / بِرهَمَن=1
+برهنه	hapax_reading	1	بِرَهْنِه=3 / بَرهَنه=1
+برهی	hapax_reading	1	بِرَهی=1 / بِرْهی=1
+بروز	hapax_reading	1	بُروز=1 / بِروز=1
+برون	hapax_reading	1	بُرون=17 / بَرون=1
+برکش	hapax_reading	1	بَرَکَش=4 / بَرکِش=1
+برکشد	hapax_reading	1	برکِشد=1 / بَرکَشَد=1
+برکنی	hapax_reading	1	بَرکَنی=3 / برکُنی=1
+برکه	hapax_reading	1	برکُه=1 / برکِه=1
+بز	hapax_reading	1	بُز=21 / بَز=1
+بزنم	hapax_reading	1	بَزِنِم=3 / بِزَنَم=1
+بزه	hapax_reading	1	بَزِه=11 / بِزِه=1
+بسازم	hapax_reading	1	بِسازِم=8 / بِسازَم=1
+بساط	hapax_reading	1	بِساط=6 / بَساط=1
+بستاند	hapax_reading	1	بِسِتانَد=5 / بِسْتانَد=1
+بستر	hapax_reading	1	بِستُر=6 / بَسْتَر=1
+بسته	hapax_reading	1	بَسته=3 / بِستُه=1
+بستی	hapax_reading	1	بَستی=3 / بُستی=1
+بسد	hapax_reading	1	بُسَّد=21 / بَسَد=1
+بسر	hapax_reading	1	بِسِرّ=14 / بَسَر=1 / بِسَر=1
+بسری	hapax_reading	1	بِسِرّی=2 / بَسَری=1
+بسمل	hapax_reading	1	بِسمِل=4 / بَسْمل=1
+بسون	hapax_reading	1	بِسُون=3 / بَسون=1
+بسی	hapax_reading	1	بَسی=12 / بِسی=1
+بشست	hapax_reading	1	بِشُسْت=11 / بشَست=1
+بشکست	malformed_attestation	1	بِشْکَسْت=3 / بشِْکست=1 / بِشِکست=1
+بطر	hapax_reading	1	بَطَر=5 / بُطر=1
+بعدت	hapax_reading	1	بَعِدْت=1 / بُعْدت=1
+بعده	hapax_reading	1	بَعدَه=1 / بَعدِه=1
+بعدی	hapax_reading	1	بُعدی=4 / بَعْدِی=1
+بغل	hapax_reading	1	بَغَل=3 / بَغْل=1
+بفروز	hapax_reading	1	بفُروز=1 / بِفْروز=1
+بفضلک	hapax_reading	1	بِفَضلَک=1 / بِفَضْلِک=1
+بفکن	hapax_reading	1	بِفِکَن=2 / بِفْکَن=1
+بفکند	hapax_reading	1	بِفکَنَد=5 / بِفْکنْد=1
+بقا	hapax_reading	1	بَقا=2 / بِقٰا=1
+بقیت	hapax_reading	1	بَقِیَت=5 / بَقِیْت=1
+بلابلا	hapax_reading	1	بَلَابِلَا=1 / بِلَابَلَا=1
+بلاغ	hapax_reading	1	بَلاغ=1 / بِلاغ=1
+بلن	hapax_reading	1	بِلِن=7 / بَلِن=1
+بلندی	hapax_reading	1	بِلِنْدی=5 / بُلندی=1
+بلور	impossible_initial_shadda	1	بِلُور=6 / بُّلور=1
+بمثل	hapax_reading	1	بمِثل=1 / بِمْثل=1
+بمر	hapax_reading	1	بمُر=1 / بِمَرّ=1
+بمردن	hapax_reading	1	بمُردن=1 / بَمِرْدِن=1
+بمستودعات	hapax_reading	1	بِمَستَودَعَات=1 / بِمُستَودَعات=1
+بمونه	hapax_reading	1	بَمُوّنِه=6 / بِمُونه=1
+بمیرم	hapax_reading	1	بَمیرِم=2 / بمیرُم=1
+بنای	hapax_reading	1	بِنٰای=8 / بَنای=1
+بندیش	hapax_reading	1	بَندیش=1 / بِنْدیش=1
+بنشان	hapax_reading	1	بِنِشان=2 / بِنْشان=1
+بنو	hapax_reading	1	بنَو=1 / بَنُو=1
+بنوشت	hapax_reading	1	بنَوَشت=2 / بنْوِشت=1
+بنگر	hapax_reading	1	بِنْگَر=3 / بِنِگر=1
+بنیت	hapax_reading	1	بَنَیت=1 / بُنیَت=1
+بنین	hapax_reading	1	بَنین=1 / بُنَین=1
+بها	hapax_reading	1	بِهَا=19 / بَها=1 / بِهٰا=1 / بْها=1
+بهت	hapax_reading	1	بُهت=3 / بَهِتّ=1
+بهشت	hapax_reading	1	بِهِشْت=17 / بِهَشت=1
+بهشتمه	hapax_reading	1	بِهِشْتْمِه=3 / بهِشْتِمه=1
+به‌گرد	hapax_reading	1	به‌گِرد=9 / به‌گَرد=1
+بوئه	hapax_reading	1	بُوئِه=4 / بِوئِه=1
+بوالحکم	hapax_reading	1	بوالحَکم=1 / بوالحِکَم=1
+بوتنه	hapax_reading	1	بَوِتِنِه=1 / بُوتِنِه=1
+بودت	hapax_reading	1	بُوَدَت=10 / بُوَدْت=1
+بور	hapax_reading	1	بَوِر=4 / بُور=1
+بوردمه	hapax_reading	1	بُوْردِمِه=3 / بَوِرْدْمِه=1
+بوره	hapax_reading	1	بُوِرْه=10 / بورَه=1 / بَوِرِه=1 / بُورِه=1
+بوز	hapax_reading	1	بوْز=1 / بِوَز=1
+بوه	hapax_reading	1	بَوِّه=27 / بَوَه=1 / بَوُّه=1
+بووئم	hapax_reading	1	بَوُوئِم=36 / بُوُوئِم=1
+بووئه	hapax_reading	1	بَووُئِه=9 / بُووئه=1
+بووه	hapax_reading	1	بَوِّوِه=17 / بَوَوِه=1
+بوین	hapax_reading	1	بَویْن=4 / بِوین=1
+بوینم	hapax_reading	1	بَوینِم=12 / بُوینِم=1
+بوینه	hapax_reading	1	بَوینه=1 / بِوینه=1
+بویه	hapax_reading	1	بَویّه=1 / بُویِه=1
+بپرس	hapax_reading	1	بَپرْس=1 / بِپُرس=1
+بچه	hapax_reading	1	بَچِّه=68 / بِچَه=1 / بِچِه=1
+بکا	hapax_reading	1	بُکا=6 / بَکا=1
+بکران	hapax_reading	1	بُکران=1 / بِکران=1
+بکردمه	hapax_reading	1	بَکِرْدِمِه=4 / بَکردْمه=1
+بکشتیم	hapax_reading	1	بِکِشتیم=1 / بکُشتیم=1
+بکشند	hapax_reading	1	بِکُشَند=9 / بِکَشند=1
+بکشید	hapax_reading	1	بُکشید=3 / بِکِشید=1
+بکشیم	hapax_reading	1	بُکشیم=3 / بکُشیم=1
+بکنش	hapax_reading	1	بِکُنَش=1 / بکَنش=1
+بکنم	hapax_reading	1	بَکِنِم=1 / بِکُنَم=1 / بکَنم=1
+بکنن	hapax_reading	1	بَکَنّن=1 / بَکِنِّن=1
+بکنه	hapax_reading	1	بَکَنِه=5 / بَکِنِه=1
+بکنی	hapax_reading	1	بِکَنی=3 / بِکُنی=1
+بگذارد	hapax_reading	1	بُگذارَد=1 / بِگُذارَد=1
+بگذارند	hapax_reading	1	بُگْذارَنْد=1 / بِگُذارَند=1
+بگذر	hapax_reading	1	بُگْذَر=3 / بِگُذَر=1
+بگذشت	hapax_reading	1	بُگْذَشْت=4 / بِگُذشت=1
+بگرد	hapax_reading	1	بگِرد=3 / بگَرد=1
+بگزینم	hapax_reading	1	بُگزینم=2 / بِگُزینم=1
+بگسست	hapax_reading	1	بُگْسَست=2 / بگُسست=1
+بگسل	hapax_reading	1	بُگْسِل=5 / بِگُسَل=1
+بگشاید	hapax_reading	1	بُگْشاید=3 / بِگُشایَد=1
+بگل	hapax_reading	1	بگُل=1 / بگِل=1
+بی	hapax_reading	1	بِی=5 / بَی=1
+بیاورد	hapax_reading	1	بیاوَرْد=2 / بیاوَرَد=1
+بیت	hapax_reading	1	بَیْت=9 / بِیت=1
+بیذق	hapax_reading	1	بَیذَق=1 / بِیذَق=1
+بیره	hapax_reading	1	بَیْرِه=2 / بَیِرِه=1 / بیرَه=1
+بیض	hapax_reading	1	بَیض=3 / بِیض=1
+بیضه	hapax_reading	1	بَیْضَه=2 / بِیْضِه=1
+بینی	hapax_reading	1	بَیْنِی=9 / بِینی=1
+بیورم	hapax_reading	1	بِیُورِم=6 / بَیُورم=1
+بی‌تکلف	hapax_reading	1	بی‌تَکَلُّف=16 / بی‌تکلٌف=1
+بی‌ثبات	hapax_reading	1	بی‌ثَبات=1 / بی‌ثُبات=1
+تبت	hapax_reading	1	تَبَّت=32 / تُبت=1 / تِبت=1
+تبدی	hapax_reading	1	تَبَدَّی=2 / تُبْدِی=1
+تبریز	hapax_reading	1	تَبْریز=2 / تَبِریز=1
+تبین	hapax_reading	1	تَبَیَّن=2 / تُبَیِّن=1
+تتلون	hapax_reading	1	تَتَلوَّن=3 / تَتْلُون=1
+تحجب	hapax_reading	1	تَحَجَّب=1 / تَحْجُب=1
+تحدث	hapax_reading	1	تَحدُث=1 / تُحَدِّث=1
+تحلوا	hapax_reading	1	تَحِلُّوا=1 / تُحِلُّوا=1
+تخم	hapax_reading	1	تُخْم=4 / تَخم=1
+ترا	hapax_reading	1	تُرا=47 / تَرا=1
+ترجمان	hapax_reading	1	تَرجُمان=1 / تُرجُمان=1
+ترجی	hapax_reading	1	تُرْجِی=3 / تُرجَی=1
+ترحل	hapax_reading	1	تَرَّحل=1 / تَرْحَل=1
+ترد	hapax_reading	1	تُرَدّ=2 / تُرِد=1
+ترسم	hapax_reading	1	تَرْسَم=4 / تَرْسِم=1
+ترهات	hapax_reading	1	تُرَّهات=41 / تَرهات=1
+ترکه	hapax_reading	1	تَرْکُه=1 / تُرکه=1
+تری	hapax_reading	1	تَرَی=37 / تِری=1
+تش	hapax_reading	1	تَش=23 / تُش=1
+تشبه	hapax_reading	1	تَشَبّه=9 / تُشبه=1
+تصل	hapax_reading	1	تَصَل=1 / تَصِل=1
+تطاول	hapax_reading	1	تَطاوُل=9 / تَطاوَل=1
+تعد	hapax_reading	1	تَعُدّ=4 / تُعَدّ=1
+تعلق	hapax_reading	1	تعلُّق=30 / تعلٌق=1
+تعنت	hapax_reading	1	تَعَنُّت=10 / تَعنَّت=1
+تعین	hapax_reading	1	تَعَیُّن=80 / تعیَّن=1
+تقدس	hapax_reading	1	تُقدَّس=7 / تقدُّس=1
+تقی	hapax_reading	1	تُقَی=3 / تَقیٰ=1
+تلا	hapax_reading	1	تَلا=1 / تِلا=1
+تله	hapax_reading	1	تَله=7 / تِله=1
+تمتع	hapax_reading	1	تَمَتَّع=21 / تمتُّع=1
+تمر	hapax_reading	1	تَمَرّ=4 / تَمُرّ=1
+تملک	hapax_reading	1	تَمَلَّک=2 / تملِک=1
+تمنا	hapax_reading	1	تَمَنّا=116 / تِمنّا=1
+تن	hapax_reading	1	تَن=83 / تُن=1 / تِن=1
+تنت	hapax_reading	1	تَنَت=4 / تنْت=1
+تندی	hapax_reading	1	تَنَدی=2 / تُندی=1
+تنفس	hapax_reading	1	تَنَفَّس=6 / تَنَفُّس=1
+تنه	hapax_reading	1	تِنِه=57 / تَنه=1
+تنکی	hapax_reading	1	تَنَکی=1 / تَنُکی=1
+تواضع	hapax_reading	1	تَواضَع=1 / تَواضُع=1
+توانا	hapax_reading	1	تَوانا=1 / تِوٰانٰا=1
+تورون	hapax_reading	1	تُوروَن=1 / تُوروُن=1
+توفیق	hapax_reading	1	تَوفیق=1 / تُوفیق=1
+توکل	hapax_reading	1	توکٌل=51 / توکُل=1
+تک	hapax_reading	1	تَک=7 / تِک=1
+تکذبون	hapax_reading	1	تُکَذِّبُون=2 / تَکْذِبُون=1
+تکلف	hapax_reading	1	تَکَلُّف=79 / تَکَلَّف=1
+تیه	hapax_reading	1	تیِه=2 / تَیْه=1
+ثبات	hapax_reading	1	ثَبات=2 / ثُبات=1
+ثباتی	hapax_reading	1	ثَباتی=1 / ثُباتی=1
+ثری	hapax_reading	1	ثَریٰ=15 / ثُری=1
+ثمر	hapax_reading	1	ثَمَر=9 / ثِمَر=1
+ثمن	hapax_reading	1	ثَمَن=3 / ثُمن=1
+جائع	hapax_reading	1	جَائِع=2 / جٰائع=1
+جانتان	hapax_reading	1	جانِتان=1 / جانْتان=1
+جانش	hapax_reading	1	جانْش=12 / جانٌش=1
+جاهدوا	hapax_reading	1	جاهَدُوا=1 / جَاهِدُوا=1
+جبه	hapax_reading	1	جُبّه=39 / جَبَه=1
+جبهت	hapax_reading	1	جَبهت=1 / جِبهت=1
+جدایی	hapax_reading	1	جِدٰایی=4 / جُدایی=1
+جده	hapax_reading	1	جَدِّه=6 / جَدَّه=1 / جَدُّه=1 / جِدِّه=1
+جرعه	hapax_reading	1	جُرعه=5 / جَرعه=1
+جرمش	hapax_reading	1	جُرمش=3 / جِرمش=1
+جز	hapax_reading	1	جُز=27 / جَز=1
+جزا	hapax_reading	1	جَزا=1 / جِزٰا=1
+جزع	hapax_reading	1	جَزَع=9 / جِزع=1
+جزو	hapax_reading	1	جُزْو=6 / جزُو=1
+جستنش	hapax_reading	1	جُستنش=5 / جَستنش=1
+جستنی	hapax_reading	1	جَستنی=1 / جُستنی=1
+جسته‌ست	hapax_reading	1	جُسته‌ست=2 / جَسته‌ست=1
+جستیم	hapax_reading	1	جُستیم=3 / جَستیم=1
+جعل	hapax_reading	1	جُعَل=19 / جَعَل=1
+جعلت	hapax_reading	1	جَعَلت=1 / جُعِلت=1
+جفا	hapax_reading	1	جَفٰا=8 / جُفا=1 / جِفٰا=1
+جفته	hapax_reading	1	جُفته=3 / جَفته=1
+جلاب	hapax_reading	1	جُلاب=28 / جَلّاب=1
+جلاجل	hapax_reading	1	جَلاجِل=2 / جُلاجل=1
+جلدی	hapax_reading	1	جَلدی=1 / جِلدِی=1
+جلی	hapax_reading	1	جَلِیّ=7 / جَلْی=1
+جماع	hapax_reading	1	جَماع=4 / جِماع=1
+جماله	hapax_reading	1	جَمالِه=1 / جِمٰالِه=1
+جمع	hapax_reading	1	جَمْع=9 / جَمَع=1
+جمعت	hapax_reading	1	جَمَعْت=2 / جَمَعَت=1
+جمه	hapax_reading	1	جمَّه=2 / جِمِه=1
+جنابه	hapax_reading	1	جَنابِه=1 / جُنابه=1
+جنان	hapax_reading	1	جَنان=10 / جِنان=1
+جنت	hapax_reading	1	جَنَّت=495 / جَنِّت=1
+جند	hapax_reading	1	جَند=3 / جُند=1
+جه	hapax_reading	1	جِه=10 / جَه=1
+جهار	hapax_reading	1	جَهار=1 / جِهار=1
+جهانش	hapax_reading	1	جهانَش=2 / جهانْش=1
+جود	hapax_reading	1	جُود=8 / جَوَد=1
+جوشن	hapax_reading	1	جُوشَن=1 / جُوشِن=1
+جوون	hapax_reading	1	جِووُن=5 / جُوون=1
+جگر	hapax_reading	1	جِگَر=3 / جَگر=1 / جِگِر=1
+جیبی	hapax_reading	1	جَیبی=1 / جِیبی=1
+جید	hapax_reading	1	جَیْد=3 / جِید=1
+حال	hapax_reading	1	حٰال=11 / حَال=1
+حالم	hapax_reading	1	حالَم=1 / حالِم=1
+حبر	hapax_reading	1	حِبْر=5 / حَبر=1
+حبس	hapax_reading	1	حَبس=2 / حُبِس=1
+حبش	hapax_reading	1	حَبَش=21 / حَبِش=1
+حبل	hapax_reading	1	حَبْل=6 / حَبَل=1
+حبلی	hapax_reading	1	حَبْلی=1 / حُبلی=1
+حبهم	hapax_reading	1	حُبِّهِم=3 / حبُّهُم=1
+حبک	hapax_reading	1	حُبَّک=12 / حُبُّک=1 / حُبِّک=1
+حجاج	hapax_reading	1	حُجّاج=14 / حَجّاج=1
+حجب	hapax_reading	1	حُجُب=13 / حَجَب=1 / حُجَب=1
+حجرالاسود	hapax_reading	1	حَجَرالاسوَد=1 / حَجِرُالْاَسوِد=1
+حجیب	hapax_reading	1	حَجیب=1 / حِجیب=1
+حدا	hapax_reading	1	حُدا=3 / حَدا=1
+حداد	hapax_reading	1	حَدّاد=5 / حِدَاد=1
+حدت	hapax_reading	1	حَدَّت=17 / حِدّت=1
+حدیثی	hapax_reading	1	حَدِیْثِی=2 / حَدِیثْی=1
+حذر	hapax_reading	1	حَذَر=9 / حُذر=1
+حرف	hapax_reading	1	حَرْف=2 / حِرَف=1
+حرم	hapax_reading	1	حَرَم=15 / حُرم=1
+حزم	hapax_reading	1	حَزْم=14 / حِزم=1
+حسبت	hapax_reading	1	حَسِبْت=2 / حِسبت=1
+حسنت	hapax_reading	1	حُسنَت=19 / حَسُنت=1
+حسیب	hapax_reading	1	حَسِیب=2 / حِسیب=1
+حضر	hapax_reading	1	حَضَر=9 / حُضر=1
+حلت	hapax_reading	1	حَلَّت=6 / حِلّت=1
+حمل	hapax_reading	1	حَمَل=14 / حِمل=1
+حملان	hapax_reading	1	حَملان=1 / حُملان=1
+حنا	hapax_reading	1	حِنٰا=9 / حَنا=1
+حوت	hapax_reading	1	حَوَت=1 / حُوت=1
+حورالعین	hapax_reading	1	حُورالعین=2 / حورُالعین=1
+حوش	hapax_reading	1	حَوِش=4 / حَوْش=1
+حوض	hapax_reading	1	حُوض=2 / حَوض=1
+حول	hapax_reading	1	حَوْل=2 / حُول=1
+حولی	hapax_reading	1	حَولی=1 / حُولی=1
+حکمی	hapax_reading	1	حُکمی=4 / حَکَمی=1
+حیدر	hapax_reading	1	حَیْدِر=2 / حَیدَر=1
+حیران	hapax_reading	1	حَیران=1 / حِیْران=1
+حیز	hapax_reading	1	حیَز=15 / حِیز=1
+خارش	hapax_reading	1	خارَش=2 / خارِش=1
+خاصه	hapax_reading	1	خاصَه=9 / خاصِه=1
+خبث	hapax_reading	1	خُبْث=25 / خَبث=1
+خبر	hapax_reading	1	خَبَر=4 / خَبْر=1
+ختایی	hapax_reading	1	خَتایی=3 / خُتایی=1
+خجیره	hapax_reading	1	خِجیرِه=3 / خَجیرِه=1
+خداوندان	hapax_reading	1	خَداوندان=1 / خُداوندان=1
+خدای	hapax_reading	1	خُدای=1 / خِدٰای=1
+خدایی	hapax_reading	1	خِدٰایی=4 / خُدایی=1
+خدم	hapax_reading	1	خَدَم=8 / خِدم=1
+خذلان	hapax_reading	1	خِذْلان=13 / خَذْلان=1
+خراج	hapax_reading	1	خَراج=3 / خُراج=1
+خراسان	hapax_reading	1	خَراسان=1 / خُراسان=1
+خران	hapax_reading	1	خِران=2 / خَران=1
+خرج	hapax_reading	1	خَرج=1 / خُرج=1
+خردست	hapax_reading	1	خُردست=3 / خِرَدست=1
+خردش	hapax_reading	1	خردْش=1 / خُردَش=1
+خرف	hapax_reading	1	خِرِف=4 / خَرَف=1
+خرما	hapax_reading	1	خُرَّما=14 / خرِما=1
+خرمی	hapax_reading	1	خُرَّمی=118 / خَرَمی=1
+خس	hapax_reading	1	خَس=13 / خِس=1
+خسر	hapax_reading	1	خُسُر=2 / خَسِر=1
+خسروی	hapax_reading	1	خُسرَوی=2 / خِسروی=1
+خشک	hapax_reading	1	خُشک=9 / خِشْک=1
+خشکی	hapax_reading	1	خُشکی=1 / خِشْکی=1
+خضروار	hapax_reading	1	خِضْروار=2 / خَضَروار=1
+خضری	hapax_reading	1	خِضْری=2 / خضَری=1
+خطا	hapax_reading	1	خَطا=2 / خِطٰا=1
+خطبه	hapax_reading	1	خِطبه=3 / خُطبه=1
+خفاش	hapax_reading	1	خُفّٰاش=37 / خَفاش=1
+خفتان	hapax_reading	1	خُفْتان=4 / خِفتان=1
+خل	hapax_reading	1	خَل=7 / خِلّ=1
+خلخی	hapax_reading	1	خَلُّخی=5 / خُلخی=1
+خلع	hapax_reading	1	خَلع=2 / خُلع=1
+خلقا	hapax_reading	1	خُلِقَا=2 / خَلْقَاً=1
+خماهن	hapax_reading	1	خُماهَن=2 / خَماهن=1
+خمش	hapax_reading	1	خَمُش=12 / خُمش=1
+خمشان	hapax_reading	1	خَمُشان=1 / خَمِشان=1
+خنجر	hapax_reading	1	خَنْجِر=2 / خَنْجَر=1
+خنه	hapax_reading	1	خِنِه=6 / خَنِّه=1
+خنور	hapax_reading	1	خَنّور=1 / خُنور=1
+خنک	hapax_reading	1	خُنُک=37 / خِنک=1
+خنگ	hapax_reading	1	خِنْگ=11 / خَنگ=1
+خه	hapax_reading	1	خَه=4 / خِه=1
+خهی	hapax_reading	1	خَهی=2 / خِهی=1
+خو	hapax_reading	1	خُو=12 / خَو=1
+خواجه	hapax_reading	1	خواجَه=1 / خوٰاجِه=1
+خوار	hapax_reading	1	خُوار=2 / خْوار=1
+خورش	hapax_reading	1	خُورِش=2 / خورَش=1
+خوری	hapax_reading	1	خَوری=7 / خُوری=1
+خوش‌خرام	hapax_reading	1	خوش‌خَرام=1 / خوش‌خُرام=1
+خوف	hapax_reading	1	خَوف=4 / خُوف=1
+خونش	hapax_reading	1	خونَش=1 / خونْش=1
+خون‌فشان	hapax_reading	1	خون‌فَشان=1 / خون‌فِشان=1
+خویشتن	hapax_reading	1	خویشْتَن=2 / خویشِتن=1
+خیالک	hapax_reading	1	خَیَالُک=3 / خَیالِک=1
+دارالملک	malformed_attestation	1	دارُالمُلک=3 / دارٍُالملک=1
+دارته	hapax_reading	1	دارِته=1 / دارْته=1
+داردش	hapax_reading	1	داردَش=1 / داردْش=1
+دارمه	hapax_reading	1	دٰارْمِه=38 / دارِمه=1
+داره	hapax_reading	1	دٰارِه=4 / دَارَه=1
+داری	hapax_reading	1	دَارِی=5 / دٰاری=1
+دانش	hapax_reading	1	دانَش=6 / دانِش=1
+دبر	hapax_reading	1	دَبر=1 / دُبُر=1
+دتا	hapax_reading	1	دِتٰا=3 / دْتا=1
+ددی	hapax_reading	1	دَدی=2 / دِدی=1
+درا	hapax_reading	1	دَرا=5 / دِرا=1
+دراز	hapax_reading	1	دِرٰاز=2 / دُرْاز=1
+درای	hapax_reading	1	دَرای=3 / دِرای=1
+درتاب	hapax_reading	1	دَرتاب=1 / دُرتاب=1
+درجا	hapax_reading	1	دَرْجا=1 / دُرْجاً=1
+درجی	hapax_reading	1	دُرجی=8 / دَرجی=1
+درخور	hapax_reading	1	درخَور=25 / درخُور=1
+درخورد	hapax_reading	1	درخَورد=8 / درخورْد=1
+دردست	hapax_reading	1	دَردست=3 / دُردست=1
+درده	hapax_reading	1	دَرْدِه=13 / دُرده=1
+دردها	hapax_reading	1	دَردها=1 / دُردها=1
+دردکش	hapax_reading	1	دُردکَش=4 / دَردکش=1
+دردیم	hapax_reading	1	دُردیم=2 / دَردیم=1
+دردی‌کش	hapax_reading	1	دُرْدی‌کَش=15 / دُردی‌کِش=1
+درمنه	hapax_reading	1	دِرَمنه=2 / دَرمَنه=1
+درمی	hapax_reading	1	دِرَمی=5 / دَرْمَی=1
+دروند	hapax_reading	1	دُروند=1 / دِرَوَند=1
+دروی	hapax_reading	1	دَروی=2 / دِرَوی=1
+درکش	hapax_reading	1	دَرکَش=10 / درکِش=1
+درکشد	hapax_reading	1	درکَشد=1 / دَرکِشد=1
+درکه	hapax_reading	1	دُرکه=2 / دَرْکه=1
+دریاب	hapax_reading	1	دَریاب=3 / دُریاب=1
+دریم	hapax_reading	1	دَریم=3 / دُریم=1
+دریو	hapax_reading	1	دِرْیُو=11 / دَرْیُو=1
+دزلف	hapax_reading	1	دِزِلْف=1 / دْزلف=1
+دست	hapax_reading	1	دَسْت=64 / دِسْت=1
+دستوری	hapax_reading	1	دَستوری=1 / دُستوری=1
+دشمن	hapax_reading	1	دِشْمِن=5 / دُشمن=1
+دشمنانت	hapax_reading	1	دشمنانْت=3 / دشمنانَت=1
+دفتر	hapax_reading	1	دَفْتِر=3 / دَفْتَر=1
+دلازار	hapax_reading	1	دلْازٰار=1 / دِلٰازٰار=1
+دلت	hapax_reading	1	دلْت=4 / دِلَت=1
+دلشان	hapax_reading	1	دِلْشان=3 / دِلِشان=1
+دلو	hapax_reading	1	دِلُو=2 / دْلو=1
+دمادم	hapax_reading	1	دَمادَم=5 / دُمادُم=1
+دماغ	hapax_reading	1	دِماغ=24 / دٍماغ=1 / دُماغ=1
+دمت	hapax_reading	1	دَمَت=2 / دُمَّت=1 / دُمْت=1
+دن	hapax_reading	1	دَن=17 / دُن=1
+دنبله	hapax_reading	1	دَنْبَلَه=1 / دُنْبَلَه=1
+دنه	hapax_reading	1	دِنِه=3 / دْنه=1
+دنیمه	hapax_reading	1	دَنیمِه=1 / دِنیمه=1
+دهان	hapax_reading	1	دَهان=4 / دُهان=1
+دهند	hapax_reading	1	دَهَند=1 / دِهِند=1
+دو	hapax_reading	1	دُو=9 / دَو=1 / دِو=1
+دواب	hapax_reading	1	دَواب=6 / دُواب=1
+دوار	hapax_reading	1	دَوّار=42 / دُوار=1
+دوازده	hapax_reading	1	دِوٰازْدَه=1 / دِوٰازْدِه=1
+دود	hapax_reading	1	دَوَد=18 / دُود=1
+دوران	hapax_reading	1	دَوَران=5 / دوْران=1
+دورق	hapax_reading	1	دِوَرِق=1 / دْوَرق=1
+دوری	hapax_reading	1	دَوْری=10 / دوُری=1
+دوسته	hapax_reading	1	دُوسْتِه=2 / دَوِسْتِه=1
+دوستی	hapax_reading	1	دُوستی=16 / دَوستی=1
+دوسی	hapax_reading	1	دَوِسّی=1 / دُوسّی=1
+دولته	hapax_reading	1	دَولَتِه=2 / دُوْلِتِه=1
+دومه	hapax_reading	1	دُوّمِه=11 / دومَه=1
+دوی	hapax_reading	1	دَوی=3 / دُوی=1
+دپاته	hapax_reading	1	دِپاته=1 / دْپاته=1
+دیار	hapax_reading	1	دَیّار=44 / دِیَار=1
+دیجور	hapax_reading	1	دَیْجُوْر=2 / دِیجور=1
+دیدنش	hapax_reading	1	دیدنَش=1 / دیدنْش=1
+دیرش	hapax_reading	1	دَیرش=1 / دِیرَش=1
+دیم	hapax_reading	1	دِیِّم=2 / دیَم=1 / دیُم=1
+دیمه	hapax_reading	1	دَیْمِه=29 / دیِمِه=1
+دینکم	hapax_reading	1	دِینَکُم=3 / دِینُکُم=1
+دیگر	hapax_reading	1	دیگِر=3 / دیگَر=1
+د‌رج	hapax_reading	1	دَ‌رج=3 / دُ‌رج=1
+ذا	hapax_reading	1	ذَا=8 / ذٰا=1
+ذات	hapax_reading	1	ذَات=9 / ذٰات=1
+ذروه‌ی	hapax_reading	1	ذَروه‌ی=1 / ذُرْوِه‌ی=1
+ذمه	hapax_reading	1	ذَمِّه=2 / ذمَّه=1
+ذهاب	hapax_reading	1	ذَهاب=1 / ذِهاب=1
+ذوالمن	hapax_reading	1	ذَوالمَن=4 / ذُوالمَن=1
+ذکا	hapax_reading	1	ذُکا=2 / ذَکا=1
+ذکر	hapax_reading	1	ذِکْر=6 / ذُکِر=1
+ذکراه	hapax_reading	1	ذِکَراه=1 / ذِکْراه=1
+ذکرت	hapax_reading	1	ذَکَرْت=2 / ذُکِرَت=1
+ذکره	hapax_reading	1	ذِکرُه=2 / ذِکرَه=1
+رأسه	hapax_reading	1	رَأسَه=1 / رَأسِه=1
+را	hapax_reading	1	رَا=1 / رٰا=1
+راحته	hapax_reading	1	راحتِه=1 / راحَتَه=1 / راحَتُه=1
+رامش	hapax_reading	1	رامِش=3 / رامَش=1
+راهت	hapax_reading	1	راهَت=1 / راهِت=1
+راهوی	hapax_reading	1	راهَوی=1 / راهُوی=1
+راوق	hapax_reading	1	راوَق=4 / راوُق=1
+رایت	hapax_reading	1	رَاَیْت=2 / رایَت=1
+رباه	hapax_reading	1	رَبَّاه=2 / رُباه=1
+ربما	hapax_reading	1	رُبَّمَا=4 / رَبُّما=1
+ربنا	hapax_reading	1	رَبَّنَا=45 / رَبُّنَا=1 / رَبِّنَا=1
+ربه	hapax_reading	1	رَبَّه=5 / ربِّه=1
+ربک	hapax_reading	1	رَبِّک=15 / رَبُّک=1
+رجال	hapax_reading	1	رِجال=5 / رَجال=1
+رجل	hapax_reading	1	رَجُل=1 / رِجل=1
+رخ	hapax_reading	1	رُخ=73 / رَخ=1
+رخم	hapax_reading	1	رُخَم=18 / رَخم=1
+ردوا	hapax_reading	1	رُدّوا=2 / رَدُّوا=1
+رزقکم	hapax_reading	1	رِزقُکُم=3 / رِزْقَکُم=1
+رس	hapax_reading	1	رَس=6 / رُس=1
+رستمی	hapax_reading	1	رَسْتَمی=2 / رُستمی=1
+رستنت	hapax_reading	1	رَستنت=2 / رُستنت=1
+رستند	hapax_reading	1	رَستند=3 / رُستند=1
+رسته‌ای	hapax_reading	1	رَسته‌ای=2 / رُسته‌ای=1
+رستیم	hapax_reading	1	رُستیم=2 / رَستیم=1
+رسیده‌ست	hapax_reading	1	رَسیده‌ست=1 / رِسیده‌ست=1
+رشته‌ای	hapax_reading	1	رُشته‌ای=1 / رِشته‌ای=1
+رضیت	hapax_reading	1	رَضیِت=1 / رَضیْت=1
+رفتم	hapax_reading	1	رُفتُم=3 / رَفتم=1
+رفتنش	hapax_reading	1	رفتنْش=2 / رفتنَش=1
+رفته	hapax_reading	1	رُفته=19 / رَفته=1
+رفته‌اند	hapax_reading	1	رَفْتِه‌اَنْد=1 / رُفته‌اند=1
+رفتی	hapax_reading	1	رُفتی=10 / رَفتی=1
+رفتیم	hapax_reading	1	رَفتیم=1 / رُفتیم=1
+رفو	hapax_reading	1	رَفو=1 / رُفو=1
+رق	hapax_reading	1	رَقّ=10 / رِقّ=1
+رقت	hapax_reading	1	رَقَّت=11 / رِقت=1
+رماح	hapax_reading	1	رَماح=1 / رِماح=1
+رمانی	hapax_reading	1	رُمّانی=19 / رَمَانِی=1
+رمحش	hapax_reading	1	رُمْحَش=6 / رمُحش=1
+رند	hapax_reading	1	رِند=10 / رَنْد=1
+رهبان	hapax_reading	1	رُهبان=22 / رَهبان=1
+رهبانی	hapax_reading	1	رُهبانی=2 / رَهبانی=1
+روا	hapax_reading	1	رَوا=3 / رِوا=1
+روبه	hapax_reading	1	روبَه=21 / رُوبِه=1
+رود	hapax_reading	1	رَوَد=81 / رُوَد=1
+روز	hapax_reading	1	رُوز=13 / رَوز=1
+روزه	hapax_reading	1	رُوزِه=4 / رُوزُه=1
+روزگار	hapax_reading	1	رُوزِگٰار=2 / روزْگار=1
+روشن	hapax_reading	1	روشِن=3 / روشَن=1
+رون	hapax_reading	1	روُن=1 / رَوَن=1
+روید	hapax_reading	1	رَوید=1 / رُوَید=1
+رکیب	hapax_reading	1	رِکیب=2 / رَکیب=1
+ریاحین	hapax_reading	1	رَیاحین=2 / رِیاحین=1
+ریب	hapax_reading	1	رَیْب=6 / رِیْب=1
+ریع	hapax_reading	1	رَیع=3 / رِیع=1
+زاغ	hapax_reading	1	زَاغ=1 / زٰاغ=1
+زاول	hapax_reading	1	زاوُل=8 / زاوٌل=1
+زاید	hapax_reading	1	زایَد=2 / زایِد=1
+زرش	hapax_reading	1	زَرَش=11 / زرْش=1
+زشت	hapax_reading	1	زَشْت=1 / زِشْت=1
+زغن	hapax_reading	1	زَغَن=4 / زِغن=1
+زفر	malformed_attestation	1	زَِفَر=4 / زَفَر=1 / زُفَر=1
+زلت	hapax_reading	1	زَلَّت=10 / زِلْت=1
+زلفینش	hapax_reading	1	زلفینَش=1 / زلفینْش=1
+زلیخا	hapax_reading	1	زُلَیْخا=3 / زُلِیخا=1
+زماننا	hapax_reading	1	زمانُنا=1 / زمانِنا=1
+زمر	hapax_reading	1	زُمَر=4 / زَمْر=1
+زمن	hapax_reading	1	زَمَن=28 / زمِن=1
+زمون	hapax_reading	1	زَمُون=2 / زُمون=1
+زنخت	hapax_reading	1	زَنَخَت=1 / زِنَخَت=1
+زنم	hapax_reading	1	زَنَم=5 / زِنِم=1
+زنه	hapax_reading	1	زَنِّه=14 / زِنّه=1
+زنی	hapax_reading	1	زَنّی=17 / زِنِی=1
+زه	hapax_reading	1	زِه=27 / زَه=1
+زهد	hapax_reading	1	زُهْد=9 / زٌهد=1
+زهش	hapax_reading	1	زهُش=1 / زِهَش=1
+زوون	hapax_reading	1	زِوُون=2 / زَوُون=1
+زکات	hapax_reading	1	زَکات=2 / زِکٰات=1
+زکام	hapax_reading	1	زُکام=5 / زَکام=1 / زِکام=1
+زیبق	hapax_reading	1	زِیْبَق=2 / زَیبق=1
+زین	hapax_reading	1	زَیْن=8 / زُیِّن=1
+زینهار	hapax_reading	1	زینَهار=1 / زینْهار=1
+سازش	hapax_reading	1	سازَش=1 / سٰازِش=1
+سازم	hapax_reading	1	سازَم=2 / سازِم=1
+ساعته	hapax_reading	1	ساعَته=1 / سٰاعِتِه=1
+ساغر	hapax_reading	1	ساغَر=7 / ساغِر=1
+سالم	hapax_reading	1	سالَم=2 / سالِم=1
+سبحات	hapax_reading	1	سُبُحات=3 / سُبْحات=1
+سبع	hapax_reading	1	سَبْع=9 / سَبَع=1 / سُبع=1
+سبق	hapax_reading	1	سَبَق=19 / سَبْق=1
+سبوح‌خوان	hapax_reading	1	سَبّوح‌خوان=1 / سُبّوح‌خوان=1
+سترد	hapax_reading	1	سِتُرد=3 / سُترد=1
+سترون	hapax_reading	1	سِتَروَن=3 / سَتَروَن=1
+سترگ	hapax_reading	1	سِتُرگ=2 / سُتُرگ=1
+ستیر	hapax_reading	1	سَتیر=1 / سِتیر=1
+سجده	hapax_reading	1	سَجده=2 / سِجده=1
+سحرها	hapax_reading	1	سَحَرها=1 / سِحرها=1
+سحور	hapax_reading	1	سَحور=1 / سُحور=1
+سحی	hapax_reading	1	سَحّی=1 / سِحی=1
+سخر	hapax_reading	1	سَخَّر=1 / سِخر=1
+سرادق	hapax_reading	1	سُرادِق=4 / سَرادِق=1
+سرایت	hapax_reading	1	سَرایت=1 / سِرایت=1
+سرایم	hapax_reading	1	سُرایم=4 / سَرایم=1
+سرایی	hapax_reading	1	سُرایی=3 / سَرایی=1
+سرب	hapax_reading	1	سَرَب=1 / سُرُب=1
+سرده	hapax_reading	1	سردَه=1 / سَردِه=1
+سرست	hapax_reading	1	سَرست=7 / سِرست=1
+سرشک	hapax_reading	1	سِرِشْک=8 / سَرشک=1
+سرو	hapax_reading	1	سَرْو=30 / سُرو=1
+سرورا	hapax_reading	1	سَروَرا=2 / سُرُوراً=1
+سرون	hapax_reading	1	سُرون=3 / سَرون=1
+سرونگ	hapax_reading	1	سَرْوَنگ=1 / سَرْوِنگ=1
+سرکه	hapax_reading	1	سَرْکِه=2 / سِرکه=1
+سرگردونمه	hapax_reading	1	سرگردونِمِه=1 / سَرْگِردُونْمِه=1
+سریم	hapax_reading	1	سَریم=1 / سِرّیم=1
+سزاوار	hapax_reading	1	سِزاوار=2 / سَزاوار=1
+سزای	hapax_reading	1	سَزای=1 / سِزای=1
+سعاد	hapax_reading	1	سُعاد=2 / سَعاد=1
+سعد	hapax_reading	1	سَعْد=18 / سَعِد=1
+سعده	hapax_reading	1	سعدَه=1 / سَعدُه=1
+سعدی	hapax_reading	1	سَعدِی=1 / سُعدی=1
+سفالی	hapax_reading	1	سَفالی=1 / سُفالی=1
+سفته	hapax_reading	1	سُفته=12 / سَفته=1
+سفر	hapax_reading	1	سَفَر=8 / سِفر=1
+سفه	hapax_reading	1	سَفَه=3 / سِفَه=1
+سقلابی	hapax_reading	1	سَقلابی=2 / سِقلابی=1
+سقم	hapax_reading	1	سَقَم=1 / سُقم=1 / سِقَم=1
+سل	hapax_reading	1	سَل=5 / سِل=1
+سلک	hapax_reading	1	سِلْک=7 / سُلَک=1
+سلیمان	hapax_reading	1	سُلَیمَان=1 / سُلِیمان=1
+سماک	hapax_reading	1	سِماک=5 / سَماک=1
+سمت	hapax_reading	1	سمَت=1 / سَمْت=1
+سمعه	hapax_reading	1	سَمعه=1 / سُمعه=1
+سمندر	hapax_reading	1	سمندُر=1 / سَمَندَر=1 / سَمِنْدِر=1
+سنبل	hapax_reading	1	سُنْبُل=20 / سٌنبل=1
+سنت	hapax_reading	1	سُنَّت=71 / سِنَّت=1
+سنین	hapax_reading	1	سِنِین=9 / سُنَین=1
+سه	hapax_reading	1	سِه=7 / سَه=1
+سها	hapax_reading	1	سُها=27 / سَها=1
+سهام	hapax_reading	1	سَهام=1 / سِهام=1
+سهر	hapax_reading	1	سَهَر=2 / سُهر=1
+سهی	hapax_reading	1	سَهی=11 / سُهی=1
+سهیل	hapax_reading	1	سُهَیل=5 / سُهِیل=1
+سوجن	hapax_reading	1	سُوجِن=4 / سَوجن=1
+سودا	hapax_reading	1	سَودا=2 / سُودا=1
+سودائیمه	hapax_reading	1	سَودٰائیمِه=1 / سُودائیمه=1
+سودای	hapax_reading	1	سَودای=2 / سُودٰای=1
+سودکت	hapax_reading	1	سوُدَکْت=1 / سُودَکِت=1
+سور	hapax_reading	1	سُوَر=14 / سُوُر=1
+سوزمه	hapax_reading	1	سُوزِّمِه=5 / سُوزْمه=1
+سوسن	hapax_reading	1	سُوسَن=2 / سُوسِن=1
+سوسنش	hapax_reading	1	سوسنَش=1 / سوسنْش=1
+سون	hapax_reading	1	سُون=26 / سْون=1
+سپر	hapax_reading	1	سِپَر=6 / سِپُر=1
+سپرد	hapax_reading	1	سِپُرد=5 / سِپَرَد=1
+سپردم	hapax_reading	1	سپُردم=3 / سپَردم=1
+سپرم	hapax_reading	1	سِپُرم=1 / سپَرم=1
+سکر	hapax_reading	1	سُکر=8 / سَکَر=1 / سِکر=1
+سکری	hapax_reading	1	سُکْری=4 / سَکْریٰ=1
+سکون	hapax_reading	1	سُکُون=3 / سکَون=1
+سیئات	hapax_reading	1	سیِّئات=28 / سیَئات=1
+سیدنا	hapax_reading	1	سَیِّدِنَا=2 / سَیِّدُنَا=1
+سیران	hapax_reading	1	سَیَران=2 / سِیران=1
+سیرش	hapax_reading	1	سِیَرَش=2 / سَیرش=1
+سیف	hapax_reading	1	سَیْف=3 / سِیف=1
+سیلی	hapax_reading	1	سیْلی=6 / سِیلی=1
+سیم	hapax_reading	1	سِیُم=35 / سَیَم=1 / سیْم=1
+سیمینش	hapax_reading	1	سیمینَش=2 / سیمینْش=1
+سیمین‌عذار	hapax_reading	1	سیمین‌عَذار=1 / سیمین‌عِذار=1
+سیم‌کش	hapax_reading	1	سیم‌کُش=1 / سیم‌کِش=1
+شادروان	hapax_reading	1	شادُرْوان=16 / شادَروان=1 / شادِروان=1
+شانه	hapax_reading	1	شانَه=1 / شَانُه=1
+شبانی	hapax_reading	1	شُبانی=2 / شَبانی=1
+شبع	hapax_reading	1	شَبِع=1 / شِبَع=1
+شبهی	hapax_reading	1	شَبَهی=1 / شِبهی=1
+شجون	hapax_reading	1	شَجون=1 / شُجون=1
+شخم	hapax_reading	1	شَخَم=1 / شُخم=1
+شدن	hapax_reading	1	شُدَن=4 / شَدَن=1
+شر	hapax_reading	1	شَر=150 / شِر=1
+شراب	hapax_reading	1	شَرَاب=4 / شِراب=1
+شرح	hapax_reading	1	شَرْح=7 / شرَح=1
+شرم	hapax_reading	1	شَرْم=4 / شِرم=1
+شستن	hapax_reading	1	شَستن=1 / شِستن=1
+شسته‌اند	hapax_reading	1	شَسته‌اند=1 / شُسته‌اند=1
+شسته‌ای	hapax_reading	1	شَسته‌ای=9 / شِسته‌ای=1
+شستی	hapax_reading	1	شُستی=3 / شَستی=1
+ششم	hapax_reading	1	شَشَم=1 / شُشَم=1
+شعار	hapax_reading	1	شِعار=2 / شَعار=1
+شعرک	hapax_reading	1	شَعرِک=1 / شِعرَک=1
+شغل	hapax_reading	1	شُغْل=3 / شَغَل=1
+شفا	hapax_reading	1	شَفَا=2 / شِفا=1
+شق	hapax_reading	1	شَقّ=17 / شِقّ=1
+شل	hapax_reading	1	شَل=6 / شِل=1
+شمت	hapax_reading	1	شَمَّت=2 / شِمت=1
+شمرند	hapax_reading	1	شُمَرند=1 / شِمرند=1
+شمری	hapax_reading	1	شَمَری=4 / شُمَری=1
+شمه	hapax_reading	1	شَمِّه=34 / شِمِه=1
+شموس	hapax_reading	1	شَموس=1 / شُموس=1
+شنعت	hapax_reading	1	شَنْعَت=2 / شُنعت=1
+شنوا	hapax_reading	1	شَنْوا=1 / شِنوا=1
+شنود	hapax_reading	1	شِنَوَد=3 / شُنود=1
+شنی	hapax_reading	1	شَنی=3 / شِنی=1
+شهره	hapax_reading	1	شُهره=19 / شَهرِه=1
+شهنشاه	hapax_reading	1	شَهَنشاه=2 / شهِنشاه=1
+شور	hapax_reading	1	شُور=3 / شَور=1
+شومه	hapax_reading	1	شُومِّه=13 / شَوَمِه=1
+شونی	hapax_reading	1	شُونی=3 / شَونی=1
+شویی	hapax_reading	1	شَویی=1 / شُویی=1
+شکارته	hapax_reading	1	شکارِته=1 / شکارْته=1
+شکرخنده	hapax_reading	1	شَکرْخنده=4 / شِکَرخنده=1
+شکرین	hapax_reading	1	شکًرین=14 / شِکرین=1
+شکل	hapax_reading	1	شِکْل=3 / شَکل=1
+شیطان	hapax_reading	1	شَیطَان=1 / شِیْطان=1
+شیم	hapax_reading	1	شِیَم=7 / شَیَم=1
+صاحب‌قران	hapax_reading	1	صاحب‌قَران=2 / صاحب‌قِران=1
+صبا	hapax_reading	1	صَبًاً=13 / صَبَاً=1 / صِبٰا=1
+صباح	hapax_reading	1	صَبَاح=7 / صبٰاح=1
+صبح	hapax_reading	1	صُبْح=6 / صُبُح=1
+صحبت	hapax_reading	1	صُحْبَت=5 / صَحِبت=1
+صحت	hapax_reading	1	صِحَّت=28 / صَحَّت=1
+صد	hapax_reading	1	صَد=35 / صُد=1 / صِد=1
+صدره	hapax_reading	1	صُدره=4 / صَدرُه=1 / صَدْرِه=1
+صراط	hapax_reading	1	صِرَاط=4 / صَراط=1
+صغر	hapax_reading	1	صَغَر=2 / صِغَر=1
+صفات	hapax_reading	1	صِفَات=6 / صَفات=1
+صفای	hapax_reading	1	صِفٰای=3 / صَفای=1
+صفت	hapax_reading	1	صِفِت=7 / صَفَت=1 / صَفِت=1
+صفر	hapax_reading	1	صَفَر=1 / صَفْر=1 / صِفر=1
+صقال	hapax_reading	1	صَقال=1 / صِقال=1
+صلات	hapax_reading	1	صَلات=1 / صِلات=1
+صلب	hapax_reading	1	صُلب=6 / صَلب=1
+صلح	hapax_reading	1	صُلْح=2 / صَلَح=1
+صنع	hapax_reading	1	صُنْع=49 / صَنع=1
+صنعت	hapax_reading	1	صُنعت=4 / صَنْعَت=1
+صهر	hapax_reading	1	صِهر=8 / صَهر=1
+صهیب	hapax_reading	1	صُهِیْب=4 / صُهَیب=1
+صهیلش	hapax_reading	1	صَهیلش=1 / صُهیلش=1
+صوت	hapax_reading	1	صُوت=2 / صَوْت=1
+صور	hapax_reading	1	صُوَر=38 / صُوُر=1
+صیاد	impossible_initial_shadda	1	صّیٰاد=57 / صیٌاد=1
+صید	hapax_reading	1	صَید=2 / صِیْد=1
+ضراب	hapax_reading	1	ضَرّاب=4 / ضِراب=1
+ضرغام	hapax_reading	1	ضَرغام=1 / ضِرغام=1
+ضعف	hapax_reading	1	ضَعْف=1 / ضُعف=1 / ضِعف=1
+ضلال	hapax_reading	1	ضَلال=4 / ضِلال=1
+طارم	hapax_reading	1	طارَم=4 / طارُم=1
+طبع	hapax_reading	1	طَبْع=9 / طَبَع=1
+طبق	hapax_reading	1	طَبَق=8 / طَبِق=1
+طرة	hapax_reading	1	طُرَّة=31 / طَرة=1
+طرفی	hapax_reading	1	طَرَفی=5 / طَرْفی=1
+طرقوا	hapax_reading	1	طَرِّقوا=2 / طُرُقوا=1
+طره‌اش	hapax_reading	1	طُرِّه‌اش=6 / طٌره‌اش=1
+طریقه	hapax_reading	1	طَرِیقُه=1 / طَریقِه=1
+طعان	hapax_reading	1	طَعَّان=1 / طِعان=1
+طعمه	hapax_reading	1	طُعمه=2 / طَعمُه=1
+طغرای	hapax_reading	1	طُغرای=5 / طَغرای=1
+طلب	hapax_reading	1	طَلَب=6 / طَلِب=1
+طلسم	hapax_reading	1	طَلِسْم=2 / طِلْسَم=1
+طوبی	hapax_reading	1	طُوْبَی=12 / طِوْبَی=1
+طور	hapax_reading	1	طُوْر=9 / طَور=1
+طول	impossible_initial_shadda	1	طُوُل=5 / طَّول=1
+طیبات	hapax_reading	1	طُیِّبَات=19 / طَیِّبات=1
+طیره	hapax_reading	1	طَیرَه=4 / طِیره=1
+ظرف	hapax_reading	1	ظَرْف=1 / ظُرَف=1
+ظفر	hapax_reading	1	ظَفَر=2 / ظَفِر=1 / ظُفُر=1
+ظلوم	hapax_reading	1	ظَلوم=3 / ظُلوم=1
+عبده	hapax_reading	1	عَبْدُه=6 / عَبْدَه=1
+عبدود	hapax_reading	1	عبدوُد=1 / عبدُوَد=1
+عبدکم	hapax_reading	1	عَبْدُکم=1 / عَبْدِکُم=1
+عبر	hapax_reading	1	عِبَر=10 / عَبَر=1
+عبره	hapax_reading	1	عَبْره=2 / عِبْره=1
+عبق	hapax_reading	1	عَبَق=1 / عَبِق=1
+عتابی	hapax_reading	1	عِتابی=3 / عُتابی=1
+عجاب	hapax_reading	1	عِجاب=2 / عُجاب=1
+عجبت	hapax_reading	1	عَجِبْت=2 / عَجَبَت=1 / عُجبت=1
+عجبی	hapax_reading	1	عُجبی=2 / عَجَبی=1
+عجم	hapax_reading	1	عَجَم=4 / عَجْم=1 / عُجم=1
+عد	hapax_reading	1	عَدّ=3 / عُدّ=1 / عِد=1
+عدد	hapax_reading	1	عَدَد=3 / عَدُد=1 / عِدد=1
+عدم	hapax_reading	1	عَدَم=10 / عَدْم=1
+عدول	hapax_reading	1	عَدول=1 / عُدول=1
+عذاب	hapax_reading	1	عَذَاب=11 / عِذاب=1
+عذار	hapax_reading	1	عِذار=12 / عُذار=1
+عذر	hapax_reading	1	عُذْر=9 / عُذَر=1
+عرس	hapax_reading	1	عُرُس=2 / عِرس=1
+عرضه	hapax_reading	1	عَرْضِه=4 / عُرضه=1
+عرف	hapax_reading	1	عَرَف=8 / عُرف=1
+عرقی	hapax_reading	1	عِرقی=2 / عَرَقی=1
+عرنینه	hapax_reading	1	عِرنِینُه=1 / عِرْنینِه=1
+عری	hapax_reading	1	عِری=2 / عُری=1
+عزمه	hapax_reading	1	عَزَمَه=2 / عَزمِه=1
+عزوجل	malformed_attestation	1	عَزَّوَجَل=22 / عزَُوجل=1
+عزی	hapax_reading	1	عُزّی=29 / عِزّی=1
+عسجد	hapax_reading	1	عَسْجَد=3 / عَسْجُد=1
+عشق	hapax_reading	1	عِشْق=62 / عشَق=1 / عِشِق=1
+عشقت	hapax_reading	1	عشقَت=1 / عشقِت=1
+عطلت	hapax_reading	1	عُطْلَت=3 / عُطلُت=1
+عظم	hapax_reading	1	عَظُم=6 / عِظم=1
+عظمت	hapax_reading	1	عَظِمَت=1 / عَظْمَت=1
+عفن	hapax_reading	1	عَفَن=1 / عَفِن=1
+عقابی	hapax_reading	1	عِقابی=2 / عُقابی=1
+عقب	hapax_reading	1	عَقِب=2 / عَقَب=1
+عقبه	hapax_reading	1	عَقَبَه=4 / عَقْبَه=1
+عقده	hapax_reading	1	عُقْده=10 / عَقْده=1
+عقول	hapax_reading	1	عُقُول=2 / عَقول=1
+علت	hapax_reading	1	عِلَّت=100 / عَلَت=1
+علمت	hapax_reading	1	عَلَمت=3 / عَلِمت=1
+علمه	hapax_reading	1	علمُه=1 / عَلَّمَه=1
+علو	hapax_reading	1	عُلُوّ=69 / عِلو=1
+علینا	hapax_reading	1	عَلَیْنا=5 / عَلَینٰا=1
+عماری	hapax_reading	1	عَماری=4 / عِماری=1
+عمرو	hapax_reading	1	عَمْرو=6 / عُمرُو=1
+عناب	hapax_reading	1	عَنّٰاب=33 / عَنْاَب=1
+عناد	hapax_reading	1	عِناد=2 / عَناد=1
+عندنا	hapax_reading	1	عِندَنَا=1 / عِندِنَا=1
+عنف	hapax_reading	1	عُنف=3 / عَنف=1
+عنین	hapax_reading	1	عِنین=13 / عَنین=1
+عوج	hapax_reading	1	عَوَّج=2 / عُوج=1 / عِوَج=1
+عیار	hapax_reading	1	عَیَّار=42 / عیٰار=1
+عیان	hapax_reading	1	عَیان=6 / عِیان=1
+عید	hapax_reading	1	عَیْد=2 / عِید=1
+غدر	hapax_reading	1	غَدَر=5 / غَدْر=1
+غدرکم	hapax_reading	1	غدرُکم=1 / غدرِکم=1
+غر	hapax_reading	1	غَر=7 / غُر=1
+غراب	hapax_reading	1	غُرَاب=16 / غَراب=1
+غرامت	hapax_reading	1	غَرامت=2 / غِرامَت=1
+غربت	hapax_reading	1	غَرَبَت=2 / غُربت=1
+غرد	hapax_reading	1	غُرّد=6 / غٌرد=1
+غرس	hapax_reading	1	غرْس=1 / غَرَس=1
+غرقا	hapax_reading	1	غَرَقا=1 / غَرِقَا=1
+غره‌ای	hapax_reading	1	غَرِّه‌ای=5 / غُرَّه‌ای=1
+غری	hapax_reading	1	غَری=2 / غُرّی=1
+غساله	hapax_reading	1	غَسّاله=2 / غُساله=1
+غش	hapax_reading	1	غِش=8 / غَش=1
+غضب	hapax_reading	1	غَضَب=2 / غًضب=1
+غطا	hapax_reading	1	غِطا=2 / غَطا=1
+غلامک	hapax_reading	1	غُلامَک=2 / غُلامُک=1
+غلوم	hapax_reading	1	غُلُوم=2 / غِلُوم=1
+غلی	hapax_reading	1	غُلّی=2 / غَلی=1
+غم	hapax_reading	1	غَم=76 / غِم=1
+غمر	hapax_reading	1	غُمْر=4 / غَمر=1
+غور	hapax_reading	1	غَوْر=2 / غُور=1
+غیرک	hapax_reading	1	غَیرِک=1 / غَیْرَک=1
+فاصدر	hapax_reading	1	فَاَصْدُر=1 / فَاُصْدِر=1
+فان	hapax_reading	1	فَاِن=23 / فاَن=1
+فتنوئه	hapax_reading	1	فَتْنوئه=2 / فِتُنوئِه=1
+فتی	hapax_reading	1	فَتی=6 / فُتی=1
+فتیان	hapax_reading	1	فَتَیان=1 / فَتْیان=1
+فخور	hapax_reading	1	فَخَور=1 / فَخُور=1
+فراش	hapax_reading	1	فَرّاش=26 / فِراش=1
+فراغ	hapax_reading	1	فَراغ=9 / فُراغ=1
+فراق	hapax_reading	1	فِرَاق=30 / فَراق=1
+فرج	hapax_reading	1	فَرَج=4 / فَرْج=1
+فرخ	hapax_reading	1	فَرُّخ=181 / فَرِّخ=1
+فرط	hapax_reading	1	فَرْط=3 / فُرط=1
+فرطوس	hapax_reading	1	فَرطوس=1 / فِرطوس=1
+فرقدین	hapax_reading	1	فَرْقَدَین=3 / فِرقَدین=1
+فره	hapax_reading	1	فَرِه=26 / فِره=1
+فرودین	hapax_reading	1	فَروَدین=4 / فُرودین=1
+فروز	hapax_reading	1	فُروز=2 / فَروَز=1
+فزون	hapax_reading	1	فُزُون=3 / فِزون=1
+فسان	hapax_reading	1	فَسان=3 / فِسان=1
+فسانه	hapax_reading	1	فَسانِه=4 / فِسانه=1
+فسرد	hapax_reading	1	فِسُرد=3 / فُسرد=1
+فسرده	hapax_reading	1	فَسُرده=1 / فِسُرده=1
+فش	hapax_reading	1	فَش=3 / فِش=1
+فشاند	hapax_reading	1	فشانَد=12 / فشانْد=1
+فصاحت	hapax_reading	1	فَصاحت=1 / فِصاحَت=1
+فضول	hapax_reading	1	فُضُول=4 / فَضول=1
+فطن	hapax_reading	1	فِطَن=3 / فَطِن=1 / فُطَن=1
+فطنی	hapax_reading	1	فَطِنی=1 / فِطَنی=1
+فغان	hapax_reading	1	فَغان=7 / فِغان=1
+فغیبنی	hapax_reading	1	فَغَیِبْنی=1 / فَغیبَنَی=1
+فقد	hapax_reading	1	فَقَد=15 / فَقْد=1
+فلعلی	hapax_reading	1	فلَعَلّی=1 / فَلَعِلّی=1
+فلکت	hapax_reading	1	فَلَکَت=1 / فُلکت=1
+فلکشان	hapax_reading	1	فَلَکْشان=1 / فُلکشان=1
+فلکم	hapax_reading	1	فَلَکَم=3 / فُلکم=1
+فن	hapax_reading	1	فَنّ=16 / فُن=1
+فهو	hapax_reading	1	فَهْو=4 / فَهُو=1
+فواق	hapax_reading	1	فُواق=3 / فَوَاق=1
+فکل	hapax_reading	1	فَکُلّ=9 / فُکُل=1
+فکن	hapax_reading	1	فِکَن=4 / فَکُن=1
+فگار	hapax_reading	1	فَگار=1 / فِگار=1
+فیقال	hapax_reading	1	فَیُقال=1 / فَیْقال=1
+قامت	hapax_reading	1	قامَت=5 / قامِت=1
+قبطی	hapax_reading	1	قَبْطی=1 / قِبطی=1
+قبلت	hapax_reading	1	قَبَّلت=1 / قَبِلْت=1 / قِبَلَت=1
+قتلتنی	hapax_reading	1	قَتَلتَنی=2 / قَتَلْتِنی=1
+قدت	hapax_reading	1	قَدَت=59 / قَدِت=1
+قدرست	hapax_reading	1	قَدَرست=4 / قَدْرست=1
+قدمش	hapax_reading	1	قَدَمَش=2 / قِدَمش=1
+قر	hapax_reading	1	قَرّ=3 / قِر=1
+قرآن	hapax_reading	1	قُرآن=2 / قِرآن=1
+قراطغان	hapax_reading	1	قراطِغان=1 / قَراطُغان=1
+قرانش	hapax_reading	1	قِرانَش=3 / قرانْش=1
+قرب	hapax_reading	1	قُرْب=57 / قَرِّب=1 / قُرَب=1
+قره	hapax_reading	1	قَره=3 / قُره=1
+قزح	hapax_reading	1	قُزَح=3 / قَزَح=1
+قس	hapax_reading	1	قَس=3 / قُس=1
+قسمت	hapax_reading	1	قَسَمَت=1 / قِسْمَت=1 / قِسْمِت=1
+قسمی	hapax_reading	1	قَسَمی=1 / قِسمی=1
+قصاب	hapax_reading	1	قِصّٰاب=15 / قَصّاب=1
+قصر	hapax_reading	1	قَصّر=1 / قِصَر=1
+قصه	hapax_reading	1	قِصِّه=325 / قَصّه=1
+قضا	hapax_reading	1	قَضا=3 / قًضٰا=1 / قِضٰا=1
+قضیت	hapax_reading	1	قَضیَّت=2 / قَضَیْت=1
+قطر	hapax_reading	1	قَطْر=4 / قِطر=1
+قلب	hapax_reading	1	قَلْب=6 / قُلُّب=1
+قلنا	hapax_reading	1	قُلْنَا=4 / قُلْنٰا=1
+قلوبهم	hapax_reading	1	قلوبُهُم=1 / قُلُوبِهِم=1
+قمار	hapax_reading	1	قِمار=3 / قُمار=1
+قماری	hapax_reading	1	قِماری=2 / قُماری=1
+قوا	hapax_reading	1	قِوا=2 / قَوٰا=1 / قُوا=1
+قواره	hapax_reading	1	قِوارِه=2 / قَواره=1 / قُواره=1
+قوم	hapax_reading	1	قَوْم=22 / قَوُم=1
+قومنا	hapax_reading	1	قَومنا=1 / قُومَنَا=1
+قیامت	hapax_reading	1	قِیٰامِت=1 / قیامَت=1
+لا	hapax_reading	1	لَا=82 / لٰا=1
+لامحالة	hapax_reading	1	لامَحالَة=1 / لامُحالة=1
+لبس	hapax_reading	1	لَبْس=1 / لُبس=1
+لجه	hapax_reading	1	لُجّه=39 / لَجّه=1
+لحد	hapax_reading	1	لَحَد=8 / لَحْد=1
+لحظک	hapax_reading	1	لَحْظُک=1 / لَحْظِک=1
+لحمی	hapax_reading	1	لَحمی=2 / لِحِمی=1
+لعمرک	hapax_reading	1	لَعَمْرُک=3 / لَعُمْرُک=1
+لغیرک	hapax_reading	1	لِغَیْرِک=2 / لِغِیرِک=1
+لقای	hapax_reading	1	لَقای=1 / لِقای=1
+لمن	hapax_reading	1	لِمَن=17 / لَمِن=1
+لمنال	hapax_reading	1	لِمَنال=1 / لِمُنال=1
+لهب	hapax_reading	1	لَهَب=3 / لهْب=1
+لهو	hapax_reading	1	لَهُو=5 / لَهْو=1
+لوابتلی	hapax_reading	1	لوابْتُلِی=1 / لوابْتِلِیّ=1
+لولاک	hapax_reading	1	لَولاک=1 / لُولاک=1
+لک	hapax_reading	1	لَک=22 / لُک=1
+لیت	hapax_reading	1	لَیْت=6 / لِیْت=1
+لیلی	hapax_reading	1	لَیْلی=16 / لِیلی=1
+ماذا	hapax_reading	1	مَاذَا=3 / مٰاذا=1
+مالش	hapax_reading	1	مالِش=2 / مالَش=1
+مالم	hapax_reading	1	مالَم=1 / مٰالِم=1
+ماله	hapax_reading	1	مَالِه=1 / مٰاله=1
+مالهم	hapax_reading	1	مَالَهُم=1 / مَالَهِم=1
+ماهت	hapax_reading	1	ماهَت=2 / ماهِت=1
+مبدع	hapax_reading	1	مُبْدِع=10 / مُبدَع=1
+مبدل	hapax_reading	1	مُبْدَل=53 / مُبَدّل=1
+مبرید	hapax_reading	1	مبَرید=1 / مبُرید=1
+مبطل	hapax_reading	1	مُبطَل=2 / مُبطِل=1
+متاع	hapax_reading	1	مَتاع=4 / مِتٰاع=1
+متحد	hapax_reading	1	متَّحَد=3 / مُتَحِد=1
+متصل	hapax_reading	1	مُتّصِل=29 / متّصَل=1
+مثلی	hapax_reading	1	مِثْلِی=2 / مثَلی=1
+مجال	hapax_reading	1	مَجال=7 / مِجٰال=1
+مجری	hapax_reading	1	مُجرَی=2 / مَجری=1
+مجسم	hapax_reading	1	مُجَسَّم=18 / مَجَسَّم=1
+مجم	hapax_reading	1	مِجِم=5 / مَجم=1
+مجمر	hapax_reading	1	مِجْمَر=12 / مُجمَر=1
+مجنه	hapax_reading	1	مِجِنِه=3 / مَجْنِه=1
+مجی	hapax_reading	1	مِجی=2 / مَجی=1
+مجیک	hapax_reading	1	مَجِیک=1 / مِجیک=1
+محبس	hapax_reading	1	مَحبَس=1 / مُحَبَّس=1 / مُحْبِس=1
+محتشم	hapax_reading	1	مُحْتَشَم=2 / مُحْتَشِم=1
+محدث	hapax_reading	1	مُحْدَث=19 / مُحدِث=1
+محرمی	hapax_reading	1	مَحرمی=3 / مُحرمی=1
+محشر	hapax_reading	1	مَحْشَر=5 / مَحْشِر=1
+محق	hapax_reading	1	مُحِق=7 / مَحق=1
+محقق	hapax_reading	1	مُحَقَّق=43 / محقُق=1
+محیاک	hapax_reading	1	مَحیَّاک=1 / مُحَیّاک=1
+مخ	hapax_reading	1	مُخّ=4 / مِخ=1
+مخاطب	hapax_reading	1	مخاطَب=2 / مخاطِب=1
+مخرج	hapax_reading	1	مُخْرِج=2 / مُخرَج=1
+مخلب	hapax_reading	1	مِخْلَب=5 / مِخْلْب=1
+مخلصی	hapax_reading	1	مَخْلَصی=6 / مُخلِصی=1
+مخوف	hapax_reading	1	مَخُوْف=1 / مُخوَف=1
+مخی	hapax_reading	1	مِخَی=1 / مِخْی=1
+مدام	hapax_reading	1	مُدام=19 / مِدٰام=1
+مدرس	hapax_reading	1	مُدَرِّس=14 / مَدرَس=1
+مدروس	hapax_reading	1	مَدْروس=5 / مُدروس=1
+مدرک	hapax_reading	1	مُدرِک=4 / مدرَک=1
+مدعا	hapax_reading	1	مُدَّعا=42 / مِدّعا=1
+مذهب	hapax_reading	1	مَذْهَب=3 / مُذَهّب=1
+مرایی	hapax_reading	1	مَرایی=1 / مُرایی=1
+مردست	hapax_reading	1	مَردَست=1 / مُردست=1
+مردش	hapax_reading	1	مَردش=1 / مُردش=1
+مردن	hapax_reading	1	مُردَن=19 / مِرْدِن=1
+مردند	hapax_reading	1	مُردند=11 / مَردند=1
+مردیم	hapax_reading	1	مُردیم=10 / مَردیم=1
+مرغوا	hapax_reading	1	مَرغَوا=1 / مُرغُوا=1
+مرو	hapax_reading	1	مَرو=15 / مُرو=1
+مروت	hapax_reading	1	مُرُوَّت=70 / مُرْوَت=1
+مری	hapax_reading	1	مُری=3 / مَری=1 / مِری=1
+مرید	hapax_reading	1	مُرید=10 / مَرید=1
+مزن	hapax_reading	1	مَزَن=8 / مِزُن=1
+مستحق	hapax_reading	1	مُسْتَحَق=9 / مُستَحِقّ=1
+مسترق	hapax_reading	1	مُستَرِق=2 / مُسترَق=1
+مسته	hapax_reading	1	مَسْتِه=11 / مُسته=1 / مِسْتِه=1
+مسخر	hapax_reading	1	مُسَخَّر=82 / مسخِر=1
+مسمی	hapax_reading	1	مُسَمَّی=16 / مسمّٰی=1
+مسن	hapax_reading	1	مَسِن=3 / مُسِن=1 / مِسَن=1
+مسند	hapax_reading	1	مَسْنَد=9 / مُسند=1
+مسک	hapax_reading	1	مَسَّک=1 / مُسْک=1 / مِسک=1
+مسکنت	hapax_reading	1	مَسکَنَت=3 / مِسکنت=1
+مشتری	hapax_reading	1	مُشْتَری=6 / مُشْتِری=1
+مشته	hapax_reading	1	مَشْتِه=1 / مُشته=1
+مشتی	hapax_reading	1	مُشتی=11 / مِشتی=1
+مشرب	hapax_reading	1	مَشْرَب=4 / مُشرب=1
+مشرف	hapax_reading	1	مُشَرَّف=14 / مُشْرِف=1
+مشعبد	hapax_reading	1	مُشَعْبِد=6 / مُشَعبَد=1
+مشوش	hapax_reading	1	مُشَوَّش=58 / مشُوش=1
+مشکی	hapax_reading	1	مُشکی=4 / مَشکی=1
+مشکینت	hapax_reading	1	مِشکینت=2 / مُشکینت=1
+مشیب	hapax_reading	1	مَشیب=3 / مُشیب=1
+مصاف	hapax_reading	1	مَصاف=1 / مُصاف=1
+مصدق	hapax_reading	1	مُصدَّق=31 / مصدِّق=1
+مصطبه	hapax_reading	1	مَصطَبِه=3 / مِصْطَبه=1
+مصعد	hapax_reading	1	مُصَعَّد=2 / مَصعد=1
+مضر	hapax_reading	1	مُضَر=3 / مُضِر=1
+مطرد	hapax_reading	1	مِطْرَد=2 / مُطَّرَد=1
+مطعم	hapax_reading	1	مَطعَم=1 / مُطْعَم=1
+مطلب	hapax_reading	1	مَطَلَب=15 / مَطْلَب=1 / مَطْلِب=1 / مِطِلَب=1
+مظاهر	hapax_reading	1	مَظَاهِر=1 / مُظاهر=1
+معاقب	hapax_reading	1	معاقَب=1 / مَعاقِب=1
+معد	hapax_reading	1	مُعَد=9 / مُعِد=1
+معدن	hapax_reading	1	مَعدِن=3 / مَعْدَن=1
+معذب	hapax_reading	1	مُعَذَّب=13 / مُعَذِّب=1
+معرضون	hapax_reading	1	مُعرِضُون=4 / معرَضُون=1
+معزی	hapax_reading	1	مَعْزی=21 / مُعزی=1
+معینش	hapax_reading	1	مُعینش=3 / مَعینش=1
+مغ	hapax_reading	1	مُغ=8 / مَغ=1
+مغنی	hapax_reading	1	مُغَنّی=35 / مَغْنی=1
+مفرح	hapax_reading	1	مُفَرَّح=26 / مُفَرِّح=1
+مفرحی	hapax_reading	1	مُفَرَّحی=4 / مُفرِّحی=1
+مفرش	hapax_reading	1	مَفْرَش=8 / مِفْرَش=1
+مفروش	hapax_reading	1	مَفُروش=7 / مَفْروش=1
+مفوض‌کرد	malformed_attestation	1	مفوَِّض‌کرد=1 / مفَوَّض‌کرد=1
+مفکر	hapax_reading	1	مفکَّر=1 / مفکِّر=1
+مقامش	hapax_reading	1	مَقامش=1 / مُقامش=1
+مقدس	hapax_reading	1	مُقَدَّس=16 / مَقدِس=1 / مَقْدَس=1
+مقر	hapax_reading	1	مُقِر=28 / مَقَر=1
+مقری	hapax_reading	1	مُقری=4 / مقْری=1
+مقطع	hapax_reading	1	مَقطَع=4 / مُقطع=1
+مقل	hapax_reading	1	مُقِل=4 / مَقَل=1
+مقوس	hapax_reading	1	مقوِّس=4 / مُقَّوَس=1
+مقید	hapax_reading	1	مُقَّید=45 / مقٌید=1
+ملاعب	hapax_reading	1	مَلَاعِب=1 / مُلاعب=1
+ملتمس	hapax_reading	1	مُلتَمَس=2 / مُلتمِس=1
+ملهم	hapax_reading	1	مُلهَم=4 / مَلْهَم=1
+ملکش	hapax_reading	1	مُلکَش=7 / مَلَکش=1
+ملکم	hapax_reading	1	مُلکم=2 / مَلَکم=1 / مَلِکم=1
+ملک‌العرش	hapax_reading	1	مَلَکُ‌العَرش=4 / مَلِک‌العَرش=1
+ملک‌ها	hapax_reading	1	مَلَک‌ها=1 / مُلک‌ها=1
+منبر	hapax_reading	1	مِنبَر=5 / مَنْبَر=1
+منتجب	hapax_reading	1	مُنتجِب=1 / مُنتَجَب=1
+منذرین	hapax_reading	1	منذِرین=1 / مُنذَرِین=1
+منزله	hapax_reading	1	مُنزَله=2 / مَنزِلَه=1
+منزلی	hapax_reading	1	مَنْزِلی=1 / مُنزلی=1
+منسیا	hapax_reading	1	منسِیا=1 / مَنسْیاً=1
+منعرف	hapax_reading	1	مَنْعَرَف=1 / مَنْعَرِف=1
+منما	hapax_reading	1	مَنَما=3 / مَنِما=1
+منهج	hapax_reading	1	مَنْهَج=1 / مِنهَج=1
+منهی	hapax_reading	1	مُنهی=3 / مَنهی=1
+منودادک	hapax_reading	1	مِنْوَدادِک=1 / مِنْوِدادِک=1
+منون	hapax_reading	1	مَنون=1 / مُنَوَّن=1
+منکرست	hapax_reading	1	مُنْکَرست=2 / منکِرست=1
+منکرون	hapax_reading	1	مُنْکَروُن=1 / مُنْکُرُون=1
+منکری	hapax_reading	1	منکَری=1 / مُنْکِری=1
+منگر	hapax_reading	1	مَنِگَر=4 / مَنْگَر=1
+منیتی	hapax_reading	1	مُنْیَتی=3 / مَنِیَّتی=1
+منیر	hapax_reading	1	مُنَیَّر=4 / مُنِیْر=1
+مهرره	hapax_reading	1	مَهْرْرِه=2 / مِهْرْرِه=1
+مهرها	hapax_reading	1	مِهرها=4 / مُهرها=1
+مهرورزی	hapax_reading	1	مِهْرْوَرْزی=5 / مهرِوَرزی=1
+مهل	hapax_reading	1	مَهِل=12 / مَهَل=1 / مُهل=1
+مهلک	hapax_reading	1	مُهلِک=1 / مُهْلَک=1
+مهم	hapax_reading	1	مَهَم=12 / مُهم=1
+مهوس	hapax_reading	1	مُهَوَّس=3 / مهوِّس=1
+مهی	hapax_reading	1	مِهی=5 / مَهی=1
+مهیب	hapax_reading	1	مَهیب=2 / مُهیب=1
+مهین	hapax_reading	1	مِهین=15 / مَهین=1
+مو	hapax_reading	1	مُو=4 / مَو=1
+موارک	hapax_reading	1	موارْک=1 / مِوارِک=1
+موت	hapax_reading	1	مَوْت=1 / مُوْت=1
+موجود	hapax_reading	1	مَوْجُود=1 / مُوجود=1
+مولع	hapax_reading	1	مُولَع=2 / مًولع=1
+موننه	hapax_reading	1	مُونَّنِه=2 / مُونِنه=1
+مونگ	hapax_reading	1	مُونْگ=24 / مَوَنِگ=1 / مُونِگ=1
+مژگان	hapax_reading	1	مژِّگان=4 / مژٌگان=1
+مکاس	hapax_reading	1	مِکاس=2 / مُکاس=1
+مکرم	hapax_reading	1	مُکَرَّم=35 / مُکرِم=1
+مکرمات	hapax_reading	1	مَکرُمات=1 / مُکرَمات=1
+مکرمی	hapax_reading	1	مُکرِمی=4 / مکرٌمی=1
+مکمل	hapax_reading	1	مَکَمَّل=8 / مُکَمِّل=1
+مگسل	hapax_reading	1	مَگُسِل=2 / مگْسِل=1
+میا	hapax_reading	1	مَیا=4 / مِیا=1
+میم	hapax_reading	1	مِیَم=9 / مَیِم=1
+میکند	hapax_reading	1	میکَنَد=2 / میکَنُد=1
+می‌برید	hapax_reading	1	می‌بُرید=4 / می‌بِریَد=1
+می‌بود	hapax_reading	1	می‌بُوَد=4 / می‌بَود=1
+می‌خواره	hapax_reading	1	مِی‌خواره=3 / مَی‌خواره=1
+می‌درم	hapax_reading	1	می‌دَرَم=2 / می‌دِرَم=1
+می‌فروش	hapax_reading	1	مِی‌فُروش=9 / مَی‌فروش=1
+می‌نکند	hapax_reading	1	می‌نکَند=1 / می‌نکُند=1
+می‌پرست	hapax_reading	1	میْ‌پرست=8 / مَی‌پرست=1
+می‌کشت	hapax_reading	1	می‌کُشت=5 / می‌کِشت=1
+می‌کشدم	hapax_reading	1	می‌کُشَدَم=4 / می‌کِشدم=1
+می‌کشم	hapax_reading	1	می‌کُشم=3 / می‌کَشَم=1 / می‌کِشم=1
+می‌کن	hapax_reading	1	می‌کُن=5 / می‌کَن=1
+می‌کنند	hapax_reading	1	می‌کَنند=1 / می‌کُنند=1
+نئی	hapax_reading	1	نِئی=2 / نَئی=1
+نئیوا	hapax_reading	1	نَئیوٰا=17 / نِئیوٰا=1
+نادرست	hapax_reading	1	نادُرست=1 / نادِرست=1
+نازک	hapax_reading	1	نٰازِک=4 / نازُک=1
+ناقه	impossible_initial_shadda	1	ناقِه=2 / نَّاقَه=1
+نالش	hapax_reading	1	نالِش=2 / نالَش=1 / نالْش=1
+ناله	hapax_reading	1	نٰالِه=3 / نالَه=1
+نامراد	hapax_reading	1	نامُراد=1 / نامِراد=1
+ناکسه	hapax_reading	1	ناکَسِه=2 / ناکِسِه=1
+ناگه	hapax_reading	1	ناگَه=2 / ناگِه=1
+نبردش	hapax_reading	1	نَبَردش=1 / نِبَردش=1
+نت	hapax_reading	1	نَت=1 / نُت=1
+نتواند	hapax_reading	1	نَتْواند=3 / نتْوانْد=1
+نتوانم	hapax_reading	1	نتْوانم=3 / نَتَوانَم=1
+نحل	hapax_reading	1	نَحْل=2 / نَحِل=1
+نحن	hapax_reading	1	نَحْن=22 / نُحن=1
+نخرم	hapax_reading	1	نَخِرِم=2 / نخَرَّم=1
+نخورد	hapax_reading	1	نَخُورد=8 / نخَورد=1
+ندرد	hapax_reading	1	نَدَرَد=12 / ندرٌد=1
+ندما	hapax_reading	1	نَدَما=1 / نُدَما=1
+ندهند	hapax_reading	1	نَدْهَنْد=2 / نَدِهند=1
+ندونستیما	hapax_reading	1	نَدُونِسْتیمٰا=3 / نِدونِسْتیمٰا=1
+نرستی	hapax_reading	1	نرَستی=1 / نرُستی=1
+نزاع	hapax_reading	1	نَزَّاع=1 / نِزاع=1
+نزد	hapax_reading	1	نَزَد=9 / نَزْد=1
+نزل	hapax_reading	1	نُزْل=11 / نَزَّل=1 / نُزُل=1
+نساء	hapax_reading	1	نُسَاء=1 / نِساء=1
+نسبت	hapax_reading	1	نِسْبَت=2 / نِسْبِت=1
+نسخ	hapax_reading	1	نَسْخ=3 / نُسَخ=1
+نسخه	hapax_reading	1	نُسخه=2 / نَسخِه=1
+نسپری	hapax_reading	1	نَسپَری=1 / نَسپُری=1
+نشاند	hapax_reading	1	نشانَد=8 / نشانْد=1
+نشر	hapax_reading	1	نَشُر=2 / نَشْر=1
+نشره	hapax_reading	1	نَشرِه=1 / نُشره=1
+نشستی	hapax_reading	1	نشُستی=1 / نِشَستی=1
+نشط	hapax_reading	1	نَشَط=1 / نَشْط=1
+نشور	hapax_reading	1	نُشُور=3 / نَشُور=1
+نشکیبد	hapax_reading	1	نشِکیبد=1 / نَشْکیبد=1
+نصح	hapax_reading	1	نُصح=3 / نَصح=1
+نصرة	hapax_reading	1	نصرِة=1 / نُصرَة=1
+نطق	hapax_reading	1	نُطُق=5 / نَطَق=1 / نُطَق=1 / نُطْق=1
+نطقت	hapax_reading	1	نَطَقَت=1 / نَطَقْت=1
+نظاره	hapax_reading	1	نَظّاره=129 / نِظاره=1
+نظرته	hapax_reading	1	نَظِرْته=1 / نَظْرَتِه=1
+نعمت	hapax_reading	1	نِعَمَت=9 / نَعَمت=1 / نِعْمَت=1
+نعوذ	hapax_reading	1	نَعُوُذ=6 / نَعُوْذ=1
+نغنوی	hapax_reading	1	نَغنَوی=2 / نَغنُوی=1
+نقره	hapax_reading	1	نُقْرِه=3 / نَقره=1 / نِقره=1
+نقطة	hapax_reading	1	نُقْطَة=2 / نَقْطَة=1
+نقطی	hapax_reading	1	نَقَطی=1 / نُقطی=1
+نقلش	hapax_reading	1	نَقلَش=1 / نُقلَش=1
+نم	hapax_reading	1	نَم=32 / نُم=1
+نما	hapax_reading	1	نُما=3 / نَما=1 / نِما=1
+نمایی	hapax_reading	1	نُمایی=4 / نَمایی=1
+نمرود	hapax_reading	1	نِمرود=2 / نَمرود=1
+نمود	hapax_reading	1	نُمود=8 / نٌمود=1
+ننشاند	hapax_reading	1	نَنِشانَد=2 / ننشانْد=1
+ننشیند	hapax_reading	1	نَنْشینَد=2 / نَنِشیند=1
+ننه	hapax_reading	1	نَنه=1 / نِنِه=1
+ننهد	hapax_reading	1	نَنَهَد=3 / نَنِهَد=1 / نَنْهد=1
+ننهم	hapax_reading	1	نَنَهَم=3 / ننْهم=1
+نهادم	hapax_reading	1	نِهادَم=2 / نَهادم=1
+نهد	hapax_reading	1	نَهَد=12 / نِهَد=1
+نهر	hapax_reading	1	نَهَر=5 / نَهْر=1
+نهل	hapax_reading	1	نِهِل=2 / نَهل=1
+نهلم	hapax_reading	1	نَهَلِم=1 / نَهِلَم=1
+نهله	hapax_reading	1	نِهِلِّه=3 / نَهّلِه=1
+نوبر	hapax_reading	1	نُوبِر=2 / نَوبر=1
+نومه	hapax_reading	1	نُومِه=4 / نَوْمِه=1
+نومی	hapax_reading	1	نَومِی=1 / نُومّی=1
+نوو	hapax_reading	1	نَوُو=8 / نُوو=1
+نوونه	hapax_reading	1	نَوُونه=5 / نُووُنه=1
+نوینم	hapax_reading	1	نَوینم=3 / نُوینم=1
+نپرسنی	hapax_reading	1	نَپِرْسِنی=4 / نَپْرسْنی=1
+نکرد	hapax_reading	1	نَکرد=1 / نِکَرْد=1
+نکشت	hapax_reading	1	نَکِشت=7 / نَکُشت=1
+نکشته	hapax_reading	1	نکُشته=1 / نکِشته=1
+نکشتی	hapax_reading	1	نکُشتی=1 / نکِشتی=1
+نکشتیم	hapax_reading	1	نکُشتیم=2 / نکِشتیم=1
+نکشم	hapax_reading	1	نکِشم=1 / نکْشم=1
+نکشی	hapax_reading	1	نَکِشی=2 / نَکَشی=1
+نکفه	hapax_reading	1	نَکِفِه=2 / نَکْفه=1
+نکند	hapax_reading	1	نَکُنَد=8 / نکَنَد=1
+نکهت	hapax_reading	1	نَکهَت=6 / نِکهَت=1
+نگریست	hapax_reading	1	نگْریست=2 / نَگِریست=1
+نگریستی	hapax_reading	1	نَگریستی=1 / نِگریستی=1
+نگشاد	hapax_reading	1	نَگُشاد=2 / نَگْشاد=1
+نگه	hapax_reading	1	نِگَه=8 / نِگْه=1
+نیازر	hapax_reading	1	نِیٰازَر=1 / نِیٰازِر=1
+نیاورد	hapax_reading	1	نَیاوَرَد=5 / نیٰاوَرْد=1
+نیر	hapax_reading	1	نَیِّر=76 / نَیْر=1
+نیستان	hapax_reading	1	نِیِستان=2 / نَیستان=1
+هاده	hapax_reading	1	هٰادِه=2 / هادَه=1
+هاوس	hapax_reading	1	هٰاوَس=1 / هٰاوِس=1
+هدم	hapax_reading	1	هَدَم=1 / هَدِم=1
+هذه	hapax_reading	1	هٰذِه=4 / هَذِه=1
+هرگز	hapax_reading	1	هَرْگِز=8 / هرگْز=1
+هزارا	hapax_reading	1	هَزارا=1 / هِزارا=1
+هزاران	hapax_reading	1	هَزاران=3 / هِزاران=1
+هزبر	hapax_reading	1	هِزَبْر=4 / هُزبر=1
+هستمه	hapax_reading	1	هَسْتْمِه=2 / هَسْتِمِه=1
+هش	hapax_reading	1	هُش=55 / هَش=1
+هشتم	hapax_reading	1	هِشتَم=7 / هشتُم=1
+هلا	hapax_reading	1	هِلا=2 / هَلا=1
+هلال	hapax_reading	1	هِلٰال=15 / هِلَال=1
+هلم	hapax_reading	1	هَلُمّ=1 / هِلَم=1
+هلک	hapax_reading	1	هَلَک=3 / هِلک=1
+هلی	hapax_reading	1	هَلی=5 / هِلی=1
+هما	hapax_reading	1	هُمَا=9 / هِما=1
+همون	hapax_reading	1	هَمُون=17 / هُمون=1
+همی‌برد	hapax_reading	1	همی‌بَرَد=2 / همی‌بُرد=1
+هم‌سر	hapax_reading	1	هم‌سَر=1 / هم‌سِر=1
+هنگام	hapax_reading	1	هَنگام=1 / هِنْگام=1
+هو	hapax_reading	1	هُو=93 / هْو=1
+هوا	hapax_reading	1	هِوٰا=2 / هَوا=1
+هول	hapax_reading	1	هَول=1 / هُول=1
+هوکشه	hapax_reading	1	هُوکَشِه=1 / هُوکِشِه=1
+هوی	hapax_reading	1	هَوَی=14 / هُوی=1
+هویت	hapax_reading	1	هُویّت=12 / هِویّت=1
+هژبر	hapax_reading	1	هُژَبر=6 / هِژَبْر=1
+هکن	hapax_reading	1	هَکن=3 / هِکِن=1
+هیهات	hapax_reading	1	هَیهات=1 / هِیهات=1
+هیچکس	hapax_reading	1	هیچْکَس=1 / هیچکِس=1
+وأصلحوا	hapax_reading	1	وَأصلَحُوا=1 / وَأصلَحِوا=1
+واجب	hapax_reading	1	واجِب=3 / واجُب=1
+وارش	hapax_reading	1	وارِش=1 / وارْش=1
+واسر	hapax_reading	1	واسِّر=7 / واسَر=1
+والا	hapax_reading	1	وَاِلّا=6 / وٰالا=1
+والدنیا	hapax_reading	1	وَالدُّنیا=3 / وِالدُنیا=1
+واکن	hapax_reading	1	واکُن=1 / وٰاکِن=1
+وبعد	hapax_reading	1	وبُعد=1 / وَبَعْد=1 / وَبْعَد=1
+وتر	hapax_reading	1	وَتر=3 / وِتر=1
+وثاقت	hapax_reading	1	وُثاقت=1 / وِثاقت=1
+وجودی	hapax_reading	1	وُجُودِی=5 / وَجُودی=1
+وداد	hapax_reading	1	وِداد=3 / وَداد=1
+ور	hapax_reading	1	وَر=117 / وِر=1
+ورازنه	hapax_reading	1	ورازْنه=1 / وِرازِنه=1
+ورزم	hapax_reading	1	وَرْزِم=4 / وَرَزم=1
+ورزمه	hapax_reading	1	وَرْزِمِه=3 / وَرْزْمَه=1
+ورن	hapax_reading	1	وَرِن=5 / وَرْن=1
+ورنه	hapax_reading	1	وَرْنه=3 / ورنِه=1
+وسمه	hapax_reading	1	وَسْمه=4 / وُسْمه=1
+وسوسه	hapax_reading	1	وَسْوَسَه=3 / وَسْوَسِه=1
+وشم	hapax_reading	1	وَشم=1 / وُشم=1
+وشنی	hapax_reading	1	وَشْنی=1 / وِشنی=1
+وصف	hapax_reading	1	وَصْف=8 / وَصَف=1
+وصلی	hapax_reading	1	وَصلِی=2 / وُصْلَی=1
+وقع	hapax_reading	1	وَقَع=2 / وَقِع=1
+وقف	hapax_reading	1	وَقْف=2 / وَقَف=1
+ولایت	hapax_reading	1	وِلایَت=2 / وِلایِت=1
+ولو	hapax_reading	1	وَلَو=4 / ولُو=1
+ولی	hapax_reading	1	وَلِی=131 / وَلْی=1
+ونه	hapax_reading	1	وِنِه=15 / وَنّه=1
+وه	hapax_reading	1	وَه=12 / وِه=1
+وکل	hapax_reading	1	وَکُلّ=7 / وُکِّل=1
+وگرنه	hapax_reading	1	وَگَرنَه=1 / وگرنِه=1
+پ	hapax_reading	1	پُ=1 / پِ=1
+پادشه	hapax_reading	1	پٰادشَه=3 / پادشِه=1 / پادْشَه=1
+پخت	hapax_reading	1	پُخت=3 / پَخت=1
+پرت	hapax_reading	1	پَرَت=3 / پُرت=1
+پرتوش	hapax_reading	1	پَرتوَش=1 / پُرتوش=1
+پرد	hapax_reading	1	پَرَّد=34 / پَرْد=1
+پرز	hapax_reading	1	پُرُز=2 / پَرز=1
+پرس	hapax_reading	1	پُرْس=6 / پِرْس=1
+پرستش	hapax_reading	1	پرستَش=2 / پَرِسْتِش=1
+پرشکن	malformed_attestation	1	پُرشِکَن=3 / پُِرشکن=1
+پرشکوه	hapax_reading	1	پُرشِکْوِه=2 / پُرشُکوه=1
+پرم	hapax_reading	1	پَرَم=7 / پُرم=1
+پرنه	hapax_reading	1	پِرْنِه=2 / پرُنِه=1
+پره	hapax_reading	1	پَرِه=15 / پِرِه=1
+پروین	hapax_reading	1	پَروین=3 / پِروین=1
+پرکس	hapax_reading	1	پِرْکَس=3 / پِرْکِس=1
+پس	hapax_reading	1	پَس=16 / پُس=1
+پستی	hapax_reading	1	پَستی=3 / پِستی=1
+پسر	hapax_reading	1	پَسْر=1 / پِسَر=1
+پشه	hapax_reading	1	پَشَّه=55 / پشِّه=1
+پشک	hapax_reading	1	پِشک=3 / پَشک=1 / پُشک=1
+پل	hapax_reading	1	پُل=16 / پَل=1
+پله	hapax_reading	1	پِلِه=14 / پَله=1
+پناه	hapax_reading	1	پِنٰاه=2 / پَناه=1
+پیرامنت	hapax_reading	1	پیرامُنت=2 / پیرامَنَت=1
+پیرامنش	hapax_reading	1	پیرامُنَش=3 / پیرامُنْش=1
+پیش‌کش	hapax_reading	1	پیش‌کَش=1 / پیش‌کِش=1
+پیغوم	hapax_reading	1	پَیْغُوم=6 / پِیْغوم=1
+پیمبر	hapax_reading	1	پِیَمبَر=4 / پَیَمْبِر=1
+چستی	hapax_reading	1	چُستی=9 / چَستی=1
+چش	hapax_reading	1	چِش=52 / چَش=1
+چشمه	hapax_reading	1	چِشْمِه=2 / چشمَه=1 / چَشْمِه=1
+چشمه‌ی	hapax_reading	1	چِشْمِهْ‌ی=3 / چَشمه‌ی=1
+چفته	hapax_reading	1	چَفته=2 / چِفته=1
+چن	hapax_reading	1	چَن=17 / چُن=1
+چنبر	hapax_reading	1	چَنْبَر=2 / چِنْبَر=1
+چندی	hapax_reading	1	چَندی=1 / چُندی=1
+چهار	hapax_reading	1	چِهٰار=7 / چَهار=1
+چهی	hapax_reading	1	چَهی=3 / چِهی=1
+چه‌ها	hapax_reading	1	چِه‌ها=3 / چَه‌ها=1
+ک	hapax_reading	1	کِ=2 / کُ=1
+کأسا	hapax_reading	1	کَأْساً=12 / کأَساً=1
+کارم	hapax_reading	1	کارَم=1 / کارِم=1
+کافر	hapax_reading	1	کٰافِر=18 / کافَر=1 / کَافِر=1
+کبد	hapax_reading	1	کَبَد=1 / کَبِد=1
+کبر	hapax_reading	1	کِبَر=17 / کِبْر=1
+کبود	hapax_reading	1	کِبْوَد=5 / کَبود=1
+کتب	hapax_reading	1	کُتُب=8 / کَتب=1 / کُتِب=1 / کُتْب=1
+کتف	hapax_reading	1	کَتَف=4 / کَتِف=1 / کِتف=1
+کتم	hapax_reading	1	کَتْم=5 / کِتم=1
+کتمه	hapax_reading	1	کَتْمِه=5 / کِتْمِه=1
+کتیین	hapax_reading	1	کتییِن=1 / کتییْن=1
+کجه	hapax_reading	1	کِجِه=3 / کَجِه=1
+کحل	hapax_reading	1	کُحْل=27 / کُحِل=1
+کدر	hapax_reading	1	کَدَر=1 / کِدر=1
+کدوم	hapax_reading	1	کِدُوم=3 / کُدوم=1
+کدیه	hapax_reading	1	کُدْیه=4 / کِدیه=1
+کذب	hapax_reading	1	کَذِب=1 / کِذْب=1
+کذبوا	hapax_reading	1	کَذَّبُوا=1 / کُذِبُوا=1
+کرب	hapax_reading	1	کَرْب=1 / کُرَب=1
+کردبون	hapax_reading	1	کرْدْبُون=1 / کِرْدِبُون=1
+کردمه	hapax_reading	1	کِرْدْمِه=3 / کِرْدِمِه=1
+کردن	hapax_reading	1	کِردَن=2 / کَردن=1 / کِرْدِن=1
+کرشمه	hapax_reading	1	کِرِشْمِه=4 / کَرْشمه=1
+کرهی	hapax_reading	1	کَرهی=1 / کُرهی=1
+کرک	hapax_reading	1	کُرک=2 / کَرَک=1
+کری	hapax_reading	1	کَری=7 / کُری=1 / کِری=1
+کز	hapax_reading	1	کَز=23 / کِز=1
+کسان	hapax_reading	1	کَسان=11 / کِسان=1
+کشان	hapax_reading	1	کِشان=7 / کَشان=1 / کُشان=1
+کشتش	hapax_reading	1	کُشتش=2 / کِشتش=1
+کشتنت	hapax_reading	1	کُشتنت=1 / کِشتنت=1
+کشته‌اند	hapax_reading	1	کُشته‌اند=3 / کِشته‌اند=1
+کشته‌ست	hapax_reading	1	کِشته‌ست=2 / کُشته‌ست=1
+کشتومه	hapax_reading	1	کَشْتُومِه=1 / کِشْتُومِه=1
+کشدم	hapax_reading	1	کُشدم=2 / کَشَدَم=1 / کِشدم=1
+کشفته	hapax_reading	1	کَشَفته=2 / کَشُفته=1
+کشمر	hapax_reading	1	کَشمَر=1 / کِشمَر=1
+کشن	hapax_reading	1	کَشِن=1 / کُشُن=1
+کشنده	hapax_reading	1	کُشَنده=12 / کَشنده=1
+کشه	hapax_reading	1	کَشِه=9 / کِشِه=1
+کشیده	hapax_reading	1	کَشیدِه=2 / کِشیده=1
+کف	hapax_reading	1	کَف=61 / کِف=1
+کفات	hapax_reading	1	کُفات=1 / کِفَات=1
+کفر	hapax_reading	1	کُفْر=15 / کُفِر=1
+کفن	hapax_reading	1	کَفِن=4 / کفَن=1
+کلا	hapax_reading	1	کَلَّا=5 / کَلٰا=1 / کُلا=1 / کِلٰا=1
+کلاب	hapax_reading	1	کِلاب=6 / کَلاب=1
+کلال	hapax_reading	1	کَلال=2 / کُلال=1
+کلاک	hapax_reading	1	کُلاک=2 / کِلاک=1
+کلفت	hapax_reading	1	کُلفَت=7 / کَلَّفْت=1
+کلنگ	hapax_reading	1	کَلَنگ=1 / کُلَنگ=1
+کلها	hapax_reading	1	کُلَّها=6 / کُلُّها=1 / کُلِّها=1
+کلهم	hapax_reading	1	کُلُّهُم=5 / کُلِّهُم=1
+کلو	hapax_reading	1	کِلُو=2 / کُلو=1
+کلپتره	hapax_reading	1	کَلپَتره=1 / کِلپتره=1
+کلک	hapax_reading	1	کِلْک=64 / کُلک=1
+کمن	hapax_reading	1	کَمِن=30 / کِمِن=1
+کمون	hapax_reading	1	کَمُون=18 / کُمُون=1
+کمین	hapax_reading	1	کَمین=1 / کِمین=1
+کنا	hapax_reading	1	کُنَّا=10 / کِنّٰا=1
+کنان	hapax_reading	1	کُنان=2 / کَنان=1
+کنت	hapax_reading	1	کُنْت=33 / کَنَت=1 / کُنُت=1
+کنتم	hapax_reading	1	کُنْتُم=8 / کَنْتُم=1
+کندت	hapax_reading	1	کُنَدَت=9 / کَنَدَت=1
+کننده	hapax_reading	1	کَنَنده=5 / کُننده=1
+کنیم	hapax_reading	1	کَنیم=2 / کُنیَم=1 / کِنیم=1
+کهتران	hapax_reading	1	کِهتران=2 / کَهتران=1
+کهربا	hapax_reading	1	کَهْرُبا=5 / کُهربا=1
+کو	hapax_reading	1	کُو=5 / کَو=1
+کور	hapax_reading	1	کُوَر=4 / کوْر=1
+کونین	hapax_reading	1	کَونَین=32 / کونِین=1
+کید	hapax_reading	1	کَید=6 / کِید=1
+کیم	hapax_reading	1	کِیَم=8 / کَیم=1
+کیه	hapax_reading	1	کِیَه=1 / کیِه=1
+کیک	hapax_reading	1	کَیْک=2 / کِیک=1
+کی‌ام	hapax_reading	1	کِیَ‌ام=7 / کِیْ‌ام=1
+گبر	hapax_reading	1	گَبْر=9 / گُبَر=1
+گت	hapax_reading	1	گِت=4 / گَت=1
+گتمه	hapax_reading	1	گِتْمِه=11 / گِتِمه=1
+گتی	hapax_reading	1	گِتی=4 / گَتی=1
+گر	hapax_reading	1	گَر=56 / گُر=1
+گربز	hapax_reading	1	گُربُز=3 / گَربِز=1
+گردا	hapax_reading	1	گَردا=1 / گُردا=1
+گردت	hapax_reading	1	گَردَت=1 / گِردت=1
+گرددش	hapax_reading	1	گرددْش=1 / گردَدَش=1
+گرده‌ای	hapax_reading	1	گَرده‌ای=1 / گِرده‌ای=1
+گرهی	hapax_reading	1	گُرُهی=3 / گِرِهی=1
+گرگین	hapax_reading	1	گُرگین=2 / گَرگین=1
+گریه	hapax_reading	1	گِرْیِه=2 / گرِیه=1
+گزیدن	hapax_reading	1	گَزیدن=3 / گُزیدن=1
+گزیده‌ست	hapax_reading	1	گَزیده‌ست=2 / گُزیده‌ست=1
+گزیر	hapax_reading	1	گُزیر=2 / گَزیر=1
+گش	hapax_reading	1	گَش=3 / گُش=1
+گشاد	hapax_reading	1	گُشاد=4 / گِشاد=1
+گشت	hapax_reading	1	گَشْت=32 / گُشت=1 / گِشْت=1
+گشته	hapax_reading	1	گَشتِه=5 / گُشته=1
+گشن	hapax_reading	1	گُشن=7 / گَشَن=1
+گلاب	hapax_reading	1	گُلاب=3 / گِلاب=1
+گلزار	hapax_reading	1	گُلزار=3 / گِلزار=1
+گلشن	malformed_attestation	1	گُلْشَن=5 / گَُلشن=1
+گلو	hapax_reading	1	گِلُو=5 / گَلو=1 / گُلو=1
+گلگون	hapax_reading	1	گُلْگُون=3 / گِلْگُون=1
+گلیم	hapax_reading	1	گِلیم=4 / گُلیم=1
+گل‌ست	hapax_reading	1	گِل‌ست=3 / گُل‌ست=1
+گل‌چین	hapax_reading	1	گُل‌چین=1 / گِلْ‌چین=1
+گمه	hapax_reading	1	گِمِّه=18 / گِمٌه=1
+گنجور	hapax_reading	1	گَنجور=2 / گنجوُر=1
+گنجی	hapax_reading	1	گَنجی=2 / گُنجی=1
+گندم	hapax_reading	1	گَندم=1 / گُندُم=1
+گنگ	hapax_reading	1	گُنگ=5 / گَنگ=1
+گهی	hapax_reading	1	گَهی=80 / گُهی=1 / گٰهی=1
+گوا	hapax_reading	1	گَوا=2 / گُوا=1
+گورو	hapax_reading	1	گورَو=1 / گَوْرُو=1
+گوشت	hapax_reading	1	گَوَشت=18 / گُوشْت=1
+گوشه	hapax_reading	1	گُوشِه=8 / گَوشه=1
+ی	hapax_reading	1	یِ=8 / یٍ=1
+یأتی	malformed_attestation	1	یَْأتِی=2 / یَأتِی=1
+یار	hapax_reading	1	یٰار=19 / یْار=1
+یبصر	hapax_reading	1	یَبصَر=2 / یُبْصِر=1
+یبکی	hapax_reading	1	یَبکی=1 / یُبکی=1
+یتم	hapax_reading	1	یَتِمّ=2 / یُتِم=1
+یحدث	hapax_reading	1	یَحْدُث=1 / یُحَدِّث=1
+یحمی	hapax_reading	1	یُحمَی=2 / یَحمِی=1
+یدرک	hapax_reading	1	یُدرِک=1 / یُدْرَک=1
+یدی	hapax_reading	1	یَدَی=4 / یَدِی=1 / یُدَی=1
+یرجع	hapax_reading	1	یَرْجِع=3 / یَرجَع=1
+یرد	hapax_reading	1	یَرُدّ=2 / یَرِد=1
+یسر	hapax_reading	1	یُسْر=22 / یَسَر=1
+یسمع	hapax_reading	1	یَسمَع=2 / یُسمِع=1
+یشک	hapax_reading	1	یَشْک=6 / یِشک=1
+یضل	hapax_reading	1	یُضِلّ=2 / یَضِلّ=1
+یظلمون	hapax_reading	1	یَظْلِمون=1 / یُظْلَمُون=1
+یعرض	hapax_reading	1	یَعرَض=1 / یُعْرَض=1
+یفنی	hapax_reading	1	یَفْنَی=3 / یُفنِی=1
+یقضی	hapax_reading	1	یقضَی=1 / یَقضِی=1
+یقول	hapax_reading	1	یَقُوْل=4 / یَقوُل=1
+یله	hapax_reading	1	یَله=1 / یِله=1
+یمنع	hapax_reading	1	یَمْنَع=1 / یُمنع=1
+یمینی	hapax_reading	1	یَمِینِی=3 / یَمْیِنی=1
+ینال	hapax_reading	1	یَنال=1 / یُنال=1
+ینصرون	hapax_reading	1	یَنْصُرون=1 / یُنْصرُون=1
+یهدی	hapax_reading	1	یَهدِی=3 / یُهدی=1
+یهلک	hapax_reading	1	یَهلِک=1 / یُهلک=1
+یوم‌الدین	hapax_reading	1	یَومُ‌الدّین=7 / یُوْم‌الدّین=1
+یکره	hapax_reading	1	یَکرَه=1 / یِکرَه=1
+یکون	hapax_reading	1	یَکُوْن=9 / یَکْون=1 / یکَون=1
