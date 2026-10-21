@@ -3,7 +3,7 @@
 Each section's ``htmlText`` keeps the harakat, ezāfe marks and ZWNJ that
 ``plainText`` drops; ``plainText`` gives the line structure. A poem's metre is
 its sections' shared label: ``mixed`` when they disagree, ``absent`` when none
-carries one.
+carries one. Its form and rhyme letters are the first section's.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 KEY = str.maketrans("يىكۀةؤئأإٱآ", "ییکههویاااا")
+FORMS = {1: "ghazal", 2: "qasida", 3: "masnavi", 4: "qeta", 5: "robai", 6: "dobeyti", 10: "single", 16: "tarji"}
 
 
 class _Paragraphs(HTMLParser):
@@ -73,7 +74,8 @@ def section_lines(plain: str, html: str) -> list[str]:
 
 
 def poems(snapshot: Path):
-    """Every poem once, in category order: id, poet, metre, metre_status, text."""
+    """Every poem once, in category order: id, poet, metre, metre_status, text,
+    form, rhyme_letters."""
     seen = set()
     for path in sorted((snapshot / "cat").glob("*.json"), key=lambda p: int(p.stem)):
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -83,7 +85,8 @@ def poems(snapshot: Path):
                 continue
             seen.add(poem["id"])
             texts, metres = [], set()
-            for section in poem.get("mainSections") or []:
+            sections = poem.get("mainSections") or [{}]
+            for section in sections:
                 text = "\n".join(section_lines(str(section.get("plainText") or "").strip(), str(section.get("htmlText") or "")))
                 if text:
                     texts.append(text)
@@ -91,4 +94,5 @@ def poems(snapshot: Path):
                     metres.add(metre)
             status = "single" if len(metres) == 1 else "mixed" if metres else "absent"
             yield {"id": str(poem["id"]), "poet": poet, "metre": metres.pop() if status == "single" else None,
-                   "metre_status": status, "text": "\n".join(texts)}
+                   "metre_status": status, "text": "\n".join(texts),
+                   "form": FORMS.get(sections[0].get("poemFormat")), "rhyme_letters": sections[0].get("rhymeLetters")}

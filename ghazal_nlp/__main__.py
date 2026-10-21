@@ -4,7 +4,7 @@ import sys
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
-from . import arabic, aruz, aruz_eval, ezafe, ganjoor, orthography, verb, verb_eval, vowels
+from . import arabic, aruz, aruz_eval, ezafe, ganjoor, orthography, rhyme, rhyme_eval, verb, verb_eval, vowels
 
 
 def dump(result) -> None:
@@ -51,6 +51,18 @@ def aruz_derive(a):
     weights, report = aruz_eval.derive_weights(poems, aruz.Inventory.load(a.out / "metres.tsv"))
     aruz_eval.write_weights(weights, report, a.out / "weights.tsv")
     dump(report)
+
+
+def rhymes(a):
+    for r in rhyme.scan(lines(a), a.form):
+        if a.json:
+            dump(r)
+        elif r.abstention:
+            print("abstains:", r.abstention)
+        else:
+            print(f"qafiya {r.qafiya} · radif {r.radif or '—'} · rhyme words {'، '.join(r.words)}"
+                  + (f" · off: {', '.join(str(i + 1) for i in r.off)}" if r.off else "")
+                  + (f" · repeated: {'، '.join(r.repeated)}" if r.repeated else ""))
 
 
 def analyse(a):
@@ -171,6 +183,15 @@ def main() -> None:
     c = command("aruz-derive", aruz_derive, "rebuild metres.tsv and weights.tsv")
     c.add_argument("gold", type=Path)
     c.add_argument("--out", type=Path, default=Path("."), help="where to write them")
+    c = command("rhyme", rhymes, "the rhyme letters and radif of a poem, one hemistich per line")
+    c.add_argument("text", nargs="*")
+    c.add_argument("--form", required=True, choices=rhyme.FORMS)
+    c.add_argument("--json", action="store_true")
+    c = command("rhyme-eval", lambda a: dump(rhyme_eval.evaluate(a.gold, a.split, misses=a.misses)),
+                "score the rhyme finder against Ganjoor's rhyme letters")
+    c.add_argument("gold", type=Path, help="the output of `ganjoor`")
+    c.add_argument("--split", default="held_out", choices=["held_out", "dev"])
+    c.add_argument("--misses", type=int, default=0, help="show this many disagreements")
     c = command("verb", analyse, "every reading of verb tokens")
     c.add_argument("text", nargs="*")
     c.add_argument("--json", action="store_true")
