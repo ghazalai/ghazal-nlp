@@ -8,12 +8,24 @@ def spans(text, d=None):
 
 
 @pytest.mark.parametrize("text", [
-    "من بعد پریشان نگویم", "من و ما و علی", "بسم الله الرحمن الرحیم", "علیه السلام", "ان شاء الله",
-    "حق تعالی", "تیشة غمّاز راز کوهکن را فاش کرد", "علی از این خانه می‌رود", "البرز و الهام و التفات",
-    "رَحْمَة", "لا اله الا الله", "ابن ادهم من به ترک ملک فانی گویمش",
+    "من بعد پریشان نگویم", "من و ما و علی", "تیشة غمّاز راز کوهکن را فاش کرد", "علی از این خانه می‌رود",
+    "البرز و الهام و التفات", "رَحْمَة", "ابن ادهم من به ترک ملک فانی گویمش",
 ])
-def test_abstains_on_formula_homograph_or_script_only(text):
+def test_abstains_on_homograph_or_script_only(text):
     assert detector().detect(text) == []
+
+
+@pytest.mark.parametrize("text", ["بسم الله الرحمن الرحیم", "علیه السلام", "ان شاء الله", "حق تعالی", "لا اله الا الله"])
+def test_a_formula_is_a_phrase_not_a_passage(text):
+    assert [(text[s.start:s.end], s.kind) for s in detector().detect(text)] == [(text, "phrase")]
+
+
+@pytest.mark.parametrize("text, phrase", [
+    ("نمی‌آید و مع ذلک هرگاه بندگان اشرف", "مع ذلک"), ("بخانه رو دله فی الحال مقنعهٔ سبز", "فی الحال"),
+    ("صندل خادم گفت ایها الوزیر مگر او", "ایها الوزیر"), ("دیدم علی الهام را", None),
+])
+def test_set_phrases_and_a_preposition_before_the_article(text, phrase):
+    assert [text[s.start:s.end] for s in detector().detect(text) if s.kind == "phrase"] == ([phrase] if phrase else [])
 
 
 def test_persian_bounds_the_span_and_offsets_are_original():

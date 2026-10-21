@@ -32,6 +32,9 @@ PRONOUNS = frozenset("من تو او ما شما ایشان آنان آنها آ
 CLITICS = frozenset("ای ام ات اش ایم اید اند".split())
 PREPOSITIONS = frozenset("از به با در بر برای بدون بی تا جز نزد پیش پس چون مانند همچون سوی زیر روی میان "
                          "اندر ز کز".split())
+# Heads that don't take an ezāfe: adverbs, and the participles of شدن and بودن.
+NO_EZAFE = frozenset("همیشه چگونه چه‌گونه هرگونه هیچ‌گونه این‌گونه اینگونه آن‌گونه آنگونه شده بوده گشته گردیده".split())
+PARTICIPLE_AUXILIARIES = frozenset("شده بوده گشته گردیده".split())
 
 
 def inventory() -> dict[str, dict[str, int]]:
@@ -171,16 +174,23 @@ def word_class(token: str) -> str:
 def junction(site: dict) -> Decision:
     """Does the junction carry an ezāfe? ``ezafe``, ``none`` or ``abstain``.
 
-    None across punctuation, before a participle's auxiliary, a connector, a
-    preposition, a copula or a verb; ezāfe before a pronoun, a participle or any
-    other content word. The last is a stand-in for a noun and adjective lexicon,
-    not a claim that a word the verb analyser does not know is nominal.
+    None across punctuation, before a participle's auxiliary or شده، after a head
+    that takes none (همیشه، چگونه، از جمله، شده), in a reduplication (تکه تکه),
+    and before a connector, a preposition, a copula or a verb; ezāfe before a
+    pronoun, a participle or any other content word. The last is a stand-in for a
+    noun and adjective lexicon, not a claim that a word the verb analyser does not
+    know is nominal.
     """
-    _, head, gap, nxt, _ = _parts(site)
+    text, head, gap, nxt, _ = _parts(site)
     if not bare(nxt) or any(unicodedata.category(c)[0] in "PS" for c in gap):
         return Decision("none", "boundary")
-    if verb.constructions(readings(head), readings(nxt), separator=gap):
+    if verb.constructions(readings(head), readings(nxt), separator=gap) or bare(nxt) in PARTICIPLE_AUXILIARIES:
         return Decision("none", "participle_auxiliary")
+    if bare(head).replace(ZWNJ, "") in {w.replace(ZWNJ, "") for w in NO_EZAFE} or (
+            bare(head) == "جمله" and text[:site["neutral_head_span"][0]].split()[-1:] == ["از"]):
+        return Decision("none", "adverb_head")
+    if bare(nxt) == bare(head):
+        return Decision("none", "reduplication")
     cls = word_class(nxt)
     if cls in ("connector", "preposition", "copula", "clitic", "verb_reading"):
         return Decision("none", cls)

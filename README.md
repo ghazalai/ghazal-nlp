@@ -50,9 +50,25 @@ the lexicon never saw), that's 80.9% and 93.1%.
 
 On single couplets with no poem around them it's much weaker. On the 12,713
 couplets of [Ganjoor-Rhythm-Bench](https://huggingface.co/datasets/farbodbij/Ganjoor-Rhythm-Bench)
-(40 metres), the rules alone give exactly the gold metre for 32.9%. With the
-lexicon, on the 2,553 couplets from held-out poems, that's 62.6%, and another
-9.8% get several metres including the gold one.
+(40 metres), the rules alone give exactly the gold metre for 35.4%. With the
+lexicon, on the 2,553 couplets from held-out poems, that's 63.5%, and another
+9.7% get several metres including the gold one.
+
+On those couplets, next to [an XLM-R metre classifier](https://huggingface.co/katomyomachia/xlm-roberta-persian-meter)
+(35 metres, trained on Ganjoor hemistichs; its card reports 98% on a tenth of
+its own data):
+
+| exact metre per couplet | couplets | XLM-R | `aruz` with the lexicon | always the commonest metre |
+|---|---:|---:|---:|---:|
+| all held-out | 2,553 | 61.9% | 63.5% | 4.0% |
+| metre the model knows | 2,204 | 71.6% | 64.6% | 4.6% |
+| … and no hemistich in its training data | 2,041 | 70.9% | 63.7% | 4.3% |
+
+On lone couplets in its own metres the classifier is about 7 points ahead;
+across all metres they're level, since 13.7% of the couplets are in metres it
+can't answer. The GPT2-fa classifier reported at 90.4%
+([kasraSMD/Persian-Poetry-Rhythm-Detection](https://github.com/kasraSMD/Persian-Poetry-Rhythm-Detection))
+isn't here: its weights are behind a Google sign-in.
 
 Thiesen's *Manual of Classical Persian Prosody* scans 513 hemistichs; the
 scanner reaches his exact weights for 494 of them.
@@ -63,6 +79,7 @@ ghazal-nlp aruz-eval poems.jsonl [--no-lexicon] [--stripped]
 ghazal-nlp aruz-derive poems.jsonl --out ghazal_nlp/data
 ghazal-nlp aruz-derive poems.jsonl --by poet --out poet/
 ghazal-nlp aruz-eval poems.jsonl --by poet --weights poet/weights.tsv
+ghazal-nlp aruz-baselines benchmark.jsonl xlmr.jsonl
 ```
 
 ### `rhyme`: qāfiya and radif
@@ -137,8 +154,24 @@ and, in iPerUDT, a spoken ه written apart. None of the treebanks marks aspect.
 They don't agree with each other on lemmas and some features, so lemmas and
 features are scored separately; `verb_eval.py` has the exact rule.
 
+`conjugate` against [UniMorph's Persian paradigms](https://github.com/unimorph/fas),
+on the cells it builds (present and past imperfective, simple past, present
+subjunctive, imperative). UniMorph writes no ZWNJ, so neither side has one.
+
+| | simple verbs | compound verbs |
+|---|---:|---:|
+| cells | 1,794 | 5,304 |
+| built | 85.5% | 99.0% |
+| same form, when built | 95.4% | 98.3% |
+| every verb regular (baseline) | 76.6% | 50.0% |
+
+Of the 162 cells that differ, 160 are UniMorph's own garbles (ببرخیز، میبه کار
+برند، بافکن) and 2 are بگشا where UniMorph has بگشای. Eleven verbs aren't in
+my stem list, three of them typos in UniMorph (خندسن، چیندن، رختن).
+
 ```sh
 ghazal-nlp verb-eval <treebank>/*.conllu
+ghazal-nlp conjugate-eval <unimorph>/fas
 ```
 
 ### `vowels`: the vowels editors write
@@ -161,8 +194,27 @@ a word is read where an editor thought it was worth marking, not how often
 each reading occurs. `data/vowels-review.tsv` lists the words with more than
 one reading.
 
+Against full pronunciations of modern prose: [SentenceBench](https://huggingface.co/datasets/MahtaFetrat/SentenceBench)
+(400 sentences) and [HomoRich](https://huggingface.co/datasets/MahtaFetrat/HomoRich-G2P-Persian)'s
+test split (127,850 sentences on 285 homographs). A reading fits when the
+pronunciation has the vowels it marks.
+
+| | SentenceBench | HomoRich |
+|---|---:|---:|
+| words with one reading: it fits | 80.6% (618) | 82.2% (248,011) |
+| words with several: the commonest fits | 53.0% (1,014) | 53.9% (433,153) |
+| … one of them fits | 91.2% | 92.5% |
+| … a random one fits | 46.1% | 47.6% |
+| the homograph itself: the commonest fits | 42.7% (164) | 38.2% (65,955) |
+| … a random one fits | 35.4% | 39.3% |
+
+The readings are Ganjoor's, so a miss is often verse against prose (حَرَکت,
+نَمی, خَیلی). On the homographs the commonest reading is no better than a
+random one.
+
 ```sh
 ghazal-nlp vowels-derive poems.jsonl --out ghazal_nlp/data
+ghazal-nlp g2p-eval SentenceBench.csv
 ```
 
 ### `ezafe`: the ezāfe after a silent ه
@@ -179,21 +231,33 @@ for j in ezafe.junctions("نامه را نوشتم و خانه زیبا بود")
     print(j.head, j.mark, j.label, j.reason)
 ```
 
-Tested by me on sites from Wikipedia, Wikisource, books and Ganjoor
-(`data/ezafe-*-dev.jsonl`):
+Tested by me on sites from Wikipedia, Wikisource and Ganjoor, and against the
+pronunciations in SentenceBench and HomoRich:
 
 | | sites | agree | always the commoner label |
 |---|---:|---:|---:|
-| `written` | 124 | 122 (98%) | 90.3% |
-| `junction` | 175 | 148 (85%) | 61.1% |
+| `written`, dev | 102 | 100 (98%) | 88.2% |
+| `written`, held out | 78 | 68 (87%) | 87.2% |
+| `written`, SentenceBench | 14 | 13 (93%) | 100% |
+| `written`, HomoRich | 2,724 | 98.4% | 98.8% |
+| `junction`, dev | 128 | 109 (85%) | 61.7% |
+| `junction`, lab batch 1 | 43 | 37 (86%) | 86.0% |
+| `junction`, SentenceBench | 132 | 104 (79%) | 76.5% |
+| `junction`, HomoRich | 58,962 | 80.9% | 73.6% |
 
-The rules were written while looking at these sites, so treat these as
-development numbers. `junction` mostly errs by finding an ezāfe that isn't
-there, since without a noun and adjective lexicon it treats any word it can't
-place as a noun.
+The dev sites (`data/ezafe-*-dev.jsonl`) were labelled while the rules were
+written. Batch 1 (`data/ezafe-lab-1.jsonl`) was held out, but I fixed
+`junction` after looking at it (participles before شده، heads like همیشه that
+take none, reduplication), so it counts as dev for `junction`. A second batch
+is held out for that. `written` doesn't beat always saying ezāfe on held-out
+text. `junction` mostly errs by finding an ezāfe that isn't there, since
+without a noun and adjective lexicon it treats any word it can't place as a
+noun. On HomoRich, about 40% of whose sentences GPT-4o wrote, the junction
+gets 10,107 false ezāfe against 1,137 missed.
 
 ```sh
 ghazal-nlp ezafe-eval
+ghazal-nlp g2p-eval test_set.csv
 ```
 
 ### `orthography`: spelling rules
@@ -234,35 +298,70 @@ Where the two styles differ:
 The silent-ه list (`data/orthography-silent-he.tsv`, 1,253 words) comes from
 how each word's own spellings treat the ه (خانه‌ای vs گرهی).
 
+On [PerSpellData](https://github.com/rominaoji/PerSpellData)'s word-boundary
+errors, the sentence pairs that differ only in where a space or ZWNJ goes. A
+finding counts only if it changes nothing but separators. `exact` needs the
+same separator as the correct side; `apart` only whether the letters are kept
+apart, since PerSpellData often has a space where the house has ZWNJ (شده اند،
+می روم).
+
+| Virastman logs, 127,120 pairs, 138,503 edits | `ghazal` | `academy` |
+|---|---:|---:|
+| changes proposed | 26,901 | 17,252 |
+| precision, exact / apart | 17.5% / 71.6% | 16.5% / 39.6% |
+| recall, exact / apart | 3.4% / 4.3% | 2.1% / 2.2% |
+| missing ZWNJ (میروم), recall | 30.9% | 16.6% |
+
+Recall is low because 83% of the edits split two words written together
+(تلاشکردند), which no rule looks for.
+
 ```sh
 ghazal-nlp check "آنها کتاب ها را میخوانند"
 ghazal-nlp check --style academy "آنها کتاب ها را میخوانند"
 ghazal-nlp rules [--style academy]
 ghazal-nlp verify
+ghazal-nlp orthography-eval wrong_virastman.txt correct_virastman.txt [--style academy]
 ```
 
-### `arabic`: Arabic passages inside Persian
+### `arabic`: Arabic inside Persian
 
-Finds Arabic passages inside Persian text, conservatively. A shared word, a
-name or a ة isn't enough, Persian words end a span, and finding nothing means
-"don't know", not "no Arabic". A second, exact matcher finds Quran wording,
-given a copy of the text (Tanzil format).
+Finds Arabic inside Persian text, conservatively, as two kinds of span. A
+`passage` is Arabic syntax: a shared word, a name or a ة isn't enough, and
+Persian words end a span. A `phrase` is a formula or set phrase (علیه السلام،
+مع ذلک) or a preposition or vocative before an Arabic article (فی الحال، ایها
+الامیر). Finding nothing means "don't know", not "no Arabic". A third, exact
+matcher finds Quran wording, given a copy of the text (Tanzil format).
+
+Tested by me on spans and lines from Wikipedia, Wikisource and Ganjoor
+(`data/arabic-*-lab.jsonl`). Of 71 passages it found, 59 are Arabic with the
+right boundaries and 67 are Arabic (83% and 94%). Of 55 lines I marked as
+holding Arabic (two words or more), it finds something in 30, and in 1 of 27
+lines I marked as holding none (ایها القاضی). I added phrases after looking
+at those lines, so the line numbers are dev numbers.
 
 ```sh
 ghazal-nlp arabic "چنانکه گفته‌اند الحمد لله رب العالمین و ..."
+ghazal-nlp arabic-eval
 ```
 
 ## Data
 
-The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0; each TSV's
-header says where it comes from. Ganjoor and the treebanks are only read for
-testing and aren't included.
+The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0, except the files
+that quote Wikipedia or Wikisource, which are CC BY-SA 4.0 (`data/LICENSE`
+lists them); each TSV's header says where it comes from. Ganjoor,
+the treebanks, SentenceBench, HomoRich, UniMorph, PerSpellData and
+Ganjoor-Rhythm-Bench are only read for testing and aren't included.
 
-`ezafe-written-dev.jsonl` and `ezafe-junctions-dev.jsonl` are my labels on
-silent-ه junctions, one site per line: the text around it with the junction's
-mark removed (`neutralized_text`, `neutral_head_span`, `neutral_next_span`),
-the mark that was there (`observed_mark_class`), `blind` (my label without
-seeing the mark) and `revised` (my final label). Many sites are in both files.
+My labels, one item per line:
+
+- `ezafe-written-dev.jsonl`, `ezafe-junctions-dev.jsonl` and `ezafe-lab-1.jsonl`:
+  silent-ه junctions. The text around the junction with its mark removed
+  (`neutralized_text`, `neutral_head_span`, `neutral_next_span`), the mark
+  that was there (`observed_mark_class`), `blind` (my label without seeing the
+  mark) and, in the dev files, `revised` (my final label).
+- `arabic-spans-lab.jsonl`: a span the detector found, and whether it's
+  Arabic (`arabic`, `boundary` when the edges are off, `not_arabic`).
+- `arabic-lines-lab.jsonl`: whether a line holds Arabic of two words or more.
 
 ## References
 
@@ -281,6 +380,10 @@ What the tools are built from and tested on:
 
 - L. P. Elwell-Sutton, *The Persian Metres*. Cambridge University Press, 1976.
 - Aso Mahmudi and Hadi Veisi, [Automatic Meter Classification of Kurdish Poems](https://arxiv.org/abs/2102.12109), 2021: the same design as `aruz` (enumerate weight readings, score over the poem), for Kurdish.
+- [Ganjoor-Rhythm-Bench](https://huggingface.co/datasets/farbodbij/Ganjoor-Rhythm-Bench), and Theodore S. Beers's [sangin](https://github.com/theodore-s-beers/sangin), the XLM-R metre classifier.
+- Mahta Fetrat Qharabagh, Zahra Dehghanian and Hamid R. Rabiee, [Fast, Not Fancy: Rethinking G2P with Rich Data and Rule-Based Models](https://arxiv.org/abs/2505.12973), 2025 (HomoRich), and [LLM-Powered Grapheme-to-Phoneme Conversion: Benchmark and Case Study](https://huggingface.co/datasets/MahtaFetrat/SentenceBench), ICASSP 2025 (SentenceBench).
+- [UniMorph](https://unimorph.github.io/), Persian paradigms from Wiktionary.
+- Romina Oji, Nasrin Taghizadeh and Heshaam Faili, [PerSpellData](https://aclanthology.org/2021.nsurl-1.2), NSURL 2021.
 
 Other Persian tools and data I found useful:
 

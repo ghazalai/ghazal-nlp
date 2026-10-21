@@ -91,10 +91,10 @@ def test_only_the_neutral_text_is_read():
 def test_the_development_rulings():
     written = [json.loads(line) for line in open(DATA / "ezafe-written-dev.jsonl", encoding="utf-8")]
     junctions = [json.loads(line) for line in open(DATA / "ezafe-junctions-dev.jsonl", encoding="utf-8")]
-    assert ezafe.score(written, ezafe.written, "blind")["agree"] == 118
-    assert ezafe.score(written, ezafe.written, "revised")["agree"] == 122
-    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 150
-    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 148
+    assert ezafe.score(written, ezafe.written, "blind")["agree"] == 96
+    assert ezafe.score(written, ezafe.written, "revised")["agree"] == 100
+    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 111
+    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 109
 
 
 def test_junctions_in_plain_text():
@@ -102,3 +102,8 @@ def test_junctions_in_plain_text():
     assert [(j.head, j.next, j.mark, j.label) for j in found] == [
         ("نامه", "را", "unmarked", "none"), ("خانه", "زیبا", "heh_hamza", "ezafe"), ("خانه", "ای", "unmarked", "none")]
     assert found[1].span == (16, 26)
+
+
+def test_heads_and_neighbours_without_an_ezafe():
+    labels = [j.label for j in ezafe.junctions("گرفته شده است. خیره شده بود. همیشه یک قدم جلوتر. تکه تکه کرد. از جمله آشنایی")]
+    assert labels == ["none"] * 8

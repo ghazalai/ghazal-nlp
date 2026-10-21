@@ -1,10 +1,12 @@
-"""Arabic passages inside Persian, found conservatively.
+"""Arabic inside Persian, found conservatively: passages, and set phrases.
 
-The unit is Arabic syntax in context, not Arabic script: a shared word, a name,
+A passage is Arabic syntax in context, not Arabic script: a shared word, a name,
 a ة or a mark alone decides nothing. Persian words and punctuation bound the
-spans, and offsets index the original text. No span is an abstention, not a
-verdict that the text is Persian. Quran wording is a separate, exact path over
-copies the caller supplies.
+spans, and offsets index the original text. A phrase is a formula or set phrase
+(علیه السلام، مع ذلک) or a preposition or vocative before an Arabic article
+(فی الحال، ایها الامیر). No span is an abstention, not a verdict that the text
+is Persian. Quran wording is a separate, exact path over copies the caller
+supplies.
 """
 
 from __future__ import annotations
@@ -33,6 +35,7 @@ STRONG = frozenset("الذین الذی التی هذا هذه ذلک اولئک
 WEAK = frozenset("ان فی عن قال علی من ما هو هی هم نحن انت لا الا کل کان مع بین عند"
                  " له لها لهم به بها بهم الیه الیهم ای علیهم علیکم منهم لکم قد".split())
 VERBS = frozenset({"یکن", "یکون", "یقال", "یسأل", "یستدرک", "یقول", "تجعل"})
+BEFORE_ARTICLE = frozenset("فی علی عن الی مع ایها ایتها".split())
 # Persian words that end a run: vocatives, headings, credits.
 BOUNDARIES = frozenset("ای همه مردمان به رسید گویمش مشهورترین شجاعترین تالیف تألیف نویسنده"
                        " نگارخانه منابع پانویس پانویسمنابع جستارهای وابسته تصحیحها اخترشناسی"
@@ -67,6 +70,7 @@ class ArabicSpan:
     end: int
     reason: tuple[str, ...]
     quran_refs: tuple[str, ...] = ()
+    kind: str = "passage"
 
 
 class ArabicDetector:
@@ -78,6 +82,7 @@ class ArabicDetector:
         self.formulae = frozenset(" ".join(fold_word(w) for w in TOKEN.findall(f))
                                   for f in (_rows("arabic-formulae.tsv") if formulae is None else formulae))
         self.titles = [tuple(fold_word(w) for w in t.split()) for t in TITLES]
+        self.longest = max((len(f.split()) for f in self.formulae), default=2)
 
     def _features(self, token):
         raw = token[0]
@@ -148,7 +153,26 @@ class ArabicDetector:
             if any(s.start <= start and end <= s.end for s in selected) or (selected and start < selected[-1].end):
                 continue
             selected.append(ArabicSpan(start, end, reasons))
-        return selected
+        for a, b in self._phrases(text, tokens, words):
+            start, end = tokens[a].start(), tokens[b - 1].end()
+            if not any(s.start < end and start < s.end for s in selected):
+                selected.append(ArabicSpan(start, end, ("set_phrase",), kind="phrase"))
+        return sorted(selected, key=lambda s: s.start)
+
+    def _phrases(self, text, tokens, words):
+        found, i = [], 0
+        while i < len(tokens) - 1:
+            for n in range(min(self.longest, len(tokens) - i), 1, -1):
+                # علی is also the name, so a Persian ال word after it stays Persian (علی الهام).
+                article = (n == 2 and words[i] in BEFORE_ARTICLE and words[i + 1].startswith("ال")
+                           and len(words[i + 1]) > 3 and (words[i] != "علی" or words[i + 1] not in self.persian))
+                if (article or " ".join(words[i:i + n]) in self.formulae) and not any(
+                        GAP.search(text[tokens[k].end():tokens[k + 1].start()]) for k in range(i, i + n - 1)):
+                    found.append((i, i + n))
+                    i += n - 1
+                    break
+            i += 1
+        return found
 
 
 def quran_key(word: str) -> str:

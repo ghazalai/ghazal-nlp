@@ -4,7 +4,8 @@ import sys
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
-from . import arabic, aruz, aruz_eval, ezafe, ganjoor, orthography, rhyme, rhyme_eval, verb, verb_eval, vowels
+from . import arabic, arabic_eval, aruz, aruz_eval, ezafe, ganjoor, orthography, rhyme, rhyme_eval, verb, verb_eval, vowels
+from . import aruz_baselines, g2p_eval, orthography_eval
 
 
 def dump(result) -> None:
@@ -108,6 +109,10 @@ def ezafe_scores(a):
     for name, classify in (("ezafe-written-dev.jsonl", ezafe.written), ("ezafe-junctions-dev.jsonl", ezafe.junction)):
         rows = [json.loads(line) for line in open(aruz.DATA / name, encoding="utf-8")]
         report[name] = {t: ezafe.score(rows, classify, t) for t in ("blind", "revised")}
+    lab = [json.loads(line) for line in open(aruz.DATA / "ezafe-lab-1.jsonl", encoding="utf-8")]
+    report["ezafe-lab-1.jsonl"] = {
+        "written": ezafe.score([r for r in lab if r["observed_mark_class"] != "unmarked"], ezafe.written, "blind"),
+        "junction": ezafe.score([r for r in lab if r["observed_mark_class"] == "unmarked"], ezafe.junction, "blind")}
     dump(report)
 
 
@@ -217,7 +222,7 @@ def main() -> None:
     c.add_argument("--out", type=Path, default=Path("."), help="where to write them")
     c = command("ezafe", junctions, "each silent-ه junction and whether it carries an ezāfe")
     c.add_argument("text", nargs="*")
-    command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on the development rulings")
+    command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on my labels")
     registers = sorted(orthography.REGISTERS)
     c = command("rules", rules, "the spelling rules: what is recorded, what runs")
     c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
@@ -237,7 +242,24 @@ def main() -> None:
     c = command("arabic", passages, "Arabic passages inside Persian")
     c.add_argument("text", nargs="*")
     c.add_argument("--quran", type=Path, action="append", default=[], help="a Tanzil copy, sura|aya|text lines")
+    command("arabic-eval", lambda a: dump(arabic_eval.evaluate()), "score the Arabic detector on my labels")
     c.add_argument("--json", action="store_true")
+    c = command("aruz-baselines", lambda a: dump(aruz_baselines.compare(a.bench, a.predictions, aruz.scanner())),
+                "the scanner next to other metre classifiers on Ganjoor-Rhythm-Bench's held-out couplets")
+    c.add_argument("bench", type=Path, help="Ganjoor-Rhythm-Bench's benchmark.jsonl")
+    c.add_argument("predictions", nargs="+", type=Path, help="a model's predictions, JSON lines")
+    c = command("conjugate-eval", lambda a: dump(verb_eval.unimorph(a.unimorph, verb.analyzer())),
+                "score conjugate on UniMorph's Persian paradigms")
+    c.add_argument("unimorph", type=Path, help="UniMorph's fas file")
+    c = command("g2p-eval", lambda a: dump(g2p_eval.evaluate(a.csv)),
+                "score ezafe and vowels on SentenceBench or HomoRich pronunciations")
+    c.add_argument("csv", type=Path, help="SentenceBench.csv or HomoRich's test_set.csv")
+    c = command("orthography-eval", lambda a: dump(orthography_eval.evaluate(
+        list(zip(a.files[::2], a.files[1::2])), orthography.rulebase(a.style), limit=a.limit)),
+        "score the space and ZWNJ rules on PerSpellData's word-boundary pairs")
+    c.add_argument("files", nargs="+", type=Path, help="wrong and correct file, in pairs")
+    c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
+    c.add_argument("--limit", type=int, help="pairs per file")
     a = p.parse_args()
     try:
         a.run(a)

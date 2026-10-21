@@ -1,5 +1,5 @@
-# Arabic formulae used inside Persian (بسم الله، علیه السلام، …). A detected span
-# that is exactly one of these is dropped; a longer Arabic clause around it is kept.
+# Arabic formulae and set phrases used inside Persian (بسم الله، علیه السلام، مع ذلک).
+# Each is found as a phrase, not a passage; a longer Arabic clause around it is a passage.
 بسم الله
 بسم الله الرحمن الرحیم
 علیه السلام
@@ -33,3 +33,20 @@
 حور عین
 الحمد لله رب العالمین
 علی هذا القیاس
+مع ذلک
+مع هذا
+غیر ذلک
+فی نفسه
+فی مابین
+فی سبیل الله
+عن قریب
+علی ای حال
+علی هذا
+بناء علی هذا
+الی آخر
+الی غیر ذلک
+من حیث
+من جمله
+حتی الامکان
+لا محاله
+کما هو حقه
