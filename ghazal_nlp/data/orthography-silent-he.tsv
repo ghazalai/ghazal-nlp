@@ -1,41 +1,10 @@
-# Persian words ending in a silent ه — «ه»ی غیرملفوظ.
-#
-# word <TAB> silent evidence <TAB> voiced evidence <TAB> bare occurrences
-#
-# The script does not write the vowel, but the orthography around a final ه
-# reacts to whether it is pronounced, and that reaction is visible in the
-# corpus. دستور خطّ فارسی (ویراست جدید) pp. 46–47 is what makes the inference
-# legitimate rather than merely clever:
-#
-#   silent ه (خانه) — the indefinite ی takes a linking ا and the ezafe takes a
-#                     mark:  خانه‌ای، خانهٔ، خانه‌ی
-#   voiced ه (گره)  — the ی attaches solid and the ezafe writes nothing at all:
-#                     گرهی، «گره کور»  (p.47: «کلمه‌های مختوم به ها»ی ملفوظ …
-#                     گذاشتن این کسره در نگارش الزامی نیست»)
-#
-# So a word's own spellings vote on how its ه is pronounced. Derived from a 2026
-# Persian corpus, not from memory: at least 20 evidence tokens, and the winning
-# reading ahead of its rival 10 to 1. A word not in this file is an abstention,
-# never an assumption — which is why the file lists the *silent* inventory
-# rather than the voiced one. Rules fire on a proven-silent host and decline
-# everything else, so an omission costs coverage and never correctness.
-#
-# Words ending in اه are deliberately absent: a rule decides them. Of the stems
-# with 20+ evidence tokens, 138 ending in اه are voiced (ماه، گاه، شاه، راه،
-# پادشاه، سیاه …) and exactly one is silent — نشأه, an Arabic loan. وه and یه
-# get no such rule and are in the file individually, because they genuinely
-# split: میوه، سایه، قهوه، جلوه are silent while کوه، انبوه، فقیه، سفیه are not.
-#
-# Two-letter words (به، نه، ده، ره، شه، مه، ته، زه) are excluded on the length
-# floor and stay abstentions. Their evidence is real but mixed, and most of it
-# is not this word at all — تهی، زهی، نهی، سهی are words in their own right,
-# not a stem plus ی. That is the ـتر/دختر trap, and the floor is the guard.
-#
-# Verse contractions of اه words — گه، نگه، سپه، شه، مه، ره، کوته، همره، گنه —
-# are voiced and correctly absent. The imperatives بده، مده، منه، بنه are absent
-# for the same reason and it matters: «بده ای دوست» is a vocative, not a clitic.
-#
-# 1,269 entries.
+# Words ending in a silent ه (خانه, not گره).
+# silent: spellings like خانه‌ای، خانهٔ، خانه‌ی. voiced: spellings like گرهی.
+# bare: the word with nothing attached. Counted over a 2026 corpus sample; a word
+# is in with at least 20 silent-or-voiced spellings and silent ahead 10 to 1.
+# A word not listed is unknown, not voiced. Left out: words in اه (voiced by
+# rule), two-letter words, verse contractions (گه، ره) and imperatives (بده).
+# word	silent	voiced	bare
 درباره	7218	2	10843
 دیده	6247	0	42577
 خانه	6058	3	29467
@@ -146,7 +115,6 @@
 روضه	639	0	2053
 باره	635	7	4438
 حمله	635	0	5207
-‌ماده	634	0	2800
 لاله	625	0	11116
 پروانه	613	0	5791
 تشنه	608	0	4964
@@ -432,7 +400,6 @@
 علیه	147	0	11692
 کرشمه	147	0	931
 آشیانه	146	0	703
-به‌گفته	146	0	178
 سررشته	146	0	482
 سواره	146	0	1003
 عهدنامه	145	0	802
@@ -560,7 +527,6 @@
 شیرازه	99	0	565
 مدیره	99	0	2947
 مزرعه	99	1	394
-به‌گونه	98	0	18
 حجله	98	0	369
 رانده	98	1	1001
 ریزه	98	0	544
@@ -597,7 +563,6 @@
 بقعه	90	0	409
 زندگینامه	90	0	460
 مائده	90	0	298
-به‌وسیله	89	0	247
 سرپنجه	89	0	310
 ثمره	88	0	316
 مجسمه	88	0	433
@@ -678,7 +643,6 @@
 نکرده	70	0	4086
 هره	70	0	292
 باداره	69	0	170
-به‌واسطه	69	0	105
 دربردارنده	69	0	92
 دریوزه	69	0	508
 دهانه	69	0	134
@@ -1011,7 +975,6 @@
 آمیزه	31	0	8
 برهنه	31	0	1758
 بلندپایه	31	0	104
-به‌نوشته	31	0	36
 بگزیده	31	0	163
 تخلیه	31	0	293
 خدشه	31	0	47
@@ -1052,7 +1015,6 @@
 برگشته	29	0	839
 بشنیده	29	0	126
 بنشسته	29	0	578
-به‌خانه	29	0	31
 تابنده	29	0	1037
 تکمه	29	0	96
 جنحه	29	0	203
@@ -1172,7 +1134,6 @@
 اوفتاده	24	0	695
 بایسته	24	0	205
 بحریه	24	0	63
-به‌اندازه	24	0	31
 تاخته	24	0	373
 تهیه‌کننده	24	0	354
 خدمه	24	0	120

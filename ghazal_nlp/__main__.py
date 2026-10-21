@@ -95,24 +95,25 @@ def ezafe_scores(a):
 
 
 def rules(a):
-    base = orthography.rulebase()
+    base = orthography.rulebase(a.style)
     if a.json:
         return dump(base.summary())
     for rule in base.rules:
         state = "runs" if rule.runs else "recorded" if not rule.executable else "off"
-        print(rule.id, rule.status, rule.kind, ",".join(rule.registers), state, f"ص {rule.source.page}", sep="\t")
+        where = f"ص {rule.source.page}" if rule.source.page else f"academy: {rule.academy['position']}"
+        print(rule.id, rule.status, ",".join(rule.registers), state, where, sep="\t")
     s = base.summary()
     print(f"recorded {s['recorded']} · executable {s['executable']} · running {s['running']}")
 
 
 def check(a):
-    analysis = orthography.rulebase().check(" ".join(lines(a)), registers=tuple(a.register or ["formal_written"]),
-                                            min_confidence=a.min_confidence)
+    analysis = orthography.rulebase(a.style).check("\n".join(lines(a)), registers=tuple(a.register or ["formal_written"]),
+                                                   min_confidence=a.min_confidence)
     if a.json:
         return dump(analysis)
     for x in analysis.findings:
-        print(x.rule_id + (" (contested)" if x.contested else ""), x.text, x.suggestion or "—",
-              f"{x.citation} ({x.confidence})", sep="\t")
+        print(x.rule_id + (" (contested)" if x.contested else ""), x.severity, x.text, x.suggestion or "—",
+              x.citation, sep="\t")
     for x in analysis.abstentions if a.abstentions else ():
         print(x.rule_id, x.text, f"abstains: {x.reason}", sep="\t")
 
@@ -127,12 +128,12 @@ def verify(a):
 
 def profile(a):
     files = sorted(a.path.glob("*.txt")) if a.path.is_dir() else [a.path]
-    dump(orthography.rulebase().profile((f.read_text(encoding="utf-8") for f in files),
+    dump(orthography.rulebase(a.style).profile((f.read_text(encoding="utf-8") for f in files),
                                         registers=tuple(a.register or ["formal_written"])))
 
 
 def passages(a):
-    text = " ".join(lines(a))
+    text = "\n".join(lines(a))
     spans = arabic.detector().detect(text) + (arabic.QuranIndex(a.quran).detect(text) if a.quran else [])
     if a.json:
         return dump([asdict(s) for s in spans])
@@ -188,10 +189,12 @@ def main() -> None:
     c.add_argument("text", nargs="*")
     command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on the development rulings")
     registers = sorted(orthography.REGISTERS)
-    c = command("rules", rules, "the orthography rules: what is recorded, what runs")
+    c = command("rules", rules, "the spelling rules: what is recorded, what runs")
+    c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
     c.add_argument("--json", action="store_true")
-    c = command("check", check, "check text against the rules; every finding cites its page")
+    c = command("check", check, "check text against the spelling rules")
     c.add_argument("text", nargs="*")
+    c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
     c.add_argument("--register", action="append", choices=registers, help="formal_written when none")
     c.add_argument("--min-confidence", default="medium", choices=["low", "medium", "high"])
     c.add_argument("--abstentions", action="store_true", help="also what the rules declined to judge")
@@ -199,6 +202,7 @@ def main() -> None:
     command("verify", verify, "run every rule against its own examples")
     c = command("profile", profile, "rule coverage over a file or a directory of .txt files")
     c.add_argument("path", type=Path)
+    c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
     c.add_argument("--register", action="append", choices=registers)
     c = command("arabic", passages, "Arabic passages inside Persian")
     c.add_argument("text", nargs="*")

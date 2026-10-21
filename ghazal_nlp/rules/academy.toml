@@ -6,16 +6,10 @@
 #   retrieved 2026-08-04 from apll.ir/wp-content/uploads/2023/07/Dastour-e-Khat-17.04.1402.pdf
 #   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
 #
-# ZWNJ (U+200C) is written as \u200c throughout, so that a rule stays readable
-# and diffable. An invisible character in a rule record is a maintenance trap.
-#
-# Every rule here is checked against its own examples when the rule base loads.
-# Where the standard states a rule we cannot yet decide mechanically, the rule
-# is recorded with no detector rather than approximated — see
-# orthography.plural_ha_mandatory_separation.
+# ZWNJ (U+200C) is written \u200c.
 
 [[rule]]
-id = "orthography.mi_prefix"
+id = "academy.mi_prefix"
 layer = "orthography"
 title.fa = "نیم\u200cفاصلهٔ «می» و «نمی»"
 title.en = "The imperfective prefix takes a ZWNJ"
@@ -48,17 +42,10 @@ examples.violations = [
   { text = "می رود", expect = "می\u200cرود" },
   { text = "نمی گوید", expect = "نمی\u200cگوید" },
 ]
-notes = """
-Solid detection is off, and that is not an oversight. میدان, میهن, میوه, میراث and a \
-long tail of ordinary words begin with the same two letters, so deciding میرود from \
-میدان needs a verb-stem lexicon. It becomes decidable when the morphology layer supplies \
-one. Until then the rule abstains rather than guesses. Space detection carries medium \
-confidence because می is also the noun *wine*, which is why the register scope excludes \
-verse: در verse the free reading is common and the prefix reading is not safe.
-"""
+notes = "Solid forms (میرود) aren't checked, since میدان، میهن، میوه start the same way; verb.py's stems could decide them. Medium confidence on spaces because می is also 'wine', and not run on verse for that reason."
 
 [[rule]]
-id = "orthography.bi_prefix"
+id = "academy.bi_prefix"
 layer = "orthography"
 title.fa = "نیم\u200cفاصلهٔ پیشوند نفی «بی»"
 title.en = "The privative prefix بی takes a ZWNJ"
@@ -101,15 +88,10 @@ examples.violations = [
   { text = "بی تردید", expect = "بی\u200cتردید" },
   { text = "بیحوصله", expect = "بی\u200cحوصله" },
 ]
-notes = """
-The standard is explicit that بیهوده and بیگانه are no longer analysable as prefixed \
-forms — they are simplex words — so they sit in the exception list for a different \
-reason from بیچاره. Space detection is medium confidence because the free preposition \
-(«بی هیچ چشمداشتی») is correct Persian.
-"""
+notes = "بیهوده and بیگانه are listed because the book treats them as simple words. Medium confidence on spaces: the preposition بی (بی هیچ چشمداشتی) is right with a space."
 
 [[rule]]
-id = "orthography.ham_prefix"
+id = "academy.ham_prefix"
 layer = "orthography"
 title.fa = "نیم\u200cفاصلهٔ پیشوند «هم»"
 title.en = "The prefix هم takes a ZWNJ before its host"
@@ -153,20 +135,10 @@ examples.violations = [
   { text = "هم وطن", expect = "هم\u200cوطن" },
   { text = "هم گروه", expect = "هم\u200cگروه" },
 ]
-notes = """
-This is the rule that shows why require_host_in exists. «هم» followed by a space is \
-usually correct — it is the free adverb — so firing on every «هم X» would be worse than \
-useless. The detector therefore only fires on a host in the compound lexicon, which is \
-drawn from the standard's own example list and is deliberately short. Everything else \
-abstains with reason host_not_in_compound_lexicon, and that abstention count is the work \
-order: the full list lives in فرهنگ املایی خطّ فارسی, which we do not have. Solid \
-detection is off for the same reason in reverse — همایون, همیشه and the derivatives of \
-thirty-two exception words cannot be separated from genuine compounds without that \
-lexicon.
-"""
+notes = "Fires only on hosts in its short compound list, since هم before a space is usually the adverb; the rest abstain. Solid forms aren't checked (همایون، همیشه). Both need فرهنگ املایی خطّ فارسی."
 
 [[rule]]
-id = "orthography.comparative_tar"
+id = "academy.comparative_tar"
 layer = "orthography"
 title.fa = "نیم\u200cفاصلهٔ «ـتر» و «ـترین»"
 title.en = "The comparative and superlative suffixes take a ZWNJ"
@@ -208,17 +180,10 @@ examples.violations = [
   { text = "مهم ترین", expect = "مهم\u200cترین" },
 ]
 severity = "advisory"
-notes = """
-Severity is advisory rather than violation, and the two error modes are not equally \
-strong. The full-space form («بزرگ تر») is permitted by no standard. The solid form \
-(«بزرگتر») is extremely common in real Persian and is house style at several publishers; \
-the standard is unambiguous that it is wrong, but a tool that shouts about it would be \
-ignored. Both are reported; the reader decides. تر is also the free adjective *wet*, \
-which is why the space finding carries medium confidence.
-"""
+notes = "Advisory. A space (بزرگ تر) is wrong everywhere; solid (بزرگتر) is common and some publishers' house style, though the book rules it out. Medium confidence on spaces: تر is also 'wet'."
 
 [[rule]]
-id = "orthography.plural_ha"
+id = "academy.plural_ha"
 layer = "orthography"
 title.fa = "جدانویسی «ـها»ی جمع"
 title.en = "The plural marker ها is recommended to be written separately"
@@ -258,15 +223,10 @@ examples.violations = [
   { text = "کتاب ها", expect = "کتاب\u200cها" },
   { text = "کتابها", expect = "کتاب\u200cها" },
 ]
-notes = """
-The asymmetry is the standard's own: joined is permitted, so it is advisory; a full \
-space is not permitted by anyone, so it is a violation. The standard names our exact \
-problem as a reason for its recommendation — spacing errors break tokenization — which \
-is a rare case of an orthographic authority arguing from computation.
-"""
+notes = "Joined ها is allowed, so that's advisory; a full space isn't, so that's a violation."
 
 [[rule]]
-id = "orthography.plural_ha_after_silent_he"
+id = "academy.plural_ha_after_silent_he"
 layer = "orthography"
 title.fa = "جدانویسی الزامی «ـها» پس از «ه»ی غیرملفوظ"
 title.en = "The plural ها must be separated after a silent ه"
@@ -290,7 +250,7 @@ source.page = 41
 source.locator = "تبصرهٔ «ها»، بند ۵"
 source.retrieved = "2026-08-04"
 detector.type = "pattern"
-detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*ه)ها(?![\\w\u200c])"
+detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*(?<!ا)ه)ها(?![\\w\u200c])"
 detector.kind = "solid_where_zwnj_required"
 detector.repair = "\\1\u200cها"
 detector.severity = "violation"
@@ -300,16 +260,10 @@ examples.violations = [
   { text = "خانهها", expect = "خانه\u200cها" },
   { text = "میوهها", expect = "میوه\u200cها" },
 ]
-notes = """
-Decidable from characters alone, unlike the other five environments — which is why this \
-one has a detector and orthography.plural_ha_mandatory_separation does not. The rule \
-also fires for a pronounced ه preceded by a connecting letter (فقیه\u200cها), which the \
-standard requires separated for the same reason, so the over-reach is in the direction \
-of the standard rather than away from it.
-"""
+notes = "Also fires after a pronounced ه that follows a joining letter (فقیه\u200cها), which the book separates too."
 
 [[rule]]
-id = "orthography.plural_ha_mandatory_separation"
+id = "academy.plural_ha_mandatory_separation"
 layer = "orthography"
 title.fa = "شش محیط جدانویسی الزامی «ـها»"
 title.en = "The six environments where separating ها is mandatory"
@@ -321,7 +275,7 @@ statement.fa = """
 """
 statement.en = """
 Six environments in which the plural ها may only be written separately. Environment 5 is \
-implemented as orthography.plural_ha_after_silent_he; the other five are recorded here \
+implemented as academy.plural_ha_after_silent_he; the other five are recorded here \
 and not yet checkable.
 """
 kind = "prescriptive"
@@ -339,16 +293,10 @@ examples.violations = [
   { text = "ویتامینها", expect = "ویتامین\u200cها" },
   { text = "سعدیها", expect = "سعدی\u200cها" },
 ]
-notes = """
-Recorded without a detector, which is a legitimate and common state. Two of the five \
-remaining environments need a loanword lexicon, one needs a proper-name lexicon, one \
-needs the writer's intent (برجسته\u200cسازی), and one needs a دندانه count — the only \
-mechanically tractable of the four, and the next to be implemented. The examples are the \
-specification the detector will be written against.
-"""
+notes = "No detector. Of the other five cases, two need a loanword list, one a list of names, one the writer's intent, and one a دندانه count (the only one doable from characters)."
 
 [[rule]]
-id = "orthography.persian_letters"
+id = "academy.persian_letters"
 layer = "orthography"
 title.fa = "کاربرد «ی» و «ک» فارسی به\u200cجای «ي» و «ك» عربی"
 title.en = "Persian ی and ک, not their Arabic counterparts"
@@ -381,16 +329,10 @@ examples.violations = [
   { text = "كتاب" },
   { text = "ايران" },
 ]
-notes = """
-No repair template, because one pattern covers two letters and a suggestion must be \
-exact rather than approximately right. A normalizer already fixes this — 44,783 times in \
-one Ganjoor profile alone, its single largest rule — so the value here is not the \
-transformation but the citation: this is the clause that makes it wrong, rather than a \
-convention everyone assumes.
-"""
+notes = "No repair, since one pattern covers both letters. Any normalizer fixes this; the rule is here for the citation."
 
 [[rule]]
-id = "orthography.ezafe_after_silent_he"
+id = "academy.ezafe_after_silent_he"
 layer = "orthography"
 title.fa = "کسرهٔ اضافه پس از «ه»ی غیرملفوظ"
 title.en = "The ezāfe on a word ending in silent ه"
@@ -426,18 +368,8 @@ examples.violations = [
   { text = "خانه\u200cی او", expect = "خانهٔ" },
   { text = "برنامه\u200cی روزانه", expect = "برنامهٔ" },
 ]
-notes = """
-The first contested rule in the base, and a deliberate one — it exists to prove the \
-mechanism before a harder disagreement needs it. A finding here says the sources \
-disagree and shows both; it does not say the writer is wrong. The corpus rate for each \
-form, per register, is the measurement that should accompany this rule and has not been \
-taken yet.
-"""
+notes = "Contested: a finding shows both forms; it doesn't say the writer is wrong."
 
 [[rule.disputes]]
 source = "contemporary editorial practice"
-summary = """
-A large share of modern Persian publishing, and most web text, writes خانه\u200cی. The \
-form is legible, unambiguous, and survives copy-paste between systems that mangle U+0654 \
-— a real argument the standard does not address.
-"""
+summary = "Much modern publishing and most web text writes خانه\u200cی. It's clear and survives copy-paste between systems that mangle U+0654."

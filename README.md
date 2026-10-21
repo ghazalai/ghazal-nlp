@@ -1,67 +1,66 @@
 # ghazal-nlp
 
-Persian rules as small deterministic tools. No model, no network, nothing
-beyond the Python standard library. Every answer names the rule or licence
-behind it, and where the rules cannot decide, the tool says so instead of
-guessing.
+Small deterministic tools for Persian. No models, no network, just the Python
+standard library. Every answer says which rule produced it, and when the rules
+can't decide, the tool abstains instead of guessing.
 
 ```sh
 pip install git+https://github.com/alijulaeerad/ghazal-nlp
 ghazal-nlp scan "الا یا ایها الساقی ادر کأسا و ناولها"
 ghazal-nlp verb "نمی‌گفتند برمی‌دارد"
 ghazal-nlp conjugate گفتن --tense past --aspect imperfective --person 1 --number plur
+ghazal-nlp check "آنها کتاب ها را میخوانند"
 ```
 
 ## Tools
 
 ### `aruz`: classical metre
 
-A written hemistich admits several syllabifications, because Persian does not
-write short vowels, the ezāfe or gemination. The scanner searches them against
-the 146 weight patterns of 142 metres and reports the cheapest metres, every
-other metre it admits with its cost in licences (hamze elision, the conjunction
-و, ابدال, an overlong read long, …), or an abstention with a reason. It reads
-an editor's harakat, shadda, ezāfe hamza and ZWNJ as constraints. A poem's
-metre is the one most of its hemistichs admit.
+Persian doesn't write short vowels, the ezāfe or gemination, so one written
+hemistich can be read several ways. The scanner tries those readings against
+146 weight patterns (142 metres). For each line it returns the cheapest
+metres, every other metre that fits along with the licences it needs (hamze
+elision, و read short, ابدال, an overlong syllable read long, …), or an
+abstention with a reason. Harakat, shadda, the ezāfe hamza and ZWNJ written by
+the editor are used as constraints. A poem gets the metre most of its lines
+fit.
 
 ```python
 from ghazal_nlp import aruz
-s = aruz.scanner().scan("بشنو این نی چون شکایت می‌کند")
+s = aruz.scanner().scan("الا یا ایها الساقی ادر کأسا و ناولها")
 s.metres, s.weights, s.devices, s.candidates
-aruz.scan_poem(poem_text).metres
+aruz.scan_poem("بشنو این نی چون شکایت می‌کند\nاز جدایی‌ها حکایت می‌کند").metres
 ```
 
-Measured on 2,000 held-out Ganjoor poems (32,084 hemistichs), against
-Ganjoor's own metre labels (snapshot 2026-08-03; a fixed fifth of the poems is
-held out by id):
+Tested on 2,000 held-out Ganjoor poems (32,084 hemistichs) against Ganjoor's
+metre labels. The held-out poems are a fixed fifth, chosen by poem id.
 
-| | rules alone | with the weight lexicon |
+| | rules only | with the weight lexicon |
 |---|---:|---:|
-| hemistichs whose gold metre is admitted | 99.2% | 95.7% |
-| metres admitted per hemistich | 3.07 | 1.80 |
-| poems scanned to exactly the gold metre | 78.9% | 93.5% |
-| hemistichs abstained on | 0.05% | 0.05% |
+| gold metre among the answers | 99.2% | 95.7% |
+| metres per hemistich | 3.07 | 1.80 |
+| poem gets exactly the gold metre | 78.9% | 93.5% |
+| abstained | 0.05% | 0.05% |
 
-The weight lexicon (`data/weights.tsv`) records the syllable weights each word
-took under its poem's metre label, from the development poems only. It is
-supervised; the rules-alone column is not.
+The weight lexicon (`data/weights.tsv`) is learned from the labels of the
+other four fifths, so that column is supervised. The rules-only column isn't.
 
-Of the 513 hemistichs Thiesen scans in *A Manual of Classical Persian Prosody*
-(1982), the scanner can produce his exact syllable weights for 494
-(`data/readings-thiesen.tsv`).
+Thiesen's *Manual of Classical Persian Prosody* scans 513 hemistichs; the
+scanner reaches his exact weights for 494 of them.
 
-Reproduce: `ghazal-nlp ganjoor <snapshot> > poems.jsonl`, then
-`ghazal-nlp aruz-eval poems.jsonl [--no-lexicon] [--stripped]`.
-`ghazal-nlp aruz-derive poems.jsonl` rebuilds `metres.tsv` and `weights.tsv`.
+```sh
+ghazal-nlp ganjoor <snapshot> > poems.jsonl
+ghazal-nlp aruz-eval poems.jsonl [--no-lexicon] [--stripped]
+ghazal-nlp aruz-derive poems.jsonl   # rebuilds metres.tsv and weights.tsv
+```
 
 ### `verb`: verb analysis and generation
 
-Every reading of a verb token, from the stems of 251 verbs and 94 attested
-separable-preverb pairs (بر، در، باز، وا، فرو، سر، فرا): tense, aspect, mood,
-person, number, polarity, participles, perfects and the imperfective perfect,
-each naming the rules that built it. An unknown stem abstains. `constructions`
-reads two-token tenses (رفته بود، خواهد رفت، گفته شد) without changing the
-token readings, and `conjugate` generates any cell of the paradigm.
+Every reading of a verb token: tense, aspect, mood, person, number, polarity,
+participles and perfects. It knows 251 verbs and 94 separable preverb pairs
+(بر، در، باز، وا، فرو، سر، فرا), and abstains on a stem it doesn't know.
+`constructions` reads two-word tenses (رفته بود، خواهد رفت، گفته شد), and
+`conjugate` builds any form.
 
 ```python
 from ghazal_nlp import verb
@@ -69,7 +68,7 @@ from ghazal_nlp import verb
 verb.analyzer().conjugate("برداشتن", mood="imperative", person=2)  # بردار
 ```
 
-Measured on every VERB and AUX word of the UD Persian treebanks:
+Tested on every VERB and AUX word in the UD Persian treebanks:
 
 | | Seraji | PerDT | iPerUDT (informal) |
 |---|---:|---:|---:|
@@ -77,44 +76,47 @@ Measured on every VERB and AUX word of the UD Persian treebanks:
 | analysed | 82.2% | 89.0% | 55.4% |
 | features agree, when analysed | 99.3% | 98.8% | 97.8% |
 | readings per analysed verb | 1.14 | 1.14 | 1.13 |
-| می‌ and نمی‌ words analysed | 99.2% | 98.9% | 70.3% |
+| می‌ and نمی‌ forms analysed | 99.2% | 98.9% | 70.3% |
 
-Most unanalysed verbs are the copula است and colloquial forms (میشه، داره).
-The treebanks' conventions differ from each other and from the analyser's
-(Seraji lemmatises passive شد as کرد; the future auxiliary carries Tense=Fut),
-so features and lemmas are scored apart, by the rule stated in `verb_eval.py`.
-Reproduce: `ghazal-nlp verb-eval <treebank>/*.conllu`.
+Most of what's left is the copula است and colloquial forms (میشه، داره). The
+treebanks don't agree with each other on lemmas and some features, so lemmas
+and features are scored separately; `verb_eval.py` has the exact rule.
+
+```sh
+ghazal-nlp verb-eval <treebank>/*.conllu
+```
 
 ### `vowels`: the vowels editors write
 
-Persian leaves short vowels unwritten, but Ganjoor's editors mark many of
-them. The lexicon groups every marked spelling of a consonant skeleton into
-readings: two spellings are two readings only when they put different vowels
-on the same letter. Marks on the last letter (the ezāfe, an Arabic case ending,
-a pausal sukun) are split off as syntax. A skeleton nobody marked is absent,
-which means unknown, not unambiguous.
+Ganjoor's editors mark short vowels on the words they think need them. This
+lexicon groups every marked spelling of a word into readings: two spellings
+are different readings only if they put different vowels on the same letter.
+Marks on the last letter (ezāfe, Arabic case endings) are split off. A word
+nobody marked isn't in the lexicon, so missing means unknown, not unambiguous.
 
 ```python
 from ghazal_nlp import vowels
 [(r.form, r.count) for r in vowels.lexicon().lookup("گل").readings]  # گِل 610, گُل 371, گَل 5
 ```
 
-From the whole Ganjoor snapshot: 30,259 skeletons have a reading, 27,702 of
-them one and 2,557 more than one (1,006 with two readings attested at least
-twice each). Over Ganjoor's 20.1M running tokens, 46.5% have an ambiguous
-skeleton, 35.2% a settled one and 18.3% one nobody marked. Counts are of marked
-spellings: editors mark where a word is hard, so they say how a word is read
-when someone bothered to write it down, not how often each reading occurs.
-`data/vowels-review.tsv` lists every skeleton with more than one reading, by
-reason. Reproduce: `ghazal-nlp vowels-derive poems.jsonl`.
+Over all of Ganjoor: 30,259 words have a reading, 2,557 of them more than one.
+Of 20.1M running words, 46.5% have more than one reading, 35.2% have one, and
+18.3% were never marked. The counts are of marked spellings, so they show how
+a word is read where an editor thought it was worth marking, not how often
+each reading occurs. `data/vowels-review.tsv` lists the words with more than
+one reading.
+
+```sh
+ghazal-nlp vowels-derive poems.jsonl
+```
 
 ### `ezafe`: the ezāfe after a silent ه
 
-`sites` finds every word ending in a silent ه followed by another word, records
-how the junction is written (هٔ، ۀ، ه‌ی، هی، ه ی، or nothing), and removes only
-that mark. Two classifiers read only the neutralised text: `written` (is a
-written mark an ezāfe, or an old spelling of ‌ای?) and `junction` (does an
-unmarked junction carry one?).
+`sites` finds every word ending in a silent ه that's followed by another word,
+records how the junction is written (هٔ، ۀ، ه‌ی، هی، ه ی or nothing), and
+removes just that mark. Two classifiers then look at the unmarked text:
+`written` decides whether a written mark is an ezāfe or an old spelling of ‌ای,
+and `junction` decides whether an unmarked junction has an ezāfe.
 
 ```python
 from ghazal_nlp import ezafe
@@ -122,80 +124,102 @@ for site in ezafe.sites({"text": "نامه را نوشتم و خانه زیبا 
     print(site["head"], ezafe.junction(site))
 ```
 
-Measured against Ali Julaee Rad's rulings on development sites from Wikipedia,
-Wikisource, books and Ganjoor (`data/ezafe-*-dev.jsonl`). The blind ruling was
-made with the mark hidden; the revised one after it was shown and the case
-discussed.
+Tested by me on sites from Wikipedia, Wikisource, books and Ganjoor
+(`data/ezafe-*-dev.jsonl`):
 
-| | sites | blind | revised |
-|---|---:|---:|---:|
-| `written`: is the written mark an ezāfe | 124 | 118 / 123 | 122 / 124 |
-| `junction`: is there an ezāfe | 176 | 85.6% | 84.0% |
+| | sites | agree |
+|---|---:|---:|
+| `written` | 124 | 122 (98%) |
+| `junction` | 175 | 147 (84%) |
 
-The development rulings are the ones the rules were written against, so these
-are development numbers. `junction` overcalls the ezāfe on unmarked text (24
-of its 28 revised errors), because without a noun and adjective lexicon any
-word it cannot place counts as content. Reproduce: `ghazal-nlp ezafe-eval`.
+The rules were written while looking at these sites, so treat these as
+development numbers. `junction` mostly errs by finding an ezāfe that isn't
+there, since without a noun and adjective lexicon it treats any word it can't
+place as a noun.
 
-### `orthography`: the Academy's spelling rules, cited
+```sh
+ghazal-nlp ezafe-eval
+```
 
-The rules of the Academy's دستور خطّ فارسی as records (`rules/*.toml`): each
-cites its page and clause, declares the registers it holds in, and ships
-correct Persian it must not flag and wrong Persian it must flag. A rule that
-fails its own examples does not load. Findings point into the text as written,
-and a case a rule cannot decide comes back as an abstention with its reason:
-a ZWNJ before ای is only suggested once the word's final ه is proven silent.
+### `orthography`: spelling rules
+
+Two styles. `academy` is the Persian Academy's دستور خطّ فارسی, each rule
+citing its page. `ghazal` is my house style: I treat the Academy as evidence,
+not authority. It adopts the Academy rules careful writers actually follow,
+and where they don't, it goes with what careful contemporary writing does.
+
+Every rule is a TOML record (`rules/`) with the registers it applies to,
+correct examples it must not flag and wrong ones it must. A rule that fails
+its own examples doesn't load. When a rule can't decide, it abstains and
+says why (a ZWNJ before ای is only suggested once the word's final ه is known
+to be silent). In `ghazal`, a finding is either a `violation` (something no
+careful writer does: Arabic ي, a full space before ها) or `house` (both
+spellings are fine, here's the house one).
 
 ```python
 from ghazal_nlp import orthography
-for f in orthography.rulebase().check("کتاب ها را بزرگتر می نویسم").findings:
-    print(f.rule_id, f.text, "→", f.suggestion, f.citation)
+for f in orthography.rulebase("ghazal").check("آنها کتاب ها را میخوانند").findings:
+    print(f.rule_id, f.severity, f.text, "→", f.suggestion)
 orthography.is_silent_he("خانه"), orthography.is_silent_he("راه")  # True, False
 ```
 
-45 rules are recorded, 34 have a detector, and 33 run (31 active, and 2
-contested, where the standard and current usage disagree and the finding says
-so). The silent-ه inventory (`data/orthography-silent-he.tsv`) holds 1,269
-words, each decided by how its own spellings treat the ه (خانه‌ای against
-گرهی). Reproduce: `ghazal-nlp verify`, `ghazal-nlp rules`.
+Where the two styles differ:
+
+| | `academy` | `ghazal` |
+|---|---|---|
+| ezāfe after silent ه | خانهٔ / خانۀ; خانه‌ی is wrong | خانه‌ی; خانهٔ and خانۀ are fine |
+| plural and comparative | ZWNJ, joined allowed | ZWNJ (house); joined is fine |
+| compounds (آنها، این‌طور، هیچ‌کدام) | its printed lists | what careful writers write, pair by pair (`data/ghazal-house-forms.tsv`) |
+| tanvin (واقعاً) | required | left as written |
+| preferred spellings (اطاق/اتاق) | the Academy's pick | both fine |
+| می before a verb | ZWNJ; spaced form only | ZWNJ; spaced or joined, checked by `verb` |
+| digits, «», …, Latin , ; ? | not covered | Persian digits, « », …, ، ؛ ؟ |
+
+The silent-ه list (`data/orthography-silent-he.tsv`, 1,253 words) comes from
+how each word's own spellings treat the ه (خانه‌ای vs گرهی).
+
+```sh
+ghazal-nlp check "آنها کتاب ها را میخوانند"
+ghazal-nlp check --style academy "آنها کتاب ها را میخوانند"
+ghazal-nlp rules [--style academy]
+ghazal-nlp verify
+```
 
 ### `arabic`: Arabic passages inside Persian
 
-A conservative detector for Arabic syntax inside Persian text: a shared word, a
-name or a ة decides nothing, Persian words bound the spans, and finding no span
-is an abstention, not a verdict. A second, exact path matches Quran wording
-against copies of the text the caller supplies (Tanzil).
+Finds Arabic passages inside Persian text, conservatively. A shared word, a
+name or a ة isn't enough, Persian words end a span, and finding nothing means
+"don't know", not "no Arabic". A second, exact matcher finds Quran wording,
+given a copy of the text (Tanzil format).
 
-On a fresh sample of Persian corpus lines, judged by a model rather than a
-person: 44 of 50 detected spans are Arabic (88%; 95% interval 76–94%), no
-line without Arabic was flagged, and the detector finds 52% of the lines that
-contain Arabic (weighted). The Quran path is also 44 of 50, and finds 29%.
-Reproduce: `ghazal-nlp arabic`.
+```sh
+ghazal-nlp arabic "چنانکه گفته‌اند الحمد لله رب العالمین و ..."
+```
 
 ## Data
 
-The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0, and each file's
-header says what it was derived from. Ganjoor and the treebanks are read for
-measurement and are not shipped.
+The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0; each file's
+header says where it comes from. Ganjoor and the treebanks are only read for
+testing and aren't included.
 
 ## References
 
-What the tools are built from and measured on:
+What the tools are built from and tested on:
 
 - Ganjoor: [ganjoor.net](https://ganjoor.net), its [API](https://api.ganjoor.net) and [source](https://github.com/ganjoor). The poems, the editors' marks and the metre labels behind `aruz`, `vowels` and `ezafe`.
 - Finn Thiesen, *A Manual of Classical Persian Prosody, with Chapters on Urdu, Karakhanidic and Ottoman Prosody*. Wiesbaden: Harrassowitz, 1982. ISBN 3-447-02104-7. The source of `readings-thiesen.tsv`, and of the است contraction, the robāʿī family and the دوری caesura in `aruz`.
 - امید طبیب‌زاده (به کوشش)، *وزن شعر فارسی از دیروز تا امروز* (مجموعهٔ سخنرانی‌های نخستین هم‌اندیشی وزن شعر فارسی و اشعار ایرانی در انجمن زبان‌شناسی ایران، ۹ و ۱۰ اردیبهشت ۱۳۸۹). تهران: فرهنگستان زبان و ادب فارسی، نشر آثار، ۱۳۹۰. ISBN 978-600-6143-12-5. Najafi's «دایره‌ای با ۱۸۰ وزن» (one metre is what can co-occur in one poem; the دوری halves), Shamisa on ابدال in the first foot, and Samiʿi Gilani's table of Saʿdī's metres, used to check Ganjoor's labels.
 - John Mace, *Persian Grammar: For Reference and Revision*. London: RoutledgeCurzon, 2003. Appendix I, the irregular present stems behind `verb-stems.tsv`.
-- فرهنگستان زبان و ادب فارسی، *دستور خطّ فارسی*، ویراست جدید، ۱۴۰۱ ([PDF](https://apll.ir/wp-content/uploads/2023/07/Dastour-e-Khat-17.04.1402.pdf)). The orthography rules, and the silent-ه spellings (pp. 46–47) and stem changes after ب، ن and می (pp. 38–39).
-- [لغت‌نامهٔ دهخدا](https://dehkhoda.ut.ac.ir), consulted on doubtful verbs (اندودن، فراختن).
+- فرهنگستان زبان و ادب فارسی، *دستور خطّ فارسی*، ویراست جدید، ۱۴۰۱ ([PDF](https://apll.ir/wp-content/uploads/2023/07/Dastour-e-Khat-17.04.1402.pdf)). The `academy` rules, the silent-ه spellings (pp. 46–47) and the stem changes after ب، ن and می (pp. 38–39).
+- [لغت‌نامهٔ دهخدا](https://dehkhoda.ut.ac.ir), for doubtful verbs (اندودن، فراختن).
 - [UD Persian Seraji](https://github.com/UniversalDependencies/UD_Persian-Seraji): Mojgan Seraji, Filip Ginter and Joakim Nivre, [Universal Dependencies for Persian](https://aclanthology.org/L16-1374/), LREC 2016.
 - [UD Persian PerDT](https://github.com/UniversalDependencies/UD_Persian-PerDT): Mohammad Sadegh Rasooli et al., [The Persian Dependency Treebank Made Universal](https://arxiv.org/abs/2009.10205), 2020.
 - [iPerUDT](https://github.com/royakabiri/iPerUDT): Roya Kabiri, Simin Karimi and Mihai Surdeanu, [Informal Persian Universal Dependency Treebank](https://aclanthology.org/2022.lrec-1.766/), LREC 2022.
 - Charles Elkan and Keith Noto, [Learning Classifiers from Only Positive and Unlabeled Data](https://cseweb.ucsd.edu/~elkan/posonly.pdf), KDD 2008. The learned ezāfe classifier on the `dev` branch.
 
-Other Persian tools and data we found useful:
+Other Persian tools and data I found useful:
 
-- [Hazm](https://github.com/roshan-research/hazm), [Parsivar](https://github.com/ICTRC/Parsivar), [DadmaTools](https://github.com/Dadmatech/DadmaTools) and [Stanza](https://github.com/stanfordnlp/stanza): normalisation, tokenisation, tagging and parsing pipelines.
+- [Hazm](https://github.com/roshan-research/hazm), [Parsivar](https://github.com/ICTRC/Parsivar), [DadmaTools](https://github.com/Dadmatech/DadmaTools) and [Stanza](https://github.com/stanfordnlp/stanza): normalisation, tokenisation, tagging and parsing.
 - [Perstem](https://github.com/jonsafari/perstem) and [Persian-Morphology](https://github.com/omidrohanian/Persian-Morphology): a stemmer and a two-level morphology in foma.
 - [PARSEME shared task data](https://gitlab.com/parseme/sharedtask-data), including Persian multiword expressions.
 - [ParsMap](https://huggingface.co/datasets/sbunlp/ParsMap): formal and informal Persian pairs.

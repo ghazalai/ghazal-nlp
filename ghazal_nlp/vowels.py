@@ -117,9 +117,6 @@ def split_terminal(form: str) -> tuple[str, str]:
     return _render(parsed), terminal
 
 
-# --- readings -----------------------------------------------------------------
-
-
 @dataclass(frozen=True, slots=True)
 class Reading:
     form: str
@@ -225,9 +222,6 @@ def build_lexicon(counts: dict[str, int]) -> Lexicon:
     return Lexicon({k: Entry(k, readings_of(f), marked[k], total[k], ezafe[k]) for k, f in forms.items()})
 
 
-# --- measurement --------------------------------------------------------------
-
-
 def measure(counts: dict[str, int], lex: Lexicon, min_evidence: int = 1) -> dict:
     """Running tokens whose skeleton is ambiguous, settled, or never marked."""
     ambiguous_keys = {e.skeleton for e in lex.ambiguous(min_evidence)}
@@ -295,9 +289,6 @@ def review_queue(lex: Lexicon) -> list[tuple[str, str, int, tuple[Reading, ...]]
             reason = "hapax_reading" if minority == 1 else "rare_reading" if minority < 5 else "attested_homograph"
         items.append((e.skeleton, reason, minority, e.readings))
     return sorted(items, key=lambda item: (-item[2], item[0]))
-
-
-# --- the build ----------------------------------------------------------------
 
 
 def derive(gold: Path):

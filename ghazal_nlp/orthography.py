@@ -1,12 +1,10 @@
-"""Persian orthography as cited rules: each rule a record from the Academy
-standard (دستور خطّ فارسی) with its page and its own examples, compiled into a
-check over the text as written.
+"""Persian spelling rules, checked over the text as written.
 
-A rule cites a source and page, ships correct Persian it must not flag and wrong
-Persian it must flag, declares the registers it holds in, and does not load if it
-fails its own examples. A case a rule cannot decide is returned as an abstention
-with a reason. Findings point into the original text, so nothing is normalized
-first.
+Two styles: ``academy``, the Academy's دستور خطّ فارسی with its pages, and
+``ghazal``, the house style, which adopts the Academy rules careful writers
+follow and has its own where they don't. A rule ships correct Persian it must
+not flag and wrong Persian it must flag, and doesn't load if it fails them. A
+case a rule can't decide comes back as an abstention with a reason.
 """
 
 from __future__ import annotations
@@ -19,7 +17,9 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Iterable, Iterator, Sequence
 
-RULEBASE_VERSION = "0.1.0"
+from . import verb
+
+RULEBASE_VERSION = "0.2.0"
 RULES = Path(__file__).parent / "rules"
 DATA = Path(__file__).parent / "data"
 
@@ -33,23 +33,30 @@ SPACES = re.compile(r"^[ \t\xa0]+$")
 EDGE_PUNCTUATION = "،؛؟؍؞٪٫٬٭۔"
 # Letters that do not join the next one: after them a compound needs no ZWNJ (p. 23).
 NON_JOINING = frozenset("اآأإدذرزژوؤءةى")
+# A line in another Arabic-script language: a letter Persian lacks, or a Kurdish spelling.
+OTHER_SCRIPT = re.compile(r"[ڵڕۆێڤۊٹڈڑںےۓټډړږښګڼېڻڦڄڃڇڍڊڌڎڏۈۋ]|(?<![^\s«(\"'])ئ|وو|یەک|ەکان|ەکە|(?<!\S)لە(?!\S)")
+ARABIC_LETTER = re.compile(r"[\u0621-\u064a\u066e-\u06d3\u06d5]")
+LATIN_LETTER = re.compile(r"[A-Za-z]")
+LINES = {
+    "persian_script": lambda line: not OTHER_SCRIPT.search(line),
+    "persian": lambda line: len(ARABIC_LETTER.findall(line)) > len(LATIN_LETTER.findall(line)),
+}
 
 LAYERS = frozenset({"orthography", "phonology", "prosody", "morphology", "syntax", "lexicon", "discourse"})
 STATUSES = frozenset({"proposed", "active", "contested", "retired"})
+STYLES = ("ghazal", "academy")
+ACADEMY_POSITIONS = frozenset({"right", "wrong", "either", "unspecified", "varies"})
 KINDS = frozenset({"prescriptive", "descriptive", "contested"})
 REGISTERS = frozenset({"formal_written", "colloquial", "verse", "classical", "technical"})
 RUNNING = frozenset({"active", "contested"})
 CONFIDENCE = {"low": 0, "medium": 1, "high": 2}
 
 
-# --- the silent ه -------------------------------------------------------------
-
-
 @lru_cache(maxsize=1)
 def silent_he_inventory() -> frozenset[str]:
     """The words proven to end in a silent ه."""
     lines = (DATA / "orthography-silent-he.tsv").read_text(encoding="utf-8").splitlines()
-    return frozenset(line.split("\t")[0] for line in lines if line.strip() and not line.startswith("#"))
+    return frozenset(line.split("\t")[0].replace(ZWNJ, "") for line in lines if line.strip() and not line.startswith("#"))
 
 
 def is_silent_he(word: str) -> bool | None:
@@ -64,9 +71,6 @@ def is_silent_he(word: str) -> bool | None:
     if bare.endswith("اه"):
         return False
     return True if bare in silent_he_inventory() else None
-
-
-# --- results ------------------------------------------------------------------
 
 
 @dataclass(frozen=True, slots=True)
@@ -109,9 +113,6 @@ class Abstention:
     text: str
 
 
-# --- detectors ----------------------------------------------------------------
-
-
 @dataclass(frozen=True, slots=True)
 class AffixZwnj:
     """A prefix or suffix bound to its host with ZWNJ, written instead with a
@@ -128,6 +129,7 @@ class AffixZwnj:
     solid_exceptions: frozenset[str] = frozenset()
     lexical_exceptions: frozenset[str] = frozenset()
     require_host_in: frozenset[str] | None = None
+    host_exceptions: frozenset[str] = frozenset()
     free_form: bool = False
     min_host: int = 3
     space_severity: str = "violation"
@@ -157,6 +159,8 @@ class AffixZwnj:
                 continue
             host = tokens[j]
             if not SPACES.match(text[host.end:token.start] if suffix else text[token.end:host.start]):
+                continue
+            if host.bare in self.host_exceptions:
                 continue
             span = (min(host.start, token.start), max(host.end, token.end))
             if not PERSIAN.match(host.text) or len(host.bare) < self.min_host:
@@ -201,35 +205,80 @@ class AffixZwnj:
 
 @dataclass(frozen=True, slots=True)
 class Pattern:
-    """A regex, for what is decidable from characters alone; ``repair`` is a
-    ``re.sub`` template."""
+    """A regex, for what is decidable from characters alone. ``repair`` is a
+    ``re.sub`` template, or ``translate`` maps characters of the match;
+    ``lines`` keeps only the lines a ``LINES`` test accepts."""
 
     rule_id: str
     layer: str
     pattern: str
     kind: str = "pattern"
     repair: str | None = None
+    translate: dict | None = None
+    lines: str | None = None
     severity: str = "violation"
     confidence: str = "high"
     note: str | None = None
 
+    def __post_init__(self):
+        if self.lines is not None and self.lines not in LINES:
+            raise TypeError(f"unknown lines test {self.lines!r}")
+
+    def _suggest(self, m: re.Match) -> str | None:
+        if self.translate is not None:
+            return m.group().translate(str.maketrans(self.translate))
+        return m.expand(self.repair) if self.repair is not None else None
+
     def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding]:
-        for m in re.finditer(self.pattern, text):
-            yield Finding(self.rule_id, self.layer, self.kind, m.span(), m.group(),
-                          m.expand(self.repair) if self.repair is not None else None,
-                          self.severity, self.confidence, note=self.note)
+        start = 0
+        for line in text.split("\n") if self.lines else [text]:
+            if not self.lines or LINES[self.lines](line):
+                for m in re.finditer(self.pattern, line):
+                    yield Finding(self.rule_id, self.layer, self.kind, (start + m.start(), start + m.end()), m.group(),
+                                  self._suggest(m), self.severity, self.confidence, note=self.note)
+            start += len(line) + 1
+
+
+SPELLINGS = {"spaced": " ", "zwnj": ZWNJ, "solid": ""}
+
+
+def _spell(first: str, second: str, form: str) -> str:
+    if form == "zwnj" and first[-1] in NON_JOINING:
+        form = "solid"
+    return first + SPELLINGS[form] + second
 
 
 @lru_cache(maxsize=None)
 def closed_list(name: str) -> dict[str, str]:
-    """A ``wrong<TAB>right`` table in ``data/``."""
+    """A ``wrong<TAB>right`` table in ``data/``, or a pair table: first word,
+    second word, the house spelling and the other spellings (spaced, zwnj, solid)."""
     table = {}
     for line in (DATA / name).read_text(encoding="utf-8").splitlines():
-        line = line.split("#", 1)[0].strip()
-        if line:
-            wrong, _, right = line.partition("\t")
-            table[wrong.strip()] = right.strip()
+        if line.startswith("#") or not line.strip():
+            continue
+        cells = [c.strip() for c in line.split("\t")]
+        if len(cells) == 4 and cells[2] in SPELLINGS:
+            first, second, house, others = cells
+            right = _spell(first, second, house)
+            for other in others.split(","):
+                if (wrong := _spell(first, second, other)) != right:
+                    table.setdefault(wrong, right)
+        else:
+            table[cells[0]] = cells[1]
     return table
+
+
+@lru_cache(maxsize=None)
+def _index(file, entries, abstain_on) -> dict[str, list[tuple[tuple[str, ...], str | None]]]:
+    table: dict[str, str | None] = {**(closed_list(file) if file else {}), **dict(entries)}
+    table.update(dict.fromkeys(abstain_on))
+    index: dict[str, list] = {}
+    for key, repair in table.items():
+        parts = tuple(key.split())
+        index.setdefault(parts[0], []).append((parts, repair))
+    for group in index.values():
+        group.sort(key=lambda item: len(item[0]), reverse=True)
+    return index
 
 
 def _core(token: Token) -> tuple[str, int, int]:
@@ -251,21 +300,14 @@ class ClosedList:
     file: str | None = None
     abstain_on: frozenset[str] = frozenset()
     abstain_reason: str = "the standard makes this one sense-dependent"
+    abstain_before: str | None = None
     kind: str = "non_standard_form"
     severity: str = "violation"
     confidence: str = "high"
     note: str | None = None
 
     def _candidates(self) -> dict[str, list[tuple[tuple[str, ...], str | None]]]:
-        table: dict[str, str | None] = {**(closed_list(self.file) if self.file else {}), **self.entries}
-        table.update(dict.fromkeys(self.abstain_on))
-        index: dict[str, list] = {}
-        for key, repair in table.items():
-            parts = tuple(key.split())
-            index.setdefault(parts[0], []).append((parts, repair))
-        for group in index.values():
-            group.sort(key=lambda item: len(item[0]), reverse=True)
-        return index
+        return _index(self.file, tuple(self.entries.items()), self.abstain_on)
 
     def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding | Abstention]:
         candidates = self._candidates()
@@ -280,7 +322,9 @@ class ClosedList:
                     continue
                 span = (cores[i][1], cores[last][2])
                 found = text[span[0]:span[1]]
-                if repair is None:
+                if self.abstain_before and last + 1 < len(tokens) and cores[last + 1][0].startswith(self.abstain_before):
+                    yield Abstention(self.rule_id, f"before {self.abstain_before}", span, found)
+                elif repair is None:
                     yield Abstention(self.rule_id, self.abstain_reason, span, found)
                 else:
                     yield Finding(self.rule_id, self.layer, self.kind, span, found, repair,
@@ -389,11 +433,47 @@ class Compound:
             )
 
 
+@dataclass(frozen=True, slots=True)
+class VerbPrefix:
+    """می or نمی written spaced or solid before a verb. The verb analyser
+    decides, so میدان and میوه are left alone; ``exceptions`` are solid forms that
+    are also words (میدانی)."""
+
+    rule_id: str
+    layer: str
+    prefixes: tuple[str, ...] = ("نمی", "می")
+    exceptions: frozenset[str] | str = frozenset()
+    kind: str = "verb_prefix_without_zwnj"
+    severity: str = "violation"
+    confidence: str = "high"
+    note: str | None = None
+
+    def _skip(self) -> frozenset[str]:
+        if isinstance(self.exceptions, str):
+            return frozenset(closed_list(self.exceptions))
+        return self.exceptions
+
+    def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding]:
+        skip = self._skip()
+        for i, token in enumerate(tokens):
+            if token.text in self.prefixes and i + 1 < len(tokens) and SPACES.match(text[token.end:tokens[i + 1].start]):
+                body, span = tokens[i + 1].text, (token.start, tokens[i + 1].end)
+                prefix = token.text
+            elif ZWNJ not in token.text and token.text not in skip:
+                prefix = next((p for p in self.prefixes if token.text.startswith(p)), None)
+                if prefix is None:
+                    continue
+                body, span = token.text[len(prefix):], (token.start, token.end)
+            else:
+                continue
+            joined = prefix + ZWNJ + body
+            if len(body) >= 2 and PERSIAN.match(body) and verb.analyzer().analyze(joined).readings:
+                yield Finding(self.rule_id, self.layer, self.kind, span, text[span[0]:span[1]], joined,
+                              self.severity, self.confidence, note=self.note)
+
+
 DETECTORS = {"affix_zwnj": AffixZwnj, "closed_list": ClosedList, "compound": Compound,
-             "enclitic": Enclitic, "pattern": Pattern}
-
-
-# --- rules --------------------------------------------------------------------
+             "enclitic": Enclitic, "pattern": Pattern, "verb_prefix": VerbPrefix}
 
 
 class RuleError(ValueError):
@@ -403,7 +483,8 @@ class RuleError(ValueError):
 @dataclass(frozen=True, slots=True)
 class Source:
     work: str
-    page: str
+    page: str | None = None
+    evidence: str | None = None
     publisher: str | None = None
     edition: str | None = None
     isbn: str | None = None
@@ -412,7 +493,7 @@ class Source:
     sha256: str | None = None
 
     def citation(self) -> str:
-        parts = [self.work, self.publisher, self.edition, f"ص {self.page}", self.locator]
+        parts = [self.work, self.publisher, self.edition, self.page and f"ص {self.page}", self.locator]
         return "، ".join(p for p in parts if p)
 
 
@@ -439,6 +520,11 @@ class Rule:
     confidence: str = "high"
     notes: str | None = None
     disputes: tuple[dict[str, str], ...] = ()
+    academy: dict[str, str] | None = None
+
+    @property
+    def style(self) -> str:
+        return self.id.split(".")[0]
 
     @property
     def executable(self) -> bool:
@@ -515,10 +601,14 @@ def parse_rule(record: dict) -> Rule:
         raise RuleError(f"{rule_id}: scope.registers is required — an unscoped rule is false somewhere")
     if unknown := set(registers) - REGISTERS:
         raise RuleError(f"{rule_id}: unknown registers {sorted(unknown)}")
+    if rule_id.split(".")[0] not in STYLES:
+        raise RuleError(f"{rule_id}: an id starts with its style, one of {STYLES}")
     source = _require(record, "source", rule_id)
-    for key in ("work", "page"):
-        if not source.get(key):
-            raise RuleError(f"{rule_id}: source.{key} is required — no rule without a citation")
+    if not source.get("work") or not (source.get("page") or source.get("evidence")):
+        raise RuleError(f"{rule_id}: source.work and source.page or source.evidence are required")
+    academy = record.get("academy")
+    if rule_id.startswith("ghazal.") and (not academy or academy.get("position") not in ACADEMY_POSITIONS):
+        raise RuleError(f"{rule_id}: academy.position is required, one of {sorted(ACADEMY_POSITIONS)}")
     for key in ("title", "statement"):
         if not _require(record, key, rule_id).get("fa"):
             raise RuleError(f"{rule_id}: {key}.fa is required — the Persian is authoritative")
@@ -534,24 +624,27 @@ def parse_rule(record: dict) -> Rule:
         registers, Source(**{k: str(v) if k == "page" else v for k, v in source.items()}), ok, bad,
         _detector(spec, rule_id, record["layer"]) if spec else None,
         record.get("severity", "violation"), record.get("confidence", "high"), record.get("notes"),
-        tuple(record.get("disputes") or ()),
+        tuple(record.get("disputes") or ()), academy,
     )
 
 
-def load_rules(paths: Sequence[Path] | None = None) -> list[Rule]:
-    """Every rule in the packs, rejecting an id used twice."""
-    rules, seen = [], {}
+def load_rules(paths: Sequence[Path] | None = None) -> tuple[list[Rule], dict[str, tuple[str, ...]]]:
+    """Every rule in the packs, rejecting an id used twice, and the rules each
+    style adopts from another."""
+    rules, seen, adopts = [], {}, {}
     for path in sorted(paths) if paths is not None else sorted(RULES.glob("*.toml")):
-        for record in tomllib.loads(path.read_text(encoding="utf-8")).get("rule", []):
+        pack = tomllib.loads(path.read_text(encoding="utf-8"))
+        if pack.get("adopts"):
+            adopts[path.stem.split("-")[0]] = tuple(pack["adopts"])
+        for record in pack.get("rule", []):
             rule = parse_rule(record)
             if rule.id in seen:
                 raise RuleError(f"duplicate rule id {rule.id!r} in {path} and {seen[rule.id]}")
             seen[rule.id] = path
             rules.append(rule)
-    return rules
-
-
-# --- the rule base ------------------------------------------------------------
+    if missing := {a for ids in adopts.values() for a in ids} - seen.keys():
+        raise RuleError(f"adopted rules not found: {sorted(missing)}")
+    return rules, adopts
 
 
 @dataclass(frozen=True, slots=True)
@@ -568,8 +661,14 @@ class RuleBase:
     rules: list[Rule] = field(default_factory=list)
 
     @classmethod
-    def load(cls, paths: Sequence[Path] | None = None, *, verify: bool = True) -> RuleBase:
-        base = cls(load_rules(paths))
+    def load(cls, paths: Sequence[Path] | None = None, *, style: str | None = None, verify: bool = True) -> RuleBase:
+        """All rules, or one style's: its own and the ones it adopts."""
+        rules, adopts = load_rules(paths)
+        if style is not None:
+            if style not in STYLES:
+                raise ValueError(f"unknown style {style!r}, one of {STYLES}")
+            rules = [r for r in rules if r.style == style or r.id in adopts.get(style, ())]
+        base = cls(rules)
         if verify:
             base.verify()
         return base
@@ -607,6 +706,10 @@ class RuleBase:
             got, skipped = rule.scan(text)
             findings += [f for f in got if CONFIDENCE.get(f.confidence, 0) >= floor]
             abstentions += skipped
+        rank = {"violation": 0, "advisory": 1, "house": 2}
+        findings.sort(key=lambda f: (f.span, f.suggestion or "", rank.get(f.severity, 3)))
+        findings = [f for i, f in enumerate(findings)
+                    if not i or (f.span, f.suggestion) != (findings[i - 1].span, findings[i - 1].suggestion)]
         findings.sort(key=lambda f: (f.span[0], f.rule_id))
         abstentions.sort(key=lambda a: (a.span[0], a.rule_id))
         return Analysis(tuple(findings), tuple(abstentions), len(rules), tuple(registers))
@@ -635,7 +738,7 @@ class RuleBase:
         }
 
 
-@lru_cache(maxsize=1)
-def rulebase() -> RuleBase:
-    """The shipped packs, verified once."""
-    return RuleBase.load()
+@lru_cache(maxsize=None)
+def rulebase(style: str = "ghazal") -> RuleBase:
+    """One style's rules, verified once."""
+    return RuleBase.load(style=style)

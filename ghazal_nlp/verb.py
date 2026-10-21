@@ -268,9 +268,6 @@ def analyzer() -> Analyzer:
     return Analyzer()
 
 
-# --- two tokens ---------------------------------------------------------------
-
-
 @dataclass(frozen=True, slots=True)
 class Construction:
     """A possible two-token tense; adjectival participles and lexical شدن or

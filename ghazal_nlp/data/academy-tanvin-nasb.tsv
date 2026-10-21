@@ -1,16 +1,8 @@
-# تنوین نصب — دستور خطّ فارسی (ویراست جدید)، ص ۵۶.
-#
-# «آوردن تنوین، درصورتی‌که تلفّظ شود، در همهٔ متون الزامی است.»
-# Left column: the bare form (no tanvin). Right column: the form the
-# standard requires. The alef carries the tanvin, per rule 1 on that page.
-#
-# ابدا، اصلا and مطلقا are deliberately absent: footnote 1 on the same page
-# says those three may be read without the tanvin, so their bare form is not
-# an error. جدا, بنا and عرفا are absent because each is also an ordinary
-# Persian word that carries no tanvin at all.
-#
-# The first block is printed in the standard. The second applies the same
-# clause to common Arabic adverbs it does not print — see the rule's notes.
+# Words written with tanvin: دستور خطّ فارسی (ویراست جدید)، ص ۵۶.
+# bare	with tanvin
+# The first block is printed on p. 56; the second is common adverbs it doesn't list.
+# Left out: ابدا، اصلا، مطلقا (p. 56 allows them bare) and جدا، بنا، عرفا (also
+# ordinary Persian words).
 
 واقعا	واقعاً
 طبیعتا	طبیعتاً

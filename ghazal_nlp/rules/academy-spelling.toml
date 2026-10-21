@@ -1,0 +1,49 @@
+# Orthography: the Academy's preferred spelling for words written more than one way.
+#
+#   دستور خطّ فارسی (ویراست جدید)
+#   فرهنگستان زبان و ادب فارسی، نشر آثار، تهران، چاپ اول ۱۴۰۱
+#   ISBN 978-622-5305-22-9
+#   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
+#
+# The common-word index (pp. 73–81); the proper-name index (pp. 82–85) isn't included.
+
+[[rule]]
+id = "academy.preferred_spelling"
+layer = "orthography"
+title.fa = "املای مرجّح فرهنگستان برای واژه\u200cهای چنداملایی"
+title.en = "The Academy's preferred spelling for a multi-spelling word"
+statement.fa = """
+برخی کلمات در فارسی دو یا چند صورت املایی دارند. فرهنگستان برای هریک صورت مرجّح را در \
+«فهرست واژه\u200cهای عامّ دو یا چنداملایی» (صص ۷۳–۸۱) تعیین کرده است؛ ضوابط انتخاب، به \
+ترتیب اولویت، عبارت\u200cاند از املای رایج\u200cتر، ملاحظات تاریخی و پرهیز از افزایش \
+هم\u200cنگاشت\u200cها، و پرهیز از پیشنهاد صورت املایی غیرمتعارف.\
+"""
+statement.en = """
+An index of about 130 Persian words with two or more current spellings, each with the \
+one the Academy prefers — اتاق over اطاق, بلیت over بلیط, زغال over ذغال. Page 72 states \
+the three criteria the choice follows.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "73–81"
+source.locator = "«فهرست واژه\u200cهای عامّ دو یا چنداملایی»؛ ضوابط انتخاب در ص ۷۲"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.file = "academy-preferred-spellings.tsv"
+detector.kind = "dispreferred_spelling"
+detector.severity = "advisory"
+detector.confidence = "high"
+examples.ok = ["اتاق", "بلیت", "زغال", "طوفان", "آخر سال", "تراز مالی"]
+examples.violations = [
+  { text = "اطاق", expect = "اتاق" },
+  { text = "بلیط", expect = "بلیت" },
+  { text = "ذغال", expect = "زغال" },
+]
+severity = "advisory"
+notes = "Advisory: the book states a preference and doesn't call the other spelling wrong. The data file lists what's left out (both accepted, decided by meaning like آخر/آخور, or a ZWNJ the PDF doesn't show). Exact match, so اطاق\u200cها is missed. قدغن → غدغن really is what p. 78 prints."

@@ -40,8 +40,6 @@ def pattern_for_label(label: str) -> str | None:
     return "".join(feet) if feet and None not in feet else None
 
 
-# --- letters ------------------------------------------------------------------
-
 FOLD = str.maketrans("يىﻯكةۀئؤأإٱ", "یییکههءءءاا")
 STRIP = re.compile("[ً-ٰ٘ۖ-ۭـ‌-‏﻿]")
 WORD = re.compile(r"[^\s .,،؛؟!:;«»\"'()\[\]{}\-–—ـ/\\|*_+=]+")
@@ -170,9 +168,6 @@ def prepare(line: str, *, marks: Marks | None = None) -> Skeleton:
         raise ScriptError("empty_line")
     return Skeleton(tuple(chars), tuple(ids), tuple(initial), tuple(final), tuple(words),
                     tuple(letter_marks) if any(letter_marks) else ())
-
-
-# --- syllables ----------------------------------------------------------------
 
 
 @dataclass(frozen=True, slots=True)
@@ -421,8 +416,6 @@ def _codas(skel: Skeleton, kind: str, k: int, word: int, dev: int, devices: Devi
         yield WEIGHT[kind, 1], k, dev | TASHDID
 
 
-# --- patterns -----------------------------------------------------------------
-
 CAESURA = "|"
 
 # Doubled metres whose poets let words cross the half: دوری by their arkān only.
@@ -500,8 +493,6 @@ def _pattern_slots(weights: str, i: int, devices: Devices):
 def _slot_blocked(licence: int, depth: int, devices: Devices) -> bool:
     return licence == EBDAL and depth < 2 and not devices.ebdal_first_foot
 
-
-# --- the weight lexicon -------------------------------------------------------
 
 PINNED, UNDERDETERMINED, VARIABLE, CONFLICT = "pinned", "underdetermined", "variable", "conflict"
 
@@ -615,9 +606,6 @@ class WeightLexicon:
                     tuple((w.rsplit(":", 1)[0], int(w.rsplit(":", 1)[1])) for w in support.split("|") if w),
                 ))
         return cls(entries, provenance, **kwargs)
-
-
-# --- the scanner --------------------------------------------------------------
 
 
 @dataclass(frozen=True, slots=True)
@@ -824,8 +812,6 @@ def scanner(lexicon: bool = True) -> Scanner:
     """The shipped scanner; ``lexicon=False`` is the unsupervised one."""
     return Scanner(lexicon=WeightLexicon.load() if lexicon else None)
 
-
-# --- poems --------------------------------------------------------------------
 
 MAX_LINES = 40
 VOTE_MARGIN = 6  # a line votes for every metre within this many licences of its cheapest

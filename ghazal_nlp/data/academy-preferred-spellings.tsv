@@ -1,23 +1,8 @@
-# املای مرجّح فرهنگستان — دستور خطّ فارسی (ویراست جدید)، صص ۷۳–۸۱،
-# «فهرست واژه‌های عامّ دو یا چنداملایی».
-#
-# Left column: a spelling the standard lists as existing. Right column: the one
-# it marks مرجّح. Only rows where the standard names a single preferred form are
-# here; a row that prints both as correct (توفان/طوفان، نعنا/نعناع، سرشک/سرشگ،
-# دکمه/دگمه، سوگ/سوک، رتیل/رطیل، تبرزد/طبرزد، دایرةالمعارف/دائرةالمعارف،
-# باتون/باتوم، پیشخوان، بختنصر) is not an error either way and is absent.
-#
-# Also absent, on purpose, and this is the interesting exclusion: rows the
-# standard resolves *by sense*, where the rejected spelling is an ordinary word
-# in another meaning — آخر/آخور، تاق/طاق (سقف vs مقابل جفت)، تراز/طراز،
-# تاس/طاس، تایر/طایر، ختمی/خطمی، قرق/غرق، هیز/حیز، انتر/عنتر، آقا/آغا،
-# ارک/ارگ. Flagging those needs a sense the detector does not have.
-#
-# Rows whose preferred form contains a ZWNJ we cannot see in the source's text
-# layer (الم‌شنگه، طاس‌کباب، ترق‌وتوروق، قاروقور، لق‌لق، وق‌وق، نق‌نق،
-# قره‌قروت) are absent rather than guessed at: a repair must be exact.
-#
-# The proper-name index on pp. 82–85 is a separate list and is not extracted.
+# The Academy's preferred spellings: دستور خطّ فارسی (ویراست جدید)، صص ۷۳–۸۱.
+# other spelling	preferred
+# Left out: pairs where both spellings are correct (توفان/طوفان), pairs decided by
+# meaning (آخر/آخور، تاق/طاق), and pairs whose preferred form has a ZWNJ the PDF
+# doesn't show (الم‌شنگه).
 
 آروق	آروغ
 آزوقه	آذوقه

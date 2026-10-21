@@ -1,11 +1,5 @@
-# Arabic formulae used inside Persian. The detector drops a scored span that is
-# exactly one, the Quran index a match wholly inside one; a longer Arabic clause
-# around one is still reported.
-#
-# The first 26 were listed by hand. The last seven were added once their uses in
-# a development partition were read and some were found inside Persian (from 1 of
-# 10 for لا اله الا الله to 10 of 10 for حور عین). ما شاء الله was read and left
-# out: all ten uses audited were inside Arabic.
+# Arabic formulae used inside Persian (بسم الله، علیه السلام، …). A detected span
+# that is exactly one of these is dropped; a longer Arabic clause around it is kept.
 بسم الله
 بسم الله الرحمن الرحیم
 علیه السلام

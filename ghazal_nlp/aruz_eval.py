@@ -47,9 +47,6 @@ def load_gold(path: Path) -> list[GoldPoem]:
     return out
 
 
-# --- the inventory ------------------------------------------------------------
-
-
 def rubai_variants(pattern: str) -> list[str]:
     """The robāʿī family: the middle foot alternates –⏑⏑– with ⏑–⏑–, and any ⏑⏑
     may fuse into one long (Thiesen §§156, 255–256)."""
@@ -90,12 +87,6 @@ def write_inventory(entries, path: Path = DATA / "metres.tsv") -> None:
     rows = [f"{e.label}\t{e.pattern}\t{e.provenance}\t{e.poems}" for e in entries if e.pattern or e.provenance == "unexpanded"]
     path.write_text("\n".join(header + rows) + "\n", encoding="utf-8")
 
-
-# --- the weight lexicon -------------------------------------------------------
-#
-# The scanner run backwards: the label fixes the pattern, and the search reads
-# off what each word must have weighed. Intersected across occurrences, a word's
-# readings converge.
 
 ACCEPT = -1
 MAX_WORD_READINGS = 32
@@ -273,7 +264,8 @@ def classify(counter: dict[frozenset[str], int], max_weights: int, coverage: flo
 
 def derive_weights(poems, inventory: Inventory, devices: Devices = Devices(), *, max_lines: int = 24,
                    record_min: int = 2, max_weights: int = 6, coverage: float = 0.99):
-    """The weight lexicon from the development split only."""
+    """The weight lexicon from the development split only: the label fixes the
+    pattern, and the scanner reads off what each word must have weighed."""
     tries, stats, seen = {}, Counter(poems=0, lines=0, lines_used=0), {}
     for gold in poems:
         if gold.held_out:
@@ -330,9 +322,6 @@ def write_weights(entries, report: dict, path: Path = DATA / "weights.tsv") -> N
     rows = ["\t".join((e.word, e.status, "|".join(e.weights), str(e.occurrences), f"{e.agreement:.4f}",
                        "|".join(f"{w}:{c}" for w, c in e.support))) for e in entries]
     path.write_text("\n".join(header + rows) + "\n", encoding="utf-8")
-
-
-# --- evaluation ---------------------------------------------------------------
 
 
 def evaluate(poems, scanner: Scanner, *, split: str = "held_out", limit: int = 2000,
@@ -399,12 +388,6 @@ def evaluate(poems, scanner: Scanner, *, split: str = "held_out", limit: int = 2
                       for m, c in sorted(per_metre.items(), key=lambda kv: -kv[1].total())[:20]],
     }
 
-
-# --- readings -----------------------------------------------------------------
-#
-# A line can keep its metre through the wrong pronunciation, so the reading sets
-# score one level down: is a hand syllabification's weight sequence among those
-# the scanner reaches under the gold metre?
 
 SUPERHEAVY = "S"  # CV̄C or CVCC, counted – ⏑ or one –
 LONG_VOWELS, SHORT_VOWELS, LENGTHENED = set("âiu"), set("aeoĭŭ"), set("ēōā")
@@ -504,7 +487,8 @@ def load_readings(path: Path) -> list[dict]:
 
 
 def score_readings(rows, scanner: Scanner) -> dict:
-    """How many readings the scanner still reaches, and how many compete."""
+    """How many hand syllabifications the scanner still reaches under the gold
+    metre, and how many readings compete with them."""
     counted, admitted, sizes = 0, 0, []
     rows = [r for r in rows if not r["provenance"].startswith("excluded:")]
     for r in rows:

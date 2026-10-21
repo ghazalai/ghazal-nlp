@@ -34,7 +34,7 @@ PREPOSITIONS = frozenset("از به با در بر برای بدون بی تا �
 
 def inventory() -> dict[str, dict[str, int]]:
     rows = (orthography.DATA / "orthography-silent-he.tsv").read_text(encoding="utf-8").splitlines()
-    return {w: {"silent": int(s), "voiced": int(v), "bare": int(b)}
+    return {w.replace(ZWNJ, ""): {"silent": int(s), "voiced": int(v), "bare": int(b)}
             for w, s, v, b in (line.split("\t") for line in rows if line and not line.startswith("#"))}
 
 
@@ -114,9 +114,6 @@ def _parts(site: dict):
     return text, text[h0:h1], text[h1:n0], text[n0:n1], n1
 
 
-# --- a written mark -----------------------------------------------------------
-
-
 @dataclass(frozen=True, slots=True)
 class Reading:
     label: str
@@ -150,9 +147,6 @@ def written(site: dict, arm: str = "closed") -> Reading:
     if arm == "closed+verb" and any(r.verb_form != "participle" for r in readings(nxt).readings):
         return Reading("not_ezafe", "verb_reading")
     return Reading("ezafe", "default")
-
-
-# --- any junction -------------------------------------------------------------
 
 
 @lru_cache(maxsize=32768)
@@ -191,9 +185,6 @@ def junction(site: dict) -> Reading:
     if cls in ("pronoun", "participle_reading", "content_unknown"):
         return Reading("ezafe", cls)
     return Reading("abstain", "unknown")
-
-
-# --- scoring ------------------------------------------------------------------
 
 
 def score(rows, classify, target: str) -> dict:

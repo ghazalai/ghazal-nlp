@@ -1,10 +1,6 @@
-# Persian words that begin with ال, so ال in them is not the Arabic article.
-# word <TAB> lines
-#
-# Every ال-word seen in at least three clearly Persian lines (two or more Persian
-# function words, no Arabic cue) of a 5% development partition, 8,610 documents,
-# of a 2026 corpus of Ganjoor, Wikisource and Wikipedia. Evidence of Persian use,
-# not proof that a word is never Arabic. 306 words.
+# Persian words that start with ال, where ال isn't the Arabic article.
+# Each was seen in at least three clearly Persian lines of a 2026 corpus sample.
+# word	lines
 ال	8
 الآخر	7
 الآخرة	3

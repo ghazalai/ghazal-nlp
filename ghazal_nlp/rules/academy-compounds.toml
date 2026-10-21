@@ -1,26 +1,14 @@
-# Orthography — the fixed compounds the Academy standard settles by name.
+# Orthography: the fixed compounds the standard lists by name, pp. 34–36 and 69–71.
 #
 #   دستور خطّ فارسی (ویراست جدید)
 #   فرهنگستان زبان و ادب فارسی، نشر آثار، تهران، چاپ اول ۱۴۰۱
 #   ISBN 978-622-5305-22-9
 #   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
 #
-# Pages 34–36 and 69–71 of the standard are lists: *this word is written solid
-# with the word after it, that one with a half-space, and here are the six
-# exceptions.* Every rule in this pack is therefore a `closed_list` detector whose
-# entries are transcribed from the printed list and nothing else. Where the
-# standard prints an open-ended rule with two examples (که), the detector holds
-# the two examples and abstains on everything else — see the notes on each rule.
-#
-# ZWNJ (U+200C) is written \u200c throughout.
-#
-# Which separator each entry takes is not a choice: page 23 defines نیم‌فاصله
-# for a first part whose last letter connects (هیچ‌کس، این‌طور) and بی‌فاصله —
-# literally nothing — for one that cannot (هرکس، آنجا، ازنظر). Both appear here
-# and the difference is the standard's, not ours.
+# ZWNJ (U+200C) is written \u200c.
 
 [[rule]]
-id = "orthography.demonstrative_compounds"
+id = "academy.demonstrative_compounds"
 layer = "orthography"
 title.fa = "فاصله\u200cگذاری «این» و «آن» در ترکیب"
 title.en = "The demonstratives این and آن in fixed compounds"
@@ -63,16 +51,10 @@ examples.violations = [
   { text = "آن جا", expect = "آنجا" },
   { text = "آن چه", expect = "آنچه" },
 ]
-notes = """
-«این چه» is deliberately absent: only آنچه is in the standard's exception list, so «این \
-چه کاری است» is correct Persian and must not be flagged. «این که» and «آن که» abstain \
-instead of firing, because تبصرهٔ ۲ makes the repair depend on the reading — solid اینکه \
-as a plain conjunction, but این\u200cکه with a ZWNJ in the sense «این کسی که». The \
-detector cannot read a sense, so it says which clause it cannot apply and stops there.
-"""
+notes = "این چه isn't listed (only آنچه is), so «این چه کاری است» passes. این که and آن که abstain: the book joins them or uses a ZWNJ depending on sense."
 
 [[rule]]
-id = "orthography.har_lexicalised"
+id = "academy.har_lexicalised"
 layer = "orthography"
 title.fa = "ترکیب\u200cهای واژگانی\u200cشدهٔ «هر»"
 title.en = "The lexicalised compounds of هر are written solid"
@@ -116,17 +98,10 @@ examples.violations = [
   { text = "هر یک", expect = "هریک" },
   { text = "هر گونه", expect = "هرگونه" },
 ]
-notes = """
-«هر چند» abstains rather than fires, and it is the one entry that has to. هرچند is the \
-concessive *although*; هر چند is هر modifying a quantity — «هر چند سال یک بار». The \
-standard lists هرچند among the lexicalised forms without addressing the second reading, \
-so joining every occurrence would turn a correct sentence into a wrong one. Everything \
-else in the list is unambiguous. Measured over a 1.08M-word sample of a 2026 Persian \
-corpus: 488 spaced occurrences of these forms, of which 42 are the ambiguous «هر چند».
-"""
+notes = "هر چند abstains: it's either 'although' (هرچند) or 'every few' (هر چند سال)."
 
 [[rule]]
-id = "orthography.hamin_haman_lexicalised"
+id = "academy.hamin_haman_lexicalised"
 layer = "orthography"
 title.fa = "ترکیب\u200cهای واژگانی\u200cشدهٔ «همین» و «همان»"
 title.en = "The lexicalised compounds of همین and همان take a ZWNJ"
@@ -166,14 +141,10 @@ examples.violations = [
   { text = "همین که", expect = "همین\u200cکه" },
   { text = "همان جا", expect = "همان\u200cجا" },
 ]
-notes = """
-The list is closed and short, which is the whole reason this is executable. «همان کتاب» \
-and «همین روز» are correct with a full space and stay unflagged because the detector \
-only knows the eight printed forms.
-"""
+notes = "Only the eight listed forms; همان کتاب keeps its space."
 
 [[rule]]
-id = "orthography.hich_lexicalised"
+id = "academy.hich_lexicalised"
 layer = "orthography"
 title.fa = "ترکیب\u200cهای واژگانی\u200cشدهٔ «هیچ»"
 title.en = "The lexicalised compounds of هیچ take a ZWNJ"
@@ -209,14 +180,10 @@ examples.violations = [
   { text = "هیچ کس", expect = "هیچ\u200cکس" },
   { text = "هیچ یک", expect = "هیچ\u200cیک" },
 ]
-notes = """
-«هیچ چیز» is not in the standard's list, so it keeps its full space. That asymmetry — \
-هیچ\u200cکس joined, هیچ چیز separate — is exactly the kind of thing a rule base is for: \
-it is arbitrary, it is stated on a page, and nobody remembers it.
-"""
+notes = "هیچ چیز isn't listed, so it keeps its space."
 
 [[rule]]
-id = "orthography.ke_compound"
+id = "academy.ke_compound"
 layer = "orthography"
 title.fa = "نیم\u200cفاصلهٔ «که» در ترکیب"
 title.en = "که takes a ZWNJ when it compounds with the word before it"
@@ -253,17 +220,10 @@ examples.violations = [
   { text = "چنان که", expect = "چنان\u200cکه" },
   { text = "چون که", expect = "چون\u200cکه" },
 ]
-notes = """
-The standard's clause is open — *که in composition with the word before it* — and prints \
-two examples. The detector holds exactly those two, because the emphatic که in the same \
-section takes a full space after any word at all, so a general rule over «X که» would \
-flag ordinary Persian on every second line. Widening this list is a lexicon problem \
-(which X compound with که), and the lexicon is فرهنگ املایی خطّ فارسی, which we do not \
-have.
-"""
+notes = "Only the two printed examples, since the emphatic که takes a space after anything. Widening it needs فرهنگ املایی خطّ فارسی."
 
 [[rule]]
-id = "orthography.compound_conjunction"
+id = "academy.compound_conjunction"
 layer = "orthography"
 title.fa = "فاصله\u200cگذاری حروف ربط مرکب"
 title.en = "Compound conjunctions are written without a full space"
@@ -320,19 +280,10 @@ examples.violations = [
   { text = "با این که", expect = "بااینکه" },
   { text = "بنا بر این", expect = "بنابراین" },
 ]
-notes = """
-Each entry is the standard's own printed form; where a ZWNJ falls is decided by the \
-joining behaviour of the preceding letter (page 23), not by taste — ازآنجاکه has no \
-separator at all because ا and ز do not join forward, while درحالی\u200cکه needs one \
-because ی does. «به\u200cطوری که» and «به هر دلیل که» stay unflagged because the \
-standard exempts them explicitly, and the detector simply does not carry them. Measured \
-over a 1.08M-word sample of a 2026 Persian corpus these forms appear spaced 293 times \
-against roughly 100 joined — usage is genuinely split here, unlike the compound \
-prepositions.
-"""
+notes = "The separator follows the letter before it (p. 23): ازآنجاکه has none, درحالی\u200cکه has a ZWNJ. به\u200cطوری که and longer ones are exempt and not listed. Spaced forms are common in published text."
 
 [[rule]]
-id = "orthography.compound_preposition"
+id = "academy.compound_preposition"
 layer = "orthography"
 title.fa = "فاصله\u200cگذاری حروف اضافهٔ مرکب"
 title.en = "Compound prepositions are written without a full space"
@@ -387,37 +338,14 @@ examples.violations = [
   { text = "بر اساس", expect = "براساس" },
 ]
 severity = "advisory"
-notes = """
-The second contested rule in the base, and unlike the first it was filed as contested \
-*because of a measurement*. It started as an ordinary prescriptive rule and was the \
-loudest thing in the pack: 24.5 findings per 10,000 words, touching 20.9% of Wikipedia \
-segments — more than any other rule including the plural ها. That is the over-firing \
-signature, so it was investigated rather than shipped.\n\
-
-The investigation found the rule is not wrong. Page 69 prints these seventeen forms \
-joined and the book writes «کلمهٔ پس\u200cاز خود» that way on nearly every page of its \
-own text. What the volume measures is a real and near-total disagreement between the \
-Academy and everyone who publishes Persian — recorded in `disputes` above with the \
-counts.\n\
-
-So the finding says the sources disagree and shows both, which is what a contested rule \
-is for and what a 20.9% hit rate on ordinary prose actually means here. Severity \
-advisory, confidence medium, and no auto-application. Adjudicating it does not belong in \
-this record.
-"""
+notes = "Contested: the book joins these (پیش\u200cاز، ازنظر), published Persian almost always spaces them, so it fires on a lot of ordinary prose. Advisory, medium confidence."
 
 [[rule.disputes]]
 source = "contemporary editorial practice, measured over a 2026 Persian corpus"
-summary = """
-Published Persian writes these prepositions with a full space, and not marginally: in a \
-1.08M-word sample, پیش از runs 340 spaced to 1 joined, بعد از 682 to 8, راجع به 180 to \
-1, از نظر 150 to 6. Only به طور follows the Academy (164 joined to 47 spaced). A \
-prescription this comprehensively ignored is a disagreement between the standard and the \
-language's editors, not a population of typing errors.
-"""
+summary = "Published Persian spaces these: in a 1.08M-word sample پیش از runs 340 spaced to 1 joined, بعد از 682 to 8, راجع به 180 to 1, از نظر 150 to 6. Only به طور follows the book (164 joined to 47 spaced)."
 
 [[rule]]
-id = "orthography.numeral_spacing"
+id = "academy.numeral_spacing"
 layer = "orthography"
 title.fa = "قواعد عددنویسی"
 title.en = "How the parts of a written-out number are spaced"
@@ -452,16 +380,4 @@ examples.violations = [
   { text = "دو هزار", expect = "دوهزار" },
   { text = "یک چهارم", expect = "یک\u200cچهارم" },
 ]
-notes = """
-Recorded without a detector on purpose. Three of the five sub-rules are tractable in \
-isolation and dangerous together: «دو هزار» is دوهزار when it is the number 2000 and two \
-words when it is «دو هزار تومانی», and deciding which needs a reading of the noun phrase \
-that this layer does not have. The examples are the specification the detector will be \
-written against once the morphology layer can identify a numeral phrase.\n\
-
-Worth recording separately: the standard says nothing at all about **digit characters**. \
-Table 1 (pp. 29–32) lists the 33 letters and Table 2 (p. 33) the 10 secondary signs; \
-neither contains a digit, and the Persian ۰۱۲۳ vs Arabic ٠١٢٣ question is not addressed \
-anywhere in the 86 pages. Any rule we write about digit characters will have to cite \
-something else.
-"""
+notes = "No detector: «دو هزار» is دوهزار as the number 2000 but two words in «دو هزار تومانی». The book says nothing about digit characters."

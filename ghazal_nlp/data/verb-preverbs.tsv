@@ -1,7 +1,5 @@
-# Separable preverbs: each preverb with a base verb it attaches to, and the exact-token
-# hits in a 3.98M-segment Persian corpus for the joined infinitive and for a present
-# form. A model (not a person) read every pair in context before it was admitted; a
-# surface form can still be another word.
+# Separable preverbs and the verbs they attach to, with exact-token hits in a
+# 3.98M-segment Persian corpus for the joined infinitive and a present form.
 # preverb	base	infinitive_hits	present_hits
 باز	آمدن	37	2
 باز	ایستادن	6	7

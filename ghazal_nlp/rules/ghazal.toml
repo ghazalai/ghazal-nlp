@@ -1,0 +1,441 @@
+# ghazal: the house style. The Academy rules careful writers follow are adopted
+# as they are; the rules below are ghazal's own. A finding with severity "house"
+# is an accepted spelling, with the house one suggested. ZWNJ is written \u200c.
+
+adopts = [
+  "academy.plural_ha_after_silent_he",
+  "academy.copula_after_silent_he",
+  "academy.clitic_pronoun_after_silent_he",
+  "academy.ya_nakare_after_silent_he",
+  "academy.copula_after_vowel_host",
+  "academy.clitic_pronoun_after_vowel_host",
+]
+
+[[rule]]
+id = "ghazal.persian_letters"
+layer = "orthography"
+title.fa = "ی و ک فارسی"
+title.en = "Persian ی ک ه, not the Arabic or other-script letters"
+statement.fa = "«ي»، «ى»، «ۍ»، «ك»، «ڪ»، «ھ»، «ہ» و «ە» در متن فارسی «ی»، «ک» و «ه» نوشته می\u200cشوند. سطری که به کردی، اردو، پشتو، سندی یا اویغوری است بررسی نمی\u200cشود."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
+source.work = "ghazal house style"
+source.evidence = "ي and ك in 43% of web documents; a line in another Arabic-script language keeps its letters"
+academy.position = "right"
+academy.rule = "academy.persian_letters"
+detector.type = "pattern"
+detector.pattern = "[\\w\u064b-ْٰ\u0654ٕ\u200c]*[يىۍكڪھہە][\\w\u064b-ْٰ\u0654ٕ\u200c]*"
+detector.kind = "non_persian_letter"
+detector.translate = { "ي" = "ی", "ى" = "ی", "ۍ" = "ی", "ك" = "ک", "ڪ" = "ک", "ھ" = "ه", "ہ" = "ه", "ە" = "ه" }
+detector.lines = "persian_script"
+examples.ok = ["کتاب\u200cهای ایرانی", "یکی", "ئەو لە کوردستانە"]
+examples.violations = [
+  { text = "كتاب", expect = "کتاب" },
+  { text = "ايران", expect = "ایران" },
+]
+
+[[rule]]
+id = "ghazal.ezafe_hamza_letter"
+layer = "orthography"
+title.fa = "همزه\u0654 جدا به\u200cجای نشانه\u0654 اضافه"
+title.en = "ء after ه used as the ezāfe"
+statement.fa = "«ء» پس از «ه» به\u200cجای نشانه\u0654 اضافه («خانهء من») نوشته نمی\u200cشود."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "the hamza letter for the ezāfe mark is a typing error, not a convention"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "([\\w\u200c]*ه)ء(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
+detector.kind = "hamza_letter_for_ezafe"
+detector.repair = "\\1\u200cی"
+examples.ok = ["خانه\u0654 من", "جزء", "خانه\u200cی من"]
+examples.violations = [
+  { text = "خانهء من", expect = "خانه\u200cی" },
+]
+
+[[rule]]
+id = "ghazal.arabic_digits"
+layer = "orthography"
+title.fa = "رقم\u200cهای فارسی به\u200cجای عربی"
+title.en = "Persian digits, not Arabic-Indic"
+statement.fa = "رقم\u200cهای عربی (٠ تا ٩) با رقم\u200cهای فارسی (۰ تا ۹) نوشته می\u200cشوند."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "٤ ٥ ٦ look different from ۴ ۵ ۶ and break search"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "[٠-٩]+"
+detector.kind = "arabic_digits"
+detector.translate = { "٠" = "۰", "١" = "۱", "٢" = "۲", "٣" = "۳", "٤" = "۴", "٥" = "۵", "٦" = "۶", "٧" = "۷", "٨" = "۸", "٩" = "۹" }
+examples.ok = ["۱۴۰۲", "2024"]
+examples.violations = [
+  { text = "١٤٠٢", expect = "۱۴۰۲" },
+]
+
+[[rule]]
+id = "ghazal.zwnj_stand_in"
+layer = "orthography"
+title.fa = "نویسه\u0654 نامرئی به\u200cجای نیم\u200cفاصله"
+title.en = "An invisible character standing in for a ZWNJ"
+statement.fa = "نشانه\u0654 جهت، فاصله\u0654 صفر، نرم\u200cخط یا BOM میان دو حرف به\u200cجای نیم\u200cفاصله نوشته شده است."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
+source.work = "ghazal house style"
+source.evidence = "these come from keyboards and converters that lack a ZWNJ"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "(?<=[ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])[\u200e\u200f\u061c\u200b\u00ad\ufeff¬\u009d]+(?=[ـ\u200c\u200d\u200e\u200f\u061c\u200b\u00ad\ufeff¬\u009d]*(?!ـ)[ء-يٮ-ۓە])"
+detector.kind = "stand_in_for_zwnj"
+detector.repair = "\u200c"
+examples.ok = ["حمل\u200cونقل"]
+examples.violations = [
+  { text = "حمل\u200bونقل", expect = "\u200c" },
+  { text = "می\u200fرود", expect = "\u200c" },
+]
+
+[[rule]]
+id = "ghazal.invisible_controls"
+layer = "orthography"
+title.fa = "نویسه\u200cهای کنترلی نامرئی"
+title.en = "Invisible control characters"
+statement.fa = "نشانه\u200cهای جهت، فاصله\u0654 صفر، نرم\u200cخط و BOM بیرون از کلمه حذف می\u200cشوند."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
+source.work = "ghazal house style"
+source.evidence = "they change nothing a reader sees and break search"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "(?<![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])[\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]+|[\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]+(?![\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]*[ء-يٮ-ۓە])"
+detector.kind = "invisible_control"
+detector.repair = ""
+examples.ok = ["متن"]
+examples.violations = [
+  { text = "\u200fمتن", expect = "" },
+  { text = "متن\ufeff", expect = "" },
+]
+
+[[rule]]
+id = "ghazal.redundant_zwnj"
+layer = "orthography"
+title.fa = "نیم\u200cفاصله\u0654 بی\u200cاثر"
+title.en = "A ZWNJ that changes nothing"
+statement.fa = "نیم\u200cفاصله پس از حرف جدانویس («دیدار\u200cها») یا پیش از فاصله و نشانه اثری ندارد و حذف می\u200cشود."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
+source.work = "ghazal house style"
+source.evidence = "after ا د ذ ر ز ژ و the letters are already apart (p. 23 of the Academy's book)"
+academy.position = "right"
+detector.type = "pattern"
+detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]*[اآأإدذرزژوؤء][\u064b-ْٰ\u0654ٕ]{0,2})\u200c+(?=[ء-يٮ-ۓە])|([\\w\u064b-ْٰ\u0654ٕ\u200c]*[\\w\u064b-ْٰ\u0654ٕ])\u200c+(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
+detector.kind = "redundant_zwnj"
+detector.repair = "\\1\\2"
+examples.ok = ["کتاب\u200cها", "خانه\u200cای", "دیدارها"]
+examples.violations = [
+  { text = "دیدار\u200cها", expect = "دیدار" },
+  { text = "کتاب\u200c خوب", expect = "کتاب" },
+]
+
+[[rule]]
+id = "ghazal.tatweel"
+layer = "orthography"
+title.fa = "کشیده"
+title.en = "Tatweel that only stretches a join"
+statement.fa = "کشیده\u200cای که فقط اتصال دو حرف را دراز می\u200cکند حذف می\u200cشود؛ کشیده\u0654 تنها که خط تیره است می\u200cماند."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "a tatweel between two letters is decoration; one standing alone is a dash (تهران ـ ایرنا)"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "(?:(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ]{2}))ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])|ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])(?=[ء-يٮ-ۓە])"
+detector.kind = "tatweel"
+detector.repair = ""
+examples.ok = ["تهران ـ ایرنا", "کتاب"]
+examples.violations = [
+  { text = "کتــاب", expect = "" },
+]
+
+[[rule]]
+id = "ghazal.doubled_mark"
+layer = "orthography"
+title.fa = "اعراب تکراری"
+title.en = "A mark written twice"
+statement.fa = "اعرابی که دو بار پشت هم آمده یک بار نوشته می\u200cشود."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
+source.work = "ghazal house style"
+source.evidence = "a doubled harakat renders as one mark or as noise"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "([\u064b-ْٰ\u0654ٕ])\\1+"
+detector.kind = "doubled_mark"
+detector.repair = "\\1"
+examples.ok = ["ک\u064eت\u064eب"]
+examples.violations = [
+  { text = "ک\u064e\u064e\u064eتب", expect = "\u064e" },
+]
+
+[[rule]]
+id = "ghazal.latin_punctuation"
+layer = "orthography"
+title.fa = "ویرگول و نقطه\u200cویرگول و علامت پرسش لاتین"
+title.en = "Latin , ; ? after a Persian word"
+statement.fa = "پس از کلمه\u0654 فارسی «،» و «؛» و «؟» فارسی نوشته می\u200cشود، مگر حرف لاتین در پی آن بیاید."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "، over , in more than 99% of careful writing; ؛ in 97%"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "(?<=[ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ\u200c]) *[,;?]+(?![A-Za-z])"
+detector.kind = "latin_punctuation"
+detector.translate = { "," = "،", ";" = "؛", "?" = "؟" }
+examples.ok = ["کتاب، قلم", "Python, Java", "چرا؟"]
+examples.violations = [
+  { text = "کتاب, قلم", expect = "،" },
+  { text = "چرا?", expect = "؟" },
+]
+
+[[rule]]
+id = "ghazal.punctuation_spacing"
+layer = "orthography"
+title.fa = "فاصله پیش از نشانه\u0654 پایانی و پس از نشانه\u0654 آغازی"
+title.en = "No space before a closing mark or after an opening one"
+statement.fa = "میان کلمه و «،» «؛» «.» «:» «!» «؟» «»» «)» پس از آن، و میان «««(» و کلمه\u0654 پس از آن فاصله نمی\u200cآید."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "ghazal house style"
+source.evidence = "spaces inside the marks are the commonest punctuation error in web text"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "(?:(?<=[\\w\u064b-ْٰ\u0654ٕ»)\\]]) +(?=[،؛,.:!?؟»)\\]}]*[،؛,.:!?؟»)\\]}](?:\\s|$))|(?<=[ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ]) +(?=[،؛,.:!?؟»)\\]}]*[،؛,.:!?؟][ء-يٮ-ۓە]))(?![:;=]-?[)(\\]\\[DPpOo3|/\\\\*])(?!\\. \\.|\\.{4})|(?<=[«(\\[{])(?<![\\w\u064b-ْٰ\u0654ٕ][«(\\[{]) +(?=[\\w\u064b-ْٰ\u0654ٕ])"
+detector.kind = "space_at_punctuation"
+detector.repair = ""
+examples.ok = ["گفت: «بیا».", "خوب بود :)"]
+examples.violations = [
+  { text = "گفت « بیا »", expect = "" },
+  { text = "کتاب ، قلم", expect = "" },
+]
+
+[[rule]]
+id = "ghazal.mi_prefix"
+layer = "orthography"
+title.fa = "نیم\u200cفاصله\u0654 «می» و «نمی»"
+title.en = "می and نمی take a ZWNJ before a verb"
+statement.fa = "«می» و «نمی» پیش از فعل با نیم\u200cفاصله نوشته می\u200cشوند، چه جدا نوشته شده باشند چه چسبیده؛ فقط وقتی تحلیل\u200cگر فعل آن را فعل بشناسد."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "careful writers write the ZWNJ; the verb analyser leaves میدان، میوه and می (wine) alone"
+academy.position = "right"
+academy.rule = "academy.mi_prefix"
+detector.type = "verb_prefix"
+detector.exceptions = "ghazal-mi-words.tsv"
+examples.ok = ["می\u200cرود", "میدان", "میوه", "میدانی", "می ناب"]
+examples.violations = [
+  { text = "میرود", expect = "می\u200cرود" },
+  { text = "نمی گوید", expect = "نمی\u200cگوید" },
+]
+
+[[rule]]
+id = "ghazal.plural_space"
+layer = "orthography"
+title.fa = "«ها» با فاصله\u0654 کامل"
+title.en = "The plural ها written with a full space"
+statement.fa = "«ها» و صورت\u200cهای صرفی آن با نیم\u200cفاصله یا چسبیده نوشته می\u200cشوند، نه با فاصله\u0654 کامل."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "a full space before ها is an error in every register"
+academy.position = "right"
+academy.rule = "academy.plural_ha"
+detector.type = "affix_zwnj"
+detector.affix = "ها"
+detector.variants = ["های", "هایی", "هایم", "هایت", "هایش", "هایمان", "هایتان", "هایشان", "هاست"]
+detector.position = "suffix"
+detector.detect_space = true
+detector.detect_solid = false
+detector.min_host = 2
+detector.host_exceptions = ["و", "که", "از", "به", "در", "با", "تا", "را", "یا", "هم", "نه", "بر", "برای", "چون", "اگر", "اما", "ولی", "پس", "نیز", "ها", "های"]
+examples.ok = ["کتاب\u200cها", "کتابها", "های های"]
+examples.violations = [
+  { text = "کتاب ها", expect = "کتاب\u200cها" },
+  { text = "کتاب های من", expect = "کتاب\u200cهای" },
+]
+
+[[rule]]
+id = "ghazal.house_forms"
+layer = "orthography"
+title.fa = "املای مرجّح خانه"
+title.en = "The house spelling of a pair written more than one way"
+statement.fa = "برای جفت\u200cکلمه\u200cهایی که نویسندگان دقیق به چند شکل می\u200cنویسند (آنها/آن\u200cها، پایان نامه/پایان\u200cنامه)، شکل مرجّح خانه پیشنهاد می\u200cشود. شکل دیگر غلط نیست."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "ghazal house style"
+source.evidence = "a stratified sample of contemporary Persian: آن\u200cها 16,426 against آنها 5,664 on Wikipedia, 15,640 against 285 at Mizan, 389 against 3,837 at IRIB; بزرگ\u200cترین with a ZWNJ 82–90% in state media"
+academy.position = "varies"
+detector.type = "closed_list"
+detector.file = "ghazal-house-forms.tsv"
+detector.kind = "house_spelling"
+detector.severity = "house"
+detector.note = "both spellings are correct; this is the house one"
+examples.ok = ["آن\u200cها", "کتاب\u200cها"]
+examples.violations = [
+  { text = "آنها", expect = "آن\u200cها" },
+  { text = "بزرگترین", expect = "بزرگ\u200cترین" },
+  { text = "پایان نامه", expect = "پایان\u200cنامه" },
+]
+notes = "The Academy agrees on some pairs and not others (همبازی, این\u200cطور)."
+
+[[rule]]
+id = "ghazal.ezafe_after_silent_he"
+layer = "orthography"
+title.fa = "اضافه پس از «ه»ی غیرملفوظ"
+title.en = "The ezāfe after a silent ه as ه\u200cی"
+statement.fa = "کسره\u0654 اضافه پس از «ه»ی غیرملفوظ در خانه با «ه\u200cی» نوشته می\u200cشود («خانه\u200cی من»). «خانه\u0654 من» و «خانۀ من» هم درست\u200cاند."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "ghazal house style"
+source.evidence = "ه\u200cی survives every keyboard and copy-paste; ه\u0654 and ۀ are often lost or turned into ه + ء"
+academy.position = "wrong"
+academy.rule = "academy.ezafe_after_silent_he"
+detector.type = "pattern"
+detector.pattern = "([\\w\u200c]*)(?:ۀ|ه\u0654)(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
+detector.kind = "house_spelling"
+detector.repair = "\\1ه\u200cی"
+detector.severity = "house"
+detector.note = "ه\u0654 and ۀ are correct; ه\u200cی is the house spelling"
+examples.ok = ["خانه\u200cی من", "خانه"]
+examples.violations = [
+  { text = "خانه\u0654 من", expect = "خانه\u200cی" },
+  { text = "خانۀ من", expect = "خانه\u200cی" },
+]
+
+[[rule]]
+id = "ghazal.copula_apart"
+layer = "orthography"
+title.fa = "«است» جدا"
+title.en = "است written apart from its word"
+statement.fa = "«است» با فاصله از کلمه\u0654 پیش از خود نوشته می\u200cشود («خانه است»)."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "ghazal house style"
+source.evidence = "careful writers write است apart; pp. 42–43 of the Academy's book agree"
+academy.position = "right"
+detector.type = "pattern"
+detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]+)\u200c(است)(?![\\w\u064b-ْٰ\u0654ٕ\u200c])"
+detector.kind = "house_spelling"
+detector.repair = "\\1 \\2"
+detector.severity = "house"
+examples.ok = ["خانه است"]
+examples.violations = [
+  { text = "خانه\u200cاست", expect = "خانه است" },
+]
+
+[[rule]]
+id = "ghazal.teh_marbuta"
+layer = "orthography"
+title.fa = "«ة» در واژه\u200cهای فارسی\u200cشده"
+title.en = "ة in a word Persian spells with ه or ت"
+statement.fa = "واژه\u200cهایی که فارسی با «ه» یا «ت» می\u200cنویسد (سوره، رحمت) با «ة» نوشته نمی\u200cشوند. «ة» در عبارت عربی («رحمة الله») می\u200cماند."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "1,580 words where the Persian spelling wins 10 to 1 in a 2026 corpus"
+academy.position = "right"
+academy.rule = "academy.taa_marbuta_word_final"
+detector.type = "closed_list"
+detector.file = "ghazal-teh-marbuta.tsv"
+detector.abstain_before = "ال"
+detector.kind = "teh_marbuta"
+examples.ok = ["سوره", "رحمة الله"]
+examples.violations = [
+  { text = "سورة", expect = "سوره" },
+  { text = "جهة", expect = "جهت" },
+]
+
+[[rule]]
+id = "ghazal.persian_digits"
+layer = "orthography"
+title.fa = "رقم فارسی در متن فارسی"
+title.en = "Persian digits in Persian text"
+statement.fa = "در سطر فارسی رقم\u200cها و ٪ فارسی نوشته می\u200cشوند، جز در کلمه\u200cای که حرف لاتین یا @ # _ = & یا :// دارد."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "Persian digits in careful prose; Latin % on Wikipedia 16%, on blogs 95%"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "(?<!\\S)(?!\\S*(?:[A-Za-z@#_=&]|://))\\S*[0-9]\\S*"
+detector.kind = "house_spelling"
+detector.lines = "persian"
+detector.translate = { "0" = "۰", "1" = "۱", "2" = "۲", "3" = "۳", "4" = "۴", "5" = "۵", "6" = "۶", "7" = "۷", "8" = "۸", "9" = "۹", "%" = "٪" }
+detector.severity = "house"
+examples.ok = ["سال ۱۴۰۲", "version 3.2 of Python", "نسخه\u0654 v2"]
+examples.violations = [
+  { text = "سال 1402", expect = "۱۴۰۲" },
+  { text = "رشد 5%", expect = "۵٪" },
+]
+
+[[rule]]
+id = "ghazal.guillemets"
+layer = "orthography"
+title.fa = "گیومه\u0654 فارسی"
+title.en = "« » around a Persian quotation"
+statement.fa = "نقل\u200cقول فارسی میان « » می\u200cآید، نه \" \" یا “ ”."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "« » and \" \" are both common; « » is the house one"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "[\"“]([^\"“”\\n]*[ء-يٮ-ۓە][^\"“”\\n]*)[\"”]"
+detector.kind = "house_spelling"
+detector.repair = "«\\1»"
+detector.severity = "house"
+examples.ok = ["«سلام»", "\"hello\""]
+examples.violations = [
+  { text = "\"سلام\"", expect = "«سلام»" },
+]
+
+[[rule]]
+id = "ghazal.ellipsis"
+layer = "orthography"
+title.fa = "سه\u200cنقطه"
+title.en = "… for three dots"
+statement.fa = "سه نقطه\u0654 پشت هم با نویسه\u0654 «…» نوشته می\u200cشود."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "... and … are both common; … is the house one"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "\\.(?: ?\\.){2,}"
+detector.kind = "house_spelling"
+detector.repair = "…"
+detector.severity = "house"
+examples.ok = ["صبر کن…"]
+examples.violations = [
+  { text = "صبر کن...", expect = "…" },
+]

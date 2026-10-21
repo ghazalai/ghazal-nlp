@@ -1,19 +1,10 @@
-# Persian verb stems: infinitive, past stem(s), present stem(s); alternates split by "|".
-# Where a present stem changes after ب، ن or می (pp. 38–39 of the Academy's دستور خط
-# فارسی), the written alternate is listed too: آمدن has آ and یا.
-#
-# Sources: the standard grammars' paradigm tables; John Mace, Persian Grammar: For
-#   Reference and Revision, Appendix I, pp. 209–211 (his transliteration separates
-#   raftan/rav- 'go' from roftan/rub- 'sweep'); and class rules, each with its
-#   exceptions named: ـیدن drops یدن, ـاندن drops دن, ـودن → ـا, ـاختن ـیختن ـوختن → ـز,
-#   except دیدن/بین، شناختن/شناس، فروختن/فروش، درودن/درو.
-# Every stem was checked against a 3.98M-segment Persian corpus for finite present
-#   forms its own past stem cannot produce (می‌دید is not evidence for a stem دی).
-#   Rarity did not disqualify; ambiguity did.
-#
-# Declined: آر for آوردن (bare آرد is the noun 'flour'); preverb compounds
-#   (verb-preverbs.tsv); بایدن، درایدن، زدیدن، گرودن (not verbs); مزیدن، سربریدن،
-#   باشیدن (their evidence belongs to other words).
+# Verb stems: infinitive, past stems, present stems; alternates split by "|".
+# Where a present stem changes after ب، ن or می (دستور خطّ فارسی، صص ۳۸–۳۹) the
+# written alternate is listed too: آمدن has آ and یا.
+# Sources: the standard paradigm tables; John Mace, Persian Grammar, Appendix I;
+# and the class rules (ـیدن، ـاندن، ـودن، ـاختن/ـیختن/ـوختن) with their exceptions.
+# Each stem was checked against a corpus for present forms its past stem can't make.
+# Left out: آر for آوردن (آرد is flour); بایدن، درایدن، زدیدن، گرودن (not verbs).
 بودن	بود	باش|هست
 شدن	شد	شو
 کردن	کرد	کن

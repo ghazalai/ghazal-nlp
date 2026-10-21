@@ -1,39 +1,15 @@
-# Orthography — the enclitic sets, from the Academy standard's own tables.
+# Orthography: the enclitics, from the tables on pp. 42–46.
 #
 #   دستور خطّ فارسی (ویراست جدید)
 #   فرهنگستان زبان و ادب فارسی، نشر آثار، تهران، چاپ اول ۱۴۰۱
 #   ISBN 978-622-5305-22-9
 #   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
 #
-# Pages 42–46 are three tables with the same shape: a host, the class of its
-# final letter, a linking consonant, and the resulting form. Between them they
-# settle the whole enclitic system — the present copula, the possessive and
-# objective pronouns (what recent grammars call ضمیر شخصی متصل, per the book's
-# own footnote on p.44), and the indefinite/abstract ی.
-#
-# Read across all three tables the separator rule is one sentence: **the clitic
-# takes a ZWNJ exactly when the host ends in ه، ی or و, and is written solid
-# everywhere else.** After a connecting or a disconnecting consonant the tables
-# write it solid (کتابم، برادرم) and there is nothing for a detector to find;
-# after ا and after الف مقصوره a linking ی appears and the result is again
-# solid (پایم، طوبایم). A full space is not among the forms any of the three
-# tables gives.
-#
-# **The ZWNJ is not in the PDF.** Its text layer contains zero U+200C across all
-# ninety pages, so every form here was read off the rendered page at 400dpi
-# rather than extracted. Page 46 is the proof that the distinction is real and
-# typographic: خانه‌ای and گرهی sit in adjacent rows of one table, the first
-# with the half-space and the second without, because the ه of گره is
-# pronounced and the ه of خانه is not.
-#
-# That is why these rules are gated on `require_silent_he` and not on the
-# character. See `orthography.py` and `data/orthography-silent-he.tsv` for the
-# inventory and for what it deliberately does not reach.
-#
-# ZWNJ (U+200C) is written \u200c throughout.
+# A clitic takes a ZWNJ after ه، ی or و and is solid otherwise; a ه host counts only once its ه is known silent.
+# ZWNJ (U+200C) is written \u200c.
 
 [[rule]]
-id = "orthography.copula_after_silent_he"
+id = "academy.copula_after_silent_he"
 layer = "orthography"
 title.fa = "پیوستن «ام، ایم، اید، اند» به کلمهٔ مختوم به «ه»ی غیرملفوظ"
 title.en = "The enclitic copula after a silent ه takes a ZWNJ, never a full space"
@@ -71,24 +47,10 @@ examples.violations = [
   { text = "رفته ام", expect = "رفته\u200cام" },
   { text = "گفته اید", expect = "گفته\u200cاید" },
 ]
-notes = """
-«ای» is deliberately not in this set, and the reason is on another page of the same \
-book: page 34 makes ای (حرف ندا) a free word that always takes a full space. It is ruled \
-separately by orthography.ya_nakare_after_silent_he, which can only fire once the host \
-is proven — the copula set needs no such proof because اند، ایم، اید are never free \
-words, while ای is.\n\
-
-The solid error mode («خستهام») is not checked and that one is a lexicon problem: ابهام، \
-الهام، اتهام all end in ـهام without containing a clitic, and separating a genuine host \
-from them needs the word list we do not have.\n\
-
-`آگاه اند` is in the ok examples because the gate has to be exercised by something the \
-old pattern got wrong: the ه of آگاه is pronounced, so the joined form is آگاهند and not \
-آگاه\u200cاند.
-"""
+notes = "ای isn't in the set: the vocative ای is a free word (p. 34), so it's handled by academy.ya_nakare_after_silent_he. The solid error (خستهام) isn't checked, since ابهام، الهام، اتهام end the same way."
 
 [[rule]]
-id = "orthography.copula_after_vowel_host"
+id = "academy.copula_after_vowel_host"
 layer = "orthography"
 title.fa = "پیوستن «ام، ایم، اید، اند» به کلمهٔ مختوم به «ی» یا «و»"
 title.en = "The enclitic copula after a ی or و host takes a ZWNJ"
@@ -123,19 +85,10 @@ examples.violations = [
   { text = "ایرانی ام", expect = "ایرانی\u200cام" },
   { text = "راضی اند", expect = "راضی\u200cاند" },
 ]
-notes = """
-Split from the silent-ه rule rather than merged into it because the two environments \
-need different gates, not because the standard separates them. A ی host is decidable \
-from the character; a ه host is not.\n\
-
-The و row of the table (توام، متروایید) is recorded here and not detected. و does not \
-join to its left, so the joined and the unjoined spellings render identically and the \
-corpus carries 18 space-written sites in total — below anything this rule could be \
-measured on.
-"""
+notes = "The و row (توام) isn't checked: و doesn't join to the left, so the half-space can't be seen."
 
 [[rule]]
-id = "orthography.clitic_pronoun_after_silent_he"
+id = "academy.clitic_pronoun_after_silent_he"
 layer = "orthography"
 title.fa = "پیوستن ضمایر ملکی و مفعولی به کلمهٔ مختوم به «ه»ی غیرملفوظ"
 title.en = "A possessive/objective clitic after a silent ه takes a ZWNJ"
@@ -173,24 +126,10 @@ examples.violations = [
   { text = "نتیجه اش", expect = "نتیجه\u200cاش" },
   { text = "همه شان", expect = "همه\u200cشان" },
 ]
-notes = """
-«ام» belongs to this set too and is not in it here: it is graphically identical to the \
-copula ام, which page 42 owns, and a finding that cited the pronoun table for «رفته ام» \
-would cite the wrong clause. The repair is the same either way; the citation is not, and \
-the citation is the point.\n\
-
-The plural clitics carry the half-space although they take no linking ا — the table \
-prints خانه\u200cمان، خانه\u200cتان، خانه\u200cشان with the ه in final form. The old \
-pattern here produced the right answer without being able to say why; the reason is that \
-a silent ه at the end of a word is, in the standard's own words, «در حکم حرف منفصل» \
-(p.27).\n\
-
-«شان» is also an Arabic noun (شأن/شان), so a host ending in ه followed by it could in \
-principle be two words; no instance appeared in the sample.
-"""
+notes = "ام is left to the copula rule: the two look the same and the copula table owns the citation. شان can also be the noun شأن, though that's rare here."
 
 [[rule]]
-id = "orthography.clitic_pronoun_after_vowel_host"
+id = "academy.clitic_pronoun_after_vowel_host"
 layer = "orthography"
 title.fa = "پیوستن ضمایر ملکی و مفعولی به کلمهٔ مختوم به «ی»"
 title.en = "A possessive/objective clitic after a ی host takes a ZWNJ"
@@ -225,14 +164,10 @@ examples.violations = [
   { text = "زندگی اش", expect = "زندگی\u200cاش" },
   { text = "کشتی شان", expect = "کشتی\u200cشان" },
 ]
-notes = """
-The رادیو row of the same table (رادیوام، رادیواش) is recorded and not detected, for the \
-reason given under orthography.copula_after_vowel_host: و does not join to its left, so \
-the half-space is invisible and the corpus offers nothing to measure against.
-"""
+notes = "The و row (رادیوام) isn't checked, as in academy.copula_after_vowel_host."
 
 [[rule]]
-id = "orthography.ya_nakare_after_silent_he"
+id = "academy.ya_nakare_after_silent_he"
 layer = "orthography"
 title.fa = "یای نکره پس\u200cاز «ه»ی غیرملفوظ"
 title.en = "The indefinite ی after a silent ه takes a linking ا and a ZWNJ"
@@ -241,12 +176,7 @@ statement.fa = """
 خانه\u200cای، مدرسه\u200cای، گوشه\u200cای. پس\u200cاز «ه»ی ملفوظ چنین نیست و «ی» \
 بی\u200cواسطه می\u200cچسبد: گرهی.\
 """
-statement.en = """
-The indefinite ی joins a silent-ه host through a linking ا — خانه\u200cای — and a \
-pronounced ه takes the ی directly and solid, گرهی. The two sit in adjacent rows of one \
-table, which is what makes the distinction a fact of the standard rather than an \
-inference from it.
-"""
+statement.en = "The indefinite ی joins a silent-ه host through a linking ا (خانه\u200cای); a pronounced ه takes the ی directly and solid (گرهی)."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical"]
@@ -273,31 +203,10 @@ examples.violations = [
   { text = "گوشه ای", expect = "گوشه\u200cای" },
   { text = "پاره ای روغن", expect = "پاره\u200cای" },
 ]
-notes = """
-Was `proposed` and unexecutable until 22 September 2026. What changed is not the rule \
-but the gate: the indefinite ای and the vocative ای share a glyph, page 34 puts the \
-vocative always at a full space, and nothing in the characters separates «مدرسه ای ساخت» \
-from «مده ای دوست». The host test does separate them, and the three ok examples above \
-are the three failures it was built against, found by reading 106 real instances:
-
-  پندم مده ای دوست        — مده is an imperative; its ه is not proven silent
-  سر ببالین عدم بازنه ای  — likewise
-  نکردی جگرگاه ای پور باز — the ه of گاه is pronounced, so the rule declines
-
-All three now abstain rather than bond, and they abstain for two different recorded \
-reasons (`he_not_proven_silent`, `he_is_voiced`) rather than one.\n\
-
-The گ half of page 46's footnote — یای مصدری و نسبت deleting the ه and inserting گ \
-(خانگی، همیشگی) — is still not executable and is still out. A pattern over \
-«ه(\u200c)گی/گان» fires on سه\u200cگانه، ده\u200cگانه، دوازده\u200cگانه, which page 59 \
-§۱-ب writes *with* a half-space, and on دهگان, which the same clause exempts. Measured \
-over a 1.08M-word sample of a 2026 Persian corpus it produced 44 hits of which 25 were \
-correct Persian — a 57% false-positive rate for six true findings, which is exactly the \
-trade the rule base exists to refuse.
-"""
+notes = "Fires only when the host's ه is known to be silent, because the vocative ای looks the same: «مده ای دوست» abstains. The گ form (خانگی، همیشگی) isn't checked: a pattern would hit سه\u200cگانه and دهگان, which are right."
 
 [[rule]]
-id = "orthography.ya_nakare_after_vowel_host"
+id = "academy.ya_nakare_after_vowel_host"
 layer = "orthography"
 title.fa = "یای نکره پس\u200cاز «ی»"
 title.en = "The indefinite ی after a ی host takes a linking ا and a ZWNJ"
@@ -333,20 +242,4 @@ examples.violations = [
   { text = "کشتی ای دیدم", expect = "کشتی\u200cای" },
   { text = "صندلی ای", expect = "صندلی\u200cای" },
 ]
-notes = """
-Recorded and **not executed**, because it was measured and it failed.\n\
-
-The vocative collision is here as it is after a silent ه, but there is no equivalent of \
-the silent-ه inventory to close it: a ی host is decidable from the character, and that \
-is exactly the problem — the character is all there is. Run over 2,094 spans on which \
-two normalizers disagreed, this detector fired 22 times, and reading all 22 they are \
-vocatives almost without exception: «علی ای …»، «جامی ای …»، «شکی ای …»، «ساحری ای …»، \
-«گوی ای …». Ali's ruling on those spans names «شکی ای» among Hazm's errors, so the rule \
-would have reproduced a defect already adjudicated against.\n\
-
-The clause it transcribes is real and the ی row of page 46 is not in doubt. What is \
-missing is a way to tell a منادا from an indefinite after a ی host, which is a \
-clause-level question and not an orthographic one. It stays here, executable and off, so \
-that the day something can answer that question the rule is a status change rather than \
-a rediscovery.
-"""
+notes = "Off: after a ی host it mostly hits vocatives («علی ای …», «شکی ای …»), and nothing here tells a vocative from the indefinite."
