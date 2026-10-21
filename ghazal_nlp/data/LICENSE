@@ -5,7 +5,8 @@ https://creativecommons.org/licenses/by/4.0/
 Copyright (c) 2026 Ali Julaee Rad. Each file's header names what it was
 derived from.
 
-These files quote text from Wikipedia and Wikisource and are licensed under
+These files quote text from Wikipedia and Wikisource, or are derived from the
+Tajik Shahnameh corpus (ArabovMK/shahnameh-tajik-corpus), and are licensed under
 CC BY-SA 4.0 instead (https://creativecommons.org/licenses/by-sa/4.0/):
 ezafe-written-dev.jsonl, ezafe-junctions-dev.jsonl, ezafe-lab-1.jsonl,
-arabic-spans-lab.jsonl, arabic-lines-lab.jsonl.
+arabic-spans-lab.jsonl, arabic-lines-lab.jsonl, shahnameh-tajik-test.jsonl.

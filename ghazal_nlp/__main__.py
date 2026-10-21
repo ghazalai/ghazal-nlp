@@ -5,7 +5,7 @@ from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
 from . import arabic, arabic_eval, aruz, aruz_eval, ezafe, ganjoor, orthography, rhyme, rhyme_eval, verb, verb_eval, vowels
-from . import aruz_baselines, g2p_eval, orthography_eval
+from . import aruz_baselines, g2p_eval, orthography_eval, shahnameh_eval
 
 
 def dump(result) -> None:
@@ -260,6 +260,8 @@ def main() -> None:
     c.add_argument("files", nargs="+", type=Path, help="wrong and correct file, in pairs")
     c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
     c.add_argument("--limit", type=int, help="pairs per file")
+    command("shahnameh-eval", lambda a: dump(shahnameh_eval.evaluate()),
+            "score vowels and ezafe against the Tajik Shahnameh")
     a = p.parse_args()
     try:
         a.run(a)

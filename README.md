@@ -260,6 +260,32 @@ ghazal-nlp ezafe-eval
 ghazal-nlp g2p-eval test_set.csv
 ```
 
+### The Tajik Shāhnāme as gold
+
+Tajik Cyrillic writes the short vowels and the ezāfe. I aligned a Tajik copy of
+the Shāhnāme to Ganjoor's, hemistich by hemistich, and put its vowels on the
+Persian letters. `data/shahnameh-tajik-test.jsonl` holds 3,000 hemistichs from
+the held-out fifth of the poems, each word with its vocalized form and whether
+an ezāfe follows; only words the alignment accounted for letter by letter are
+kept.
+
+| | words / sites | tool | baseline |
+|---|---:|---:|---:|
+| `vowels`, one reading: it fits | 5,499 | 87.6% | |
+| `vowels`, several: the commonest fits | 6,689 | 59.4% | a random one 46.1% |
+| `vowels`, several: one of them fits | 6,689 | 95.5% | |
+| `ezafe.junction` | 561 | 54.7% | always none 90.6% |
+| `ezafe.written`, marked sites | 51 | 96.1% | always ezāfe 96.1% |
+
+The vowels are the Tajik edition's (یَکی، سَر، و read u), and Tajik doesn't
+tell i from ī or u from ū. `junction` fails on the verse: a silent-ه head
+before a noun with no ezāfe is the usual case there (همه کوه، تیره خاک), and
+it finds one at 252 of 508 such junctions.
+
+```sh
+ghazal-nlp shahnameh-eval
+```
+
 ### `orthography`: spelling rules
 
 Two styles. `academy` is the Persian Academy's دستور خطّ فارسی, each rule
@@ -352,7 +378,7 @@ lists them); each TSV's header says where it comes from. Ganjoor,
 the treebanks, SentenceBench, HomoRich, UniMorph, PerSpellData and
 Ganjoor-Rhythm-Bench are only read for testing and aren't included.
 
-My labels, one item per line:
+The test data, one item per line (my labels, except the last):
 
 - `ezafe-written-dev.jsonl`, `ezafe-junctions-dev.jsonl` and `ezafe-lab-1.jsonl`:
   silent-ه junctions. The text around the junction with its mark removed
@@ -362,6 +388,8 @@ My labels, one item per line:
 - `arabic-spans-lab.jsonl`: a span the detector found, and whether it's
   Arabic (`arabic`, `boundary` when the edges are off, `not_arabic`).
 - `arabic-lines-lab.jsonl`: whether a line holds Arabic of two words or more.
+- `shahnameh-tajik-test.jsonl`: Shāhnāme hemistichs with each word's vowels and
+  ezāfe from the Tajik copy (ArabovMK/shahnameh-tajik-corpus, CC BY-SA 4.0).
 
 ## References
 

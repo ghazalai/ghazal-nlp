@@ -1,6 +1,6 @@
 import json
 
-from ghazal_nlp import aruz, aruz_baselines, g2p_eval, orthography, orthography_eval, verb, verb_eval
+from ghazal_nlp import aruz, aruz_baselines, g2p_eval, orthography, orthography_eval, shahnameh_eval, verb, verb_eval
 from ghazal_nlp.aruz_eval import held_out
 
 
@@ -35,6 +35,17 @@ def test_g2p_eval(tmp_path):
     assert g2p_eval.fits("گُل", "gol") and not g2p_eval.fits("گِل", "gol") and g2p_eval.fits("خُوبی", "xubi")
     assert g2p_eval.words("کتابِ من", ["ketAb-e", "man"]) == [("کتابِ", "ketAb-e"), ("من", "man")]
 
+
+def test_shahnameh_eval(tmp_path):
+    path = tmp_path / "test.jsonl"
+    row = {"poem": 1, "couplet": 0, "pos": 0, "fa": "نامهٔ دوست را خواند",
+           "words": [["نامه", "نامه", True], ["دوست", "دوست", False], ["را", "را", False], ["خواند", "خوانَد", False]]}
+    path.write_text(json.dumps(row, ensure_ascii=False) + "\n", encoding="utf-8")
+    r = shahnameh_eval.evaluate(path)
+    assert r["ezafe_junction"]["confusion"] == {"ezafe->ezafe": 1} and r["ezafe_written"]["confusion"] == {"ezafe->ezafe": 1}
+    assert shahnameh_eval.fits("چُو", "چو") and shahnameh_eval.fits("بِه", "به") and shahnameh_eval.fits("کِه", "کِه")
+    assert not shahnameh_eval.fits("سِوَی", "سوی") and not shahnameh_eval.fits("گِل", "گُل") and not shahnameh_eval.fits("کَه", "کِه")
+    assert len(shahnameh_eval.rows()) == 3000
 
 def test_aruz_baselines(tmp_path):
     ids = [i for i in range(1, 200) if held_out(str(i))][:2]
