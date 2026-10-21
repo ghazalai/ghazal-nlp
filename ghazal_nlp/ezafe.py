@@ -13,6 +13,7 @@ import hashlib
 import json
 import re
 import unicodedata
+from collections import Counter
 from dataclasses import dataclass
 from functools import lru_cache
 
@@ -197,7 +198,9 @@ def score(rows, classify, target: str) -> dict:
             confusion[key] = confusion.get(key, 0) + 1
     total = sum(confusion.values())
     right = sum(n for k, n in confusion.items() if k.split("->")[0] == k.split("->")[1])
+    gold = Counter(k.split("->")[0] for k, n in confusion.items() for _ in range(n))
     return {"sites": total, "agree": right, "accuracy": round(right / total, 4) if total else 0.0,
+            "majority_baseline": round(max(gold.values()) / total, 4) if total else 0.0,
             "confusion": dict(sorted(confusion.items()))}
 
 

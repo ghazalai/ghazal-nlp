@@ -16,7 +16,7 @@ from .aruz import (
     CAESURA, CONFLICT, COST, DATA, LONG, MAX_LINES, OVERLONG, PINNED, RUBAI, SHORT, UNDERDETERMINED, VARIABLE,
     Devices, Inventory, MetreEntry, Scanner, ScriptError, Trie, WeightEntry, _constrainable_words,
     _glide, _glide_weights, _moves, _pattern_slots, _slot_blocked, _word_spans, hemistichs,
-    pattern_for_label, prepare, votes, winners,
+    pattern_for_label, prepare, scan_poem, votes, winners,
 )
 
 SNAPSHOT = "Ganjoor editorial metre labels, snapshot api-2026-08-03"
@@ -343,7 +343,7 @@ def evaluate(poems, scanner: Scanner, *, split: str = "held_out", limit: int = 2
     alias = {label: frozenset(ps) for label, ps in scanner.inventory.label_patterns.items()}
     lines, poem, reasons, confusion = Counter(), Counter(), Counter(), Counter()
     per_metre = defaultdict(Counter)
-    admitted = scanned = ambiguity = identified = gated = 0
+    admitted = cheapest = scanned = ambiguity = identified = gated = 0
     for gold in pool:
         tally, costs, used = Counter(), Counter(), 0
         text = hemistichs(gold.text)
@@ -358,6 +358,7 @@ def evaluate(poems, scanner: Scanner, *, split: str = "held_out", limit: int = 2
             gated += s.gated
             ambiguity += len(s.metres)
             admitted += gold.metre in dict(s.candidates)
+            cheapest += gold.metre in s.metres
             for metre, cost in votes(s):
                 tally[metre] += 1
                 costs[metre] += cost
@@ -388,6 +389,7 @@ def evaluate(poems, scanner: Scanner, *, split: str = "held_out", limit: int = 2
         "poems": len(pool), "lines": line_total,
         "line_rate": {k: round(v / line_total, 4) for k, v in lines.most_common()},
         "gold_admitted_rate": round(admitted / scanned, 4) if scanned else 0.0,
+        "gold_among_cheapest_rate": round(cheapest / scanned, 4) if scanned else 0.0,
         "mean_metres_per_line": round(ambiguity / scanned, 2) if scanned else 0.0,
         "lexicon_gated_rate": round(gated / scanned, 4) if scanned else 0.0,
         "abstentions": dict(reasons.most_common()),
@@ -513,3 +515,33 @@ def score_readings(rows, scanner: Scanner) -> dict:
     median = 0.0 if not sizes else float(sizes[mid]) if len(sizes) % 2 else (sizes[mid - 1] + sizes[mid]) / 2
     return {"lines": len(rows), "too_many_to_count": len(rows) - counted, "reading_admitted": admitted,
             "median_readings": median}
+
+
+def evaluate_couplets(path: Path, scanner: Scanner, *, held_out_only: bool = False) -> dict:
+    """Couplets labelled with a metre's feet (Ganjoor-Rhythm-Bench's ``first``,
+    ``second``, ``rhythm``, ``poem_id``): is the couplet's metre exactly the label?
+    ``held_out_only`` keeps the couplets of held-out poems, for a scanner whose
+    lexicon saw the others."""
+    rows, seen = [], set()
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            r = json.loads(line)
+            key = (r["poem_id"], r["couplet_index"])
+            if key not in seen and (not held_out_only or held_out(str(r["poem_id"]))):
+                seen.add(key)
+                rows.append(r)
+    feet = {label: tidy(label).split(" (")[0] for label in scanner.inventory.label_patterns}
+    outcome, per_metre = Counter(), defaultdict(Counter)
+    for r in rows:
+        gold = tidy(r["rhythm"])
+        result = scan_poem(r["first"] + "\n" + r["second"], scanner)
+        got = {feet.get(m, m) for m in result.metres}
+        o = "abstain" if not got else "exact" if got == {gold} else \
+            "ambiguous_including_gold" if gold in got else "wrong"
+        outcome[o] += 1
+        per_metre[gold][o] += 1
+    n = outcome.total() or 1
+    return {"couplets": outcome.total(), "rate": {k: round(v / n, 4) for k, v in outcome.most_common()},
+            "metres": len(per_metre),
+            "known_metres": sum(any(f == m for f in feet.values()) for m in per_metre),
+            "per_metre": {m: round(c["exact"] / c.total(), 3) for m, c in sorted(per_metre.items(), key=lambda kv: -kv[1].total())}}
