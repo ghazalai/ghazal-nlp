@@ -1,12 +1,10 @@
 # ghazal-nlp
 
-Small deterministic tools for Persian. No models, no network, just the Python
-standard library. Every answer says which rule produced it, and when the rules
-can't decide, the tool abstains instead of guessing.
+NLP tools for Farsi and its variations, python standard library were possible.
 
 ```sh
 pip install git+https://github.com/alijulaeerad/ghazal-nlp
-ghazal-nlp scan "الا یا ایها الساقی ادر کأسا و ناولها"
+ghazal-nlp scan "طبعِ چون آب و غزل‌هایِ روان ما را بس"
 ghazal-nlp verb "نمی‌گفتند برمی‌دارد"
 ghazal-nlp conjugate گفتن --tense past --aspect imperfective --person 1 --number plur
 ghazal-nlp check "آنها کتاب ها را میخوانند"
@@ -18,7 +16,7 @@ ghazal-nlp check "آنها کتاب ها را میخوانند"
 
 Persian doesn't write short vowels, the ezāfe or gemination, so one written
 hemistich can be read several ways. The scanner tries those readings against
-146 weight patterns (142 metres). For each line it returns the cheapest
+76 weight patterns (65 metres, the ones at least five Ganjoor poems use). For each line it returns the cheapest
 metres, every other metre that fits along with the licences it needs (hamze
 elision, و read short, ابدال, an overlong syllable read long, …), or an
 abstention with a reason. Harakat, shadda, the ezāfe hamza and ZWNJ written by
@@ -27,7 +25,7 @@ fit.
 
 ```python
 from ghazal_nlp import aruz
-s = aruz.scanner().scan("الا یا ایها الساقی ادر کأسا و ناولها")
+s = aruz.scanner().scan("طبعِ چون آب و غزل‌هایِ روان ما را بس")
 s.metres, s.weights, s.devices, s.candidates
 aruz.scan_poem("بشنو این نی چون شکایت می‌کند\nاز جدایی‌ها حکایت می‌کند").metres
 ```
@@ -37,13 +35,22 @@ metre labels. The held-out poems are a fixed fifth, chosen by poem id.
 
 | | rules only | with the weight lexicon |
 |---|---:|---:|
-| gold metre among the answers | 99.2% | 95.7% |
-| metres per hemistich | 3.07 | 1.80 |
-| poem gets exactly the gold metre | 78.9% | 93.5% |
-| abstained | 0.05% | 0.05% |
+| gold metre among the answers | 99.0% | 95.9% |
+| gold metre among the cheapest | 56.6% | 70.1% |
+| metres per hemistich | 2.37 | 1.52 |
+| poem gets exactly the gold metre | 83.8% | 94.6% |
+| abstained | 0.08% | 0.08% |
 
 The weight lexicon (`data/weights.tsv`) is learned from the labels of the
 other four fifths, so that column is supervised. The rules-only column isn't.
+With the editors' marks removed (`--stripped`), a poem gets exactly the gold
+metre 83.5% of the time with rules only and 94.3% with the lexicon.
+
+On single couplets with no poem around them it's much weaker. On the 12,713
+couplets of [Ganjoor-Rhythm-Bench](https://huggingface.co/datasets/farbodbij/Ganjoor-Rhythm-Bench)
+(40 metres), the rules alone give exactly the gold metre for 32.9%. With the
+lexicon, on the 2,553 couplets from held-out poems, that's 62.6%, and another
+9.8% get several metres including the gold one.
 
 Thiesen's *Manual of Classical Persian Prosody* scans 513 hemistichs; the
 scanner reaches his exact weights for 494 of them.
@@ -52,13 +59,57 @@ scanner reaches his exact weights for 494 of them.
 ghazal-nlp ganjoor <snapshot> > poems.jsonl
 ghazal-nlp aruz-eval poems.jsonl [--no-lexicon] [--stripped]
 ghazal-nlp aruz-derive poems.jsonl --out ghazal_nlp/data
+ghazal-nlp aruz-derive poems.jsonl --by poet --out poet/
+ghazal-nlp aruz-eval poems.jsonl --by poet --weights poet/weights.tsv
+```
+
+### `rhyme`: qāfiya and radif
+
+Give it a poem, one hemistich per line, and its form (ghazal, qasida, qeta,
+masnavi, robai, dobeyti). It finds the radif, the words every rhyming
+hemistich ends with, and the qāfiya, the letters before the radif that they
+share. It also gives each line's rhyme word, flags any line that misses the
+rhyme, and lists rhyme words used twice. The even hemistichs decide the rhyme,
+and the opening one is checked against them, since a robāʿī's first line
+doesn't have to rhyme. A masnavi gets one rhyme per couplet. Matching is on
+letters only: harakat, ZWNJ and punctuation don't count, and an ezāfe هٔ counts
+as هی.
+
+```python
+from ghazal_nlp import rhyme
+r, = rhyme.scan(["دلم جز مهر مه‌رویان طریقی بر نمی‌گیرد", "ز هر در می‌دهم پندش ولیکن در نمی‌گیرد",
+                 "خدا را ای نصیحتگو حدیث ساغر و می گو", "که نقشی در خیال ما از این خوشتر نمی‌گیرد"], "ghazal")
+r.qafiya, r.radif, r.words  # ر, نمی‌گیرد, (بر, در, خوشتر)
+```
+
+Tested against the rhyme letters Ganjoor gives on the held-out fifth of its
+poems:
+
+| | poems | same rhyme letters as Ganjoor | abstained |
+|---|---:|---:|---:|
+| ghazal | 12,293 | 97.5% | 0.8% |
+| qasida | 1,563 | 92.5% | 2.1% |
+| qeta | 1,621 | 95.1% | 2.6% |
+| robāʿī | 4,750 | 98.8% | 0.1% |
+| dobeyti | 79 | 96.2% | 0% |
+
+Ganjoor has no rhyme letters for a masnavi; 98.5% of the 96,707 held-out
+masnavi couplets rhyme. Most of the disagreements are poems where one line
+misses the rhyme: Ganjoor keeps only what every line shares, while I keep what
+nearly all of them share and flag the odd line out.
+
+```sh
+ghazal-nlp rhyme --form ghazal < poem.txt
+ghazal-nlp ganjoor <snapshot> > poems.jsonl
+ghazal-nlp rhyme-eval poems.jsonl [--misses 20]
 ```
 
 ### `verb`: verb analysis and generation
 
 Every reading of a verb token: tense, aspect, mood, person, number, polarity,
 participles and perfects. It knows 251 verbs and 94 separable preverb pairs
-(بر، در، باز، وا، فرو، سر، فرا), and abstains on a stem it doesn't know.
+(بر، در، باز، وا، فرو، سر، فرا), the copula, and spoken forms (میشه، کنه،
+اومدم، نمیدونم). It abstains on a stem it doesn't know.
 `constructions` reads two-word tenses (رفته بود، خواهد رفت، گفته شد), and
 `conjugate` builds any form.
 
@@ -73,14 +124,16 @@ Tested on every VERB and AUX word in the UD Persian treebanks:
 | | Seraji | PerDT | iPerUDT (informal) |
 |---|---:|---:|---:|
 | verbs | 17,680 | 72,817 | 8,911 |
-| analysed | 82.6% | 89.3% | 59.0% |
-| features agree, when analysed | 99.4% | 98.9% | 97.9% |
-| readings per analysed verb | 1.14 | 1.14 | 1.13 |
-| می‌ and نمی‌ forms analysed | 99.2% | 98.9% | 70.3% |
+| analysed | 97.5% | 97.0% | 89.7% |
+| features agree, when analysed | 99.5% | 98.9% | 97.5% |
+| features and mood agree, where mood is marked | 98.4% | 90.4% | 93.2% |
+| readings per analysed verb | 1.30 | 1.35 | 1.24 |
+| می‌ and نمی‌ forms analysed | 99.7% | 98.9% | 99.3% |
 
-Most of what's left is the copula است and colloquial forms (میشه، داره). The
-treebanks don't agree with each other on lemmas and some features, so lemmas
-and features are scored separately; `verb_eval.py` has the exact rule.
+Most of what's left are pieces the treebanks split off a word (ست، ند، کن)
+and, in iPerUDT, a spoken ه written apart. None of the treebanks marks aspect.
+They don't agree with each other on lemmas and some features, so lemmas and
+features are scored separately; `verb_eval.py` has the exact rule.
 
 ```sh
 ghazal-nlp verb-eval <treebank>/*.conllu
@@ -112,7 +165,7 @@ ghazal-nlp vowels-derive poems.jsonl --out ghazal_nlp/data
 
 ### `ezafe`: the ezāfe after a silent ه
 
-`sites` finds every word ending in a silent ه that's followed by another word,
+`junctions` finds every word ending in a silent ه that's followed by another word,
 records how the junction is written (هٔ، ۀ، ه‌ی، هی، ه ی or nothing), and
 removes just that mark. Two classifiers then look at the unmarked text:
 `written` decides whether a written mark is an ezāfe or an old spelling of ‌ای,
@@ -120,17 +173,17 @@ and `junction` decides whether an unmarked junction has an ezāfe.
 
 ```python
 from ghazal_nlp import ezafe
-for site in ezafe.sites({"text": "نامه را نوشتم و خانه زیبا بود"}):
-    print(site["head"], ezafe.junction(site))
+for j in ezafe.junctions("نامه را نوشتم و خانه زیبا بود"):
+    print(j.head, j.mark, j.label, j.reason)
 ```
 
 Tested by me on sites from Wikipedia, Wikisource, books and Ganjoor
 (`data/ezafe-*-dev.jsonl`):
 
-| | sites | agree |
-|---|---:|---:|
-| `written` | 124 | 122 (98%) |
-| `junction` | 175 | 147 (84%) |
+| | sites | agree | always the commoner label |
+|---|---:|---:|---:|
+| `written` | 124 | 122 (98%) | 90.3% |
+| `junction` | 175 | 148 (85%) | 61.1% |
 
 The rules were written while looking at these sites, so treat these as
 development numbers. `junction` mostly errs by finding an ezāfe that isn't
@@ -169,7 +222,8 @@ Where the two styles differ:
 |---|---|---|
 | ezāfe after silent ه | خانهٔ / خانۀ; خانه‌ی is wrong | خانه‌ی; خانهٔ and خانۀ are fine |
 | plural and comparative | ZWNJ, joined allowed | ZWNJ (house); joined is fine |
-| compounds (آنها، این‌طور، هیچ‌کدام) | its printed lists | what careful writers write, pair by pair (`data/ghazal-house-forms.tsv`) |
+| compounds (پایان‌نامه، بین‌المللی) | its printed lists | joined where careful writers mostly join them (`data/ghazal-compounds.tsv`) |
+| pairs written both ways (آنها/آن‌ها) | its printed lists | what careful writers write more, pair by pair (`data/ghazal-house-forms.tsv`) |
 | tanvin (واقعاً) | required | left as written |
 | preferred spellings (اطاق/اتاق) | the Academy's pick | both fine |
 | می before a verb | ZWNJ; spaced form only | ZWNJ; spaced or joined, checked by `verb` |
