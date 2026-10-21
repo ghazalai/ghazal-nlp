@@ -30,21 +30,23 @@ class GoldPoem:
     held_out: bool
 
 
-def held_out(poem_id: str) -> bool:
-    """A fixed fifth of the poems, by id. The hash chain is the one every
-    published number used."""
-    doc_id = hashlib.sha1(f"poem\x1fganjoor\x1f{poem_id}".encode()).hexdigest()
+def held_out(poem_id: str, kind: str = "poem") -> bool:
+    """A fixed fifth of the poems, by poem id, or of the poets, by name. The hash
+    chain is the one every published number used."""
+    doc_id = hashlib.sha1(f"{kind}\x1fganjoor\x1f{poem_id}".encode()).hexdigest()
     return int.from_bytes(hashlib.blake2b(doc_id.encode(), digest_size=8).digest(), "big") % 5 == 0
 
 
-def load_gold(path: Path) -> list[GoldPoem]:
-    """Poems with a single metre label, from ``ganjoor.poems`` written as JSON lines."""
+def load_gold(path: Path, by: str = "poem") -> list[GoldPoem]:
+    """Poems with a single metre label, from ``ganjoor.poems`` written as JSON lines;
+    ``by="poet"`` holds out a fifth of the poets instead of a fifth of the poems."""
     out = []
     with open(path, encoding="utf-8") as f:
         for line in f:
             p = json.loads(line)
             if p["metre_status"] == "single" and p["text"] and p["metre"]:
-                out.append(GoldPoem(p["id"], tidy(p["metre"]), p["text"], held_out(p["id"])))
+                out.append(GoldPoem(p["id"], tidy(p["metre"]), p["text"],
+                                    held_out(p["poet"], "poet") if by == "poet" else held_out(p["id"])))
     named = Counter(p.metre for p in out if not p.held_out and "(" in p.metre)
     names = {}
     for label, _ in named.most_common():

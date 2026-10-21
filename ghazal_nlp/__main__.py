@@ -38,15 +38,16 @@ def scan(a):
 
 
 def aruz_scores(a):
-    scanner = aruz.Scanner(lexicon=None if a.no_lexicon else aruz.WeightLexicon.load(), marks=None if a.stripped else aruz.Marks())
-    poems = aruz_eval.load_gold(a.gold)
+    lexicon = None if a.no_lexicon else aruz.WeightLexicon.load(a.weights) if a.weights else aruz.WeightLexicon.load()
+    scanner = aruz.Scanner(lexicon=lexicon, marks=None if a.stripped else aruz.Marks())
+    poems = aruz_eval.load_gold(a.gold, by=a.by)
     report = aruz_eval.evaluate(poems, scanner, split=a.split, limit=a.limit)
     report["thiesen"] = aruz_eval.score_readings(aruz_eval.load_readings(aruz.DATA / "readings-thiesen.tsv"), scanner)
     dump(report)
 
 
 def aruz_derive(a):
-    poems = aruz_eval.load_gold(a.gold)
+    poems = aruz_eval.load_gold(a.gold, by=a.by)
     aruz_eval.write_inventory(aruz_eval.build_inventory(poems), a.out / "metres.tsv")
     weights, report = aruz_eval.derive_weights(poems, aruz.Inventory.load(a.out / "metres.tsv"))
     aruz_eval.write_weights(weights, report, a.out / "weights.tsv")
@@ -178,11 +179,14 @@ def main() -> None:
     c.add_argument("gold", type=Path, help="the output of `ganjoor`")
     c.add_argument("--split", default="held_out", choices=["held_out", "dev"])
     c.add_argument("--limit", type=int, default=2000)
+    c.add_argument("--by", default="poem", choices=["poem", "poet"], help="hold out poems or whole poets")
+    c.add_argument("--weights", type=Path, help="a weights.tsv from aruz-derive --by poet")
     c.add_argument("--no-lexicon", action="store_true")
     c.add_argument("--stripped", action="store_true")
     c = command("aruz-derive", aruz_derive, "rebuild metres.tsv and weights.tsv")
     c.add_argument("gold", type=Path)
     c.add_argument("--out", type=Path, default=Path("."), help="where to write them")
+    c.add_argument("--by", default="poem", choices=["poem", "poet"])
     c = command("rhyme", rhymes, "the rhyme letters and radif of a poem, one hemistich per line")
     c.add_argument("text", nargs="*")
     c.add_argument("--form", required=True, choices=rhyme.FORMS)
