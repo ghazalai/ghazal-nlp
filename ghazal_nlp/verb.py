@@ -133,6 +133,9 @@ def _epenthetic(table: dict, stem: str):
 
 
 def _after_prefix(stem: str) -> str:
+    """بیاور، بیفت; a stem already in ای keeps its ا (بایست)."""
+    if stem.startswith("ای"):
+        return stem
     return "یا" + stem[1:] if stem.startswith("آ") else "ی" + stem[1:] if stem.startswith("ا") else stem
 
 

@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from .verb import ZWNJ, Analyzer, Reading
+from .verb import PAST_ENDINGS, PRESENT_ENDINGS, ZWNJ, Analyzer, Reading
 
 FEATURES = ("Person", "Number", "Polarity", "Tense")
 MOODS = {"Indicative": "Ind", "Subjunctive": "Sub", "Imperative": "Imp"}
@@ -88,3 +88,58 @@ def evaluate(paths, analyzer: Analyzer) -> dict:
         "abstentions": dict(reasons.most_common()),
         "commonest_unanalysed": unknown.most_common(20),
     }
+
+
+# UniMorph cells conjugate can build, as its arguments; the others (perfects, future, progressive, the bare
+# present PFV, participles) are counted, not scored.
+CELLS = {("PRS", "IPFV"): {}, ("PST",): {"tense": "past"}, ("PST", "IPFV"): {"tense": "past", "aspect": "imperfective"},
+         ("SBJV", "PRS"): {"mood": "subjunctive"}, ("IMP",): {"mood": "imperative"}}
+
+
+def naive(infinitive: str, tense="present", mood="indicative", person=3, number="sing", aspect=None, **_) -> str:
+    """The baseline: every verb regular, the present stem the infinitive less یدن or its last two letters."""
+    stem = infinitive[:-1] if tense == "past" else infinitive[:-3] if infinitive.endswith("یدن") else infinitive[:-2]
+    endings = PAST_ENDINGS if tense == "past" else PRESENT_ENDINGS
+    ending = next(e for e, v in endings.items() if v == (person, number))
+    if mood == "imperative":
+        ending = "" if number == "sing" else "ید"
+    prefix = "می" if mood == "indicative" and (tense == "present" or aspect) else "ب" if tense == "present" else ""
+    return prefix + stem + ending
+
+
+def unimorph(path, analyzer: Analyzer) -> dict:
+    """conjugate against UniMorph's Persian paradigms, cell by cell. UniMorph
+    writes no ZWNJ (میخورم), so forms are compared without it. A compound verb
+    (آبتنی کردن) is its light verb's form after the first part."""
+    tally, misses = Counter(), []
+    with open(path, encoding="utf-8") as f:
+        rows = [line.rstrip("\n").split("\t") for line in f if line.count("\t") == 2]
+    for lemma, form, tags in rows:
+        t = tags.split(";")
+        if "COL" in t:
+            continue
+        person = next((int(x) for x in t if x in "123"), None)
+        cell = next((c for c in CELLS if set(c) == set(t) - {"V", "1", "2", "3", "SG", "PL"}), None)
+        kind = "compound" if " " in lemma else "simple"
+        if cell is None or person is None:
+            tally[f"{kind}:not_built"] += 1
+            continue
+        first, _, verb = lemma.rpartition(" ")
+        args = dict(CELLS[cell], person=person, number="sing" if "SG" in t else "plur")
+        mine, base = analyzer.conjugate(verb, **args), naive(verb, **args)
+        gold = form.replace(ZWNJ, "")
+        tally[f"{kind}:cells"] += 1
+        tally[f"{kind}:built"] += mine is not None
+        tally[f"{kind}:right"] += mine is not None and (first + " " if first else "") + mine.replace(ZWNJ, "") == gold
+        tally[f"{kind}:baseline"] += (first + " " if first else "") + base == gold
+        if mine is not None and (first + " " if first else "") + mine.replace(ZWNJ, "") != gold and len(misses) < 30:
+            misses.append([lemma, tags, form, mine])
+    report = {}
+    for kind in ("simple", "compound"):
+        n = tally[f"{kind}:cells"] or 1
+        report[kind] = {"cells": tally[f"{kind}:cells"], "not_built_cells": tally[f"{kind}:not_built"],
+                        "built": round(tally[f"{kind}:built"] / n, 4), "right": round(tally[f"{kind}:right"] / n, 4),
+                        "right_when_built": round(tally[f"{kind}:right"] / (tally[f"{kind}:built"] or 1), 4),
+                        "naive_baseline": round(tally[f"{kind}:baseline"] / n, 4)}
+    report["misses"] = misses
+    return report
