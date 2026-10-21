@@ -255,14 +255,15 @@ def _spell(first: str, second: str, form: str) -> str:
 @lru_cache(maxsize=None)
 def closed_list(name: str) -> dict[str, str]:
     """A ``wrong<TAB>right`` table in ``data/``, or a pair table: first word,
-    second word, the house spelling and the other spellings (spaced, zwnj, solid)."""
+    second word, the house spelling, the other spellings (spaced, zwnj, solid)
+    and any evidence after them."""
     table = {}
     for line in (DATA / name).read_text(encoding="utf-8").splitlines():
         if line.startswith("#") or not line.strip():
             continue
         cells = [c.strip() for c in line.split("\t")]
-        if len(cells) == 4 and cells[2] in SPELLINGS:
-            first, second, house, others = cells
+        if len(cells) >= 4 and cells[2] in SPELLINGS:
+            first, second, house, others = cells[:4]
             right = _spell(first, second, house)
             for other in others.split(","):
                 if (wrong := _spell(first, second, other)) != right:

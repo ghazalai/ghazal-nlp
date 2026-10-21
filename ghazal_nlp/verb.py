@@ -30,6 +30,8 @@ COPULAS = {"است": (3, "sing", "pos"), "هست": (3, "sing", "pos"), "نیست
 # A bare present stem is an imperative or a noun, never a finite verb, except
 # the impersonal می‌توان, which has no personal subject.
 IMPERSONAL = frozenset({"توان"})
+# The verbs a bare spoken present in ه is read for (کار کنه، داره، باشه); any other stem + ه is likely a noun.
+LIGHT = frozenset("کردن شدن داشتن بودن دادن زدن گرفتن خوردن آمدن".split())
 UD_ASPECT = {"imperfective": "Imp", "perfective": "Perf", "perfect": "Perf", "imperfective_perfect": "Imp"}
 
 
@@ -265,6 +267,8 @@ class Analyzer:
                                   "indicative", *past_endings[ending], polarity)
         for written, ending in _split_ending(body, present_endings):
             for stem, verb in lookup(present, written):
+                if spoken and ending == "ه" and not prefixed and verb.infinitive not in LIGHT:
+                    continue  # نامه is a letter, not نام+ه
                 # A stem with a glide alternate takes it before ی: می‌گوید is گوی+د, not گو+ید.
                 if not _stem_allowed(stem, verb.present, prefixed=prefixed) or (
                         ending.startswith("ی") and stem + "ی" in verb.present):

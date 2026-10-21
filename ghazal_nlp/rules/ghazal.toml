@@ -298,9 +298,31 @@ examples.ok = ["آن\u200cها", "کتاب\u200cها"]
 examples.violations = [
   { text = "آنها", expect = "آن\u200cها" },
   { text = "بزرگترین", expect = "بزرگ\u200cترین" },
-  { text = "پایان نامه", expect = "پایان\u200cنامه" },
+  { text = "کتابهای", expect = "کتاب\u200cهای" },
 ]
 notes = "The Academy agrees on some pairs and not others (همبازی, این\u200cطور)."
+
+[[rule]]
+id = "ghazal.compounds"
+layer = "orthography"
+title.fa = "ترکیب\u200cهای جدانوشته"
+title.en = "A compound careful writers join, written spaced"
+statement.fa = "ترکیب\u200cهایی که نویسندگان دقیق بیشتر\u0650 وقت\u200cها پیوسته یا با نیم\u200cفاصله می\u200cنویسند (پایان\u200cنامه، بین\u200cالمللی) با فاصله\u0654 کامل نوشته نمی\u200cشوند."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "ghazal house style"
+source.evidence = "a stratified sample of contemporary Persian: joined 60% or more of the time on average across the strata that write the pair"
+academy.position = "varies"
+detector.type = "closed_list"
+detector.file = "ghazal-compounds.tsv"
+detector.kind = "spaced_compound"
+examples.ok = ["پایان\u200cنامه", "بین\u200cالمللی"]
+examples.violations = [
+  { text = "پایان نامه", expect = "پایان\u200cنامه" },
+  { text = "بین المللی", expect = "بین\u200cالمللی" },
+]
+notes = "The Academy prints some of these and leaves the rest to the writer."
 
 [[rule]]
 id = "ghazal.ezafe_after_silent_he"
