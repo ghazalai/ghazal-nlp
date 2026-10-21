@@ -100,7 +100,7 @@ def vowels_derive(a):
 
 def junctions(a):
     for line in lines(a):
-        for j in ezafe.junctions(line):
+        for j in ezafe.junctions(line, a.profile, a.metre):
             print(line[slice(*j.span)], j.mark, j.label, j.reason, sep="\t")
 
 
@@ -222,6 +222,8 @@ def main() -> None:
     c.add_argument("--out", type=Path, default=Path("."), help="where to write them")
     c = command("ezafe", junctions, "each silent-ه junction and whether it carries an ezāfe")
     c.add_argument("text", nargs="*")
+    c.add_argument("--profile", default="prose", choices=["prose", "verse"])
+    c.add_argument("--metre", help="the poem's metre, as Ganjoor labels it, for --profile verse")
     command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on my labels")
     registers = sorted(orthography.REGISTERS)
     c = command("rules", rules, "the spelling rules: what is recorded, what runs")

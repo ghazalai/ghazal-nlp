@@ -17,7 +17,7 @@ from collections import Counter
 from dataclasses import dataclass
 from functools import lru_cache
 
-from . import orthography, verb, vowels
+from . import aruz, orthography, verb, vowels
 
 ZWNJ, ZWJ = "‌", "‍"
 WORD = re.compile(r"[\wً-ٰٟۖ-ۭ‌‍]+")
@@ -171,16 +171,43 @@ def word_class(token: str) -> str:
     return "content_unknown" if has_letter(word) else "nonword"
 
 
-def junction(site: dict) -> Decision:
+@lru_cache(maxsize=64)
+def _scanner(metres: tuple[str, ...]) -> aruz.Scanner:
+    full = aruz.scanner()
+    return aruz.Scanner(aruz.Inventory(e for e in full.inventory.entries if e.label in metres), lexicon=full.lexicon)
+
+
+def metre(site: dict) -> str | None:
+    """``ezafe`` or ``none``: whichever reading of the junction lets its line scan with
+    fewer licences in ``site["metre"]``, or else in the line's own cheapest metres;
+    None on a tie. A long ezāfe after a silent ه is not counted as a licence: in the
+    Shāhnāme's metre it is always long."""
+    text = site["neutralized_text"]
+    h0, h = site["neutral_head_span"]
+    line = next(m for m in re.finditer(r"[^\n\t]+", text) if m.start() <= h0 < m.end())
+    a, line = line.start(), line.group()
+    metres = (site["metre"],) if site.get("metre") else aruz.scanner().scan(line).metres
+    if not metres:
+        return None
+    scan = _scanner(tuple(metres)).scan
+    cost = [s.licences - ("ezafe_lengthening" in s.devices) if s.metres else 99
+            for s in (scan(line[:h - a] + "ٔ" + line[h - a:]), scan(line[:h - a] + "ْ" + line[h - a:]))]
+    return None if cost[0] == cost[1] else "ezafe" if cost[0] < cost[1] else "none"
+
+
+def junction(site: dict, profile: str = "prose") -> Decision:
     """Does the junction carry an ezāfe? ``ezafe``, ``none`` or ``abstain``.
 
     None across punctuation, before a participle's auxiliary or شده، after a head
     that takes none (همیشه، چگونه، از جمله، شده), in a reduplication (تکه تکه),
-    and before a connector, a preposition, a copula or a verb; ezāfe before a
-    pronoun, a participle or any other content word. The last is a stand-in for a
-    noun and adjective lexicon, not a claim that a word the verb analyser does not
-    know is nominal.
+    and before a connector, a preposition, a copula or a verb. Otherwise, in
+    profile ``prose``, ezāfe before a pronoun, a participle or any other content
+    word. The last is a stand-in for a noun and adjective lexicon, not a claim
+    that a word the verb analyser does not know is nominal. In profile ``verse``
+    the metre decides (``metre``), and without one there is none.
     """
+    if profile not in ("prose", "verse"):
+        raise ValueError(f"unknown profile {profile!r}")
     text, head, gap, nxt, _ = _parts(site)
     if not bare(nxt) or any(unicodedata.category(c)[0] in "PS" for c in gap):
         return Decision("none", "boundary")
@@ -194,6 +221,8 @@ def junction(site: dict) -> Decision:
     cls = word_class(nxt)
     if cls in ("connector", "preposition", "copula", "clitic", "verb_reading"):
         return Decision("none", cls)
+    if profile == "verse":
+        return Decision(m, "metre") if (m := metre(site)) else Decision("none", "default")
     if cls in ("pronoun", "participle_reading", "content_unknown"):
         return Decision("ezafe", cls)
     return Decision("abstain", "unknown")
@@ -224,12 +253,13 @@ class Junction:
     reason: str
 
 
-def junctions(text: str) -> list[Junction]:
+def junctions(text: str, profile: str = "prose", metre: str | None = None) -> list[Junction]:
     """Every silent-ه junction in ``text``: ``ezafe``, ``none`` or ``abstain``, and why.
-    A written mark is judged by ``written``, an unmarked junction by ``junction``."""
+    A written mark is judged by ``written``, an unmarked junction by ``junction``;
+    ``metre`` is the poem's, for profile ``verse``."""
     out = []
-    for site in sites({"text": text}):
-        d = written(site) if site["marked"] else junction(site)
+    for site in sites({"text": text, "metre": metre}):
+        d = written(site) if site["marked"] else junction(site, profile)
         out.append(Junction(site["head"], text[slice(*site["next_span"])], (site["head_span"][0], site["next_span"][1]),
                             site["observed_mark_class"], "none" if d.label == "not_ezafe" else d.label, d.reason))
     return out

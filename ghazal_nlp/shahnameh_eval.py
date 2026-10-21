@@ -13,6 +13,7 @@ vowel. A reading fits when every vowel it marks is the Tajik one on that
 letter, every sukun it marks has none, and a vowel it marks before a bare ا، و
 or ی is that letter's (چُو، رَا). The lexicon comes from all of Ganjoor, these
 poems included, but from the editors' marks, not from the Tajik.
+The verse profile of ``ezafe.junction`` is given the Shāhnāme's metre.
 """
 
 from __future__ import annotations
@@ -26,6 +27,7 @@ from .orthography import DATA
 
 SHORT = {vowels.FATHA: "a", vowels.KASRA: "i", vowels.DAMMA: "u"}
 NATURAL = {"ا": "a", "آ": "a", "و": "u", "ی": "i"}
+METRE = "فعولن فعولن فعولن فعل (متقارب مثمن محذوف یا وزن شاهنامه)"
 FOLD = str.maketrans({"أ": "ا", "إ": "ا", "ؤ": "و", "ي": "ی", "ى": "ی", "ك": "ک", "\u200c": None, "\u200d": None})
 
 
@@ -81,7 +83,7 @@ def evaluate(path=DATA / "shahnameh-tajik-test.jsonl", seed: int = 0) -> dict:
             t[f"{kind}_any"] += any(ok)
             t[f"{kind}_random"] += ok[rng.randrange(len(ok))]
         found = heads(r["fa"], r["words"])
-        for site in ezafe.sites({"text": r["fa"]}):
+        for site in ezafe.sites({"text": r["fa"], "metre": METRE}):
             if (w := found.get(site["head_span"][0])) is not None:
                 sites.append(site | {"gold": "ezafe" if w[2] else "none", "gold_written": "ezafe" if w[2] else "not_ezafe"})
     rate = lambda a, b: round(t[a] / t[b], 4) if t[b] else 0.0
@@ -89,4 +91,5 @@ def evaluate(path=DATA / "shahnameh-tajik-test.jsonl", seed: int = 0) -> dict:
             "vowels": {k: {"words": t[k], "top_reading_fits": rate(f"{k}_top", k), "some_reading_fits": rate(f"{k}_any", k),
                            "random_reading_fits": rate(f"{k}_random", k)} for k in ("settled", "ambiguous")},
             "ezafe_junction": ezafe.score(sites, ezafe.junction, "gold"),
+            "ezafe_junction_verse": ezafe.score(sites, lambda s: ezafe.junction(s, "verse"), "gold"),
             "ezafe_written": ezafe.score([s for s in sites if s["marked"]], ezafe.written, "gold_written")}

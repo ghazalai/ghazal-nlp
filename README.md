@@ -233,6 +233,18 @@ for j in ezafe.junctions("نامه را نوشتم و خانه زیبا بود")
     print(j.head, j.mark, j.label, j.reason)
 ```
 
+`junction` has two profiles. `prose`, the default, is the one above. `verse`
+keeps the rules for where there's no ezāfe, then lets the metre decide: it scans
+the line once with the junction read as an ezāfe and once without, and takes
+whichever needs fewer licences. Give it the poem's metre when you know it;
+otherwise it uses the line's own cheapest metres. With no metre or a tie it says
+none.
+
+```python
+ezafe.junctions("فرستاده شاه را پیش خواند", profile="verse",
+                metre="فعولن فعولن فعولن فعل (متقارب مثمن محذوف یا وزن شاهنامه)")
+```
+
 Tested by me on sites from Wikipedia, Wikisource and Ganjoor, and against the
 pronunciations in SentenceBench and HomoRich:
 
@@ -259,6 +271,7 @@ dictionary, per its paper), and about 40% of its sentences GPT-4o wrote, so its
 rows measure agreement with that tagging, not with people.
 
 ```sh
+ghazal-nlp ezafe --profile verse --metre "<Ganjoor's label>" "<a hemistich>"
 ghazal-nlp ezafe-eval
 ghazal-nlp g2p-eval test_set.csv
 ```
@@ -277,13 +290,18 @@ kept.
 | `vowels`, one reading: it fits | 5,499 | 87.6% | |
 | `vowels`, several: the commonest fits | 6,689 | 59.4% | a random one 46.1% |
 | `vowels`, several: one of them fits | 6,689 | 95.5% | |
-| `ezafe.junction` | 561 | 54.7% | always none 90.6% |
+| `ezafe.junction`, prose | 561 | 54.7% | always none 90.6% |
+| `ezafe.junction`, verse, the metre given | 561 | 96.3% | always none 90.6% |
 | `ezafe.written`, marked sites | 51 | 96.1% | always ezāfe 96.1% |
 
 The vowels are the Tajik edition's (یَکی، سَر، و read u), and Tajik doesn't
-tell i from ī or u from ū. `junction` fails on the verse: a silent-ه head
-before a noun with no ezāfe is the usual case there (همه کوه، تیره خاک), and
-it finds one at 252 of 508 such junctions.
+tell i from ī or u from ū. The prose profile fails on the verse: a silent-ه
+head before a noun with no ezāfe is the usual case there (همه کوه، تیره خاک),
+and it finds one at 252 of 508 such junctions. I tuned the verse profile on the
+other four fifths of the poems (11,417 sites), where it gets 97.1% against 90.5%
+for always none. In this metre an ezāfe after a silent ه is always long, so the
+verse profile doesn't count lengthening it as a licence. Modern verse (Nima,
+Sepehri, Forough, Akhavan, Shamlou) isn't measured yet.
 
 ```sh
 ghazal-nlp shahnameh-eval

@@ -107,3 +107,12 @@ def test_junctions_in_plain_text():
 def test_heads_and_neighbours_without_an_ezafe():
     labels = [j.label for j in ezafe.junctions("گرفته شده است. خیره شده بود. همیشه یک قدم جلوتر. تکه تکه کرد. از جمله آشنایی")]
     assert labels == ["none"] * 8
+
+
+def test_the_verse_profile_reads_the_metre():
+    metre = "فعولن فعولن فعولن فعل (متقارب مثمن محذوف یا وزن شاهنامه)"
+    found = [(j.label, j.reason) for t in ("فرستاده شاه را پیش خواند", "از اندیشه دل دور کن تا توان", "خانه زیبا")
+             for j in ezafe.junctions(t, "verse", metre)]
+    assert found == [("ezafe", "metre"), ("none", "metre"), ("none", "default")]
+    with pytest.raises(ValueError):
+        ezafe.junction(next(ezafe.sites(segment("خانه زیبا"))), "poetry")
