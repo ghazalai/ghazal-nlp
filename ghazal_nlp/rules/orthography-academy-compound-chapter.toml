@@ -1,0 +1,860 @@
+# Orthography — «ترکیب‌ها», the compounds chapter of the Academy standard.
+#
+#   دستور خطّ فارسی (ویراست جدید)
+#   فرهنگستان زبان و ادب فارسی، نشر آثار، تهران، چاپ اول ۱۴۰۱
+#   ISBN 978-622-5305-22-9
+#   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
+#   pages 58–68, read from the page rendered at 400dpi — the PDF's text layer
+#   contains no U+200C anywhere, so an extraction cannot answer a spacing
+#   question.
+#
+# Page 58 is the clause that governs everything here. The Academy names three
+# possible policies for compound spacing — rule everything apart, rule
+# everything together, or rule only the obligatory cases — and states that it
+# chose the third: «تنها موارد الزامی جدانویسی یا پیوسته‌نویسی را ... معیّن
+# کرده است». So a compound this chapter does not name is *deliberately
+# unruled*, and نخست وزیر against نخست‌وزیر is not a violation either way. A
+# preference there is a house preference and must ship labelled as one, not as
+# a rule with a page number behind it.
+#
+# The chapter has three parts and they are not symmetrical:
+#
+#   الف) ترکیب‌هایی که الزاماً پیوسته نوشته می‌شوند     pp. 58–61
+#   ب)  ترکیب‌هایی که الزاماً با نیم‌فاصله/بی‌فاصله     pp. 61–66
+#   ج)  ترکیب‌هایی که الزاماً با فاصلهٔ کامل            pp. 67–68
+#
+# Two of its clauses are general rules with a gate we can actually test, and
+# they are the ones worth having: p. 59 ج and p. 66 بند ۱۱ both say a compound
+# whose first part ends in a **silent ه** takes a half-space, on the stated
+# ground that «های غیرملفوظ در حکم حرف منفصل است». That is decidable, because
+# the silent-ه inventory is derived from a corpus (see `orthography.py`).
+#
+# Everything else in the chapter is either a printed list — transcribed here
+# verbatim as a closed list — or a rule whose gate we do not have, recorded
+# with its examples and `status = "proposed"` so the specification exists
+# before the detector does.
+#
+# Every active rule below was measured over 420,000 segments of a 2026 Persian
+# corpus before it was made active, and every finding it produced was read.
+# The measurements that *rejected* a clause are recorded in that rule's notes,
+# because a rule the evidence killed is worth more than a rule that was never
+# tried.
+#
+# ZWNJ (U+200C) is written \u200c throughout.
+
+[[rule]]
+id = "orthography.compound_after_silent_he"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ ترکیب پس از «ه»ی غیرملفوظ"
+title.en = "A compound whose first part ends in a silent ه takes a ZWNJ"
+statement.fa = """
+کلمه\u200cهای مرکّبی که جزء اوّل آن\u200cها به «ها»ی غیرملفوظ ختم شود (های غیرملفوظ در \
+حکم حرف منفصل است) با نیم\u200cفاصله نوشته می\u200cشود: بهانه\u200cگیر، پایه\u200cدار، \
+کناره\u200cگیر. همچنین ترکیب\u200cهای پسوندی: دروازه\u200cبان، دیوانه\u200cوار، \
+زباله\u200cدان، علاقه\u200cمند، لاله\u200cزار.\
+"""
+statement.en = """
+Compounds built with a suffix are written solid — that is the default the standard sets \
+on p. 58 — except when the first part ends in a silent ه, in which case the half-space \
+is obligatory. The standard's own reason is that a silent ه counts as a non-joining \
+letter.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "59, 66"
+source.locator = "«ترکیب\u200cها»، الف بند ۱ ج؛ و بند ۱۱"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "compound"
+detector.require_silent_he = true
+detector.seconds = ["مند", "پژوه", "آمیز", "پرداز", "گری", "شناس", "بان"]
+detector.host_exceptions = ["همه", "جمله", "همیشه", "هرگونه", "چگونه", "گونه", "درباره"]
+examples.ok = ["علاقه\u200cمند", "دروازه\u200cبان", "خانه من", "همه کار", "گره دار"]
+examples.violations = [
+  { text = "علاقه مند", expect = "علاقه\u200cمند" },
+  { text = "دروازه بان", expect = "دروازه\u200cبان" },
+  { text = "عشوه گری", expect = "عشوه\u200cگری" },
+]
+notes = """
+The gate is the rule. «خانهٔ من» is an ezāfe phrase that p. 67 ج.۱ gives a *full* space \
+and «خانه\u200cدار» is a compound that takes a half-space, and nothing in the characters \
+separates them — so the second element decides, and it is a closed set of bound elements \
+the standard prints.\n\
+
+Which second elements is a measured question, not a transcription. Run over 420,000 \
+segments of a 2026 Persian corpus with the silent-ه gate and a wider set — گر، کار، گیر، \
+دار، ساز، کش، دان، خوان، زار، نگار، خانه، نامه، آور — the rule produced 1,231 findings \
+and most were wrong, all in the same way: the second element also exists as a free word. \
+«دیده گر بیند» is the conditional گر; «همه کار» is a noun phrase; «کرده گیر» and «شده \
+دان» are the idiomatic imperatives *suppose that* and *know that*; «نه جات» is جا with a \
+clitic. The seven elements listed above are the ones with no free-word reading, and on \
+them the rule produces 124 findings over 81 distinct forms of which every one was read \
+and every one is a genuine violation — لاله\u200cزار، عشوه\u200cگری، شعبده\u200cپرداز، \
+دیده\u200cبان، کعبه\u200cشناس، نهفته\u200cپژوه.\n\
+
+زار is the instructive exclusion. It looks like the best candidate in the chapter — \
+لاله\u200cزار and سبزه\u200cزار are the standard's own examples and they carry 53 of its \
+94 findings — but زار is also the free adjective *wretched*, and «همه زار»، «ناله زار»، \
+«چگونه زار»، «شده زار» are correct Persian. At roughly 2:1 it is too good to drop and \
+not good enough to ship, so it is named here rather than silently omitted.\n\
+
+دار and ساز are the same shape at about 7:3 (پرده\u200cدار، روزه\u200cدار، چاره\u200cساز \
+right; «پاینده دار» and «کرده ساز» wrong) and are the obvious next work: a finite-verb \
+reading would decide them, which is the morphology layer's job and not this one's.
+"""
+
+[[rule]]
+id = "orthography.suffix_always_zwnj"
+layer = "orthography"
+title.fa = "پسوندهایی که همواره با نیم\u200cفاصله نوشته می\u200cشوند"
+title.en = "The suffixes that take a ZWNJ whatever the host"
+statement.fa = """
+پسوندهای «-آسا»، «-آگین»، «-فام»، «-وش» همواره با نیم\u200cفاصله/بی\u200cفاصله (بسته به \
+نوع حروف) از کلمهٔ پیش\u200cاز خود نوشته می\u200cشوند: برق\u200cآسا، خشم\u200cآگین، \
+آتش\u200cفام، تلخ\u200cوش. پسوند «-وار» نیز همواره با نیم\u200cفاصله نوشته می\u200cشود، \
+مگر در: بزرگوار، خانوار، راهوار/رهوار، سوگوار، شاهوار/شهوار، عیالوار، ماهوار.\
+"""
+statement.en = """
+Unlike the suffixes of the previous rule, these four — and وار — take the half-space \
+regardless of what the host ends in. وار carries the standard's own list of eight \
+exceptions, which are written solid.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "verse", "classical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "59–60"
+source.locator = "«ترکیب\u200cها»، الف بند ۱، تبصره\u200cهای ۱ و ۴"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "compound"
+detector.require_silent_he = false
+detector.seconds = ["وار", "آسا", "آگین", "فام", "وش"]
+detector.host_exceptions = ["همه", "جمله", "همیشه", "هرگونه", "چگونه", "گونه"]
+examples.ok = ["برق\u200cآسا", "بزرگوار", "سوگوار", "خشم\u200cآگین"]
+examples.violations = [
+  { text = "پروانه وار", expect = "پروانه\u200cوار" },
+  { text = "نهنگ آسا", expect = "نهنگ\u200cآسا" },
+  { text = "خشم آگین", expect = "خشم\u200cآگین" },
+]
+notes = """
+The eight وار exceptions need no exception list here and deliberately have none: بزرگوار \
+and سوگوار are written solid, so they arrive as a single token and the space scan never \
+sees them. Listing them would be a transcription with no effect, which is worse than not \
+listing them.\n\
+
+Measured over 420,000 segments of a 2026 Persian corpus: 387 findings over 270 distinct \
+forms — موسی\u200cوار، پروانه\u200cوار، سلیمان\u200cوار، خاقانی\u200cآسا، \
+گوهر\u200cآگین، لعل\u200cفام، ماه\u200cوش. Read in full, the only residue is a handful \
+of verse artefacts where فام follows a finite verb («شود فام»).\n\
+
+باره and جات are in the standard's same تبصره and are **not** here. باره is a free noun \
+— «دربارهٔ او»، «بر باره نشست» — and جات is far more often جا with a second-person \
+clitic («نه جات»، «هر جات») than the plural suffix. Both would fire on ordinary Persian.
+"""
+
+[[rule]]
+id = "orthography.suffix_san"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ پسوند «-سان»"
+title.en = "The suffix سان takes a ZWNJ"
+statement.fa = """
+پسوند «-سان» همواره با نیم\u200cفاصله/بی\u200cفاصله از کلمهٔ پیش\u200cاز خود نوشته \
+می\u200cشود، مگر در: همسان، یکسان.\
+"""
+statement.en = """
+سان takes the half-space after any host; همسان and یکسان are the two forms the standard \
+writes solid.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical", "verse", "classical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 59
+source.locator = "«ترکیب\u200cها»، الف بند ۱، تبصرهٔ ۲"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["یکسان", "همسان", "سیماب\u200cسان"]
+examples.violations = [
+  { text = "نهنگ سان", expect = "نهنگ\u200cسان" },
+  { text = "شمع سان", expect = "شمع\u200cسان" },
+]
+notes = """
+Split from the rule above on evidence rather than on the page — the standard puts سان in \
+the same تبصره as وار, and it was written here as an executable rule first. It is \
+proposed because it was then measured, twice, and failed both times.\n\
+
+Over 420,000 segments of a 2026 Persian corpus it produces 341 findings, more than every \
+other suffix in this pack combined, and 89% of them are one construction the standard \
+never illustrates: a demonstrative contraction plus سان — «بدین سان» 75, «زین سان» 46, \
+«بران سان» 39, «زان سان» 33, «ازین سان» 26. The clause says «همواره», so بدین\u200cسان \
+is probably what it intends, but probably is not what the other rules here stand on.\n\
+
+The second measurement is the one that settles it. Run over a Wikipedia sample, seven of \
+fourteen findings were not Persian at all: «نیویورک سان» is *The New York Sun*, \
+«دوسالانهٔ سان» a biennale, and سان is separately an ordinary Persian noun in «سان دیدن» \
+— a military review. A suffix rule firing on an English newspaper masthead is not a \
+severity problem that advisory would contain; it is the wrong rule. It needs a gate that \
+knows the host is Persian and the سان is a suffix, and that gate does not exist here.
+"""
+
+[[rule]]
+id = "orthography.suffix_vareh_solid"
+layer = "orthography"
+title.fa = "پیوسته\u200cنویسی پسوند «-واره»"
+title.en = "The suffix واره is written solid"
+statement.fa = """
+پسوند «-واره» همواره به\u200cصورت پیوسته با کلمهٔ پیش\u200cاز خود نوشته می\u200cشود: \
+جشنواره، سنگواره، گاهواره، ماهواره.\
+"""
+statement.en = """
+واره is the counterpart of وار and goes the other way: it is always solid. The pair is \
+why the standard prints them in one تبصره.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 59
+source.locator = "«ترکیب\u200cها»، الف بند ۱، تبصرهٔ ۱"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "space_where_joined"
+detector.entries."جشن واره" = "جشنواره"
+detector.entries."سنگ واره" = "سنگواره"
+detector.entries."گاه واره" = "گاهواره"
+detector.entries."ماه واره" = "ماهواره"
+detector.entries."جشن\u200cواره" = "جشنواره"
+detector.entries."سنگ\u200cواره" = "سنگواره"
+detector.entries."گاه\u200cواره" = "گاهواره"
+detector.entries."ماه\u200cواره" = "ماهواره"
+examples.ok = ["جشنواره", "ماهواره", "سنگواره"]
+examples.violations = [
+  { text = "جشن واره", expect = "جشنواره" },
+  { text = "ماه\u200cواره", expect = "ماهواره" },
+]
+notes = """
+Four printed words, and the half-spaced forms are listed alongside the spaced ones \
+because واره is the one suffix in the chapter where a ZWNJ is the error rather than the \
+repair — a writer who has learned «-وار» will write «ماه\u200cواره», and that is \
+precisely the mistake this تبصره exists to prevent.
+"""
+
+[[rule]]
+id = "orthography.pseudo_suffix_lexicalised"
+layer = "orthography"
+title.fa = "ترکیب\u200cهای واژگانی\u200cشدهٔ «-خانه» و «-نامه»"
+title.en = "The lexicalised compounds of خانه and نامه are written solid"
+statement.fa = """
+پسوندواره\u200cهای «-خانه»، «-نامه» و نظایر آن\u200cها همواره با \
+نیم\u200cفاصله/بی\u200cفاصله از کلمهٔ پیش\u200cاز خود نوشته می\u200cشوند، مگر در \
+ترکیب\u200cهایی که واژگانی شده\u200cاند: سفارتخانه، غسّالخانه، کتابخانه، گلخانه، میخانه، \
+اساسنامه، بخشنامه، دانشنامه، سالنامه، شاهنامه، فصلنامه، قطعنامه، قولنامه، ماهنامه.\
+"""
+statement.en = """
+خانه and نامه are productive enough that the standard calls them pseudo-suffixes. They \
+take a half-space by default; the fourteen compounds it prints have lexicalised and are \
+written solid.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 60
+source.locator = "«ترکیب\u200cها»، الف بند ۱، تبصرهٔ ۵"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "space_where_joined"
+detector.entries."سفارت خانه" = "سفارتخانه"
+detector.entries."کتاب خانه" = "کتابخانه"
+detector.entries."گل خانه" = "گلخانه"
+detector.entries."می خانه" = "میخانه"
+detector.entries."اساس نامه" = "اساسنامه"
+detector.entries."بخش نامه" = "بخشنامه"
+detector.entries."دانش نامه" = "دانشنامه"
+detector.entries."سال نامه" = "سالنامه"
+detector.entries."شاه نامه" = "شاهنامه"
+detector.entries."فصل نامه" = "فصلنامه"
+detector.entries."قطع نامه" = "قطعنامه"
+detector.entries."قول نامه" = "قولنامه"
+detector.entries."ماه نامه" = "ماهنامه"
+detector.entries."سفارت\u200cخانه" = "سفارتخانه"
+detector.entries."کتاب\u200cخانه" = "کتابخانه"
+detector.entries."گل\u200cخانه" = "گلخانه"
+detector.entries."اساس\u200cنامه" = "اساسنامه"
+detector.entries."بخش\u200cنامه" = "بخشنامه"
+detector.entries."دانش\u200cنامه" = "دانشنامه"
+detector.entries."سال\u200cنامه" = "سالنامه"
+detector.entries."شاه\u200cنامه" = "شاهنامه"
+detector.entries."فصل\u200cنامه" = "فصلنامه"
+detector.entries."قطع\u200cنامه" = "قطعنامه"
+detector.entries."قول\u200cنامه" = "قولنامه"
+detector.entries."ماه\u200cنامه" = "ماهنامه"
+examples.ok = ["کتابخانه", "شاهنامه", "آیین\u200cنامه", "زاد\u200cگاه"]
+examples.violations = [
+  { text = "کتاب خانه", expect = "کتابخانه" },
+  { text = "قطع\u200cنامه", expect = "قطعنامه" },
+  { text = "فصل نامه", expect = "فصلنامه" },
+]
+notes = """
+غسّالخانه is in the printed list and is not here: the spaced form «غسّال خانه» carries a \
+shadda that the corpus writes four different ways, and an entry that can only match one \
+of them is a list with a hidden hole. The general half-space case (آیین\u200cنامه، \
+زاد\u200cگاه) is deliberately not detected — that would need the lexicon of which X \
+compound with نامه, which is فرهنگ املایی خطّ فارسی, and we do not hold it. Footnote 4 \
+on p. 60 says the same thing about «-سرا»، «-کار»، «-کش»، «-گرا»، «-گونه».
+"""
+
+[[rule]]
+id = "orthography.compound_lexicalised_solid"
+layer = "orthography"
+title.fa = "ترکیب\u200cهای بسیط\u200cگونه"
+title.en = "The compounds that have lexicalised are written solid"
+statement.fa = """
+ترکیب\u200cهای واژگانی\u200cشده (بسیط\u200cگونه) پیوسته نوشته می\u200cشوند: آبرو، آبشار، \
+الفبا، تختخواب، رختخواب. همچنین کلمه\u200cهایی که در آن\u200cها کاهش یا افزایش واجی یا \
+ادغام یا جابه\u200cجایی روی داده باشد: سکنجبین، سیصد، کمابیش، نستعلیق، هشیار. و \
+ترکیب\u200cهای ساخته\u200cشده با «بِه» هنگامی که جزء دوم با «الف» یا «آ» آغاز نشود: \
+بهبود، بهداشت، بهروز، بهزیستی، بهساز.\
+"""
+statement.en = """
+Three clauses of part الف that are each a printed list: compounds that have become \
+simple words, compounds carrying a phonological change, and the compounds of بِه whose \
+second part does not start with a long ā.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "60–61"
+source.locator = "«ترکیب\u200cها»، الف بندهای ۲، ۴ و ۵"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "space_where_joined"
+detector.entries."آب رو" = "آبرو"
+detector.entries."آب شار" = "آبشار"
+detector.entries."تخت خواب" = "تختخواب"
+detector.entries."رخت خواب" = "رختخواب"
+detector.entries."کما بیش" = "کمابیش"
+detector.entries."تخت\u200cخواب" = "تختخواب"
+detector.entries."رخت\u200cخواب" = "رختخواب"
+detector.entries."آب\u200cشار" = "آبشار"
+examples.ok = ["تختخواب", "آبشار", "بهداشت", "به خانه رفت", "به نام خدا"]
+examples.violations = [
+  { text = "تخت خواب", expect = "تختخواب" },
+  { text = "رخت\u200cخواب", expect = "رختخواب" },
+  { text = "کما بیش", expect = "کمابیش" },
+]
+notes = """
+**Not one of the بِه compounds is detected, and that is a measurement.** They were \
+transcribed from p. 61 in the first draft of this rule — بهبود، بهداشت، بهروز، بهزیستی، \
+بهساز، بهداری، بهدین، بهنام — and over 18,000 segments of a 2026 Persian corpus the \
+entry «به نام» alone fired **554 times**, every one of them on «به نام خدا» and its kin: \
+an ordinary prepositional phrase. «به دین» fired 22 times on «به دین اسلام», «به روز» 12 \
+on «به روز بعد».\n\
+
+The cause is that بِه *good* and به *to* are the same two letters and the standard \
+separates them by sense. A closed list cannot, so the first draft produced the \
+highest-volume false positive in the whole rule base — louder than every real rule in \
+this pack put together. The compounds stay in the Persian statement above, where a \
+reader gets them, and out of the detector, where they would corrupt text.\n\
+
+What is left detects only the compounds with no homograph: آبرو، آبشار، تختخواب، \
+رختخواب، کمابیش. Page 61's تبصره points the same way from the other side — the بِه \
+compounds whose second part begins with آ take a half-space (به\u200cآذین، \
+به\u200cآفرید، به\u200cآیین) and footnote 3 adds the fruit به in به\u200cلیمو — three \
+more senses that one list would have to tell apart.
+"""
+
+[[rule]]
+id = "orthography.interfix_compound"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ ترکیب\u200cهای بیناوندی"
+title.en = "Compounds built on an interfix take a ZWNJ"
+statement.fa = """
+ترکیب\u200cهای ساخته\u200cشده با بیناوندهای «ا»، «به»، «تا»، و «وا» با \
+نیم\u200cفاصله/بی\u200cفاصله نوشته می\u200cشوند: جابه\u200cجا، دست\u200cبه\u200cدست، \
+دم\u200cبه\u200cدم، دورادور، روبه\u200cرو، سربه\u200cسر، گوش\u200cتاگوش، \
+لحظه\u200cبه\u200cلحظه، موبه\u200cمو. تبصره: آن دسته از ترکیب\u200cهای با بیناوند «ا» که \
+امکان اتّصال بیناوند به حرف پیشین وجود دارد پیوسته نوشته می\u200cشوند: تنگاتنگ، دمادم، \
+رنگارنگ، لبالب، مالامال.\
+"""
+statement.en = """
+X-به-X and X-تا-X compounds are held together, not spaced. The ا interfix goes solid \
+instead wherever the letter before it joins.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 63
+source.locator = "«ترکیب\u200cها»، ب بند ۵ و تبصرهٔ آن"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "space_where_zwnj"
+detector.entries."جا به جا" = "جابه\u200cجا"
+detector.entries."دست به دست" = "دست\u200cبه\u200cدست"
+detector.entries."دم به دم" = "دم\u200cبه\u200cدم"
+detector.entries."رو به رو" = "روبه\u200cرو"
+detector.entries."سر به سر" = "سربه\u200cسر"
+detector.entries."گوش تا گوش" = "گوش\u200cتاگوش"
+detector.entries."لحظه به لحظه" = "لحظه\u200cبه\u200cلحظه"
+detector.entries."مو به مو" = "موبه\u200cمو"
+detector.entries."دور ا دور" = "دورادور"
+detector.entries."تنگ ا تنگ" = "تنگاتنگ"
+detector.entries."رنگ ا رنگ" = "رنگارنگ"
+examples.ok = ["جابه\u200cجا", "رنگارنگ", "تنگاتنگ", "روبه\u200cرو"]
+examples.violations = [
+  { text = "جا به جا", expect = "جابه\u200cجا" },
+  { text = "مو به مو", expect = "موبه\u200cمو" },
+  { text = "دست به دست", expect = "دست\u200cبه\u200cدست" },
+]
+notes = """
+Only the forms the standard prints. «سر به سر» is the listed compound meaning *level \
+with*; «سر به زیر انداخت» is an ordinary prepositional phrase and shares no entry with \
+it, which is the whole reason this stays a list.
+"""
+
+[[rule]]
+id = "orthography.coordinative_compound"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ ترکیب\u200cهای عطفی و اتباعی"
+title.en = "Echo and idiomatic coordinative compounds take a ZWNJ"
+statement.fa = """
+ترکیب\u200cهای اِتباعی با نیم\u200cفاصله/بی\u200cفاصله نوشته می\u200cشوند: پول\u200cمول، \
+پول\u200cوپله، دم\u200cودستگاه، دنگ\u200cوفنگ، شلوغ\u200cپلوغ. ترکیب\u200cهای عطفی در \
+معنای مجازی یا اصطلاحی نیز: آب\u200cوهوا، پروبال، حیص\u200cوبیص، دوروبر، رتق\u200cوفتق، \
+رفت\u200cوآمد، رفع\u200cورجوع، کم\u200cوکاست، هست\u200cونیست. تبصره: ترکیب\u200cهای \
+عطفی\u200cای که در آن\u200cها واو عطف محذوف است با نیم\u200cفاصله نوشته می\u200cشوند: \
+پشتک\u200cوارو، سبک\u200cسنگین، سنگین\u200cرنگین، عجیب\u200cغریب.\
+"""
+statement.en = """
+A coordinative compound used idiomatically is one word: آب\u200cوهوا is climate, not \
+water and weather. The standard prints both lists and the elided-واو set in a تبصره.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "verse", "classical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "62–63"
+source.locator = "«ترکیب\u200cها»، ب بندهای ۳ و ۶ و تبصرهٔ آن"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "space_where_zwnj"
+detector.entries."آب و هوا" = "آب\u200cوهوا"
+detector.entries."پر و بال" = "پروبال"
+detector.entries."دور و بر" = "دوروبر"
+detector.entries."رتق و فتق" = "رتق\u200cوفتق"
+detector.entries."رفت و آمد" = "رفت\u200cوآمد"
+detector.entries."رفع و رجوع" = "رفع\u200cورجوع"
+detector.entries."کم و کاست" = "کم\u200cوکاست"
+detector.entries."هست و نیست" = "هست\u200cونیست"
+detector.entries."دم و دستگاه" = "دم\u200cودستگاه"
+detector.entries."دنگ و فنگ" = "دنگ\u200cوفنگ"
+detector.entries."شلوغ پلوغ" = "شلوغ\u200cپلوغ"
+detector.entries."سبک سنگین" = "سبک\u200cسنگین"
+detector.entries."عجیب غریب" = "عجیب\u200cغریب"
+detector.entries."پشتک وارو" = "پشتک\u200cوارو"
+examples.ok = ["آب\u200cوهوا", "عجیب\u200cغریب", "رفت\u200cوآمد", "آب و نان خورد"]
+examples.violations = [
+  { text = "آب و هوا", expect = "آب\u200cوهوا" },
+  { text = "عجیب غریب", expect = "عجیب\u200cغریب" },
+  { text = "کم و کاست", expect = "کم\u200cوکاست" },
+]
+notes = """
+Restricted to the idiomatic readings the standard prints, because the literal ones take \
+full spaces and share their characters exactly. «آب و هوای این شهر» is the compound; «آب \
+و نان» is two nouns joined by و and is not in the list. A general rule over «X و Y» \
+would rewrite Persian coordination wholesale, which is why the chapter itself is a list \
+here.
+"""
+
+[[rule]]
+id = "orthography.arabic_term_phrase"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ عبارت\u200cهای عربیِ اصطلاح\u200cشده"
+title.en = "Arabic phrases that have become Persian terms take a ZWNJ"
+statement.fa = """
+عبارت\u200cهای عربی\u200cای که تبدیل به اصطلاح شده\u200cاند با \
+نیم\u200cفاصله/بی\u200cفاصله نوشته می\u200cشوند: ان\u200cشاءالله، ماشاءالله، \
+الله\u200cاعلم، حقّ\u200cتعالی، باری\u200cتعالی، علی\u200cایّ\u200cحال، مع\u200cذلک، \
+مع\u200cهذا، من\u200cبعد، صعب\u200cالحصول، دارالسّلام، حجرالاسود.\
+"""
+statement.en = """
+An Arabic phrase that has entered Persian as a single term is written as a single term. \
+This is the opposite of the Arabic-passage question: these are Persian words that happen \
+to be Arabic in origin, not Arabic being quoted.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "classical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 64
+source.locator = "«ترکیب\u200cها»، ب بند ۹"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "space_where_zwnj"
+detector.entries."ان شاء الله" = "ان\u200cشاءالله"
+detector.entries."ما شاء الله" = "ماشاءالله"
+detector.entries."الله اعلم" = "الله\u200cاعلم"
+detector.entries."حق تعالی" = "حقّ\u200cتعالی"
+detector.entries."باری تعالی" = "باری\u200cتعالی"
+detector.entries."علی ای حال" = "علی\u200cایّ\u200cحال"
+detector.entries."مع ذلک" = "مع\u200cذلک"
+detector.entries."مع هذا" = "مع\u200cهذا"
+detector.entries."صعب الحصول" = "صعب\u200cالحصول"
+detector.entries."حبل المتین" = "حبل\u200cالمتین"
+detector.entries."صریح اللهجه" = "صریح\u200cاللّهجه"
+detector.entries."دامت برکاته" = "دامت\u200cبرکاته"
+detector.entries."سید السادات" = "سیّدالسّادات"
+detector.entries."سید الشهدا" = "سیّدالشّهدا"
+examples.ok = [
+  "ان\u200cشاءالله", "مع\u200cذلک", "من بعد ذلک غفراناً لکاتبه", "از این من بهتر است",
+]
+examples.violations = [
+  { text = "ان شاء الله", expect = "ان\u200cشاءالله" },
+  { text = "مع ذلک", expect = "مع\u200cذلک" },
+  { text = "حق تعالی", expect = "حقّ\u200cتعالی" },
+]
+notes = """
+Fifteen of roughly sixty. The rest of the printed list is vocalised Arabic — \
+اعلی\u200cالله\u200cمقامه، حمّالةالحطب، رَحِمَهُ\u200cالله، ذوالجلال\u200cوالاکرام — and \
+a closed list matches exactly, so an entry transcribed from a rendered page with one \
+shadda in the wrong place is an entry that can never fire, or worse, one that fires on \
+something else. Those are held back until the list can be checked against a second \
+source. What is here are the forms that carry no vowel signs in their spaced spelling \
+and are unambiguous.\n\
+
+«من بعد» was in this list and is not any more, and the reason is worth keeping. It fired \
+twice over 18,000 segments of a 2026 Persian corpus. The first was Saadi — «و من بعد \
+پریشان نگویم» — where من\u200cبعد means *henceforth* and the repair is right. The second \
+was «من بعد ذلک غفراناً لکاتبه», which is not Persian at all: it is Arabic, من is the \
+Arabic preposition *from*, and joining it would corrupt a quotation.\n\
+
+One for one. That is the Arabic-passage problem in a single entry: the rule is about \
+Arabic phrases naturalised **into** Persian, and it cannot tell them from Arabic being \
+quoted, because they are the same words. Nothing in this layer can, until a \
+passage-level gate exists — and the same evidence says a character-level one would not \
+do it, since every character here is equally at home in both languages.
+"""
+
+[[rule]]
+id = "orthography.present_stem_compound"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ ترکیب با بن مضارع"
+title.en = "A compound whose second part is a present verb stem takes a ZWNJ"
+statement.fa = """
+ترکیب\u200cهایی که جزء دوم آن\u200cها بن مضارع فعل باشد همواره با \
+نیم\u200cفاصله/بی\u200cفاصله نوشته می\u200cشوند: اندوه\u200cبار، ریاضی\u200cدان، \
+زبان\u200cشناس، گیاه\u200cشناس، مشقّت\u200cبار، موسیقی\u200cدان. تبصره: درصورتی\u200cکه \
+کلمهٔ ساخته\u200cشده با بن مضارع نهادینه یا واژگانی شده باشد یا جنبهٔ اداری و صنفی یافته \
+باشد پیوسته نوشته می\u200cشود: آبخیز، آبدار، آشپز، استاندار، بازیکن، بخشدار، پاسدار، \
+جانباز، حسابدار، راهدار، رگبار، سالگرد، فرماندار، مهتاب، ولگرد.\
+"""
+statement.en = """
+The general form of the compound rule: any noun plus a present stem is one word. This is \
+the clause that would decide زبان\u200cشناس and ریاضی\u200cدان without a list — and it \
+is recorded without a detector.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 62
+source.locator = "«ترکیب\u200cها»، ب بند ۲ و تبصرهٔ آن"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["زبان\u200cشناس", "آبخیز", "حسابدار", "این بار", "کرده گیر"]
+examples.violations = [
+  { text = "زبان شناس", expect = "زبان\u200cشناس" },
+  { text = "گیاه شناس", expect = "گیاه\u200cشناس" },
+  { text = "ریاضی دان", expect = "ریاضی\u200cدان" },
+]
+notes = """
+Proposed, and the reason is a measurement rather than a missing lexicon. Applied over \
+420,000 segments of a 2026 Persian corpus with the present stems the standard's own \
+examples name — دان، بار، گیر، دار، شناس، ساز، کش، خوان — the clause produced far more \
+wrong findings than right ones, and always for the same reason: a present stem *is* a \
+word. «این بار» is a noun. «به گر» is the conditional. «کرده گیر» and «شده دان» are the \
+idioms *suppose that* and *know that*, which is a bare present stem used as a finite \
+imperative and is the single most frequent construction the rule would break.\n\
+
+What separates زبان\u200cشناس from «کرده گیر» is that the first element is a noun and \
+the second is not a finite verb. That is a parse, not a lookup, and this layer does not \
+have one.\n\
+
+«کرده گیر» was re-examined 22 Sep 2026 after Ali asked whether کرده here is the noun \
+کُرده rather than the participle کَرده. It is the participle, and the corpus is \
+emphatic: of its 31 instances, two carry the privative نا- («آنچه کردم با تو من، ناکرده \
+گیر»), which attaches to a participle and not to a noun, and the word before it is a \
+light-verb complement in nearly all the rest — طی، مسخر، منزل، گذر، گنه، سیه، قوی، گل، \
+راست. Saadi pairs it in consecutive lines with «پرورده گیر». The word Ali had in mind is \
+real but is گُرده with گ — Dehkhoda's «میان دو کتف که سنگینی کوله بر روی آن افتد» — and \
+the corpus carries it as گرده گاه (8) and «بر گرده گرفت»; کُرده with a damma occurs 32 \
+times and is کُردها, the Kurds. The check also turned up «گرده گیر» three times, where \
+گرده is the *round loaf*: «قرص مه را گرده گیر». Both spellings are therefore the same \
+construction, «X را Y گیر» — which is the point this clause rests on. Two of the eight \
+stems survive under the silent-ه gate and they are in \
+`orthography.compound_after_silent_he`; the rest wait.\n\
+
+The تبصره's twenty-four institutionalised forms are recorded in the statement rather \
+than as a `solid_exceptions` list, because a list of exceptions to a rule that does not \
+run is a list nothing reads.
+"""
+
+[[rule]]
+id = "orthography.reduplicated_compound"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ ترکیب\u200cهای تکراری"
+title.en = "A reduplicated compound takes a ZWNJ"
+statement.fa = """
+ترکیب\u200cهایی که از تکرار یک واژه ساخته می\u200cشوند با نیم\u200cفاصله/بی\u200cفاصله \
+نوشته می\u200cشوند: بدوبدو، پایین\u200cپایین\u200cها، تک\u200cتک، جفت\u200cجفت، \
+خط\u200cخطی، فردفرد، کم\u200cکم، کورکورانه، لنگ\u200cلنگان، یکی\u200cیکی. اگر بین دو جزء \
+مکرّر کسرهٔ اضافه بیاید با فاصلهٔ کامل نوشته می\u200cشوند: خیسِ خیس، داغِ داغ داغ.\
+"""
+statement.en = """
+X X is written X\u200cX — except when a kasre of ezāfe sits between the two, where it \
+stays two words.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 62
+source.locator = "«ترکیب\u200cها»، ب بند ۴ و پانویس ۲"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["تک\u200cتک", "کم\u200cکم", "یکی\u200cیکی", "خیسِ خیس"]
+examples.violations = [
+  { text = "تک تک", expect = "تک\u200cتک" },
+  { text = "کم کم", expect = "کم\u200cکم" },
+  { text = "جفت جفت", expect = "جفت\u200cجفت" },
+]
+notes = """
+A two-line regex, and it is proposed rather than active for one reason: the exception is \
+invisible. «خیسِ خیس» and «خیس خیس» differ only by a kasre, and normalization commonly \
+strips diacritics — so by the time the rule base sees the text, the case the standard \
+exempts and the case it repairs are the same string. Writing this rule against \
+normalized text would be a rule that is wrong exactly where the standard bothered to say \
+so.\n\
+
+It becomes executable on text that keeps its diacritics. That is the version to build.
+"""
+
+[[rule]]
+id = "orthography.ezafe_compound_spacing"
+layer = "orthography"
+title.fa = "فاصله\u200cگذاری ترکیب\u200cهای اضافی"
+title.en = "An ezāfe compound is spaced by whether its kasre is pronounced"
+statement.fa = """
+ترکیب\u200cهای اضافی (شامل موصوف و صفت، مضاف و مضاف\u200cالیه) هنگامی که کسره یا نشانهٔ \
+اضافه تلفّظ شود با فاصلهٔ کامل نوشته می\u200cشوند: درِ باغ، دوستِ صمیمی، نامهٔ من. \
+درصورتی\u200cکه کسرهٔ اضافه تخفیف یافته یا محذوف باشد با نیم\u200cفاصله/بی\u200cفاصله \
+نوشته می\u200cشوند: آب\u200cلیمو، آب\u200cمیوه، تخت\u200cجمشید، تخم\u200cمرغ، \
+حاصل\u200cضرب، دست\u200cکم، سیب\u200cزمینی، صاحب\u200cنظر، صرف\u200cنظر، صورت\u200cجلسه، \
+هیئت\u200cمدیره.\
+"""
+statement.en = """
+The clause that decides نخست وزیر against نخست\u200cوزیر, and it decides it by \
+pronunciation: full space when the ezāfe is said, half-space when it has been dropped.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 67
+source.locator = "«ترکیب\u200cها»، ج بند ۱ و تبصره\u200cهای ۱ و ۲"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["تخم\u200cمرغ", "سیب\u200cزمینی", "دوستِ صمیمی", "آبرو"]
+examples.violations = [
+  { text = "تخم مرغ", expect = "تخم\u200cمرغ" },
+  { text = "سیب زمینی", expect = "سیب\u200cزمینی" },
+  { text = "صرف نظر", expect = "صرف\u200cنظر" },
+]
+notes = """
+This is the clause Ali's preference for نخست\u200cوزیر belongs under, and it is the \
+reason the preference cannot be shipped as a rule off this book. The standard's test is \
+whether the ezāfe kasre is *pronounced*, which Persian script does not write and this \
+layer cannot hear. What the standard supplies is thirteen printed examples, not a \
+criterion a detector can apply — and نخست وزیر is not among them, so p. 58's «تنها موارد \
+الزامی» governs and it is unruled by design.\n\
+
+A house preference for نخست\u200cوزیر is therefore legitimate and must ship as a house \
+preference with its own record, not as this rule with a page number borrowed from it. \
+The printed thirteen could ship as a closed list tomorrow; the general clause needs the \
+ezāfe, which is the vocalization layer's problem and is tracked there.
+"""
+
+[[rule]]
+id = "orthography.compound_verb_full_space"
+layer = "orthography"
+title.fa = "فاصلهٔ کامل در مصدرهای مرکّب"
+title.en = "The light verb of a compound verb keeps its full space"
+statement.fa = """
+در مصدرهای مرکّب و مصدرهای گروهی، همکرد (به\u200cصورت مصدری یا صرف\u200cشده) با یک \
+فاصلهٔ کامل از جزء غیرهمکرد نوشته می\u200cشود: اختصاص دادن، اختصاص داده بودیم، به دست \
+آوردن، جابه\u200cجا کردن، سخن گفتن، سخن گفتم. تبصرهٔ ۱: صورت\u200cهای مشتق از \
+فعل\u200cهای گروهی و مصدرهای مرکّب با نیم\u200cفاصله نوشته می\u200cشوند: آشتی\u200cکنان، \
+بازسازی\u200cشده، برون\u200cسپاری، به\u200cکارگیری، تصمیم\u200cگیرنده، فیلم\u200cبرداری، \
+یاری\u200cدهنده. تبصرهٔ ۲: صورت\u200cهای اسمی مشتق از فعل\u200cهای مرکّب پیوسته نوشته \
+می\u200cشوند: برونداد، پسماند، پیشرفت، رویداد، عملکرد، گرامیداشت.\
+"""
+statement.en = """
+A compound verb is spaced; the noun and adjective derived from it are not. «نقل شده» as \
+a verb keeps its space, «نقل\u200cشده» as a participle-adjective takes a half-space, and \
+the difference is the syntax.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "67–68"
+source.locator = "«ترکیب\u200cها»، ج بند ۲ و تبصره\u200cهای ۱ و ۲"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["سخن گفتن", "اختصاص دادن", "بازسازی\u200cشده", "پیشرفت", "نقل شده است"]
+examples.violations = [
+  { text = "سخن\u200cگفتن", expect = "سخن گفتن" },
+  { text = "اختصاص\u200cدادن", expect = "اختصاص دادن" },
+  { text = "بازسازی شده است", expect = "بازسازی\u200cشده" },
+]
+notes = """
+Recorded because it answers an existing ruling and cannot yet be executed. Ali's note on \
+a normalizer disagreement says «this نقل\u200cشده is correct with a space», and this \
+clause is why he is right: در «نقل شده است» the شده is the light verb of a compound verb \
+and takes a full space, while the same two words as an attributive adjective take a \
+half-space. The detector needs to tell a verb chain from a noun phrase.\n\
+
+The morphology layer is what would tell them apart, and its ceiling is already measured \
+and already binding: the verb-stem lexicon held 113 verbs, and 17 of 24 sampled flush می \
+left unrepaired stood before a verb the analyzer did not know. The same lexicon blocks \
+this rule. Expanding it buys both at once, which makes it the highest-value item \
+outstanding in this layer.
+"""
+
+[[rule]]
+id = "orthography.proper_noun_compound"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ ترکیب دارای اسم خاص"
+title.en = "A compound containing a proper noun takes a ZWNJ"
+statement.fa = """
+اگر یک جزء ترکیب اسم خاص باشد با نیم\u200cفاصله/بی\u200cفاصله نوشته می\u200cشود: \
+تهران\u200cگردی، حافظ\u200cپژوهی، سعدی\u200cصفت، عیسی\u200cدم.\
+"""
+statement.en = """
+A compound with a name in it is held together, whatever the other part is.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 66
+source.locator = "«ترکیب\u200cها»، بند ۱۲"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["حافظ\u200cپژوهی", "تهران\u200cگردی", "سعدی\u200cصفت", "سعدی گفت"]
+examples.violations = [
+  { text = "حافظ پژوهی", expect = "حافظ\u200cپژوهی" },
+  { text = "تهران گردی", expect = "تهران\u200cگردی" },
+  { text = "سعدی صفت", expect = "سعدی\u200cصفت" },
+]
+notes = """
+Needs a name recognizer, which the fingerprint and corpus layers have the makings of and \
+this layer does not. Recorded now because the examples are the specification: \
+«سعدی\u200cصفت» joins and «سعدی گفت» does not, and any detector built here has to keep \
+those apart before it ships.
+"""
+
+[[rule]]
+id = "orthography.compound_adjective"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ صفت\u200cهای مرکّب"
+title.en = "Compound adjectives take a ZWNJ"
+statement.fa = """
+صفت\u200cهای مرکّب با نیم\u200cفاصله/بی\u200cفاصله نوشته می\u200cشوند: اجل\u200cرسیده، \
+اخلال\u200cکننده، پاک\u200cدامن، پرفروش، تمام\u200cوقت، حق\u200cشناس، حقیقت\u200cجو، \
+خوش\u200cبرخورد، درس\u200cخوان، زمین\u200cخوار، سیه\u200cچشم، شاه\u200cنشین، \
+عافیت\u200cطلب، مصلحت\u200cبین، نیک\u200cبخت، یاری\u200cدهنده. تبصره: برخی صورت\u200cهای \
+مرخّم صفت\u200cهای فاعلی و مفعولی به\u200cصورت پیوسته نهادینه شده\u200cاند: دانشجو، \
+رهبر، کامران، نامزد.\
+"""
+statement.en = """
+The broadest clause in the chapter, and the one furthest out of reach: any compound \
+adjective is one word.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 66
+source.locator = "«ترکیب\u200cها»، بند ۱۳ و تبصرهٔ آن"
+source.retrieved = "2026-09-22"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["نیک\u200cبخت", "تمام\u200cوقت", "دانشجو", "رهبر", "مرد پاک"]
+examples.violations = [
+  { text = "نیک بخت", expect = "نیک\u200cبخت" },
+  { text = "تمام وقت", expect = "تمام\u200cوقت" },
+  { text = "پاک دامن", expect = "پاک\u200cدامن" },
+]
+notes = """
+Requires knowing that a two-word sequence is an adjective, which is a part-of-speech \
+decision over a phrase and not a property of either word. «پاک دامن» is the compound \
+*chaste*; «دامن پاک» is a noun and its adjective and takes a full space. Recorded as the \
+chapter's last clause so the pack is complete, and so that the next reader can see that \
+the missing piece is a tagger rather than another list.
+"""

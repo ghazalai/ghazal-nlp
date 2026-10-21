@@ -4,7 +4,7 @@ import sys
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
-from . import aruz, aruz_eval, ganjoor, verb, verb_eval, vowels
+from . import arabic, aruz, aruz_eval, ezafe, ganjoor, orthography, verb, verb_eval, vowels
 
 
 def dump(result) -> None:
@@ -78,6 +78,68 @@ def vowels_derive(a):
     dump(report)
 
 
+def junctions(a):
+    for line in lines(a):
+        for site in ezafe.sites({"text": line}):
+            text, (h0, _), (_, n1) = site["neutralized_text"], site["neutral_head_span"], site["neutral_next_span"]
+            reading = ezafe.written(site) if site["marked"] else ezafe.junction(site)
+            print(text[h0:n1], site["observed_mark_class"], reading.label, reading.reason, sep="\t")
+
+
+def ezafe_scores(a):
+    report = {}
+    for name, classify in (("ezafe-written-dev.jsonl", ezafe.written), ("ezafe-junctions-dev.jsonl", ezafe.junction)):
+        rows = [json.loads(line) for line in open(aruz.DATA / name, encoding="utf-8")]
+        report[name] = {t: ezafe.score(rows, classify, t) for t in ("blind", "revised")}
+    dump(report)
+
+
+def rules(a):
+    base = orthography.rulebase()
+    if a.json:
+        return dump(base.summary())
+    for rule in base.rules:
+        state = "runs" if rule.runs else "recorded" if not rule.executable else "off"
+        print(rule.id, rule.status, rule.kind, ",".join(rule.registers), state, f"ص {rule.source.page}", sep="\t")
+    s = base.summary()
+    print(f"recorded {s['recorded']} · executable {s['executable']} · running {s['running']}")
+
+
+def check(a):
+    analysis = orthography.rulebase().check(" ".join(lines(a)), registers=tuple(a.register or ["formal_written"]),
+                                            min_confidence=a.min_confidence)
+    if a.json:
+        return dump(analysis)
+    for x in analysis.findings:
+        print(x.rule_id + (" (contested)" if x.contested else ""), x.text, x.suggestion or "—",
+              f"{x.citation} ({x.confidence})", sep="\t")
+    for x in analysis.abstentions if a.abstentions else ():
+        print(x.rule_id, x.text, f"abstains: {x.reason}", sep="\t")
+
+
+def verify(a):
+    try:
+        base = orthography.RuleBase.load()
+    except orthography.RuleError as e:
+        sys.exit(f"rule base failed verification\n{e}")
+    print(f"{len(base.rules)} rules pass their own examples")
+
+
+def profile(a):
+    files = sorted(a.path.glob("*.txt")) if a.path.is_dir() else [a.path]
+    dump(orthography.rulebase().profile((f.read_text(encoding="utf-8") for f in files),
+                                        registers=tuple(a.register or ["formal_written"])))
+
+
+def passages(a):
+    text = " ".join(lines(a))
+    spans = arabic.detector().detect(text) + (arabic.QuranIndex(a.quran).detect(text) if a.quran else [])
+    if a.json:
+        return dump([asdict(s) for s in spans])
+    for s in sorted(spans, key=lambda s: s.start):
+        print(s.start, s.end, text[s.start:s.end], ",".join(s.reason + s.quran_refs), sep="\t")
+
+
 def main() -> None:
     p = argparse.ArgumentParser(prog="ghazal-nlp")
     sub = p.add_subparsers(dest="command", required=True)
@@ -122,6 +184,26 @@ def main() -> None:
     c.add_argument("text", nargs="*")
     c = command("vowels-derive", vowels_derive, "rebuild the vowel lexicon and review queue")
     c.add_argument("gold", type=Path, help="the output of `ganjoor`")
+    c = command("ezafe", junctions, "each silent-ه junction and whether it carries an ezāfe")
+    c.add_argument("text", nargs="*")
+    command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on the development rulings")
+    registers = sorted(orthography.REGISTERS)
+    c = command("rules", rules, "the orthography rules: what is recorded, what runs")
+    c.add_argument("--json", action="store_true")
+    c = command("check", check, "check text against the rules; every finding cites its page")
+    c.add_argument("text", nargs="*")
+    c.add_argument("--register", action="append", choices=registers, help="formal_written when none")
+    c.add_argument("--min-confidence", default="medium", choices=["low", "medium", "high"])
+    c.add_argument("--abstentions", action="store_true", help="also what the rules declined to judge")
+    c.add_argument("--json", action="store_true")
+    command("verify", verify, "run every rule against its own examples")
+    c = command("profile", profile, "rule coverage over a file or a directory of .txt files")
+    c.add_argument("path", type=Path)
+    c.add_argument("--register", action="append", choices=registers)
+    c = command("arabic", passages, "Arabic passages inside Persian")
+    c.add_argument("text", nargs="*")
+    c.add_argument("--quran", type=Path, action="append", default=[], help="a Tanzil copy, sura|aya|text lines")
+    c.add_argument("--json", action="store_true")
     a = p.parse_args()
     a.run(a)
 

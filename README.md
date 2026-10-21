@@ -137,6 +137,41 @@ are development numbers. `junction` overcalls the ezāfe on unmarked text (24
 of its 28 revised errors), because without a noun and adjective lexicon any
 word it cannot place counts as content. Reproduce: `ghazal-nlp ezafe-eval`.
 
+### `orthography`: the Academy's spelling rules, cited
+
+The rules of the Academy's دستور خطّ فارسی as records (`rules/*.toml`): each
+cites its page and clause, declares the registers it holds in, and ships
+correct Persian it must not flag and wrong Persian it must flag. A rule that
+fails its own examples does not load. Findings point into the text as written,
+and a case a rule cannot decide comes back as an abstention with its reason:
+a ZWNJ before ای is only suggested once the word's final ه is proven silent.
+
+```python
+from ghazal_nlp import orthography
+for f in orthography.rulebase().check("کتاب ها را بزرگتر می نویسم").findings:
+    print(f.rule_id, f.text, "→", f.suggestion, f.citation)
+orthography.is_silent_he("خانه"), orthography.is_silent_he("راه")  # True, False
+```
+
+45 rules are recorded, 34 have a detector, and 33 run (31 active, and 2
+contested, where the standard and current usage disagree and the finding says
+so). The silent-ه inventory (`data/orthography-silent-he.tsv`) holds 1,269
+words, each decided by how its own spellings treat the ه (خانه‌ای against
+گرهی). Reproduce: `ghazal-nlp verify`, `ghazal-nlp rules`.
+
+### `arabic`: Arabic passages inside Persian
+
+A conservative detector for Arabic syntax inside Persian text: a shared word, a
+name or a ة decides nothing, Persian words bound the spans, and finding no span
+is an abstention, not a verdict. A second, exact path matches Quran wording
+against copies of the text the caller supplies (Tanzil).
+
+On a fresh sample of Persian corpus lines, judged by a model rather than a
+person: 44 of 50 detected spans are Arabic (88%; 95% interval 76–94%), no
+line without Arabic was flagged, and the detector finds 52% of the lines that
+contain Arabic (weighted). The Quran path is also 44 of 50, and finds 29%.
+Reproduce: `ghazal-nlp arabic`.
+
 ## Data
 
 The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0, and each file's

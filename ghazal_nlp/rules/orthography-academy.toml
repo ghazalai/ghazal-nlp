@@ -1,0 +1,443 @@
+# Orthography, from the Academy standard.
+#
+#   دستور خطّ فارسی (ویراست جدید)
+#   فرهنگستان زبان و ادب فارسی، نشر آثار، تهران، چاپ اول ۱۴۰۱
+#   ISBN 978-622-5305-22-9
+#   retrieved 2026-08-04 from apll.ir/wp-content/uploads/2023/07/Dastour-e-Khat-17.04.1402.pdf
+#   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
+#
+# ZWNJ (U+200C) is written as \u200c throughout, so that a rule stays readable
+# and diffable. An invisible character in a rule record is a maintenance trap.
+#
+# Every rule here is checked against its own examples when the rule base loads.
+# Where the standard states a rule we cannot yet decide mechanically, the rule
+# is recorded with no detector rather than approximated — see
+# orthography.plural_ha_mandatory_separation.
+
+[[rule]]
+id = "orthography.mi_prefix"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ «می» و «نمی»"
+title.en = "The imperfective prefix takes a ZWNJ"
+statement.fa = "«می» و «همی» (پیشوندهای فعل استمراری) نسبت به جزء اصلی فعل همواره با نیم\u200cفاصله نوشته می\u200cشوند."
+statement.en = """
+The imperfective prefixes می and همی are always written with a ZWNJ before the verb \
+stem. The same holds for the negated form نمی.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 39
+source.locator = "بند «می و همی»"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "affix_zwnj"
+detector.affix = "می"
+detector.variants = ["نمی"]
+detector.position = "prefix"
+detector.detect_space = true
+detector.detect_solid = false
+detector.free_form = true
+detector.min_host = 3
+examples.ok = ["می\u200cرود", "نمی\u200cنویسد", "کتاب را می\u200cخوانم"]
+examples.violations = [
+  { text = "می رود", expect = "می\u200cرود" },
+  { text = "نمی گوید", expect = "نمی\u200cگوید" },
+]
+notes = """
+Solid detection is off, and that is not an oversight. میدان, میهن, میوه, میراث and a \
+long tail of ordinary words begin with the same two letters, so deciding میرود from \
+میدان needs a verb-stem lexicon. It becomes decidable when the morphology layer supplies \
+one. Until then the rule abstains rather than guesses. Space detection carries medium \
+confidence because می is also the noun *wine*, which is why the register scope excludes \
+verse: در verse the free reading is common and the prefix reading is not safe.
+"""
+
+[[rule]]
+id = "orthography.bi_prefix"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ پیشوند نفی «بی»"
+title.en = "The privative prefix بی takes a ZWNJ"
+statement.fa = """
+«بی» در نقش پیشوند نفی همیشه با نیم\u200cفاصله از کلمهٔ پس از خود نوشته می\u200cشود، مگر \
+در صورت\u200cهای واژگانی\u200cشده. «بی» در نقش حرف اضافه همیشه با فاصلهٔ کامل نوشته \
+می\u200cشود.\
+"""
+statement.en = """
+The privative prefix بی is always written with a ZWNJ before its host, except in a \
+listed set of lexicalised forms. As a free preposition it takes a full space.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 39
+source.locator = "بند «بی» و تبصرهٔ آن"
+source.retrieved = "2026-08-04"
+detector.type = "affix_zwnj"
+detector.affix = "بی"
+detector.position = "prefix"
+detector.detect_space = true
+detector.detect_solid = true
+detector.free_form = true
+detector.min_host = 3
+detector.solid_exceptions = [
+  "بیجا", "بیچاره", "بیخود", "بیداد", "بیدل", "بیراه", "بیزار", "بیعار", "بیکار", "بینوا",
+  "بیهوش", "بیهوده", "بیگانه",
+]
+detector.lexical_exceptions = [
+  "بیمار", "بیست", "بیرون", "بیان", "بیدار", "بیشه", "بینی", "بیضه", "بینش", "بیشتر",
+  "بیمه", "بیضی", "بیابان", "بیعت", "بیت", "بینا", "بیوه", "بیل", "بیش", "بیگاه",
+]
+examples.ok = ["بی\u200cتردید", "بیچاره", "بیمار", "بیستم"]
+examples.violations = [
+  { text = "بی تردید", expect = "بی\u200cتردید" },
+  { text = "بیحوصله", expect = "بی\u200cحوصله" },
+]
+notes = """
+The standard is explicit that بیهوده and بیگانه are no longer analysable as prefixed \
+forms — they are simplex words — so they sit in the exception list for a different \
+reason from بیچاره. Space detection is medium confidence because the free preposition \
+(«بی هیچ چشمداشتی») is correct Persian.
+"""
+
+[[rule]]
+id = "orthography.ham_prefix"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ پیشوند «هم»"
+title.en = "The prefix هم takes a ZWNJ before its host"
+statement.fa = """
+«هم» در ترکیب همواره با نیم\u200cفاصله از کلمهٔ پس از خود نوشته می\u200cشود، مگر در \
+فهرست استثناها. «هم» پیش از کلمهٔ پیش از خود همواره با فاصلهٔ کامل نوشته می\u200cشود.\
+"""
+statement.en = """
+As a compounding prefix هم is written with a ZWNJ before its host, with a listed set of \
+exceptions written solid. As a free adverb — با هم آمدند — it takes a full space.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 40
+source.locator = "بند «هم» و پانوشت ۱"
+source.retrieved = "2026-08-04"
+detector.type = "affix_zwnj"
+detector.affix = "هم"
+detector.position = "prefix"
+detector.detect_space = true
+detector.detect_solid = false
+detector.min_host = 3
+detector.require_host_in = [
+  "اتاق", "بازی", "پایه", "قدم", "گروه", "نسل", "نگاشت", "مخرج", "وطن", "کلاس", "خانه",
+  "درس", "سفر", "تیم", "رزم", "سنگر", "دوره", "نام", "شکل", "جنس", "مرز", "نشین", "زمان",
+  "پیمان", "رده", "سطح", "نوا",
+]
+detector.solid_exceptions = [
+  "هماره", "همان", "هماورد", "هماهنگ", "همایش", "همباز", "همتا", "همچنان", "همچنین",
+  "همچو", "همچون", "همدل", "همدم", "همدیگر", "همراه", "همزن", "همسان", "همسایه", "همسر",
+  "همشهری", "همشیره", "همکار", "همکرد", "همکف", "همگن", "همگون", "همو", "هموار", "همواره",
+  "هموند", "همیدون", "همین",
+]
+examples.ok = ["هم\u200cوطن", "همکار", "با هم آمدند"]
+examples.violations = [
+  { text = "هم وطن", expect = "هم\u200cوطن" },
+  { text = "هم گروه", expect = "هم\u200cگروه" },
+]
+notes = """
+This is the rule that shows why require_host_in exists. «هم» followed by a space is \
+usually correct — it is the free adverb — so firing on every «هم X» would be worse than \
+useless. The detector therefore only fires on a host in the compound lexicon, which is \
+drawn from the standard's own example list and is deliberately short. Everything else \
+abstains with reason host_not_in_compound_lexicon, and that abstention count is the work \
+order: the full list lives in فرهنگ املایی خطّ فارسی, which we do not have. Solid \
+detection is off for the same reason in reverse — همایون, همیشه and the derivatives of \
+thirty-two exception words cannot be separated from genuine compounds without that \
+lexicon.
+"""
+
+[[rule]]
+id = "orthography.comparative_tar"
+layer = "orthography"
+title.fa = "نیم\u200cفاصلهٔ «ـتر» و «ـترین»"
+title.en = "The comparative and superlative suffixes take a ZWNJ"
+statement.fa = """
+«ـتر» و «ـترین» همواره با نیم\u200cفاصله/بی\u200cفاصله از کلمهٔ پیش از خود نوشته \
+می\u200cشوند، مگر در: بهتر، کهتر، مهتر، بیشتر، کمتر، کلانتر.\
+"""
+statement.en = """
+The comparative ـتر and superlative ـترین are always written with a ZWNJ after the word \
+they attach to, except in six lexicalised forms.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 40
+source.locator = "بند «ـتر و ـترین»"
+source.retrieved = "2026-08-04"
+detector.type = "affix_zwnj"
+detector.affix = "تر"
+detector.variants = ["ترین"]
+detector.position = "suffix"
+detector.detect_space = true
+detector.detect_solid = true
+detector.free_form = true
+detector.min_host = 3
+detector.solid_exceptions = ["بهتر", "کهتر", "مهتر", "بیشتر", "کمتر", "کلانتر"]
+detector.lexical_exceptions = [
+  "دختر", "دفتر", "بستر", "اختر", "کبوتر", "پوستر", "شتر", "چتر", "تئاتر", "مستر", "دکتر",
+  "انتر", "اکثر", "معتبر", "منتظر", "دلاور",
+]
+examples.ok = ["بزرگ\u200cتر", "بهتر", "دختر", "زیبا\u200cترین"]
+examples.violations = [
+  { text = "بزرگ تر", expect = "بزرگ\u200cتر" },
+  { text = "بزرگتر", expect = "بزرگ\u200cتر" },
+  { text = "مهم ترین", expect = "مهم\u200cترین" },
+]
+severity = "advisory"
+notes = """
+Severity is advisory rather than violation, and the two error modes are not equally \
+strong. The full-space form («بزرگ تر») is permitted by no standard. The solid form \
+(«بزرگتر») is extremely common in real Persian and is house style at several publishers; \
+the standard is unambiguous that it is wrong, but a tool that shouts about it would be \
+ignored. Both are reported; the reader decides. تر is also the free adjective *wet*, \
+which is why the space finding carries medium confidence.
+"""
+
+[[rule]]
+id = "orthography.plural_ha"
+layer = "orthography"
+title.fa = "جدانویسی «ـها»ی جمع"
+title.en = "The plural marker ها is recommended to be written separately"
+statement.fa = """
+«ـها» (نشانهٔ جمع) به هر دو صورتِ پیوسته و جدا (با نیم\u200cفاصله) به کار می\u200cرود، \
+ولی جدانویسی آن، از لحاظ آموزشی و همچنین مسائل فنی مربوط به پردازش متن، توصیه \
+می\u200cشود.\
+"""
+statement.en = """
+The plural ها is used both joined and separated, but the standard recommends separation \
+— explicitly citing text processing as one of the reasons. A full space is not among the \
+permitted forms.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 40
+source.locator = "بند «ـها (نشانهٔ جمع)»"
+source.retrieved = "2026-08-04"
+detector.type = "affix_zwnj"
+detector.affix = "ها"
+detector.position = "suffix"
+detector.detect_space = true
+detector.detect_solid = true
+detector.min_host = 3
+detector.space_severity = "violation"
+detector.solid_severity = "advisory"
+detector.lexical_exceptions = [
+  "تنها", "بها", "رها", "فقها", "گیاه", "سپاه", "دستگاه", "پناه",
+]
+examples.ok = ["کتاب\u200cها", "تنها", "خانه\u200cها"]
+examples.violations = [
+  { text = "کتاب ها", expect = "کتاب\u200cها" },
+  { text = "کتابها", expect = "کتاب\u200cها" },
+]
+notes = """
+The asymmetry is the standard's own: joined is permitted, so it is advisory; a full \
+space is not permitted by anyone, so it is a violation. The standard names our exact \
+problem as a reason for its recommendation — spacing errors break tokenization — which \
+is a rare case of an orthographic authority arguing from computation.
+"""
+
+[[rule]]
+id = "orthography.plural_ha_after_silent_he"
+layer = "orthography"
+title.fa = "جدانویسی الزامی «ـها» پس از «ه»ی غیرملفوظ"
+title.en = "The plural ها must be separated after a silent ه"
+statement.fa = """
+هرگاه کلمه به «ه»ی غیرملفوظ ختم شود، «ها» فقط به صورت جدا (با نیم\u200cفاصله) نوشته \
+می\u200cشود: خانه\u200cها، میوه\u200cها.\
+"""
+statement.en = """
+When the word ends in a silent ه, the plural ها may only be written separately. This is \
+one of the six environments where the standard makes separation mandatory rather than \
+recommended.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 41
+source.locator = "تبصرهٔ «ها»، بند ۵"
+source.retrieved = "2026-08-04"
+detector.type = "pattern"
+detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*ه)ها(?![\\w\u200c])"
+detector.kind = "solid_where_zwnj_required"
+detector.repair = "\\1\u200cها"
+detector.severity = "violation"
+detector.confidence = "high"
+examples.ok = ["خانه\u200cها", "میوه\u200cها", "کتاب\u200cها"]
+examples.violations = [
+  { text = "خانهها", expect = "خانه\u200cها" },
+  { text = "میوهها", expect = "میوه\u200cها" },
+]
+notes = """
+Decidable from characters alone, unlike the other five environments — which is why this \
+one has a detector and orthography.plural_ha_mandatory_separation does not. The rule \
+also fires for a pronounced ه preceded by a connecting letter (فقیه\u200cها), which the \
+standard requires separated for the same reason, so the over-reach is in the direction \
+of the standard rather than away from it.
+"""
+
+[[rule]]
+id = "orthography.plural_ha_mandatory_separation"
+layer = "orthography"
+title.fa = "شش محیط جدانویسی الزامی «ـها»"
+title.en = "The six environments where separating ها is mandatory"
+statement.fa = """
+«ها» در این موارد فقط به صورت جدا نوشته می\u200cشود: ۱) پس از کلمه\u200cهای بیگانه؛ ۲) \
+هنگام برجسته\u200cسازی اصل کلمه؛ ۳) هرگاه کلمه پردندانه (بیش از سه دندانه) باشد؛ ۴) در \
+جمع اسامی خاص؛ ۵) پس از «ه»ی غیرملفوظ یا «ه»ی ملفوظی که حرف پیش از آن متصل باشد؛ ۶) پس \
+از یای ساکن.\
+"""
+statement.en = """
+Six environments in which the plural ها may only be written separately. Environment 5 is \
+implemented as orthography.plural_ha_after_silent_he; the other five are recorded here \
+and not yet checkable.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 41
+source.locator = "تبصرهٔ «ها»، بندهای ۱ تا ۶"
+source.retrieved = "2026-08-04"
+examples.ok = ["ویتامین\u200cها", "سعدی\u200cها", "خط\u200cمشی\u200cها"]
+examples.violations = [
+  { text = "ویتامینها", expect = "ویتامین\u200cها" },
+  { text = "سعدیها", expect = "سعدی\u200cها" },
+]
+notes = """
+Recorded without a detector, which is a legitimate and common state. Two of the five \
+remaining environments need a loanword lexicon, one needs a proper-name lexicon, one \
+needs the writer's intent (برجسته\u200cسازی), and one needs a دندانه count — the only \
+mechanically tractable of the four, and the next to be implemented. The examples are the \
+specification the detector will be written against.
+"""
+
+[[rule]]
+id = "orthography.persian_letters"
+layer = "orthography"
+title.fa = "کاربرد «ی» و «ک» فارسی به\u200cجای «ي» و «ك» عربی"
+title.en = "Persian ی and ک, not their Arabic counterparts"
+statement.fa = """
+نشانه\u200cهای اصلی خط فارسی «ی» و «ک» است؛ صورت\u200cهای عربی «ي» و «ك» جزو \
+نشانه\u200cهای خط فارسی نیستند.\
+"""
+statement.en = """
+The Persian letters ی (U+06CC) and ک (U+06A9) are the letters of the Persian script; the \
+Arabic ي (U+064A) and ك (U+0643) are not.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 29
+source.locator = "جدول ۱. نشانه\u200cهای خط فارسی (نشانه\u200cهای اصلی)"
+source.retrieved = "2026-08-04"
+detector.type = "pattern"
+detector.pattern = "[يك]"
+detector.kind = "arabic_letter_in_persian"
+detector.severity = "violation"
+detector.confidence = "high"
+detector.note = "Arabic yeh/kaf; write the Persian ی / ک"
+examples.ok = ["کتاب\u200cهای ایرانی", "یکی"]
+examples.violations = [
+  { text = "كتاب" },
+  { text = "ايران" },
+]
+notes = """
+No repair template, because one pattern covers two letters and a suggestion must be \
+exact rather than approximately right. A normalizer already fixes this — 44,783 times in \
+one Ganjoor profile alone, its single largest rule — so the value here is not the \
+transformation but the citation: this is the clause that makes it wrong, rather than a \
+convention everyone assumes.
+"""
+
+[[rule]]
+id = "orthography.ezafe_after_silent_he"
+layer = "orthography"
+title.fa = "کسرهٔ اضافه پس از «ه»ی غیرملفوظ"
+title.en = "The ezāfe on a word ending in silent ه"
+statement.fa = """
+برای کلمه\u200cهای مختوم به «ه»ی غیرملفوظ، در حالت اضافه، از علامت «ۀ» استفاده \
+می\u200cشود: خانۀ او، برنامۀ روزانه. این علامت کوتاه\u200cشدهٔ «ی» است و نباید آن را با \
+نشانهٔ همزه اشتباه گرفت.\
+"""
+statement.en = """
+The Academy requires the ezāfe on a word ending in silent ه to be written with the \
+superscript sign (خانهٔ). Widespread contemporary usage instead writes ه + ZWNJ + ی \
+(خانه\u200cی). The sources disagree; this rule reports the disagreement rather than \
+settling it.
+"""
+kind = "contested"
+status = "contested"
+scope.registers = ["formal_written"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 47
+source.locator = "بند «کسرهٔ اضافه» و پانوشت ۱"
+source.retrieved = "2026-08-04"
+detector.type = "pattern"
+detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*ه)\u200cی(?![\\w\u200c])"
+detector.kind = "ezafe_form_disputed"
+detector.repair = "\\1ٔ"
+detector.severity = "advisory"
+detector.confidence = "medium"
+examples.ok = ["خانهٔ او", "برنامهٔ روزانه", "خانه\u200cها"]
+examples.violations = [
+  { text = "خانه\u200cی او", expect = "خانهٔ" },
+  { text = "برنامه\u200cی روزانه", expect = "برنامهٔ" },
+]
+notes = """
+The first contested rule in the base, and a deliberate one — it exists to prove the \
+mechanism before a harder disagreement needs it. A finding here says the sources \
+disagree and shows both; it does not say the writer is wrong. The corpus rate for each \
+form, per register, is the measurement that should accompany this rule and has not been \
+taken yet.
+"""
+
+[[rule.disputes]]
+source = "contemporary editorial practice"
+summary = """
+A large share of modern Persian publishing, and most web text, writes خانه\u200cی. The \
+form is legible, unambiguous, and survives copy-paste between systems that mangle U+0654 \
+— a real argument the standard does not address.
+"""

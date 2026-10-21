@@ -1,0 +1,333 @@
+# Orthography — the Arabic-derived material, from the Academy standard.
+#
+#   دستور خطّ فارسی (ویراست جدید)
+#   فرهنگستان زبان و ادب فارسی، نشر آثار، تهران، چاپ اول ۱۴۰۱
+#   ISBN 978-622-5305-22-9
+#   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
+#
+# Pages 49–57 are where Persian orthography is most obviously a negotiation with
+# another language's writing system: where the hamze sits, what happens to ة,
+# when a tanvin is obligatory. Two of the four hamze rules are recorded without
+# a detector because they are conditioned on the short vowel before the hamze,
+# and Persian does not write short vowels — the classic case where the script
+# underdetermines the language and a rule has to say so rather than guess.
+#
+# One caveat governs this whole pack and is the standard's own: page 21, قاعدهٔ
+# ۲, exempts quoted Qur'anic and Arabic text from Persian orthography — «در نقل
+# آیات قرآنی و نگارش عبارت‌های منقول از عربی، رسم خط مبدأ رعایت خواهد شد».
+# A detector cannot see a quotation mark's intent, so rules that fire inside
+# quoted Arabic carry a lowered confidence and say so.
+#
+# ZWNJ (U+200C) is written \u200c throughout.
+
+[[rule]]
+id = "orthography.hamze_medial_carrier"
+layer = "orthography"
+title.fa = "کرسی همزهٔ میانی"
+title.en = "Which carrier a medial hamze sits on"
+statement.fa = """
+همزهٔ میانی: اگر حرف پیش\u200cاز آن مفتوح باشد روی کرسی «ا» نوشته می\u200cشود (تأسّف، \
+رأفت، شأن)، مگر آنکه پس\u200cاز آن مصوّت «ای» یا «او» یا «ـِ» باشد که در این صورت روی \
+کرسی دندانه می\u200cآید (رئیس، رئوف، مطمئن)؛ اگر حرف پیش\u200cاز آن مضموم باشد روی کرسی \
+«و» (مؤذّن، رؤیا، مؤثّر)، مگر آنکه پس\u200cاز آن مصوّت بلند «او» باشد که کرسی دندانه \
+می\u200cگیرد (شئون، رئوس)؛ اگر حرف پیش\u200cاز آن مفتوح یا ساکن و پس\u200cاز آن «آ» باشد \
+به\u200cصورت «آ» نوشته می\u200cشود (قرآن، مآخذ، مرآت)؛ و در بقیهٔ موارد و در کلّیهٔ \
+کلمات دخیل فرنگی روی کرسی دندانه (مسئله، تئاتر، هیئت). استثنا: توأم.\
+"""
+statement.en = """
+Four conditions on the carrier of a medial hamze, keyed to the short vowel before it and \
+the vowel after it, plus a blanket rule sending every European loanword to the \
+dotless-tooth carrier ئ. Table 3 on pp. 52–53 prints the resulting spellings word by \
+word.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "49–50"
+source.locator = "«نشانۀ همزه» — «همزۀ میانی»، بندهای الف تا ج و تبصره"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["تأثیر", "رئیس", "مؤسسه", "قرآن", "مسئله"]
+examples.violations = [
+  { text = "تاثیر", expect = "تأثیر" },
+  { text = "موسسه", expect = "مؤسسه" },
+  { text = "مساله", expect = "مسئله" },
+]
+notes = """
+Recorded, not executable, and the reason is structural rather than temporary. Every \
+branch of this rule is conditioned on whether the letter before the hamze is مفتوح, \
+مضموم or مکسور — a short vowel, which Persian does not write. The rule is therefore a \
+statement about the phonology of a word, and checking it means knowing the word, which \
+is what Table 3 (pp. 52–53) is: a printed list of about 250 correct spellings. Turning \
+that table into a lexicon is the obvious next step and needs the table transcribed from \
+the page rather than from the PDF's text layer, because several of its cells differ only \
+by a diacritic.\n\
+
+The one fragment of this rule that *is* executable is filed separately as \
+orthography.hamze_not_yeh, because the standard names those four words as errors in its \
+own words.
+"""
+
+[[rule]]
+id = "orthography.hamze_final_carrier"
+layer = "orthography"
+title.fa = "کرسی همزهٔ پایانی"
+title.en = "Which carrier a final hamze sits on"
+statement.fa = """
+همزهٔ پایانی: اگر حرف پیش\u200cاز آن مفتوح باشد روی کرسی «ا» (خلأ، مبدأ، منشأ)؛ اگر \
+مضموم باشد روی کرسی «و» (تلألؤ، لؤلؤ)؛ اگر مکسور باشد روی کرسی «ی» (متلألئ)؛ و اگر ساکن \
+یا یکی از مصوّت\u200cهای بلند «آ» و «او» و «ای» باشد بدون کرسی نوشته می\u200cشود (جزء، \
+سوء، شیء، املاء). تبصرهٔ ۱: کلماتی مانند انشاء، املاء، اعضاء در فارسی بدون همزهٔ پایانی \
+هم نوشته می\u200cشوند که صحیح است. تبصرهٔ ۲: همزهٔ پایانی بی\u200cکرسی در اتّصال به یای \
+وحدت/نکره/نسبت/مصدری روی کرسی دندانه می\u200cآید (جزء ← جزئی، سوء ← سوئی).\
+"""
+statement.en = """
+The same vowel-conditioned carrier choice at the end of a word, with two qualifications \
+the standard adds itself: the final hamze may simply be dropped in انشاء/املاء/اعضاء, \
+and it moves onto the tooth carrier when a ی suffix follows.
+"""
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = "50–51"
+source.locator = "«همزۀ پایانی»، بندهای الف تا د و تبصره\u200cهای ۱ تا ۳"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+examples.ok = ["مبدأ", "لؤلؤ", "جزء", "انشا", "جزئی"]
+examples.violations = [
+  { text = "مبدا", expect = "مبدأ" },
+  { text = "جز", expect = "جزء" },
+]
+notes = """
+Recorded for the same reason as the medial rule — the carrier follows a short vowel the \
+script does not write — and with one extra reason of its own. The standard says in \
+تبصرهٔ ۱ that dropping the final hamze in انشاء/املاء/اعضاء is *also* correct, so a \
+naive detector would need to know which words are in that permitted set before it could \
+call a missing hamze an error. The second violation example above shows why the rule \
+matters and why it is hard: «جز» is a perfectly ordinary Persian word meaning *except*, \
+and only the sense says whether a missing hamze is an error.
+"""
+
+[[rule]]
+id = "orthography.hamze_not_yeh"
+layer = "orthography"
+title.fa = "نوشتن همزه به\u200cجای «ی» در رئیس، ارائه، جزئی، قرائت"
+title.en = "The four words the standard names as wrongly written with ی"
+statement.fa = """
+در این سال\u200cها چنان مرسوم شده است که کلمات رئیس، ارائه، جزئی، قرائت را در بعضی \
+نوشته\u200cها به شکل غلط رییس، ارایه، جزیی، قرایت می\u200cنویسند که مغایر تلفّظ متداول \
+آن\u200cهاست.\
+"""
+statement.en = """
+The standard names four words, in its own words, as commonly written wrong: رییس، ارایه، \
+جزیی، قرایت for رئیس، ارائه، جزئی، قرائت. It is the only place in the book where a \
+specific misspelling is called غلط outright.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 42
+source.locator = "پانوشت ۱ ذیل جدول «مجموعۀ ام، ای، است، ایم، اید، اند»"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "hamze_written_as_yeh"
+detector.entries."رییس" = "رئیس"
+detector.entries."ارایه" = "ارائه"
+detector.entries."جزیی" = "جزئی"
+detector.entries."قرایت" = "قرائت"
+examples.ok = ["رئیس", "ارائه", "جزئی از کل", "رویی"]
+examples.violations = [
+  { text = "رییس", expect = "رئیس" },
+  { text = "ارایه", expect = "ارائه" },
+  { text = "جزیی", expect = "جزئی" },
+]
+notes = """
+Four entries and no generalisation, deliberately. The tempting rule — *یی stands for ئی* \
+— is false across most of Persian: رویی، مویی، جویی، بویی are all ordinary words, and a \
+pattern would rewrite them. The standard names four words; the detector knows four \
+words.\n\
+
+Matching is exact, so رییس\u200cجمهور and روسا are missed. That is the documented \
+narrowing, not an oversight: extending to compounds means deciding where the listed form \
+ends inside a longer token, which is the lexicon problem again. Measured over a \
+1.08M-word sample of a 2026 Persian corpus: رییس 96, ارایه 5, جزیی 3, قرایت 0 — against \
+رئیس 734, ارائه 156, جزئی 24, قرائت 126. The correct form is the majority everywhere, \
+which is what makes the minority a finding rather than a disagreement.
+"""
+
+[[rule]]
+id = "orthography.taa_marbuta_word_final"
+layer = "orthography"
+title.fa = "«ة» در پایان واژه\u200cهای برگرفته از عربی"
+title.en = "A word-final ة is written ت or ه in Persian"
+statement.fa = """
+«ة» در واژه\u200cها و ترکیب\u200cهای برگرفته از عربی، اگر در آخر کلمه تلفّظ شود \
+به\u200cصورت «ت» نوشته می\u200cشود (رحمت، جهت، نظارت) و اگر تلفّظ نشود به\u200cصورت «ه» \
+(علاقه، مراقبه، معاینه). «ة» تنها در ترکیب\u200cهای عربیِ رایج در فارسی می\u200cماند، آن \
+هم در میان ترکیب: ثقةالاسلام، دایرةالمعارف، لیلةالقدر.\
+"""
+statement.en = """
+Word-final ة is not a Persian letter: the standard rewrites it as ت when it is \
+pronounced and as ه when it is not. It survives only *inside* fixed Arabic compounds \
+(دایرةالمعارف), never at the end of a Persian word.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 54
+source.locator = "«واژه\u200cها و ترکیب\u200cها و عبارت\u200cهای برگرفته از عربی» — «ة»، بندهای ۱ تا ۳"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "pattern"
+detector.pattern = "(?<![\\w\u200c])[\\w\u200c]*ة(?![\\w\u200c])(?!\\s+ال)"
+detector.kind = "arabic_taa_marbuta"
+detector.severity = "violation"
+detector.confidence = "medium"
+detector.note = "write ت if it is pronounced, ه if it is not — the standard does not let the detector choose"
+examples.ok = ["رحمت خدا", "علاقه", "دایرةالمعارف", "تذکرة الاولیاء"]
+examples.violations = [
+  { text = "رحمة" },
+  { text = "معاویة" },
+]
+notes = """
+No repair template, and that is the honest output: the standard's own rule branches on \
+whether the ة is pronounced, which is a fact about the word and not about the string. \
+The finding says the letter is wrong and shows the clause; choosing ت or ه is left to \
+the reader, who knows how they say it.\n\
+
+Two narrowings are built in. Word-final only, because the standard keeps ة *inside* \
+fixed compounds (دایرةالمعارف), where it is followed by ا and so never matches. And a \
+negative lookahead on a following «ال», which is what lets تذکرة الاولیاء and حدیقة \
+الحقیقه — Arabic book titles the standard writes with a full space on page 65 — pass \
+unflagged.\n\
+
+Confidence is medium rather than high because of page 21, قاعدهٔ ۲: quoted Qur'anic and \
+Arabic text keeps the source orthography, and no detector can see that a span is a \
+quotation. Measured over a 1.08M-word sample of a 2026 Persian corpus: 1,165 findings, \
+813 of them in Wikisource (largely quoted Arabic and Arabic proper names) and none at \
+all in the books partition.
+"""
+
+[[rule]]
+id = "orthography.tanvin_nasb_mandatory"
+layer = "orthography"
+title.fa = "الزامی بودن تنوین نصب"
+title.en = "A pronounced tanvin must be written"
+statement.fa = """
+آوردن تنوین، درصورتی\u200cکه تلفّظ شود، در همهٔ متون الزامی است. تنوین نصب در \
+همه\u200cجا به\u200cصورت «اً» نوشته می\u200cشود: ابداً، جزئاً، طبیعتاً، عمداً، مقدّمتاً، \
+موقّتاً، نتیجتاً، واقعاً.\
+"""
+statement.en = """
+Writing the tanvin is obligatory wherever it is pronounced, and the accusative tanvin \
+always sits on an alef. The standard's own footnote exempts ابدا، اصلا، مطلقا, which may \
+be read without it.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 56
+source.locator = "«تنوین، تشدید، حرکت\u200cگذاری»، بند ۱ و پانوشت ۱"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.file = "orthography-tanvin-nasb.tsv"
+detector.kind = "tanvin_omitted"
+detector.severity = "violation"
+detector.confidence = "high"
+examples.ok = ["واقعاً", "ظاهراً", "ابدا", "اصلا", "دانا", "رها"]
+examples.violations = [
+  { text = "واقعا", expect = "واقعاً" },
+  { text = "تقریبا", expect = "تقریباً" },
+  { text = "مثلا", expect = "مثلاً" },
+]
+notes = """
+The clause is general — *write the tanvin wherever it is pronounced* — and the standard \
+prints eleven examples. The shipped lexicon carries those eleven and then applies the \
+same clause to sixty common Arabic accusative adverbs the standard does not print; the \
+data file marks which block is which, and a reader who thinks the second block \
+over-reaches can delete it without touching the rule.\n\
+
+Three exclusions are the standard's own and three are ours. Its: ابدا، اصلا and مطلقا, \
+which its footnote says may be read without a tanvin, so their bare form is not an \
+error. Ours: جدا، بنا and عرفا, each of which is also an ordinary Persian word carrying \
+no tanvin at all — «جدا شد» is not a misspelling of «جدّاً». Matching is exact, so a \
+form written with the tanvin before the alef («واقعًا») is a different string and is \
+correctly left alone.\n\
+
+Measured over a 1.08M-word sample of a 2026 Persian corpus: about 450 bare forms against \
+about 600 written with the tanvin. Usage is genuinely split, which is why the finding is \
+a violation with a repair rather than an advisory.\n\
+
+**Do not run this rule over text whose diacritics were stripped upstream.** The books \
+partition of that corpus contains zero Arabic combining marks in 949,338 characters — \
+not few, zero — while Wikipedia has 14 per 10,000 characters and Ganjoor 65. Over that \
+partition this rule reports 16.9 findings per 10,000 words and every one of them is an \
+artefact of the ingestion path, not of a writer. A rule that reads a diacritic can only \
+be trusted on a source that carries diacritics, and saying so is part of the rule.
+"""
+
+[[rule]]
+id = "orthography.double_vav_syllable"
+layer = "orthography"
+title.fa = "هجای «ـ وو ـ» با دو واو"
+title.en = "The syllable ـووـ is written with two waws"
+statement.fa = """
+واژه\u200cهای دارای هجای میانی و پایانی «ـ وو ـ» با دو واو نوشته می\u200cشوند: داوود، \
+طاووس، کیکاووس، لهاوور، هَوو. تبصره: در مورد نام\u200cهای خاص، کاربرد املای \
+شناسنامه\u200cای/ثبتی جایز است: داوود، داوودی/داود، داودی؛ کاووس، کاووسی/کاوس، کاوسی.\
+"""
+statement.en = """
+Words with a medial or final ـووـ syllable take two waws. The standard then exempts \
+proper names, whose registry spelling is permitted whichever way it falls — which is \
+most of the words the rule would otherwise reach.
+"""
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.publisher = "فرهنگستان زبان و ادب فارسی"
+source.edition = "چاپ اول ۱۴۰۱"
+source.isbn = "978-622-5305-22-9"
+source.page = 57
+source.locator = "«تنوین، تشدید، حرکت\u200cگذاری»، بند ۵ و تبصرهٔ آن"
+source.retrieved = "2026-08-04"
+source.sha256 = "6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e"
+detector.type = "closed_list"
+detector.kind = "single_vav_for_double"
+detector.severity = "advisory"
+detector.entries."طاوس" = "طاووس"
+examples.ok = ["طاووس", "داوود", "داود", "کاووس"]
+examples.violations = [
+  { text = "طاوس", expect = "طاووس" },
+]
+notes = """
+One entry, and the size is the finding. The clause names five words and its own تبصره \
+then exempts proper names, which is four of the five — داوود, کیکاووس, کاووس and لهاوور \
+are all names, and «داود» is explicitly permitted as a registry spelling. طاووس is the \
+only common noun left, so it is the only entry. Measured over a 1.08M-word sample of a \
+2026 Persian corpus: طاوس 4 against طاووس 10, while داود runs 37 against داوود 22 — \
+which is exactly the volume this rule would have generated wrongly had the تبصره been \
+ignored.
+"""

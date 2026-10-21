@@ -1,0 +1,41 @@
+# Arabic formulae used inside Persian. The detector drops a scored span that is
+# exactly one, the Quran index a match wholly inside one; a longer Arabic clause
+# around one is still reported.
+#
+# The first 26 were listed by hand. The last seven were added once their uses in
+# a development partition were read and some were found inside Persian (from 1 of
+# 10 for لا اله الا الله to 10 of 10 for حور عین). ما شاء الله was read and left
+# out: all ten uses audited were inside Arabic.
+بسم الله
+بسم الله الرحمن الرحیم
+علیه السلام
+علیها السلام
+علیهم السلام
+علیهما السلام
+علیه الصلوة و السلام
+علیه الصلاة و السلام
+ان شاء الله
+انشاءالله
+حق تعالی
+الله تعالی
+عز و جل
+عزوجل
+جل جلاله
+صلی الله علیه و سلم
+صلی الله علیه و آله و سلم
+صلی الله علیه وآله وسلم
+رضی الله عنه
+رحمه الله
+رحمة الله علیه
+الحمد لله
+الحمدلله
+سبحانه و تعالی
+رب العالمین
+رب العزة
+لا اله الا الله
+انا لله و انا الیه راجعون
+رضی الله عنهم
+نور علی نور
+حور عین
+الحمد لله رب العالمین
+علی هذا القیاس
