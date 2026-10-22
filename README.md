@@ -237,8 +237,9 @@ for j in ezafe.junctions("نامه را نوشتم و خانه زیبا بود")
 keeps the rules for where there's no ezāfe, then lets the metre decide: it scans
 the line once with the junction read as an ezāfe and once without, and takes
 whichever needs fewer licences. Give it the poem's metre when you know it;
-otherwise it uses the line's own cheapest metres. With no metre or a tie it says
-none.
+otherwise it takes the metre most of the text's hemistichs scan cheapest in, if
+there are two or more and 40% of them agree. With no metre or a tie it says
+none, so give it the whole poem, not one line.
 
 ```python
 ezafe.junctions("فرستاده شاه را پیش خواند", profile="verse",
@@ -271,7 +272,7 @@ dictionary, per its paper), and about 40% of its sentences GPT-4o wrote, so its
 rows measure agreement with that tagging, not with people.
 
 ```sh
-ghazal-nlp ezafe --profile verse --metre "<Ganjoor's label>" "<a hemistich>"
+ghazal-nlp ezafe --profile verse --metre "<Ganjoor's label>" < poem.txt
 ghazal-nlp ezafe-eval
 ghazal-nlp g2p-eval test_set.csv
 ```
@@ -300,8 +301,22 @@ head before a noun with no ezāfe is the usual case there (همه کوه، تی�
 and it finds one at 252 of 508 such junctions. I tuned the verse profile on the
 other four fifths of the poems (11,417 sites), where it gets 97.1% against 90.5%
 for always none. In this metre an ezāfe after a silent ه is always long, so the
-verse profile doesn't count lengthening it as a licence. Modern verse (Nima,
-Sepehri, Forough, Akhavan, Shamlou) isn't measured yet.
+verse profile doesn't count lengthening it as a licence.
+
+On modern verse it doesn't help. I labelled 252 unmarked junctions from Ganjoor,
+the whole poem given as the text: 194 from Nima, Sepehri, Forough, Akhavan and
+Shamlou, 58 from Hafez, Saadi and Rumi. I set the 40% from unlabelled poems,
+before scoring these once.
+
+| | sites | verse | always none |
+|---|---:|---:|---:|
+| Hafez, Saadi, Rumi | 58 | 98.3% | 91.4% |
+| Nima, Sepehri, Forough, Akhavan, Shamlou | 194 | 89.2% | 91.2% |
+
+Nimaic verse keeps a foot but not a line length, so a third of these junctions
+are in poems that still agree on some classical metre. There it finds 5 ezāfes
+that aren't there, and of the 17 that are it finds 1. The classical rows are the same with or without Ganjoor's
+metre.
 
 ```sh
 ghazal-nlp shahnameh-eval

@@ -99,9 +99,9 @@ def vowels_derive(a):
 
 
 def junctions(a):
-    for line in lines(a):
-        for j in ezafe.junctions(line, a.profile, a.metre):
-            print(line[slice(*j.span)], j.mark, j.label, j.reason, sep="\t")
+    for text in ["\n".join(lines(a))] if a.profile == "verse" else lines(a):
+        for j in ezafe.junctions(text, a.profile, a.metre):
+            print(text[slice(*j.span)], j.mark, j.label, j.reason, sep="\t")
 
 
 def ezafe_scores(a):

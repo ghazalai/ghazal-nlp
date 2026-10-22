@@ -177,19 +177,30 @@ def _scanner(metres: tuple[str, ...]) -> aruz.Scanner:
     return aruz.Scanner(aruz.Inventory(e for e in full.inventory.entries if e.label in metres), lexicon=full.lexicon)
 
 
+@lru_cache(maxsize=8)
+def poem_metre(text: str) -> str | None:
+    """The metre most of the text's hemistichs scan cheapest in, when there are two
+    or more and at least 40% of them do. Nimaic and free verse rarely agree, and a
+    line's own cheapest metre there is noise."""
+    lines = aruz.hemistichs(text)[:aruz.MAX_LINES]
+    found, n = max(Counter(m for line in lines for m in aruz.scanner().scan(line).metres).items(),
+                   key=lambda kv: kv[1], default=(None, 0))
+    return found if len(lines) >= 2 and n >= 0.4 * len(lines) else None
+
+
 def metre(site: dict) -> str | None:
     """``ezafe`` or ``none``: whichever reading of the junction lets its line scan with
-    fewer licences in ``site["metre"]``, or else in the line's own cheapest metres;
-    None on a tie. A long ezāfe after a silent ه is not counted as a licence: in the
-    Shāhnāme's metre it is always long."""
+    fewer licences in ``site["metre"]``, or else in ``poem_metre`` of the text; None on
+    a tie or with neither. A long ezāfe after a silent ه is not counted as a licence:
+    in the Shāhnāme's metre it is always long."""
     text = site["neutralized_text"]
     h0, h = site["neutral_head_span"]
     line = next(m for m in re.finditer(r"[^\n\t]+", text) if m.start() <= h0 < m.end())
     a, line = line.start(), line.group()
-    metres = (site["metre"],) if site.get("metre") else aruz.scanner().scan(line).metres
-    if not metres:
+    found = site.get("metre") or poem_metre(text)
+    if not found:
         return None
-    scan = _scanner(tuple(metres)).scan
+    scan = _scanner((found,)).scan
     cost = [s.licences - ("ezafe_lengthening" in s.devices) if s.metres else 99
             for s in (scan(line[:h - a] + "ٔ" + line[h - a:]), scan(line[:h - a] + "ْ" + line[h - a:]))]
     return None if cost[0] == cost[1] else "ezafe" if cost[0] < cost[1] else "none"
