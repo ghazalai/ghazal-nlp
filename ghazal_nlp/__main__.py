@@ -104,6 +104,12 @@ def junctions(a):
             print(text[slice(*j.span)], j.mark, j.label, j.reason, sep="\t")
 
 
+def heh(a):
+    for line in lines(a):
+        for h in ezafe.heh(line):
+            dump(h) if a.json else print(f"{h.first} {h.second}", h.verdict, h.form, h.confidence, sep="\t")
+
+
 def ezafe_scores(a):
     report = {}
     for name, classify in (("ezafe-written-dev.jsonl", ezafe.written), ("ezafe-junctions-dev.jsonl", ezafe.junction)):
@@ -225,6 +231,9 @@ def main() -> None:
     c.add_argument("--profile", default="prose", choices=["prose", "verse"])
     c.add_argument("--metre", help="the poem's metre, as Ganjoor labels it, for --profile verse")
     command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on my labels")
+    c = command("ezafe-heh", heh, "each word ending in ه before another, and whether the ه is an ezāfe written as ه")
+    c.add_argument("text", nargs="*")
+    c.add_argument("--json", action="store_true")
     registers = sorted(orthography.REGISTERS)
     c = command("rules", rules, "the spelling rules: what is recorded, what runs")
     c.add_argument("--style", default="ghazal", choices=orthography.STYLES)

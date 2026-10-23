@@ -11,13 +11,15 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 import unicodedata
+import zlib
 from collections import Counter
 from dataclasses import dataclass
 from functools import lru_cache
 
-from . import aruz, orthography, verb, vowels
+from . import arabic, aruz, orthography, verb, vowels
 
 ZWNJ, ZWJ = "‌", "‍"
 WORD = re.compile(r"[\wً-ٰٟۖ-ۭ‌‍]+")
@@ -273,4 +275,129 @@ def junctions(text: str, profile: str = "prose", metre: str | None = None) -> li
         d = written(site) if site["marked"] else junction(site, profile)
         out.append(Junction(site["head"], text[slice(*site["next_span"])], (site["head_span"][0], site["next_span"][1]),
                             site["observed_mark_class"], "none" if d.label == "not_ezafe" else d.label, d.reason))
+    return out
+
+
+# The ezāfe written as ه, mostly in informal writing: دیواره اتاقه من for دیوارِ اتاقِ من. The ه after a
+# word is more often part of it (خونه، دسته), the copula (خوبه) or the colloquial definite (پسره رفت).
+HEH_TOKEN = re.compile(rf"[\w{MARKS}{ZWNJ}]+|[^\w\s{MARKS}{ZWNJ}]")
+NUMBERS = frozenset("یک دو سه چهار پنج شش هفت هشت نه ده یازده دوازده بیست سی چهل پنجاه صد هزار چند چن".split())
+DEGREES = frozenset("خیلی خیلیم چقدر چقد چه انقدر اینقدر انقد اینقد کاملا واقعا یکم کمی بسیار زیاد".split())
+DETERMINERS = frozenset("این اون همین همون هر یه یک هیچ کدوم کدام همه تمام".split())
+SPOKEN_PREPOSITIONS = frozenset("به از با در بر برای برا واسه تو توی سر رو روی زیر بعد قبل بدون مثل مثه پیش کنار "
+                                "جلو جلوی پشت تا بی".split())
+NEXT = ("bound", "verb", "ra", "content", "func")
+arabic_detector = lru_cache(maxsize=1)(arabic.detector)
+
+
+@lru_cache(maxsize=1)
+def heh_tables():
+    def rows(name):
+        for line in (orthography.DATA / name).read_text(encoding="utf-8").splitlines():
+            if line and not line.startswith("#"):
+                yield line.split("\t")
+    return ({r[0]: tuple(map(int, r[1:])) for r in rows("ezafe-heh-words.tsv")},
+            {(r[0], r[1]): tuple(map(int, r[2:])) for r in rows("ezafe-heh-pairs.tsv")},
+            {(r[0], r[1]): tuple(map(int, r[2:])) for r in rows("ezafe-heh-left.tsv")})
+
+
+@lru_cache(maxsize=1)
+def heh_model():
+    model = json.loads((orthography.DATA / "ezafe-heh-trees.json").read_text(encoding="utf-8"))
+    for nodes, _ in model["trees"]:
+        for node in nodes:
+            if isinstance(node[1], list):
+                node[1] = frozenset(node[1])
+    return model
+
+
+def heh_class(token: str | None, gap: str = " ") -> str:
+    if token is None:
+        return "end"
+    if not gap.isspace():
+        return "punct"
+    if token in ("را", "رو"):
+        return "ra"
+    if token.isdigit() or token in NUMBERS:
+        return "number"
+    for name, words in (("degree", DEGREES), ("determiner", DETERMINERS), ("preposition", SPOKEN_PREPOSITIONS)):
+        if token in words:
+            return name
+    return word_class(token)
+
+
+def heh_features(head: str, nxt: str, before: str | None, after: str | None, gap: str = " ") -> dict[str, float]:
+    """What the counts say about ``head`` (a word ending in ه) before ``nxt``: how edited text spells the word,
+    how often the pair is written with the bare word or its kasra instead, and the classes of the words around."""
+    words, pairs, left = heh_tables()
+    stem, log = head[:-1], math.log
+    w = words.get(head) or (0,) * 16
+    spoken, edited, stem_spoken, stem_edited, kasra, suffixed = w[:6]
+    f = {"unseen": float(head not in words), "lex": log((edited + 1) / (stem_edited + 1)),
+         "suffixed": log((suffixed + 1) / (spoken + 1)), "kasra_stem": log((kasra + 1) / (stem_spoken + stem_edited + 1)),
+         "stem_alef": float(stem[-1] in "اوآ"), "stem_yeh": float(stem[-1] in "یي")}
+    for side, counts in (("head", w[6:11]), ("stem", w[11:16])):
+        for name, n in zip(NEXT, counts):
+            f[f"{side}_{name}"] = log((n + 0.2) / (sum(counts) + 1))
+    n = [sum(c) for c in zip(*(pairs.get((stem, y), (0,) * 5) for y in {nxt, nxt[:-1] if nxt.endswith("ه") else nxt}))]
+    f["pair_seen"] = float(any(n))
+    f["pair_ratio"] = log((n[0] + 0.5) / (n[1] + n[2] + 0.5))
+    f["pair_kasra"] = math.log1p(n[2])
+    f["pair_edited"] = log((n[3] + 0.5) / (n[4] + 0.5))
+    if before is not None:
+        b = left.get((before, stem), (0, 0, 0))
+        f["left_seen"] = float(any(b))
+        f["left_ratio"] = log((b[0] + 0.5) / (b[1] + b[2] + 0.5))
+    for side, word, g in (("next", nxt, " "), ("after", after, gap), ("before", before, " ")):
+        f[f"{side}_{heh_class(word, g)}"] = 1.0
+    return f
+
+
+def heh_probability(f: dict[str, float], words: tuple[str | None, ...]) -> float:
+    """Boosted trees over the features and the hashed head, next word, word before and word after, calibrated to
+    the ezāfe-as-ه in 2.5% of sites."""
+    model = heh_model()
+    x = [f.get(n, 0.0) for n in model["features"]] + [zlib.crc32((w or "").encode()) % 4096 for w in words]
+    z = 0.0
+    for nodes, leaves in model["trees"]:
+        i = 0
+        while i >= 0:
+            feature, threshold, _, _, left, right = nodes[i]
+            v = x[feature]
+            i = left if (v in threshold if isinstance(threshold, frozenset) else v <= threshold) else right
+        z += leaves[~i]
+    z = z / model["temperature"] + model["shift"]
+    return 1 / (1 + math.exp(-max(-30.0, min(30.0, z))))
+
+
+@dataclass(frozen=True, slots=True)
+class Heh:
+    first: str
+    second: str
+    span: tuple[int, int]
+    verdict: str
+    form: str
+    confidence: float
+
+
+def heh(text: str) -> list[Heh]:
+    """Each word ending in ه before another word, and whether that ه is an ezāfe written as ه. ``verdict`` is
+    ``wrong`` when it is, with ``form`` the pair with a kasra (ی after ا and و); ``confidence`` is the
+    model's probability that the verdict is right. Verbs (رفته، می‌کنه) and Arabic passages are not sites."""
+    tokens = list(HEH_TOKEN.finditer(text))
+    passages = arabic_detector().detect(text)
+    out = []
+    for i, token in enumerate(tokens[:-1]):
+        head, nxt = token.group(), tokens[i + 1]
+        if any(p.start <= token.start() < p.end for p in passages) or (len(head) < 3 or head[-1] != "ه" or head[-2] == ZWNJ or not text[token.end():nxt.start()].isspace()
+                or not has_letter(nxt.group()) or word_class(head) in ("verb_reading", "participle_reading", "copula")):
+            continue
+        before = tokens[i - 1].group() if i and text[tokens[i - 1].end():token.start()].isspace() else None
+        after, gap = (tokens[i + 2].group(), text[nxt.end():tokens[i + 2].start()]) if i + 2 < len(tokens) else (None, " ")
+        plain = tuple(re.sub(f"[{MARKS}]", "", w) if w else w for w in (head, nxt.group(), before, after))
+        p = heh_probability(heh_features(*plain, gap), plain)
+        stem = head[:-1]
+        form = (stem + ("ی" if stem[-1] in "اوآ" else "ِ") if p >= 0.5 else head) + " " + nxt.group()
+        out.append(Heh(head, nxt.group(), (token.start(), nxt.end()), "wrong" if p >= 0.5 else "right", form,
+                       round(max(p, 1 - p), 3)))
     return out

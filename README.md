@@ -277,6 +277,35 @@ ghazal-nlp ezafe-eval
 ghazal-nlp g2p-eval test_set.csv
 ```
 
+### `ezafe.heh`: the ezāfe written as ه
+
+Informal writing often makes the ezāfe visible with ه: دیواره اتاقه من for
+دیوارِ اتاقِ من. `heh` takes every word ending in ه before another word, leaves
+out verbs and Arabic, and says whether the ه is that ezāfe (`wrong`, with the
+pair rewritten with a kasra) or belongs there (`right`: خونه، خوبه، پسره رفت).
+
+It's 700 boosted trees over corpus counts of the two words (how edited text
+spells the word, how often the pair is written bare or with a kasra, what
+follows each) and the words around. They trained on kasras rewritten as ه and
+on 1,162 sites Claude labelled, and are calibrated to the 2.5% of sites where
+the ه is an ezāfe, so they flag a site only when sure.
+
+Tested on 297 sites I labelled from tweets and YouTube comments, weighted to
+how often each kind occurs (95% intervals):
+
+| precision | recall | average precision |
+|---:|---:|---:|
+| 0.86 [0.71, 0.98] | 0.24 [0.13, 0.44] | 0.46 [0.29, 0.75] |
+
+Logistic regression on the same counts did as well on this test; on Claude's
+labels the trees are ahead (average precision 0.82 against 0.75). A character
+BiGRU and a pretrained character transformer did worse on Claude's labels and
+no better on mine.
+
+```sh
+ghazal-nlp ezafe-heh "اسمه من علیه"
+```
+
 ### The Tajik Shāhnāme as gold
 
 Tajik Cyrillic writes the short vowels and the ezāfe. I aligned a Tajik copy of
