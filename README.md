@@ -3,7 +3,7 @@
 NLP tools for Farsi and its variations, python standard library were possible.
 
 ```sh
-pip install git+https://github.com/alijulaeerad/ghazal-nlp
+pip install ghazal-nlp
 ghazal-nlp scan "یار با ماست، چه حاجت که زیادت طلبیم"
 ghazal-nlp verb "نمی‌گفتند برمی‌دارد"
 ghazal-nlp conjugate گفتن --tense past --aspect imperfective --person 1 --number plur
