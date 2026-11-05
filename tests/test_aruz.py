@@ -77,7 +77,7 @@ def test_abstentions_are_named(small):
 def test_known_hemistichs(small):
     s = Scanner(inventory=small).scan("الا یا ایها الساقی ادر کأسا و ناولها")
     assert s.metres == (HAZAJ,) and s.weights[0] == "u---u---u---u---"
-    assert set(Scanner(inventory=small).scan("بیا ساقی آن می که حال آورد").metres) == {DOBEYTI, SHAHNAMEH}
+    assert Scanner(inventory=small).scan("بیا ساقی آن می که حال آورد").metres == (SHAHNAMEH,)
     s = Scanner(inventory=small).scan("مرا با توست چندین آشنایی")
     assert s.metres and s.devices and set(s.devices) <= set(aruz.DEVICES)
 
@@ -233,7 +233,7 @@ def test_the_dowri_caesura():
     assert not dowri.scan(line).metres
     assert Scanner(inventory=inventory(RAJAZ), devices=Devices(caesura=False)).scan(line).metres
     mashkul = inventory("فعلات فاعلاتن فعلات فاعلاتن (رمل مثمن مشکول)")
-    assert Scanner(inventory=mashkul).scan("تن آدمی شریف است بجان آدمیت").licences == 2
+    assert Scanner(inventory=mashkul).scan("تن آدمی شریف است بجان آدمیت").licences == 3
 
 
 def test_marks_sit_beside_the_letters():
@@ -260,7 +260,7 @@ def test_each_mark_family():
     assert {r("- u u -"), r("- - u -")} <= read("شاه یمن", marks=False)
     assert r("- -") not in read("حقا", marks=False) and read("حقّا") == {r("- -")}
     assert r("- u -") in read("دُرِّ من") and r("u u -") not in read("دُرِّ من")
-    assert r("- u S") in read("پرّ زاغ") and r("- u S") not in read("پر زاغ", marks=False) and r("-") in read("حقّ")
+    assert r("- u S") in read("دلّ زاغ") and r("- u S") not in read("دل زاغ", marks=False) and r("-") in read("حقّ")
     assert r("- u -") in read("دیده‌ام") and r("- u -") not in read("دیده‌ام", marks=False)
     assert r("- u -") in read("جان وُ دل") and r("- u -") not in read("جان وَ دل")
 
@@ -298,4 +298,59 @@ def test_every_reading_realises_its_metre(full, name):
 
 def test_the_scanner_reaches_the_readings():
     rows = aruz_eval.load_readings(DATA / "readings-thiesen.tsv")
-    assert aruz_eval.score_readings(rows, Scanner())["reading_admitted"] == 494
+    assert aruz_eval.score_readings(rows, Scanner())["reading_admitted"] == 506
+
+
+def test_readings_lay_out_the_scan():
+    scan = aruz.scanner()
+    line = "دلم جز مهر مه‌رویان طریقی بر نمی‌گیرد"
+    best = scan.readings(line)[0]
+    assert best.metres == (HAZAJ,) and best.weights == best.pattern == "u---u---u---u---"
+    assert "".join(s.weights for s in best.syllables) == best.weights
+    assert "".join(s.letters for s in best.syllables) == "دلمجزمهرمهرویانطریقیبرنمیگیرد"
+    assert [s.letters for s in best.syllables[:3]] == ["د", "لم", "جز"]
+    assert not scan.readings("سلام علیکم")
+
+
+def test_readings_agree_with_the_scan():
+    scanner = aruz.scanner()
+    for line in ("یار با ماست، چه حاجت که زیادت طلبیم", "بشنو این نی چون شکایت می‌کند", "به نام خداوند جان و خرد"):
+        scan, found = scanner.scan(line), scanner.readings(line)
+        assert {m for r in found for m in r.metres} == {m for m, _ in scan.candidates}
+        assert found[0].licences == scan.licences
+        assert all("".join(s.weights for s in r.syllables) == r.weights for r in found)
+
+
+def test_nun_after_a_long_vowel_does_not_count():
+    """Thiesen §83: جان می‌دهد scans like جا می‌دهد, and it costs no licence."""
+    scan = aruz.scanner()
+    line = "بشنو این نی چون شکایت می‌کند"
+    best = next(r for r in scan.readings(line) if "فاعلاتن فاعلاتن فاعلن" in r.metres[0])
+    assert best.licences == 0 and "nun_after_long_vowel" in best.devices
+    assert "overlong_as_long" not in best.devices
+    off = Scanner(lexicon=scan.lexicon, devices=Devices(nun_after_long_vowel=False)).readings(line)
+    assert next(r for r in off if "فاعلاتن فاعلاتن فاعلن" in r.metres[0]).licences == 2
+
+
+def test_a_common_metre_wins_among_equals():
+    rare, common = "مفاعیلن مفاعیلن", "فاعلاتن فاعلاتن"
+    tally, costs = {rare: 1, common: 1}, {rare: 0, common: 1}
+    assert aruz.winners(tally, costs, 1) == [rare]
+    assert aruz.winners(tally, costs, 1, {rare: 8, common: 5503}) == [common]
+    assert aruz.winners({rare: 2, common: 1}, costs, 2, {rare: 8, common: 5503}) == [rare]
+
+
+def test_short_by_nature_and_the_final_e():
+    scan = aruz.scanner(lexicon=False)
+    costs = lambda line: {m: c for m, c in scan.scan(line).candidates}
+    assert costs("تو را من چشم در راهم شباهنگام")  # تو is short at no cost, Thiesen §74
+    assert aruz.prepare("چو").words == ("چو",)
+    moves = lambda word: {(w, aruz.device_names(d)) for w, _, d in aruz._syllables(aruz.prepare(word), 0, Devices())}
+    assert ("u", ()) in moves("چو") and ("-", ("cho_lengthening",)) in moves("چو")
+    assert ("u", ()) in moves("تو") and ("-", ()) in moves("تو")
+    assert ("-", ("final_e_lengthening",)) in moves("که") and ("-", ()) in moves("ده")
+
+
+def test_a_shortened_az_is_no_ezafe():
+    moves = {(w, aruz.device_names(d)) for w, _, d in aruz._syllables(aruz.prepare("ز"), 0, Devices())}
+    assert ("u", ()) in moves

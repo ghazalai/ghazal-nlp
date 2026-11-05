@@ -13,7 +13,7 @@ from datetime import date
 from pathlib import Path
 
 from .aruz import (
-    CAESURA, CONFLICT, COST, DATA, LONG, MAX_LINES, OVERLONG, PINNED, RUBAI, SHORT, UNDERDETERMINED, VARIABLE,
+    CAESURA, CONFLICT, COST, DATA, LONG, MAX_LINES, NASAL, OVERLONG, PINNED, RUBAI, SHORT, UNDERDETERMINED, VARIABLE,
     Devices, Inventory, MetreEntry, Scanner, ScriptError, Trie, WeightEntry, _constrainable_words,
     _glide, _glide_weights, _moves, _pattern_slots, _slot_blocked, _word_spans, hemistichs,
     pattern_for_label, prepare, scan_poem, votes, winners,
@@ -287,7 +287,8 @@ def derive_weights(poems, inventory: Inventory, devices: Devices = Devices(), *,
             stats["poems_label_unknown"] += 1
             continue
         if gold.metre not in tries:
-            tries[gold.metre] = Trie(sorted(set(patterns)), inventory.caesuras if devices.caesura else None)
+            folded = {p for p, labels in inventory.pattern_labels.items() if labels == [gold.metre]}
+            tries[gold.metre] = Trie(sorted({*patterns, *folded}), inventory.caesuras if devices.caesura else None)
         stats["poems"] += 1
         for line in hemistichs(gold.text)[:max_lines]:
             stats["lines"] += 1
@@ -372,7 +373,7 @@ def evaluate(poems, scanner: Scanner, *, split: str = "held_out", limit: int = 2
             poem["abstain"] += 1
             per_metre[gold.metre]["abstain"] += 1
             continue
-        best = winners(tally, costs, len(text))
+        best = winners(tally, costs, len(text), scanner.inventory.poems)
         if len(best) == 1:
             outcome = "exact" if best[0] == gold.metre else "wrong"
             if outcome == "wrong":
@@ -451,7 +452,7 @@ def readings(skel, patterns, devices: Devices, caesuras=None, cap: int = 50_000)
         pass
 
     def tokens(weights, dev):
-        return (SUPERHEAVY,) if weights == LONG + SHORT or dev & OVERLONG else tuple(weights)
+        return (SUPERHEAVY,) if weights == LONG + SHORT or dev & (OVERLONG | NASAL) else tuple(weights)
 
     def go(i, node):
         nonlocal total

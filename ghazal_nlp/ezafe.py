@@ -176,7 +176,8 @@ def word_class(token: str) -> str:
 @lru_cache(maxsize=64)
 def _scanner(metres: tuple[str, ...]) -> aruz.Scanner:
     full = aruz.scanner()
-    return aruz.Scanner(aruz.Inventory(e for e in full.inventory.entries if e.label in metres), lexicon=full.lexicon)
+    return aruz.Scanner(aruz.Inventory(e for e in full.inventory.entries if e.label in metres), lexicon=full.lexicon,
+                        devices=aruz.Devices(final_e_lengthening=False))
 
 
 @lru_cache(maxsize=8)
@@ -193,7 +194,7 @@ def poem_metre(text: str) -> str | None:
 def metre(site: dict) -> str | None:
     """``ezafe`` or ``none``: whichever reading of the junction lets its line scan with
     fewer licences in ``site["metre"]``, or else in ``poem_metre`` of the text; None on
-    a tie or with neither. A long ezāfe after a silent ه is not counted as a licence:
+    a tie or with neither. A long ezāfe or -e after a silent ه is not counted as a licence:
     in the Shāhnāme's metre it is always long."""
     text = site["neutralized_text"]
     h0, h = site["neutral_head_span"]

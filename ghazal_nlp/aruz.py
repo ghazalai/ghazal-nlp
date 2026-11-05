@@ -9,6 +9,7 @@ the licences each reading needed.
 
 from __future__ import annotations
 
+import math
 import re
 from collections import Counter
 from dataclasses import asdict, dataclass, field
@@ -57,15 +58,17 @@ DEVICES = (
     "long_vowel_shortening", "hamze_elision", "ezafe_glide", "tashdid",
     "silent_vav_after_khe", "final_syllable_free", "overlong_as_long",
     "conjunction_vav", "ebdal", "initial_long", "ezafe", "written_gemination",
-    "ezafe_lengthening", "written_ezafe", "ast_contraction",
+    "ezafe_lengthening", "written_ezafe", "ast_contraction", "nun_after_long_vowel",
+    "nun_counted", "final_e_lengthening", "cho_lengthening", "internal_alef", "fused_alef", "joined_vav", "final_r_doubled",
 )
 (SHORTEN, ELIDE, GLIDE, TASHDID, XVA, FINAL, OVERLONG, VAV, EBDAL, INITIAL,
- EZAFE, WRITTEN_GEMINATION, EZAFE_LONG, WRITTEN_EZAFE, AST) = (1 << i for i in range(15))
+ EZAFE, WRITTEN_GEMINATION, EZAFE_LONG, WRITTEN_EZAFE, AST, NASAL,
+ NUN_COUNTED, FINAL_E, CHO_LONG, ALEF_SHORT, FUSED, JOINED_VAV, R_DOUBLED) = (1 << i for i in range(23))
 
 # Uniform cost per licence. The free ones are ordinary phonology, or the
 # editor's own marks, not licences.
-FREE = FINAL | ELIDE | VAV | XVA | WRITTEN_GEMINATION | WRITTEN_EZAFE
-COST = [(mask & ~FREE).bit_count() for mask in range(1 << 15)]
+FREE = FINAL | ELIDE | VAV | XVA | WRITTEN_GEMINATION | WRITTEN_EZAFE | NASAL
+COST = [(mask & ~FREE).bit_count() for mask in range(1 << 23)]
 
 
 def device_names(mask: int) -> tuple[str, ...]:
@@ -190,6 +193,8 @@ class Devices:
     ast_contraction: bool = True
     ebdal_first_foot: bool = True
     caesura: bool = True
+    nun_after_long_vowel: bool = True  # Thiesen §83: ن after a long vowel, before a consonant, doesn't count
+    final_e_lengthening: bool = True  # a long -e is a licence; off, it's free
 
 
 WEIGHT = {
@@ -221,6 +226,11 @@ def _onsets(skel: Skeleton, i: int):
         yield i + 1, None, skel.word[i]
 
 
+VO = frozenset({"تو", "چو", "دو"})  # Thiesen §§74–75: short by nature; تو، دو lengthen often, چو hardly ever
+# Words whose final ه is a consonant; lengthening any other short -e is a licence (Thiesen §§62–65, §76).
+FINAL_H = frozenset("ده به مه ره شه گه گره زره نگه پگه سپه سیه تبه فربه ابله شبه فقه وجه وه همره گمره درگه آگه توجه متوجه موجه مواجه منزه مشتبه".split())
+
+
 def _nuclei(skel: Skeleton, k: int, word: int):
     """(kind, next index, devices) for the nucleus at ``k``."""
     yield SHORT, k, 0
@@ -229,6 +239,9 @@ def _nuclei(skel: Skeleton, k: int, word: int):
     ch = skel.chars[k]
     if ch == "آ" or (ch == "ا" and not skel.initial[k]):
         yield LONG, k + 1, 0
+    elif skel.words[word] in VO:
+        yield SHORT, k + 1, 0
+        yield LONG, k + 1, CHO_LONG if skel.words[word] == "چو" else 0
     elif ch in "وی":
         yield LONG, k + 1, 0
         yield SHORT, k + 1, SHORTEN
@@ -264,6 +277,16 @@ def _syllables(skel: Skeleton, i: int, devices: Devices):
         word = skel.word[i + 1]
         yield from _codas(skel, SHORT, i + 2, word, VAV, devices)
         yield from _codas(skel, LONG, i + 2, word, VAV, devices)
+    # Thiesen §118: a short ا after these; §79: کاو، زایران; and و joined to the next word.
+    if ch in CONSONANTS and i and i + 1 < n and skel.chars[i + 1] == "ا" and skel.word[i - 1] == skel.word[i + 1] == skel.word[i]:
+        if skel.initial[i - 1] and skel.chars[i - 1] + ch in ("بر", "بد", "سر", "در"):
+            yield from _codas(skel, SHORT, i + 2, skel.word[i], ALEF_SHORT, devices)
+    if ch in "کز" and skel.initial[i] and i + 2 < n and skel.chars[i + 1] == "ا" and skel.chars[i + 2] in "وی" and skel.word[i + 2] == skel.word[i]:
+        yield from _codas(skel, LONG, i + 3, skel.word[i], FUSED, devices)
+    if (ch in CONSONANTS and skel.final[i] and i + 2 < n and skel.chars[i + 1] == "و" and skel.initial[i + 1]
+            and not skel.final[i + 1] and skel.chars[i + 2] not in "اآ"):
+        yield SHORT, i + 2, JOINED_VAV
+        yield LONG, i + 2, JOINED_VAV
     if (devices.ast_contraction and ch in CONSONANTS and i + 2 < n and skel.chars[i + 1] == "ه"
             and skel.final[i + 1] and skel.word[i + 1] == skel.word[i]):
         start = _ast_start(skel, i + 2, whole=False)
@@ -382,7 +405,7 @@ def _codas(skel: Skeleton, kind: str, k: int, word: int, dev: int, devices: Devi
     # A word cannot end in an unwritten short vowel; one that does carries an ezāfe.
     open_final = bare and (k >= n or skel.word[k] != word)
     ezafe = 0
-    if open_final:
+    if open_final and skel.words[word] != "ز":  # از shortened, no ezāfe
         ezafe = WRITTEN_EZAFE if skel.marks and any(v in skel.marks[k - 1] for v in VOWELS) else EZAFE
     yield WEIGHT[kind, 0], k, dev | ezafe
     if open_final and devices.ezafe_long:
@@ -391,9 +414,15 @@ def _codas(skel: Skeleton, kind: str, k: int, word: int, dev: int, devices: Devi
         if not _is_coda(skel, k + count - 1, word):
             break
         weight = WEIGHT[kind, count]
-        yield weight, k + count, dev
+        nasal = devices.nun_after_long_vowel and count == 1 and kind == LONG and skel.chars[k] == "ن" and k + 1 < n
+        extra = NUN_COUNTED if nasal else 0
+        if devices.final_e_lengthening and count == 1 and kind == SHORT and skel.chars[k] == "ه" and skel.final[k] and skel.words[word] not in FINAL_H:
+            extra |= FINAL_E
+        if skel.words[word] == "چو" and count == 1 and skel.chars[k] == "و":
+            extra |= CHO_LONG
+        yield weight, k + count, dev | extra
         if len(weight) == 2 and devices.overlong_as_long:
-            yield LONG, k + count, dev | OVERLONG
+            yield LONG, k + count, dev | (NASAL if nasal else OVERLONG)
     if devices.ast_contraction and kind == LONG:
         for count in (0, 1):
             end = k + count
@@ -410,6 +439,8 @@ def _codas(skel: Skeleton, kind: str, k: int, word: int, dev: int, devices: Devi
         return
     if skel.marks and SHADDA in skel.marks[k]:
         yield WEIGHT[kind, 1], k, dev | WRITTEN_GEMINATION
+    elif skel.final[k] and skel.chars[k] == "ر" and k + 1 < n:
+        yield WEIGHT[kind, 1], k, dev | R_DOUBLED
     elif devices.tashdid and (
         _is_coda(skel, k + 1, word)
         or (devices.tashdid_before_vowel and k + 1 < n and skel.word[k + 1] == word and skel.chars[k + 1] in "اوی")
@@ -481,6 +512,14 @@ class Trie:
     def spill(self, node: int, weights: str) -> int | None:
         """An overlong ending the دوری half, its short carried across."""
         return self.walk(node, LONG + CAESURA + SHORT) if weights == LONG + SHORT else None
+
+
+def _syllables_of(skel: Skeleton, trail) -> tuple[Syllable, ...]:
+    out = []
+    while trail is not None:
+        trail, i, nxt, weights, used = trail
+        out.append(Syllable("".join(skel.chars[i:nxt]), skel.word[min(i, len(skel) - 1)], weights, device_names(used)))
+    return tuple(reversed(out))
 
 
 def _pattern_slots(weights: str, i: int, devices: Devices):
@@ -627,6 +666,29 @@ class Scansion:
 
 
 @dataclass(frozen=True, slots=True)
+class Syllable:
+    """One syllable of a reading. ``letters`` is empty for a glide, the ezāfe that
+    has no letter; ``weights`` holds two slots where one syllable fills two."""
+
+    letters: str
+    word: int
+    weights: str
+    devices: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True, slots=True)
+class Reading:
+    """A hemistich read in one weight pattern, at its cheapest."""
+
+    metres: tuple[str, ...]
+    pattern: str
+    weights: str
+    licences: int
+    devices: tuple[str, ...]
+    syllables: tuple[Syllable, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class MetreEntry:
     label: str
     pattern: str
@@ -644,6 +706,8 @@ class Inventory:
         for e in self.entries:
             self.pattern_labels.setdefault(e.pattern, []).append(e.label)
             self.label_patterns.setdefault(e.label, []).append(e.pattern)
+        # A label's poems shared among its shapes: the robāʿī's 12 don't each hold them all.
+        self.poems = {e.label: e.poems / len(self.label_patterns[e.label]) for e in self.entries}
         # Patterns differing only in the first syllable are one metre; each
         # reports the label it most often carries.
         poems = {e.label: e.poems for e in self.entries}
@@ -692,17 +756,13 @@ class Scanner:
             skel = prepare(line, marks=self.marks)
         except ScriptError as e:
             return Scansion(line, abstention=e.reason)
-        gate = self._gate(skel)
-        hits = self._search(skel, gate)
-        if not hits and gate is not None:  # the lexicon is a hypothesis; back off
-            gate = None
-            hits = self._search(skel, None)
+        hits, gate = self._hits(skel)
         if not hits:
             return Scansion(line, abstention=self._why_not(skel))
-        cheapest = min(cost for cost, _, _ in hits.values())
+        cheapest = min(hit[0] for hit in hits.values())
         labels, weights, patterns, candidates, mask = [], [], [], {}, 0
         for index in sorted(hits, key=lambda k: (hits[k][0], self.trie.patterns[k])):
-            cost, realized, used = hits[index]
+            cost, realized, used, _ = hits[index]
             pattern = self.trie.patterns[index]
             found = self.inventory.pattern_labels[pattern]
             for label in found:
@@ -714,6 +774,30 @@ class Scanner:
                 labels.extend(found)
         return Scansion(line, tuple(dict.fromkeys(labels)), tuple(patterns), tuple(weights[:self.max_weights]),
                         device_names(mask), cheapest, tuple(candidates.items()), gated=gate is not None)
+
+    def readings(self, line: str) -> tuple[Reading, ...]:
+        """Every admitted pattern read syllable by syllable, cheapest first; empty
+        where ``scan`` abstains."""
+        try:
+            skel = prepare(line, marks=self.marks)
+        except ScriptError:
+            return ()
+        hits, _ = self._hits(skel, trace=True)
+        found = []
+        for index in sorted(hits, key=lambda k: (hits[k][0], self.trie.patterns[k])):
+            cost, realized, used, trail = hits[index]
+            pattern = self.trie.patterns[index]
+            found.append(Reading(tuple(self.inventory.pattern_labels[pattern]), pattern, realized, cost,
+                                 device_names(used), _syllables_of(skel, trail)))
+        return tuple(found)
+
+    def _hits(self, skel: Skeleton, trace: bool = False):
+        gate = self._gate(skel)
+        hits = self._search(skel, gate, trace)
+        if not hits and gate is not None:  # the lexicon is a hypothesis; back off
+            gate = None
+            hits = self._search(skel, None, trace)
+        return hits, gate
 
     def _gate(self, skel: Skeleton):
         """Per letter, the (weight, next) syllables the lexicon allows, or None."""
@@ -738,12 +822,13 @@ class Scanner:
             covered = True
         return gate if covered else None
 
-    def _search(self, skel: Skeleton, gate) -> dict[int, tuple[int, str, int]]:
-        """Pattern index → (licences, weights, devices) of its cheapest reading."""
+    def _search(self, skel: Skeleton, gate, trace: bool = False) -> dict[int, tuple]:
+        """Pattern index → (licences, weights, devices, trail) of its cheapest reading;
+        the trail, kept only when ``trace``, is what ``readings`` lays out."""
         trie, devices, n = self.trie, self.devices, len(skel)
-        frontier: list[dict[int, tuple[int, str, int]]] = [{} for _ in range(n + 1)]
-        frontier[0][0] = (0, "", 0)
-        hits: dict[int, tuple[int, str, int]] = {}
+        frontier: list[dict[int, tuple]] = [{} for _ in range(n + 1)]
+        frontier[0][0] = (0, "", 0, None)
+        hits: dict[int, tuple] = {}
 
         def offer(store, node, path):
             prior = store.get(node)
@@ -755,11 +840,12 @@ class Scanner:
             if not nodes:
                 continue
             if _glide(skel, i, devices):
-                for node, (cost, sofar, mask) in list(nodes.items()):
+                for node, (cost, sofar, mask, trail) in list(nodes.items()):
                     for weight, dev in _glide_weights(devices):
                         landed = trie.walk(node, weight)
                         if landed is not None:
-                            offer(nodes, landed, (cost + COST[dev], sofar + weight, mask | dev))
+                            offer(nodes, landed, (cost + COST[dev], sofar + weight, mask | dev,
+                                                           (trail, i, i, weight, dev) if trace else None))
             if trie.caesura and i and skel.word[i] != skel.word[i - 1]:
                 for node, path in list(nodes.items()):
                     half = trie.children[node].get(CAESURA)
@@ -771,10 +857,11 @@ class Scanner:
                     continue
                 for realized, licence in _pattern_slots(weights, i, devices):
                     extra = COST[dev] + COST[licence]
-                    for node, (cost, sofar, mask) in nodes.items():
+                    for node, (cost, sofar, mask, trail) in nodes.items():
                         if licence and _slot_blocked(licence, trie.depth[node], devices):
                             continue
-                        path = (cost + extra, sofar + realized, mask | dev | licence)
+                        path = (cost + extra, sofar + realized, mask | dev | licence,
+                                (trail, i, nxt, realized, dev | licence) if trace else None)
                         landed = trie.walk(node, realized)
                         if landed is not None:
                             offer(frontier[nxt], landed, path)
@@ -787,7 +874,8 @@ class Scanner:
                         # The last syllable of a hemistich counts long whatever it is.
                         for ch, child in trie.children[node].items():
                             if trie.terminal[child] is not None and child != landed:
-                                offer(hits, trie.terminal[child], (path[0], sofar + ch, path[2] | FINAL))
+                                offer(hits, trie.terminal[child], (path[0], sofar + ch, path[2] | FINAL,
+                                                                   (trail, i, nxt, ch, dev | licence | FINAL) if trace else None))
         for node, path in frontier[n].items():
             if trie.terminal[node] is not None:
                 offer(hits, trie.terminal[node], path)
@@ -819,6 +907,7 @@ def scanner(lexicon: bool = True) -> Scanner:
 
 
 MAX_LINES = 40
+PRIOR_WEIGHT = 1.5  # licences one power of ten of poems is worth
 VOTE_MARGIN = 6  # a line votes for every metre within this many licences of its cheapest
 
 
@@ -834,11 +923,13 @@ def votes(scansion: Scansion) -> list[tuple[str, int]]:
     return [(metre, cost) for metre, cost in scansion.candidates if cost <= ceiling]
 
 
-def winners(votes: Counter, costs: Counter, hemistich_count: int) -> list[str]:
-    """Most votes, then fewest licences; past a quatrain the robāʿī loses ties,
-    since its many shapes almost always find a cheaper reading."""
+def winners(votes: Counter, costs: Counter, hemistich_count: int, poems: dict[str, int] | None = None) -> list[str]:
+    """Most votes, then fewest licences less how common the metre is (``poems``);
+    past a quatrain the robāʿī loses ties, since its many shapes almost always
+    find a cheaper reading."""
     def rank(m):
-        return votes[m], -(hemistich_count > 4 and RUBAI in m), -costs[m]
+        common = PRIOR_WEIGHT * math.log10(1 + poems.get(m, 0)) if poems else 0
+        return votes[m], -(hemistich_count > 4 and RUBAI in m), common - costs[m]
 
     best = max(rank(m) for m in votes)
     return sorted(m for m in votes if rank(m) == best)
@@ -871,7 +962,7 @@ def scan_poem(text: str, scan: Scanner | None = None, *, max_lines: int = MAX_LI
             costs[metre] += cost
     if not tally:
         return PoemScansion(lines=scanned, abstained=reasons.total(), abstentions=tuple(reasons.most_common()))
-    best = winners(tally, costs, len(lines))
+    best = winners(tally, costs, len(lines), scan.inventory.poems)
     return PoemScansion(tuple(best), tally[best[0]], scanned, reasons.total(), costs[best[0]],
                         tuple(reasons.most_common()))
 

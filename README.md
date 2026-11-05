@@ -21,12 +21,13 @@ metres, every other metre that fits along with the licences it needs (hamze
 elision, و read short, ابدال, an overlong syllable read long, …), or an
 abstention with a reason. Harakat, shadda, the ezāfe hamza and ZWNJ written by
 the editor are used as constraints. A poem gets the metre most of its lines
-fit.
+fit; among equals, the one with fewer licences and more poems behind it.
 
 ```python
 from ghazal_nlp import aruz
 s = aruz.scanner().scan("یار با ماست، چه حاجت که زیادت طلبیم")
 s.metres, s.weights, s.devices, s.candidates
+aruz.scanner().readings("یار با ماست، چه حاجت که زیادت طلبیم")[0].syllables  # which letters fill which slot
 aruz.scan_poem("بشنو این نی چون شکایت می‌کند\nاز جدایی‌ها حکایت می‌کند").metres
 ```
 
@@ -35,24 +36,31 @@ metre labels. The held-out poems are a fixed fifth, chosen by poem id.
 
 | | rules only | with the weight lexicon |
 |---|---:|---:|
-| gold metre among the answers | 99.0% | 95.9% |
-| gold metre among the cheapest | 56.6% | 70.1% |
-| metres per hemistich | 2.37 | 1.52 |
-| poem gets exactly the gold metre | 83.8% | 94.6% |
+| gold metre among the answers | 99.1% | 95.3% |
+| gold metre among the cheapest | 68.4% | 77.0% |
+| metres per hemistich | 2.19 | 1.44 |
+| poem gets exactly the gold metre | 92.5% | 95.9% |
 | abstained | 0.08% | 0.08% |
 
 The weight lexicon (`data/weights.tsv`) is learned from the labels of the
 other four fifths, so that column is supervised. The rules-only column isn't.
 With the editors' marks removed (`--stripped`), a poem gets exactly the gold
-metre 83.5% of the time with rules only and 94.3% with the lexicon.
+metre 93.1% of the time with rules only and 96.0% with the lexicon.
 Holding out whole poets instead of poems (`--by poet`, 2,000 poems by poets
-the lexicon never saw), that's 80.9% and 93.1%.
+the lexicon never saw), that's 92.4% and 95.5%.
+
+A few lines are enough for most poems. On 2,000 other held-out poems, reading only
+their opening lines, the exact metre comes out:
+
+| hemistichs given | 1 | 2 | 3 | 4 | 8 | whole poem |
+|---|---:|---:|---:|---:|---:|---:|
+| exact metre | 82.8% | 89.1% | 93.5% | 93.6% | 95.2% | 96.1% |
+| wrong | 17.2% | 10.9% | 6.5% | 6.4% | 4.8% | 3.9% |
 
 On single couplets with no poem around them it's much weaker. On the 12,713
 couplets of [Ganjoor-Rhythm-Bench](https://huggingface.co/datasets/farbodbij/Ganjoor-Rhythm-Bench)
-(40 metres), the rules alone give exactly the gold metre for 35.4%. With the
-lexicon, on the 2,553 couplets from held-out poems, that's 63.5%, and another
-9.7% get several metres including the gold one.
+(40 metres), the rules alone give exactly the gold metre for 50.7%. With the
+lexicon, on the 2,553 couplets from held-out poems, that's 70.0%.
 
 On those couplets, next to [an XLM-R metre classifier](https://huggingface.co/katomyomachia/xlm-roberta-persian-meter)
 (35 metres, trained on Ganjoor hemistichs; its card reports 98% on a tenth of
@@ -60,18 +68,18 @@ its own data):
 
 | exact metre per couplet | couplets | XLM-R | `aruz` with the lexicon | always the commonest metre |
 |---|---:|---:|---:|---:|
-| all held-out | 2,553 | 61.9% | 63.5% | 4.0% |
-| metre the model knows | 2,204 | 71.6% | 64.6% | 4.6% |
-| … and no hemistich in its training data | 2,041 | 70.9% | 63.7% | 4.3% |
+| all held-out | 2,553 | 61.9% | 70.0% | 4.0% |
+| metre the model knows | 2,204 | 71.6% | 73.6% | 4.6% |
+| … and no hemistich in its training data | 2,041 | 70.9% | 73.8% | 4.3% |
 
-On lone couplets in its own metres the classifier is about 7 points ahead;
-across all metres they're level, since 13.7% of the couplets are in metres it
-can't answer. The GPT2-fa classifier reported at 90.4%
+On lone couplets in its own metres `aruz` is about 2 points ahead, and across all
+metres about 8, since 13.7% of the couplets are in metres the classifier can't
+answer. The GPT2-fa classifier reported at 90.4%
 ([kasraSMD/Persian-Poetry-Rhythm-Detection](https://github.com/kasraSMD/Persian-Poetry-Rhythm-Detection))
 isn't here: its weights are behind a Google sign-in.
 
 Thiesen's *Manual of Classical Persian Prosody* scans 513 hemistichs; the
-scanner reaches his exact weights for 494 of them.
+scanner reaches his exact weights for 506 of them.
 
 ```sh
 ghazal-nlp ganjoor <snapshot> > poems.jsonl
@@ -321,7 +329,7 @@ kept.
 | `vowels`, several: the commonest fits | 6,689 | 59.4% | a random one 46.1% |
 | `vowels`, several: one of them fits | 6,689 | 95.5% | |
 | `ezafe.junction`, prose | 561 | 54.7% | always none 90.6% |
-| `ezafe.junction`, verse, the metre given | 561 | 96.3% | always none 90.6% |
+| `ezafe.junction`, verse, the metre given | 561 | 96.4% | always none 90.6% |
 | `ezafe.written`, marked sites | 51 | 96.1% | always ezāfe 96.1% |
 
 The vowels are the Tajik edition's (یَکی، سَر، و read u), and Tajik doesn't
@@ -340,7 +348,7 @@ before scoring these once.
 | | sites | verse | always none |
 |---|---:|---:|---:|
 | Hafez, Saadi, Rumi | 58 | 98.3% | 91.4% |
-| Nima, Sepehri, Forough, Akhavan, Shamlou | 194 | 89.2% | 91.2% |
+| Nima, Sepehri, Forough, Akhavan, Shamlou | 194 | 88.1% | 91.2% |
 
 Nimaic verse keeps a foot but not a line length, so a third of these junctions
 are in poems that still agree on some classical metre. There it finds 5 ezāfes
