@@ -230,6 +230,27 @@ examples.violations = [
 ]
 
 [[rule]]
+id = "ghazal.space_after_punctuation"
+layer = "orthography"
+title.fa = "فاصله پس از ویرگول و نشانه\u0654 پایانی"
+title.en = "A space after ، ؛ ؟ ! before the next word"
+statement.fa = "پس از «،»، «؛»، «؟» و «!» پیش از واژه\u0654 بعدی یک فاصله می\u200cآید."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "ghazal house style"
+source.evidence = "without the space the mark runs into the next word"
+academy.position = "unspecified"
+detector.type = "pattern"
+detector.pattern = "[،؛؟!](?=[ء-ی])"
+detector.kind = "no_space_after_punctuation"
+detector.repair = "\\g<0> "
+examples.ok = ["سلام، خوبی؟", "چرا؟"]
+examples.violations = [
+  { text = "سلام،خوبی", expect = "، " },
+]
+
+[[rule]]
 id = "ghazal.mi_prefix"
 layer = "orthography"
 title.fa = "نیم\u200cفاصله\u0654 «می» و «نمی»"
@@ -317,12 +338,34 @@ academy.position = "varies"
 detector.type = "closed_list"
 detector.file = "ghazal-compounds.tsv"
 detector.kind = "spaced_compound"
+detector.severity = "house"
 examples.ok = ["پایان\u200cنامه", "بین\u200cالمللی"]
 examples.violations = [
   { text = "پایان نامه", expect = "پایان\u200cنامه" },
   { text = "بین المللی", expect = "بین\u200cالمللی" },
 ]
 notes = "The Academy prints some of these and leaves the rest to the writer."
+
+[[rule]]
+id = "ghazal.spaced_ezafe_yeh"
+layer = "orthography"
+title.fa = "«ی» جدا پس از «ه»"
+title.en = "The ی of ه\u200cی written after a full space"
+statement.fa = "«ی» پس از «ه» با فاصله\u0654 کامل نوشته نمی\u200cشود: «خانه ی من» نوشته می\u200cشود «خانه\u200cی من»."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "a lone ی is not a word; the mark needs a ZWNJ to stay with the ه"
+academy.position = "wrong"
+detector.type = "pattern"
+detector.pattern = "([\\w\u200c]*ه) ی(?![\\w\u200c])"
+detector.kind = "space_where_zwnj"
+detector.repair = "\\1\u200cی"
+examples.ok = ["خانه\u200cی من", "خانه یا باغ"]
+examples.violations = [
+  { text = "خانه ی من", expect = "خانه\u200cی" },
+]
 
 [[rule]]
 id = "ghazal.ezafe_after_silent_he"

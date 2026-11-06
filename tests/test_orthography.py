@@ -65,7 +65,7 @@ def test_the_page_is_inside_the_book(rule_id):
 
 def test_pack_ids_are_unique():
     ids = [r["id"] for p in RULES.glob("*.toml") for r in tomllib.loads(p.read_text(encoding="utf-8"))["rule"]]
-    assert len(ids) == len(set(ids)) == 65
+    assert len(ids) == len(set(ids)) == 67
 
 
 @pytest.mark.parametrize("overrides,message", [

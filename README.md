@@ -415,7 +415,7 @@ Where the two styles differ:
 |---|---|---|
 | ezāfe after silent ه | خانهٔ / خانۀ; خانه‌ی is wrong | خانه‌ی; خانهٔ and خانۀ are fine |
 | plural and comparative | ZWNJ, joined allowed | ZWNJ (house); joined is fine |
-| compounds (پایان‌نامه، بین‌المللی) | its printed lists | joined where careful writers mostly join them (`data/ghazal-compounds.tsv`) |
+| compounds (پایان‌نامه، بین‌المللی) | its printed lists | joined where careful writers mostly join them, in at least two kinds of source (`data/ghazal-compounds.tsv`); `house`, since the spaced form is in use too |
 | pairs written both ways (آنها/آن‌ها) | its printed lists | what careful writers write more, pair by pair (`data/ghazal-house-forms.tsv`) |
 | tanvin (واقعاً) | required | left as written |
 | preferred spellings (اطاق/اتاق) | the Academy's pick | both fine |
@@ -434,8 +434,8 @@ apart, since PerSpellData often has a space where the house has ZWNJ (شده ا�
 
 | Virastman logs, 127,120 pairs, 138,503 edits | `ghazal` | `academy` |
 |---|---:|---:|
-| changes proposed | 26,901 | 17,252 |
-| precision, exact / apart | 17.5% / 71.6% | 16.5% / 39.6% |
+| changes proposed | 24,513 | 16,246 |
+| precision, exact / apart | 19.1% / 73.0% | 17.5% / 42.0% |
 | recall, exact / apart | 3.4% / 4.3% | 2.1% / 2.2% |
 | missing ZWNJ (میروم), recall | 30.9% | 16.6% |
 

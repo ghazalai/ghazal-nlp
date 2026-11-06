@@ -317,6 +317,7 @@ source.retrieved = "2026-08-04"
 detector.type = "pattern"
 detector.pattern = "[يك]"
 detector.kind = "arabic_letter_in_persian"
+detector.translate = { "ي" = "ی", "ك" = "ک" }
 detector.severity = "violation"
 detector.confidence = "high"
 detector.note = "Arabic yeh/kaf; write the Persian ی / ک"
