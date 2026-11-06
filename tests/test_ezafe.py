@@ -93,8 +93,8 @@ def test_the_development_rulings():
     junctions = [json.loads(line) for line in open(DATA / "ezafe-junctions-dev.jsonl", encoding="utf-8")]
     assert ezafe.score(written, ezafe.written, "blind")["agree"] == 96
     assert ezafe.score(written, ezafe.written, "revised")["agree"] == 100
-    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 111
-    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 109
+    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 113
+    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 111
 
 
 def test_junctions_in_plain_text():

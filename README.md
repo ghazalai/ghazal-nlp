@@ -291,10 +291,10 @@ pronunciations in SentenceBench and HomoRich:
 | `written`, held out | 78 | 68 (87%) | 87.2% |
 | `written`, SentenceBench | 14 | 13 (93%) | 100% |
 | `written`, HomoRich | 2,724 | 98.4% | 98.8% |
-| `junction`, dev | 128 | 109 (85%) | 61.7% |
+| `junction`, dev | 128 | 111 (87%) | 61.7% |
 | `junction`, lab batch 1 | 43 | 37 (86%) | 86.0% |
 | `junction`, SentenceBench | 132 | 104 (79%) | 76.5% |
-| `junction`, HomoRich | 58,962 | 80.9% | 73.6% |
+| `junction`, HomoRich | 58,962 | 81.4% | 73.6% |
 
 The dev sites (`data/ezafe-*-dev.jsonl`) were labelled while the rules were
 written. Batch 1 (`data/ezafe-lab-1.jsonl`) was held out, but I fixed

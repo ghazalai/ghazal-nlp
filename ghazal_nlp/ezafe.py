@@ -235,6 +235,10 @@ def junction(site: dict, profile: str = "prose") -> Decision:
     cls = word_class(nxt)
     if cls in ("connector", "preposition", "copula", "clitic", "verb_reading"):
         return Decision("none", cls)
+    after = re.match(r"(\s+)([^\s،؛؟!.:]+)", text[site["neutral_next_span"][1]:])
+    if cls == "participle_reading" and after and (
+            bare(after[2]) in PARTICIPLE_AUXILIARIES or verb.constructions(readings(nxt), readings(after[2]), separator=after[1])):
+        return Decision("none", "participle_auxiliary")
     if profile == "verse":
         return Decision(m, "metre") if (m := metre(site)) else Decision("none", "default")
     if cls in ("pronoun", "participle_reading", "content_unknown"):
