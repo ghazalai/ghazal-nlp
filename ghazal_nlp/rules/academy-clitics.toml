@@ -78,9 +78,10 @@ detector.type = "enclitic"
 detector.clitics = ["ام", "ایم", "اید", "اند"]
 detector.hosts = ["ی"]
 detector.require_silent_he = false
+detector.not_before = ["القرا", "القرای", "اس", "جی", "پی", "دی", "بی", "وی", "آر", "تی"]
 detector.severity = "violation"
 detector.confidence = "high"
-examples.ok = ["ایرانی\u200cام", "تیزپی\u200cاند", "ایرانی است", "کشتی آمد"]
+examples.ok = ["ایرانی\u200cام", "تیزپی\u200cاند", "ایرانی است", "کشتی آمد", "بیماری ام اس", "ادعای ام القرا"]
 examples.violations = [
   { text = "ایرانی ام", expect = "ایرانی\u200cام" },
   { text = "راضی اند", expect = "راضی\u200cاند" },

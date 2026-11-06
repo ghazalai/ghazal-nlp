@@ -126,7 +126,7 @@ id = "ghazal.redundant_zwnj"
 layer = "orthography"
 title.fa = "نیم\u200cفاصله\u0654 بی\u200cاثر"
 title.en = "A ZWNJ that changes nothing"
-statement.fa = "نیم\u200cفاصله پس از حرف جدانویس («دیدار\u200cها») یا پیش از فاصله و نشانه اثری ندارد و حذف می\u200cشود."
+statement.fa = "نیم\u200cفاصله پس از حرف جدانویس («دیدار\u200cها»، جز «و») یا پیش از فاصله و نشانه اثری ندارد و حذف می\u200cشود."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
@@ -134,10 +134,10 @@ source.work = "ghazal house style"
 source.evidence = "after ا د ذ ر ز ژ و the letters are already apart (p. 23 of the Academy's book)"
 academy.position = "right"
 detector.type = "pattern"
-detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]*[اآأإدذرزژوؤء][\u064b-ْٰ\u0654ٕ]{0,2})\u200c+(?=[ء-يٮ-ۓە])|([\\w\u064b-ْٰ\u0654ٕ\u200c]*[\\w\u064b-ْٰ\u0654ٕ])\u200c+(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
+detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]*[اآأإدذرزژء][\u064b-ْٰ\u0654ٕ]{0,2})\u200c+(?=[ء-يٮ-ۓە])|([\\w\u064b-ْٰ\u0654ٕ\u200c]*[\\w\u064b-ْٰ\u0654ٕ])\u200c+(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])(?![ \\t]+(?:ها|های|هایی|تر|ترین|تری)(?![\\w\u200c]))"
 detector.kind = "redundant_zwnj"
 detector.repair = "\\1\\2"
-examples.ok = ["کتاب\u200cها", "خانه\u200cای", "دیدارها"]
+examples.ok = ["کتاب\u200cها", "خانه\u200cای", "دیدارها", "نیرو\u200cهای", "گفت\u200cو\u200cگو", "رایج\u200c ترین"]
 examples.violations = [
   { text = "دیدار\u200cها", expect = "دیدار" },
   { text = "کتاب\u200c خوب", expect = "کتاب" },
@@ -159,6 +159,7 @@ detector.type = "pattern"
 detector.pattern = "(?:(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ]{2}))ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])|ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])(?=[ء-يٮ-ۓە])"
 detector.kind = "tatweel"
 detector.repair = ""
+detector.severity = "house"
 examples.ok = ["تهران ـ ایرنا", "کتاب"]
 examples.violations = [
   { text = "کتــاب", expect = "" },
@@ -339,12 +340,12 @@ detector.type = "closed_list"
 detector.file = "ghazal-compounds.tsv"
 detector.kind = "spaced_compound"
 detector.severity = "house"
-examples.ok = ["پایان\u200cنامه", "بین\u200cالمللی"]
+examples.ok = ["پایان\u200cنامه", "بین\u200cالمللی", "در حالی که", "از این رو", "دست به دست", "هر از گاهی"]
 examples.violations = [
   { text = "پایان نامه", expect = "پایان\u200cنامه" },
   { text = "بین المللی", expect = "بین\u200cالمللی" },
 ]
-notes = "The Academy prints some of these and leaves the rest to the writer."
+notes = "The Academy prints some of these and leaves the rest to the writer. A two-part join is a matter of taste, so it is only a house suggestion; three parts or more stay apart (در حالی که، از این رو، دست به دست)."
 
 [[rule]]
 id = "ghazal.spaced_ezafe_yeh"
@@ -503,4 +504,25 @@ detector.severity = "house"
 examples.ok = ["صبر کن…"]
 examples.violations = [
   { text = "صبر کن...", expect = "…" },
+]
+
+[[rule]]
+id = "ghazal.joined_always"
+layer = "orthography"
+title.fa = "واژه\u200cهایی که همیشه پیوسته\u200cاند"
+title.en = "Words nobody writes apart"
+statement.fa = "«بنابراین» را کسی جدا نمی\u200cنویسد."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "ghazal house style"
+source.evidence = "Ali, 6 Nov 2026"
+academy.position = "right"
+detector.type = "closed_list"
+detector.entries."بنا بر این" = "بنابراین"
+detector.entries."بنا براین" = "بنابراین"
+detector.kind = "spaced_compound"
+examples.ok = ["بنابراین"]
+examples.violations = [
+  { text = "بنا بر این", expect = "بنابراین" },
 ]

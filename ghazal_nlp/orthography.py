@@ -19,7 +19,7 @@ from typing import Iterable, Iterator, Sequence
 
 from . import verb
 
-RULEBASE_VERSION = "0.2.0"
+RULEBASE_VERSION = "0.3.0"
 RULES = Path(__file__).parent / "rules"
 DATA = Path(__file__).parent / "data"
 
@@ -132,6 +132,7 @@ class AffixZwnj:
     host_exceptions: frozenset[str] = frozenset()
     solid_hosts: str | None = None
     free_form: bool = False
+    skip_verbs: bool = False
     min_host: int = 3
     space_severity: str = "violation"
     solid_severity: str = "advisory"
@@ -192,7 +193,7 @@ class AffixZwnj:
                     continue
                 else:
                     host = word[len(form):]
-                if host and not self._exempt(word):
+                if host and not self._exempt(word) and not (self.skip_verbs and verb.analyzer().analyze(word).readings):
                     if len(host) < self.min_host or not PERSIAN.match(host):
                         yield Abstention(self.rule_id, "host_too_short_to_decide", (token.start, token.end), word)
                     elif hosts is not None and host not in hosts:
@@ -360,6 +361,7 @@ class Enclitic:
     clitics: frozenset[str]
     hosts: frozenset[str] = frozenset({"ه"})
     require_silent_he: bool = True
+    not_before: frozenset[str] = frozenset()
     min_host: int = 3
     kind: str = "space_where_zwnj"
     severity: str = "violation"
@@ -367,8 +369,10 @@ class Enclitic:
     note: str | None = None
 
     def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding | Abstention]:
-        for token, clitic in zip(tokens, tokens[1:]):
+        for i, (token, clitic) in enumerate(zip(tokens, tokens[1:])):
             if clitic.text not in self.clitics or not SPACES.match(text[token.end:clitic.start]):
+                continue
+            if i + 2 < len(tokens) and tokens[i + 2].bare in self.not_before:
                 continue
             host = token.bare
             span = (token.start, clitic.end)

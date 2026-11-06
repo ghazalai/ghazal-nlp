@@ -69,16 +69,17 @@ detector.position = "prefix"
 detector.detect_space = true
 detector.detect_solid = true
 detector.free_form = true
+detector.skip_verbs = true
 detector.min_host = 3
 detector.solid_exceptions = [
   "بیجا", "بیچاره", "بیخود", "بیداد", "بیدل", "بیراه", "بیزار", "بیعار", "بیکار", "بینوا",
   "بیهوش", "بیهوده", "بیگانه",
 ]
 detector.lexical_exceptions = [
-  "بیمار", "بیست", "بیرون", "بیان", "بیدار", "بیشه", "بینی", "بیضه", "بینش", "بیشتر",
+  "بیدرفش", "بیمار", "بیست", "بیرون", "بیان", "بیدار", "بیشه", "بینی", "بیضه", "بینش", "بیشتر",
   "بیمه", "بیضی", "بیابان", "بیعت", "بیت", "بینا", "بیوه", "بیل", "بیش", "بیگاه",
 ]
-examples.ok = ["بی\u200cتردید", "بیچاره", "بیمار", "بیستم"]
+examples.ok = ["بی\u200cتردید", "بیچاره", "بیمار", "بیستم", "بیایند", "بیاموزند"]
 examples.violations = [
   { text = "بی تردید", expect = "بی\u200cتردید" },
   { text = "بیحوصله", expect = "بی\u200cحوصله" },
@@ -99,7 +100,7 @@ As a compounding prefix هم is written with a ZWNJ before its host, with a list
 exceptions written solid. As a free adverb — با هم آمدند — it takes a full space.
 """
 kind = "prescriptive"
-status = "active"
+status = "retired"
 scope.registers = ["formal_written", "technical"]
 source.work = "دستور خطّ فارسی (ویراست جدید)"
 source.publisher = "فرهنگستان زبان و ادب فارسی"
@@ -130,7 +131,7 @@ examples.violations = [
   { text = "هم وطن", expect = "هم\u200cوطن" },
   { text = "هم گروه", expect = "هم\u200cگروه" },
 ]
-notes = "Fires only on hosts in its short compound list, since هم before a space is usually the adverb; the rest abstain. Solid forms aren't checked (همایون، همیشه). Both need فرهنگ املایی خطّ فارسی."
+notes = "Retired: on hand labels هم before a space was the adverb (too) in 5 of 6 flags, even on its short compound list. Hosts in the list fired, the rest abstained. Solid forms aren't checked (همایون، همیشه). Both need فرهنگ املایی خطّ فارسی."
 
 [[rule]]
 id = "academy.comparative_tar"

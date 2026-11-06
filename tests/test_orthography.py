@@ -44,8 +44,8 @@ def suggestions(rule_id, text):
 def test_the_packs_load_verified_and_count_what_runs():
     base = RuleBase.load(style="academy", verify=True)
     s = base.summary()
-    assert (s["recorded"], s["executable"], s["running"]) == (45, 34, 33)
-    assert s["by_status"] == {"proposed": 12, "active": 31, "contested": 2}
+    assert (s["recorded"], s["executable"], s["running"]) == (45, 34, 32)
+    assert s["by_status"] == {"proposed": 12, "active": 30, "contested": 2, "retired": 1}
 
 
 def test_every_rule_cites_a_page_and_declares_its_registers():
@@ -65,7 +65,7 @@ def test_the_page_is_inside_the_book(rule_id):
 
 def test_pack_ids_are_unique():
     ids = [r["id"] for p in RULES.glob("*.toml") for r in tomllib.loads(p.read_text(encoding="utf-8"))["rule"]]
-    assert len(ids) == len(set(ids)) == 67
+    assert len(ids) == len(set(ids)) == 68
 
 
 @pytest.mark.parametrize("overrides,message", [
@@ -113,7 +113,7 @@ def test_tokens_keep_zwnj_and_findings_point_into_the_text():
     assert [t.text for t in tokenize(f"بزرگ{ZWNJ}تر است")] == [f"بزرگ{ZWNJ}تر", "است"]
     text = f"کتاب ها را می{ZWNJ}خوانم"
     analysis = rulebase("academy").check(text)
-    assert analysis.findings and analysis.rulebase_version == "0.2.0"
+    assert analysis.findings and analysis.rulebase_version == "0.3.0"
     assert all(text[slice(*f.span)] == f.text and BOOK in f.citation for f in analysis.findings)
 
 
@@ -156,9 +156,16 @@ def test_a_short_host_abstains():
     assert [r.reason for r in d.scan("دکتر", tokenize("دکتر"))] == ["host_too_short_to_decide"]
 
 
-def test_ham_prefix_fires_only_on_its_lexicon():
-    assert any(f.rule_id == "academy.ham_prefix" for f in rulebase("academy").check("هم وطن").findings)
-    assert not any(f.rule_id == "academy.ham_prefix" for f in rulebase("academy").check("با هم آمدند").findings)
+def test_ham_prefix_is_retired_for_the_adverb():
+    assert not any(f.rule_id == "academy.ham_prefix" for f in rulebase("academy").check("به ماه هم سفر خواهد کرد").findings)
+    assert not rulebase("ghazal").check("کنار هم بازی کنند").findings
+
+
+def test_house_rules_leave_long_compounds_apart():
+    for text in ("در حالی که", "از این رو", "دست به دست", "هر از گاهی", f"نیرو{ZWNJ}های", "بیایند", "بیماری ام اس"):
+        assert not rulebase("ghazal").check(text).findings, text
+    assert [f.suggestion for f in rulebase("ghazal").check("بنا بر این").findings] == ["بنابراین"]
+    assert [f.severity for f in rulebase("ghazal").check("کتــاب").findings] == ["house"]
 
 
 def closed(text, **kwargs):
