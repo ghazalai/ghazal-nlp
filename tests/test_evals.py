@@ -63,3 +63,11 @@ def test_aruz_baselines(tmp_path):
     assert r["couplets"] == 2
     assert r["model"]["all"]["model"] == 0.5 and r["model"]["known_unseen"]["couplets"] == 1
     assert r["model"]["all"]["majority"] == 1.0
+
+
+def test_g2p_repeated_words_keep_their_own_pronunciations(tmp_path):
+    path = tmp_path / "repeat.csv"
+    path.write_text("dataset,grapheme,phoneme,homograph word,pronunciation\n"
+                    "test,خانه من و خانه را دیدم,xAne-ye man va xAne rA didam,,\n", encoding="utf-8")
+    result = g2p_eval.evaluate(path)["ezafe_junction"]
+    assert result["confusion"] == {"ezafe->ezafe": 1, "none->none": 1}

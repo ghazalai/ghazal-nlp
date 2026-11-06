@@ -116,3 +116,44 @@ def test_the_verse_profile_reads_the_metre():
     assert found == [("ezafe", "metre"), ("none", "metre"), ("none", "default")]
     with pytest.raises(ValueError):
         ezafe.junction(next(ezafe.sites(segment("خانه زیبا"))), "poetry")
+
+
+def test_score_negative_names_agree():
+    assert ezafe.score([{"gold": "none"}, {"gold": "not_ezafe"}],
+                       lambda _: ezafe.Decision("not_ezafe", "test"), "gold")["agree"] == 2
+
+
+@pytest.mark.parametrize("text", ["خانهٔ\nمن", "خانه‌ی\r\nمن", "خانه\nمن", "خانه\nی من", "خانه ی\nمن"])
+def test_line_break_is_a_boundary(text):
+    row = next(ezafe.sites(segment(text)))
+    assert "\n" in row["neutralized_text"]
+    assert ezafe.written(row).label == "not_ezafe"
+    assert ezafe.junction(row).label == "none"
+
+
+@pytest.mark.parametrize("text", ["اسمهِ من", "اسمِه من", "اِسمِه من"])
+def test_heh_marks_preserve_the_site_and_one_kasra(text):
+    h, = ezafe.heh(text)
+    assert h.verdict == "wrong" and "ِِ" not in h.form and h.form.endswith("سمِ من")
+    assert h.span == (0, len(text))
+
+
+def test_heh_length_counts_letters():
+    assert ezafe.heh("بِه من") == []
+
+
+def test_register_floor_is_per_text():
+    for text in ("قبله حقیقت", "رویه جاری"):
+        old, = ezafe.heh(text, edited_floor=.5)
+        new, = ezafe.heh(text)
+        assert new.verdict == "right"
+        if text == "رویه جاری":
+            assert old.verdict == "wrong"
+        assert new.threshold == .9 and new.informality <= 1
+    text = "من دیگه نمیدونم چیکار کنم اسمه من علیه"
+    assert ezafe.informality(text) > 1
+    assert next(h for h in ezafe.heh(text) if h.first == "اسمه").threshold == .5
+
+
+def test_verse_abstains_without_metre():
+    assert ezafe.junction(next(ezafe.sites(segment("خانه زیبا"))), "verse") == ezafe.Decision("abstain", "no_metre")

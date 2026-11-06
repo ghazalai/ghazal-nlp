@@ -84,6 +84,7 @@ def sites(segment: dict, lexicon: dict | None = None):
             {"ۀ": "precomposed_heh", "ە": "nfd_damaged_heh"}.get(glyph) or \
             ("heh_hamza" if "ٔ" in marks else "heh_kasra" if "ِ" in marks else "unmarked")
         if (not yeh and bare(following.group()).replace(ZWNJ, "") == "ی"
+                and not any(c in text[token.end():following.start()] for c in "\n\r")
                 and text[token.end():following.start()].isspace() and index + 2 < len(words)
                 and text[following.end():words[index + 2].start()].isspace()):
             mark = "spaced_yeh"
@@ -94,7 +95,7 @@ def sites(segment: dict, lexicon: dict | None = None):
         neutral_head = raw_head + kept
         suffix_end = words[index + 1].end() if mark == "spaced_yeh" else token.end()
         gap = text[suffix_end:following.start()]
-        replacement = neutral_head + (" " if not gap.strip() else f" {gap.strip()} ")
+        replacement = neutral_head + gap
         head_span, next_span = [token.start(), token.start() + match.start() + 1], [following.start(), following.end()]
         identity = [segment.get("source"), segment.get("segment_id"), text, head_span, next_span]
         start = token.start() + len(replacement)
@@ -145,7 +146,7 @@ def written(site: dict, arm: str = "closed") -> Decision:
     nxt = bare(nxt)
     if not nxt:
         return Decision("not_ezafe", "end")
-    if any(c in HARD_PUNCTUATION for c in gap) or "\n" in gap:
+    if any(c in HARD_PUNCTUATION or c in "\n\r" for c in gap):
         return Decision("not_ezafe", "punctuation")
     for reason, words in (("connector", CONNECTORS), ("preposition", WRITTEN_PREPOSITIONS),
                           ("simile", SIMILE), ("copula", COPULAS)):
@@ -218,12 +219,12 @@ def junction(site: dict, profile: str = "prose") -> Decision:
     profile ``prose``, ezāfe before a pronoun, a participle or any other content
     word. The last is a stand-in for a noun and adjective lexicon, not a claim
     that a word the verb analyser does not know is nominal. In profile ``verse``
-    the metre decides (``metre``), and without one there is none.
+    the metre decides (``metre``); without an agreed metre it abstains.
     """
     if profile not in ("prose", "verse"):
         raise ValueError(f"unknown profile {profile!r}")
     text, head, gap, nxt, _ = _parts(site)
-    if not bare(nxt) or any(unicodedata.category(c)[0] in "PS" for c in gap):
+    if not bare(nxt) or any(c in "\n\r" or unicodedata.category(c)[0] in "PS" for c in gap):
         return Decision("none", "boundary")
     if verb.constructions(readings(head), readings(nxt), separator=gap) or bare(nxt) in PARTICIPLE_AUXILIARIES:
         return Decision("none", "participle_auxiliary")
@@ -240,6 +241,8 @@ def junction(site: dict, profile: str = "prose") -> Decision:
             bare(after[2]) in PARTICIPLE_AUXILIARIES or verb.constructions(readings(nxt), readings(after[2]), separator=after[1])):
         return Decision("none", "participle_auxiliary")
     if profile == "verse":
+        if not (site.get("metre") or poem_metre(text)):
+            return Decision("abstain", "no_metre")
         return Decision(m, "metre") if (m := metre(site)) else Decision("none", "default")
     if cls in ("pronoun", "participle_reading", "content_unknown"):
         return Decision("ezafe", cls)
@@ -251,7 +254,9 @@ def score(rows, classify, target: str) -> dict:
     confusion = {}
     for row in rows:
         if row.get(target) is not None:
-            key = f"{row[target]}->{classify(row).label}"
+            gold, predicted = ("none" if label == "not_ezafe" else label
+                               for label in (row[target], classify(row).label))
+            key = f"{gold}->{predicted}"
             confusion[key] = confusion.get(key, 0) + 1
     total = sum(confusion.values())
     right = sum(n for k, n in confusion.items() if k.split("->")[0] == k.split("->")[1])
@@ -383,26 +388,54 @@ class Heh:
     verdict: str
     form: str
     confidence: float
+    probability: float
+    threshold: float
+    informality: float
 
 
-def heh(text: str) -> list[Heh]:
+@lru_cache(maxsize=1)
+def _register_words():
+    words = heh_tables()[0]
+    counts = {w: c[:2] for w, c in words.items()}
+    for w, c in words.items():
+        counts.setdefault(w[:-1], c[2:4])
+    spoken, edited = map(sum, zip(*counts.values()))
+    return {w: math.log((s + 1) / (e + 1) * edited / spoken) for w, (s, e) in counts.items() if s + e >= 10}
+
+
+def informality(text: str) -> float:
+    """Mean log spoken/edited frequency ratio over known words; above 1 is informal.
+    Counts come from the shipped heads and stems. No known words gives 0."""
+    words = _register_words()
+    values = [words[w] for token in HEH_TOKEN.finditer(text) if (w := bare(token.group())) in words]
+    return sum(values) / len(values) if values else 0.0
+
+
+def heh(text: str, edited_floor: float = 0.9) -> list[Heh]:
     """Each word ending in ه before another word, and whether that ه is an ezāfe written as ه. ``verdict`` is
     ``wrong`` when it is, with ``form`` the pair with a kasra (ی after ا and و); ``confidence`` is the
-    model's probability that the verdict is right. Verbs (رفته، می‌کنه) and Arabic passages are not sites."""
+    model's probability of that verdict, not a calibrated guarantee. Outside informal text the flagging
+    threshold is ``edited_floor``; otherwise 0.5. Verbs and Arabic passages are not sites."""
+    if not 0.5 <= edited_floor < 1:
+        raise ValueError("edited_floor must be at least 0.5 and below 1")
     tokens = list(HEH_TOKEN.finditer(text))
     passages = arabic_detector().detect(text)
+    register = informality(text)
+    threshold = 0.5 if register > 1 else edited_floor
     out = []
     for i, token in enumerate(tokens[:-1]):
         head, nxt = token.group(), tokens[i + 1]
-        if any(p.start <= token.start() < p.end for p in passages) or (len(head) < 3 or head[-1] != "ه" or head[-2] == ZWNJ or not text[token.end():nxt.start()].isspace()
+        plain_head = bare(head)
+        if any(p.start <= token.start() < p.end for p in passages) or (len(plain_head.replace(ZWNJ, "")) < 3 or plain_head[-1] != "ه" or plain_head[-2] == ZWNJ or not text[token.end():nxt.start()].isspace()
                 or not has_letter(nxt.group()) or word_class(head) in ("verb_reading", "participle_reading", "copula")):
             continue
         before = tokens[i - 1].group() if i and text[tokens[i - 1].end():token.start()].isspace() else None
         after, gap = (tokens[i + 2].group(), text[nxt.end():tokens[i + 2].start()]) if i + 2 < len(tokens) else (None, " ")
         plain = tuple(re.sub(f"[{MARKS}]", "", w) if w else w for w in (head, nxt.group(), before, after))
         p = heh_probability(heh_features(*plain, gap), plain)
-        stem = head[:-1]
-        form = (stem + ("ی" if stem[-1] in "اوآ" else "ِ") if p >= 0.5 else head) + " " + nxt.group()
-        out.append(Heh(head, nxt.group(), (token.start(), nxt.end()), "wrong" if p >= 0.5 else "right", form,
-                       round(max(p, 1 - p), 3)))
+        stem = re.sub(f"ه[{MARKS}]*$", "", head).rstrip("ِ")
+        wrong = p >= threshold
+        form = (stem + ("ی" if plain_head[-2] in "اوآ" else "ِ") if wrong else head) + " " + nxt.group()
+        out.append(Heh(head, nxt.group(), (token.start(), nxt.end()), "wrong" if wrong else "right", form,
+                       round(p if wrong else 1 - p, 3), p, threshold, round(register, 3)))
     return out

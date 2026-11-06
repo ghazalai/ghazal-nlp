@@ -257,11 +257,12 @@ ghazal-nlp g2p-eval SentenceBench.csv
 
 ### `ezafe`: the ezāfe after a silent ه
 
-`junctions` finds every word ending in a silent ه that's followed by another word,
+`junctions` finds every word from the silent-ه list that's followed by another word,
 records how the junction is written (هٔ، ۀ، ه‌ی، هی، ه ی or nothing), and
 removes just that mark. Two classifiers then look at the unmarked text:
 `written` decides whether a written mark is an ezāfe or an old spelling of ‌ای,
-and `junction` decides whether an unmarked junction has an ezāfe.
+and `junction` decides whether an unmarked junction has an ezāfe. A line break
+counts as a boundary.
 
 ```python
 from ghazal_nlp import ezafe
@@ -274,38 +275,41 @@ keeps the rules for where there's no ezāfe, then lets the metre decide: it scan
 the line once with the junction read as an ezāfe and once without, and takes
 whichever needs fewer licences. Give it the poem's metre when you know it;
 otherwise it takes the metre most of the text's hemistichs scan cheapest in, if
-there are two or more and 40% of them agree. With no metre or a tie it says
-none, so give it the whole poem, not one line.
+there are two or more and 40% of them agree. Without an agreed metre it
+abstains; a tie within an agreed metre still gives none. I give it the whole poem.
 
 ```python
 ezafe.junctions("فرستاده شاه را پیش خواند", profile="verse",
                 metre="فعولن فعولن فعولن فعل (متقارب مثمن محذوف یا وزن شاهنامه)")
 ```
 
-Tested by me on sites from Wikipedia, Wikisource and Ganjoor, and against the
-pronunciations in SentenceBench and HomoRich:
+I check it on labelled sites and on SentenceBench and HomoRich pronunciations:
 
 | | sites | agree | always the commoner label |
 |---|---:|---:|---:|
 | `written`, dev | 102 | 100 (98%) | 88.2% |
-| `written`, held out | 78 | 68 (87%) | 87.2% |
+| `written`, frozen lab 1 | 78 | 73 (93.6%) | 87.2% |
+| `written`, batch 2 | 47 | 45 (95.7%) | 95.7% |
 | `written`, SentenceBench | 14 | 13 (93%) | 100% |
-| `written`, HomoRich | 2,724 | 98.4% | 98.8% |
+| `written`, HomoRich | 2,724 | 98.5% | 98.9% |
 | `junction`, dev | 128 | 111 (87%) | 61.7% |
 | `junction`, lab batch 1 | 43 | 37 (86%) | 86.0% |
+| `junction`, clean batch 2 | 100 | 73 (73%) | 76.0% |
 | `junction`, SentenceBench | 132 | 104 (79%) | 76.5% |
-| `junction`, HomoRich | 58,962 | 81.4% | 73.6% |
+| `junction`, HomoRich | 58,947 | 81.4% | 73.6% |
 
 The dev sites (`data/ezafe-*-dev.jsonl`) were labelled while the rules were
-written. Batch 1 (`data/ezafe-lab-1.jsonl`) was held out, but I fixed
-`junction` after looking at it (participles before شده، heads like همیشه that
-take none, reduplication), so it counts as dev for `junction`. A second batch
-is held out for that. `written` doesn't beat always saying ezāfe on held-out
-text. `junction` mostly errs by finding an ezāfe that isn't there, since
-without a noun and adjective lexicon it treats any word it can't place as a
-noun. HomoRich's ezāfe marks were added automatically (a POS tagger and a
-dictionary, per its paper), and about 40% of its sentences GPT-4o wrote, so its
-rows measure agreement with that tagging, not with people.
+written. Batch 1 (`data/ezafe-lab-1.jsonl`) counts as dev for `junction`, since I
+fixed it after looking. Batch 2 was the only clean test of `junction`, and now
+it's used up too. `written` beats always saying ezāfe on batch 1 and ties on
+batch 2. `junction` doesn't beat always saying none on batch 2: it finds 23 of 24
+ezāfes but adds 26 that aren't there, because without a noun and adjective lexicon
+it treats any word it can't place as a noun. HomoRich's ezāfe marks were added
+automatically (a POS tagger and a dictionary, per its paper), and about 40% of its
+sentences GPT-4o wrote, so its rows measure agreement with that tagging, not with people.
+
+`sites()` only sees words on its list, which on samples from seven tables is
+54–67% of the ه-final words that aren't verbs.
 
 ```sh
 ghazal-nlp ezafe --profile verse --metre "<Ganjoor's label>" < poem.txt
@@ -323,20 +327,26 @@ pair rewritten with a kasra) or belongs there (`right`: خونه، خوبه، پ
 It's 700 boosted trees over corpus counts of the two words (how edited text
 spells the word, how often the pair is written bare or with a kasra, what
 follows each) and the words around. They trained on kasras rewritten as ه and
-on 1,162 sites Claude labelled, and are calibrated to the 2.5% of sites where
-the ه is an ezāfe, so they flag a site only when sure.
+on 1,162 labelled sites, and assume the ه is an ezāfe at 2.5% of sites, which I
+haven't verified.
 
-Tested on 297 sites I labelled from tweets and YouTube comments, weighted to
-how often each kind occurs (95% intervals):
+It flags a site at probability 0.9, or 0.5 if the whole text reads as informal:
+`informality(text)` is the mean log ratio of how often its words appear in spoken
+and edited text, and above 1 is informal. `edited_floor=0.5` turns the higher bar
+off. It still misses plenty, including the first example above.
+
+On 300 labelled sites from tweets and YouTube comments, weighted to how often
+each kind occurs (95% intervals), where a word's own ه followed by an ezāfe counts as
+no error:
 
 | precision | recall | average precision |
 |---:|---:|---:|
-| 0.86 [0.71, 0.98] | 0.24 [0.13, 0.44] | 0.46 [0.29, 0.75] |
+| 0.92 [0.79, 1.00] | 0.36 [0.26, 0.48] | 0.72 [0.62, 0.82] |
 
-Logistic regression on the same counts did as well on this test; on Claude's
-labels the trees are ahead (average precision 0.82 against 0.75). A character
-BiGRU and a pretrained character transformer did worse on Claude's labels and
-no better on mine.
+I built on these sites, so this isn't a clean test, and the final test is still
+to come. On a newer sample across spoken text, blogs, web, news, books and verse, the
+higher bar removed 66 of 71 false flags and 8 of 17 real ones. Too few real errors
+turned up there to give a precision or recall for the wider population.
 
 ```sh
 ghazal-nlp ezafe-heh "اسمه من علیه"
@@ -368,20 +378,17 @@ other four fifths of the poems (11,417 sites), where it gets 97.1% against 90.5%
 for always none. In this metre an ezāfe after a silent ه is always long, so the
 verse profile doesn't count lengthening it as a licence.
 
-On modern verse it doesn't help. I labelled 252 unmarked junctions from Ganjoor,
-the whole poem given as the text: 194 from Nima, Sepehri, Forough, Akhavan and
-Shamlou, 58 from Hafez, Saadi and Rumi. I set the 40% from unlabelled poems,
-before scoring these once.
+I also labelled 252 unmarked junctions from Ganjoor, the whole poem given as the
+text. Agreement is on the sites where it answers, the baseline on the same sites.
 
-| | sites | verse | always none |
-|---|---:|---:|---:|
-| Hafez, Saadi, Rumi | 58 | 98.3% | 91.4% |
-| Nima, Sepehri, Forough, Akhavan, Shamlou | 194 | 88.1% | 91.2% |
+| | sites | answered | agree | always none |
+|---|---:|---:|---:|---:|
+| classical sources | 58 | 56 | 55 (98.2%) | 91.1% |
+| modern verse | 194 | 165 | 153 (92.7%) | 95.8% |
 
-Nimaic verse keeps a foot but not a line length, so a third of these junctions
-are in poems that still agree on some classical metre. There it finds 5 ezāfes
-that aren't there, and of the 17 that are it finds 1. The classical rows are the same with or without Ganjoor's
-metre.
+On modern verse it doesn't help: 7 ezāfes that aren't there, and 2 of the 7 real
+ones it answers on. It abstains on the other 10 real ones. Nimaic verse keeps a foot but
+not a line length, so some poems still agree on the wrong classical metre.
 
 ```sh
 ghazal-nlp shahnameh-eval

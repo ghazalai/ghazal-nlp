@@ -53,12 +53,16 @@ def skel_letters(word: str) -> str:
     return "".join(CONSONANTS.get(c, "") for c in w)
 
 
-def words(sentence: str, sounds: list[str]):
-    fw = [(w, skel_letters(w)) for w in WORD.findall(sentence)]
+def aligned(sentence: str, sounds: list[str]):
+    fw = [(w, skel_letters(w.group())) for w in WORD.finditer(sentence)]
     pw = [(w, skel_sound(w)) for w in sounds]
     fw, pw = [x for x in fw if x[1]], [x for x in pw if x[1]]
     blocks = SequenceMatcher(None, [k for _, k in fw], [k for _, k in pw], autojunk=False).get_matching_blocks()
     return [(fw[a + i][0], pw[b + i][0]) for a, b, n in blocks for i in range(n)]
+
+
+def words(sentence: str, sounds: list[str]):
+    return [(w.group(), s) for w, s in aligned(sentence, sounds)]
 
 
 def pattern(form: str) -> re.Pattern:
@@ -95,7 +99,9 @@ def evaluate(path: Path, seed: int = 0) -> dict:
     t, confusion = Counter(), {"written": Counter(), "junction": Counter()}
     lexicon, rng = vowels.lexicon(), random.Random(seed)
     for sentence, sounds, homograph, said in rows(path):
-        pairs = words(sentence, sounds)
+        alignment = aligned(sentence, sounds)
+        pairs = [(w.group(), s) for w, s in alignment]
+        by_start = {w.start(): s for w, s in alignment}
         t["sentences"] += 1
         t["words"] += len(WORD.findall(sentence))
         t["paired"] += len(pairs)
@@ -111,8 +117,7 @@ def evaluate(path: Path, seed: int = 0) -> dict:
                 t[f"{kind}_any"] += any(ok)
                 t[f"{kind}_random"] += ok[rng.randrange(len(ok))]
         for site in ezafe.sites({"text": sentence}):
-            head = WORD.match(sentence, site["head_span"][0])
-            sound = next((s for w, s in pairs if head and w == head[0]), None)
+            sound = by_start.get(site["head_span"][0])
             if sound is None:
                 continue
             gold = "ezafe" if EZAFE.search(sound) or sound.endswith("eye") else "none"
