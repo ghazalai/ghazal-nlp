@@ -126,7 +126,7 @@ id = "ghazal.redundant_zwnj"
 layer = "orthography"
 title.fa = "نیم\u200cفاصله\u0654 بی\u200cاثر"
 title.en = "A ZWNJ that changes nothing"
-statement.fa = "نیم\u200cفاصله پس از حرف جدانویس («دیدار\u200cها»، جز «و») یا پیش از فاصله و نشانه اثری ندارد و حذف می\u200cشود."
+statement.fa = "نیم\u200cفاصله پس از حرف جدانویس («دیدار\u200cها») یا پیش از فاصله و نشانه اثری ندارد و حذف می\u200cشود."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
@@ -134,12 +134,13 @@ source.work = "ghazal house style"
 source.evidence = "after ا د ذ ر ز ژ و the letters are already apart (p. 23 of the Academy's book)"
 academy.position = "right"
 detector.type = "pattern"
-detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]*[اآأإدذرزژء][\u064b-ْٰ\u0654ٕ]{0,2})\u200c+(?=[ء-يٮ-ۓە])|([\\w\u064b-ْٰ\u0654ٕ\u200c]*[\\w\u064b-ْٰ\u0654ٕ])\u200c+(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])(?![ \\t]+(?:ها|های|هایی|تر|ترین|تری)(?![\\w\u200c]))"
+detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]*[اآأإدذرزژوؤء][\u064b-ْٰ\u0654ٕ]{0,2})\u200c+(?=[ء-يٮ-ۓە])|([\\w\u064b-ْٰ\u0654ٕ\u200c]*[\\w\u064b-ْٰ\u0654ٕ])\u200c+(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])(?![ \\t]+(?:ها|های|هایی|تر|ترین|تری)(?![\\w\u200c]))"
 detector.kind = "redundant_zwnj"
 detector.repair = "\\1\\2"
-examples.ok = ["کتاب\u200cها", "خانه\u200cای", "دیدارها", "نیرو\u200cهای", "گفت\u200cو\u200cگو", "رایج\u200c ترین"]
+examples.ok = ["کتاب\u200cها", "خانه\u200cای", "دیدارها", "رایج\u200c ترین"]
 examples.violations = [
   { text = "دیدار\u200cها", expect = "دیدار" },
+  { text = "نیرو\u200cهای", expect = "نیرو" },
   { text = "کتاب\u200c خوب", expect = "کتاب" },
 ]
 

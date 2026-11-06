@@ -162,7 +162,7 @@ def test_ham_prefix_is_retired_for_the_adverb():
 
 
 def test_house_rules_leave_long_compounds_apart():
-    for text in ("در حالی که", "از این رو", "دست به دست", "هر از گاهی", f"نیرو{ZWNJ}های", "بیایند", "بیماری ام اس"):
+    for text in ("در حالی که", "از این رو", "دست به دست", "هر از گاهی", "بیایند", "بیماری ام اس"):
         assert not rulebase("ghazal").check(text).findings, text
     assert [f.suggestion for f in rulebase("ghazal").check("بنا بر این").findings] == ["بنابراین"]
     assert [f.severity for f in rulebase("ghazal").check("کتــاب").findings] == ["house"]
