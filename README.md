@@ -81,6 +81,34 @@ isn't here: its weights are behind a Google sign-in.
 Thiesen's *Manual of Classical Persian Prosody* scans 513 hemistichs; the
 scanner reaches his exact weights for 506 of them.
 
+Where a line leaves the metre, `nearest` reads it in a given pattern with the
+fewest breaks and marks each one on its syllable. `sakta` marks where a line
+fits but the ear may stumble, after Shamisa's chapter «سکتهٔ عروضی»: an ابدال
+before the last syllable, heavy where it crosses two feet or sits next to
+another licence.
+
+```python
+s = aruz.scanner()
+s.nearest("کز نیستان تا مرا از بن ببریده‌اند", "-u---u---u-")  # each Syllable has .fault
+aruz.sakta(s.readings("ز قدر و رتبت، سر بر ستارگان ساید")[0])  # [(syllable index, "light" or "heavy"), …]
+```
+
+On 800 lines from held-out poems, each with one word dropped, added or swapped,
+and the same 800 untouched, scored against the median licences of their poem's
+first eight hemistichs:
+
+| | broken | untouched |
+|---|---:|---:|
+| no reading in the poem's metre | 40.6% | 2.0% |
+| no reading, or at least 3 licences above the median | 58.0% | 5.2% |
+
+So about four in ten broken lines still scan, because the licences are
+generous. Where `nearest` marked a break, it was on the changed word 45.5% of
+the time and within one word 79.8%. On the 11 lines of Shamisa's chapter tried,
+`sakta` lands on the word he names in 9. It marks 10.8% of Hafez's lines (4.0%
+heavy) and 18.0% of Masud Sa'd's (10.8% heavy). The direction agrees with
+Shamisa, but he finds only a few in Hafez, so it over-marks.
+
 ```sh
 ghazal-nlp ganjoor <snapshot> > poems.jsonl
 ghazal-nlp aruz-eval poems.jsonl [--no-lexicon] [--stripped]

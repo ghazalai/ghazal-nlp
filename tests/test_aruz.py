@@ -354,3 +354,27 @@ def test_short_by_nature_and_the_final_e():
 def test_a_shortened_az_is_no_ezafe():
     moves = {(w, aruz.device_names(d)) for w, _, d in aruz._syllables(aruz.prepare("ز"), 0, Devices())}
     assert ("u", ()) in moves
+
+
+def test_nearest_finds_the_break():
+    scan, pattern = aruz.scanner(), "-u---u---u-"
+    plain = scan.nearest("از جدایی‌ها حکایت می‌کند", pattern)
+    assert not any(s.fault for s in plain.syllables) and plain.licences == 0
+    added = scan.nearest("کز نیستان تا مرا از بن ببریده‌اند", pattern)
+    assert [s.letters for s in added.syllables if s.fault == "extra_syllable"] == ["را", "از"]
+    assert {s.fault for s in scan.nearest("از جدایی‌ها حکایت کند", pattern).syllables} >= {"unusual_reading"}
+    assert scan.nearest("۱۲۳", pattern) is None
+
+
+def test_sakta_marks_shamisas_examples():
+    scan = aruz.scanner()
+    feet = "مفعول مفاعیل مفاعیل فعولن".split()
+    label = "مفعول مفاعیل مفاعیل فعولن"
+    line = next(r for r in scan.readings("محسوس شنیدم من، آواز بریدن") if any(m.startswith(label) for m in r.metres))
+    assert [(line.syllables[k].letters, level) for k, level in aruz.sakta(line, tuple(feet))] == [("من", "heavy")]
+    plain = next(r for r in scan.readings("دلم جز مهر مه‌رویان طریقی بر نمی‌گیرد"))
+    assert aruz.sakta(plain) == []
+
+
+def test_a_zero_width_space_is_no_grapheme():
+    assert aruz.scanner().scan("نام\u200bهای خدا بر او خواندی").abstention is None

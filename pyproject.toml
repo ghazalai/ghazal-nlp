@@ -1,6 +1,6 @@
 [project]
 name = "ghazal-nlp"
-version = "0.2.0"
+version = "0.3.0"
 description = "Small deterministic tools for Persian: metre, verbs, vowels, ezāfe, spelling"
 readme = "README.md"
 license = "MIT AND CC-BY-4.0 AND CC-BY-SA-4.0"

@@ -44,7 +44,7 @@ def pattern_for_label(label: str) -> str | None:
 
 
 FOLD = str.maketrans("يىﻯكةۀئؤأإٱ", "یییکههءءءاا")
-STRIP = re.compile("[ً-ٰ٘ۖ-ۭـ‌-‏﻿]")
+STRIP = re.compile("[ً-ٰ٘ۖ-ۭـ​-‏﻿]")
 WORD = re.compile(r"[^\s .,،؛؟!:;«»\"'()\[\]{}\-–—ـ/\\|*_+=]+")
 CONSONANTS = set("بپتثجچحخدذرزژسشصضطظعغفقکگلمنهویء")
 LETTERS = CONSONANTS | {"ا", "آ"}
@@ -517,9 +517,29 @@ class Trie:
 def _syllables_of(skel: Skeleton, trail) -> tuple[Syllable, ...]:
     out = []
     while trail is not None:
-        trail, i, nxt, weights, used = trail
-        out.append(Syllable("".join(skel.chars[i:nxt]), skel.word[min(i, len(skel) - 1)], weights, device_names(used)))
+        trail, i, nxt, weights, used, *fault = trail
+        out.append(Syllable("".join(skel.chars[i:nxt]), skel.word[min(i, len(skel) - 1)], weights, device_names(used),
+                            fault[0] if fault else None))
     return tuple(reversed(out))
+
+
+def sakta(reading: Reading, feet: tuple[str, ...] | None = None) -> list[tuple[int, str]]:
+    """(syllable index, ``light`` or ``heavy``) for each ابدال the ear may stumble on, after
+    Shamisa, «سکتهٔ عروضی»: none before the hemistich's last syllable, heavy where it
+    crosses two feet or sits next to another licence."""
+    edges, at = set(), 0
+    for foot in feet or ():
+        at += len(FEET[foot])
+        edges.add(at)
+    found, at = [], 0
+    last = len(reading.weights) - 3
+    noisy = {"overlong_as_long", "ezafe_lengthening", "final_e_lengthening", "tashdid"}
+    for k, s in enumerate(reading.syllables):
+        if "ebdal" in s.devices and at < last:
+            near = [reading.syllables[x].devices for x in (k - 1, k + 1) if 0 <= x < len(reading.syllables)]
+            found.append((k, "heavy" if at + 1 in edges or any(noisy & set(d) for d in near) else "light"))
+        at += len(s.weights)
+    return found
 
 
 def _pattern_slots(weights: str, i: int, devices: Devices):
@@ -674,6 +694,11 @@ class Syllable:
     word: int
     weights: str
     devices: tuple[str, ...] = ()
+    fault: str | None = None
+
+
+FAULTS = ("long_for_short", "short_for_long", "extra_syllable", "missing_syllable", "unusual_reading")
+BREAK, UNUSUAL = 4, 2  # what a break in the metre and a word read against the lexicon cost, in licences
 
 
 @dataclass(frozen=True, slots=True)
@@ -790,6 +815,60 @@ class Scanner:
             found.append(Reading(tuple(self.inventory.pattern_labels[pattern]), pattern, realized, cost,
                                  device_names(used), _syllables_of(skel, trail)))
         return tuple(found)
+
+    def nearest(self, line: str, pattern: str) -> Reading | None:
+        """``line`` read in ``pattern`` with the fewest breaks, each one a syllable marked
+        with its ``fault``; a missing syllable has no letters and an extra one no slot.
+        A word read against the lexicon fits, but is marked ``unusual_reading``."""
+        try:
+            skel = prepare(line, marks=self.marks)
+        except ScriptError:
+            return None
+        gate, devices, n, m = self._gate(skel), self.devices, len(skel), len(pattern)
+        best = {(0, 0): (0, None)}
+
+        def offer(state, cost, trail):
+            if state not in best or cost < best[state][0]:
+                best[state] = (cost, trail)
+
+        for i in range(n + 1):
+            for j in range(m + 1):
+                if (i, j) not in best:
+                    continue
+                cost, trail = best[i, j]
+                if j < m:
+                    offer((i, j + 1), cost + BREAK, (trail, i, i, pattern[j], 0, "missing_syllable"))
+                if i == n:
+                    continue
+                if _glide(skel, i, devices) and j < m:
+                    for weight, dev in _glide_weights(devices):
+                        if pattern[j] == weight:
+                            offer((i, j + 1), cost + COST[dev], (trail, i, i, weight, dev, None))
+                allowed = gate[i] if gate is not None else None
+                for weights, nxt, dev in _moves(skel, i, devices):
+                    strange = UNUSUAL if allowed is not None and (weights, nxt) not in allowed else 0
+                    offer((nxt, j), cost + BREAK + COST[dev] + strange, (trail, i, nxt, weights, dev, "extra_syllable"))
+                    for realized, licence in _pattern_slots(weights, i, devices):
+                        end = j + len(realized)
+                        if end > m:
+                            continue
+                        want = pattern[j:end]
+                        used = dev | licence
+                        extra = COST[used] + strange
+                        if want == realized:
+                            offer((nxt, end), cost + extra, (trail, i, nxt, realized, used, "unusual_reading" if strange else None))
+                        elif nxt == n and end == m and want[:-1] == realized[:-1]:
+                            offer((nxt, end), cost + extra, (trail, i, nxt, want, used | FINAL, "unusual_reading" if strange else None))
+                        elif len(realized) == 1:
+                            fault = "long_for_short" if realized == LONG else "short_for_long"
+                            offer((nxt, end), cost + extra + BREAK, (trail, i, nxt, want, used, fault))
+        if (n, m) not in best:
+            return None
+        syllables = _syllables_of(skel, best[n, m][1])
+        used = [sum(1 << DEVICES.index(d) for d in s.devices) for s in syllables]
+        return Reading(tuple(self.inventory.pattern_labels.get(pattern, ())), pattern,
+                       "".join(s.weights for s in syllables), sum(COST[u] for u in used),
+                       device_names(sum(1 << i for i in range(len(DEVICES)) if any(u >> i & 1 for u in used))), syllables)
 
     def _hits(self, skel: Skeleton, trace: bool = False):
         gate = self._gate(skel)
