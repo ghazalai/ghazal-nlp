@@ -19,7 +19,7 @@ from typing import Iterable, Iterator, Sequence
 
 from . import verb
 
-RULEBASE_VERSION = "0.3.0"
+RULEBASE_VERSION = "0.3.1"
 RULES = Path(__file__).parent / "rules"
 DATA = Path(__file__).parent / "data"
 

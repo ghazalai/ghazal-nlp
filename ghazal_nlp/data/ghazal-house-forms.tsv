@@ -4,6 +4,7 @@
 # stratum writes it at least 10% of the time; the house one is what the strata
 # prefer on average. Plurals and comparatives keep the ZWNJ. evidence: per stratum,
 # how often the pair is written spaced/with a ZWNJ/solid.
+# Ali's rulings override the counts: ستاره‌دار; یکدست, and «یک دست» is left alone as it can mean one hand.
 # first	second	house	others	evidence
 آئین	های	zwnj	solid	wikipedia 3/13/1; state media 0/5/0
 آب	انبارها	spaced	zwnj	wikipedia 15/8/0
@@ -3861,7 +3862,7 @@
 سبیل	های	zwnj	solid	wikipedia 0/5/0; literature 1/37/3; historical 1/1/7
 ست	ها	zwnj	solid	state media 0/5/0
 ست	های	zwnj	solid	state media 0/11/0
-ستاره	دار	spaced	zwnj	wikipedia 43/12/0
+ستاره	دار	zwnj	spaced	wikipedia 43/12/0
 ستاری	فر	spaced	zwnj	state media 8/4/0
 ستاک	های	zwnj	solid	wikipedia 0/8/0
 ستایش	ها	zwnj	solid	wikipedia 0/9/2; historical 0/2/10
@@ -8697,7 +8698,7 @@
 یک	جور	spaced	solid,zwnj	wikipedia 82/26/14; state media 4/1/0; literature 106/16/0; edited prose 17/2/2; historical 31/9/30
 یک	جوری	spaced	zwnj	wikipedia 32/9/1; literature 32/15/0; edited prose 2/5/2; historical 17/1/2
 یک	خرده	spaced	zwnj	wikipedia 12/3/2; literature 104/2/0; historical 21/2/0
-یک	دست	spaced	solid,zwnj	wikipedia 170/22/267; state media 4/0/4; literature 247/6/50; edited prose 17/6/7; historical 161/3/72
+یک	دست	solid	zwnj	wikipedia 170/22/267; state media 4/0/4; literature 247/6/50; edited prose 17/6/7; historical 161/3/72
 یک	دسته	spaced	solid	wikipedia 169/6/1; state media 5/0/0; literature 187/8/1; edited prose 17/0/0; historical 172/1/195
 یک	دستی	solid	spaced,zwnj	wikipedia 18/4/51; literature 5/0/3; historical 5/3/1
 یک	دفعه	spaced	solid,zwnj	wikipedia 58/12/38; state media 11/1/0; literature 173/39/2; edited prose 14/2/0; historical 106/22/141

@@ -113,7 +113,7 @@ def test_tokens_keep_zwnj_and_findings_point_into_the_text():
     assert [t.text for t in tokenize(f"بزرگ{ZWNJ}تر است")] == [f"بزرگ{ZWNJ}تر", "است"]
     text = f"کتاب ها را می{ZWNJ}خوانم"
     analysis = rulebase("academy").check(text)
-    assert analysis.findings and analysis.rulebase_version == "0.3.0"
+    assert analysis.findings and analysis.rulebase_version == "0.3.1"
     assert all(text[slice(*f.span)] == f.text and BOOK in f.citation for f in analysis.findings)
 
 
@@ -301,6 +301,9 @@ def test_house_spellings_are_suggestions_not_errors():
     assert ghazal("خانهٔ من") == [("ghazal.ezafe_after_silent_he", "خانهٔ", f"خانه{ZWNJ}ی", "house")]
     assert ghazal("آنها") == [("ghazal.house_forms", "آنها", f"آن{ZWNJ}ها", "house")]
     assert ghazal(f"خانه{ZWNJ}ی من و آن{ZWNJ}ها") == []
+    assert ghazal("ستاره دار") == [("ghazal.house_forms", "ستاره دار", f"ستاره{ZWNJ}دار", "house")]
+    assert ghazal(f"یک{ZWNJ}دست") == [("ghazal.house_forms", f"یک{ZWNJ}دست", "یکدست", "house")]
+    assert ghazal("یکدست") == ghazal("یک دست") == []
     assert [f[3] for f in ghazal("كتاب")] == ["violation"]
 
 
