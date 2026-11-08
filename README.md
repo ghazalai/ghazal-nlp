@@ -289,7 +289,7 @@ I check it on labelled sites and on SentenceBench and HomoRich pronunciations:
 |---|---:|---:|---:|
 | `written`, dev | 102 | 100 (98%) | 88.2% |
 | `written`, frozen lab 1 | 78 | 73 (93.6%) | 87.2% |
-| `written`, batch 2 | 47 | 45 (95.7%) | 95.7% |
+| `written`, batch 2 | 48 | 46 (95.8%) | 95.8% |
 | `written`, SentenceBench | 14 | 13 (93%) | 100% |
 | `written`, HomoRich | 2,724 | 98.5% | 98.9% |
 | `junction`, dev | 128 | 111 (87%) | 61.7% |
@@ -441,10 +441,10 @@ apart, since PerSpellData often has a space where the house has ZWNJ (شده ا�
 
 | Virastman logs, 127,120 pairs, 138,503 edits | `ghazal` | `academy` |
 |---|---:|---:|
-| changes proposed | 24,513 | 16,246 |
-| precision, exact / apart | 19.1% / 73.0% | 17.5% / 42.0% |
+| changes proposed | 24,132 | 15,883 |
+| precision, exact / apart | 19.3% / 73.0% | 17.9% / 42.6% |
 | recall, exact / apart | 3.4% / 4.3% | 2.1% / 2.2% |
-| missing ZWNJ (میروم), recall | 30.9% | 16.6% |
+| missing ZWNJ (میروم), recall | 30.8% | 16.6% |
 
 Recall is low because 83% of the edits split two words written together
 (تلاشکردند), which no rule looks for.
