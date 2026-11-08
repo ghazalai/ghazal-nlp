@@ -2,8 +2,8 @@
 
 import importlib
 
-__version__ = "0.3.0"
-__all__ = ["arabic", "aruz", "ezafe", "orthography", "verb", "vowels"]
+__version__ = "0.4.0"
+__all__ = ["arabic", "aruz", "ezafe", "normalize", "orthography", "verb", "vowels"]
 
 
 def __getattr__(name):

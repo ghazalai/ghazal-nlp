@@ -478,11 +478,37 @@ ghazal-nlp arabic "چنانکه گفته‌اند الحمد لله رب الع�
 ghazal-nlp arabic-eval
 ```
 
+### `normalize`: the Ghazal Corpus normalizer
+
+The normalizer behind the `normalized` column of the Ghazal Corpus, version
+1.0.0, so other text can be put in the same form. It repairs what isn't a
+choice and leaves the rest as written: Arabic letters and presentation forms,
+invisible characters and ZWNJs that change nothing, Arabic-Indic digits,
+spacing and punctuation, ة in Persian words, and the junctions careful writers
+write with a ZWNJ (می before a verb, ها, an ending after ه, compounds they
+mostly join). Code in ``` blocks or `backticks` stays as written. A poem keeps
+ای apart after a word, since it's mostly the vocative.
+
+This is a copy of 1.0.0. The corpus normalizer keeps changing; this one only
+changes with a release here. It gives the same bytes as the corpus normalizer
+on 10,917,739 rows of the corpus bench, every source and profile.
+
+```python
+from ghazal_nlp import normalize
+normalize.normalize("كتاب ها را ميخوانم.")           # کتاب‌ها را می‌خوانم.
+normalize.normalize("پندم مده ای دوست", verse=True)  # پندم مده ای دوست
+normalize.house("آنها 20% بیشتر")                    # آن‌ها ۲۰٪ بیشتر: my house forms where Persian has two right ones
+normalize.key("خانهٔ پدری")                          # خانه پدری: every surface difference folded, for search and duplicates
+normalize.equivalent("خانهٔ پدری", "خانه‌ی پدری")      # True: equal up to accepted variants
+normalize.profile("ckb", "document")                 # "arab": the steps a corpus row in that language got (PROFILES)
+```
+
 ## Data
 
 The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0, except the files
 that quote Wikipedia or Wikisource, which are CC BY-SA 4.0 (`data/LICENSE`
-lists them); each TSV's header says where it comes from. Ganjoor,
+lists them); each TSV's header says where it comes from. `data/normalize` holds
+the normalizer's tables as the corpus has them, counted on the corpus. Ganjoor,
 the treebanks, SentenceBench, HomoRich, UniMorph, PerSpellData and
 Ganjoor-Rhythm-Bench are only read for testing and aren't included.
 
