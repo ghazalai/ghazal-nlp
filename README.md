@@ -512,6 +512,16 @@ the normalizer's tables as the corpus has them, counted on the corpus. Ganjoor,
 the treebanks, SentenceBench, HomoRich, UniMorph, PerSpellData and
 Ganjoor-Rhythm-Bench are only read for testing and aren't included.
 
+`data/corpus-sample.jsonl.gz` is the Ghazal Corpus 1.0.0 Sample, 500 documents
+(50 from each Starter table) with `text` and `normalized`, to try the tools on;
+each row carries its own licence (`data/LICENSE`):
+
+```python
+import gzip, json
+from importlib.resources import files
+rows = [json.loads(line) for line in gzip.open(files("ghazal_nlp") / "data/corpus-sample.jsonl.gz")]
+```
+
 The test data, one item per line (my labels, except the last):
 
 - `ezafe-written-dev.jsonl`, `ezafe-junctions-dev.jsonl` and `ezafe-lab-1.jsonl`:

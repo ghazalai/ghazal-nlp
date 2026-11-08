@@ -10,3 +10,9 @@ Tajik Shahnameh corpus (ArabovMK/shahnameh-tajik-corpus), and are licensed under
 CC BY-SA 4.0 instead (https://creativecommons.org/licenses/by-sa/4.0/):
 ezafe-written-dev.jsonl, ezafe-junctions-dev.jsonl, ezafe-lab-1.jsonl,
 arabic-spans-lab.jsonl, arabic-lines-lab.jsonl, shahnameh-tajik-test.jsonl.
+
+corpus-sample.jsonl.gz is the Sample tier of the Ghazal Corpus 1.0.0, 500
+documents, each under the licence in its own `license` field: CC BY-SA 4.0
+(Wikimedia text; its authors are in the history of each document's url), CC0 1.0
+(Common Voice) or public domain (Ganjoor poems whose poets died long ago).
+corpus-sample.json is its manifest, with the full attribution statement.
