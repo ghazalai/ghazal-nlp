@@ -15,6 +15,9 @@ classifiers = [
   "Topic :: Text Processing :: Linguistic",
 ]
 
+[project.optional-dependencies]
+neural = ["torch>=2", "transformers>=4.40"]
+
 [project.urls]
 Source = "https://github.com/ghazalai/ghazal-nlp"
 

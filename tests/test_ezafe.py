@@ -142,17 +142,19 @@ def test_heh_length_counts_letters():
     assert ezafe.heh("بِه من") == []
 
 
-def test_register_floor_is_per_text():
-    for text in ("قبله حقیقت", "رویه جاری"):
-        old, = ezafe.heh(text, edited_floor=.5)
-        new, = ezafe.heh(text)
-        assert new.verdict == "right"
-        if text == "رویه جاری":
-            assert old.verdict == "wrong"
-        assert new.threshold == .9 and new.informality <= 1
+def test_heh_threshold():
     text = "من دیگه نمیدونم چیکار کنم اسمه من علیه"
-    assert ezafe.informality(text) > 1
-    assert next(h for h in ezafe.heh(text) if h.first == "اسمه").threshold == .5
+    flags = {h.first: h.verdict for h in ezafe.heh(text)}
+    assert flags == {"دیگه": "right", "اسمه": "wrong"}
+    assert all(h.verdict == "right" for h in ezafe.heh(text, threshold=.999))
+    assert ezafe.heh("قبله حقیقت")[0].verdict == "right"
+    with pytest.raises(ValueError):
+        ezafe.heh(text, threshold=1)
+
+
+def test_heh_probabilities_can_be_replaced():
+    h, = ezafe.heh("خونه رفتم", probabilities=lambda found: [0.95] * len(found))
+    assert h.verdict == "wrong" and h.probability == 0.95
 
 
 def test_verse_without_metre_reads_as_prose():

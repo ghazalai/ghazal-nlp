@@ -279,9 +279,7 @@ def junction_features(site: dict) -> dict[str, float]:
     return f
 
 
-def junction_probability(site: dict) -> float:
-    """Boosted trees over ``junction_features``: the chance the junction carries an ezāfe."""
-    model, f = junction_model(), junction_features(site)
+def _boosted(model: dict, f: dict[str, float]) -> float:
     x = [f.get(name, 0.0) for name in model["features"]]
     z = 0.0
     for nodes, leaves in model["trees"]:
@@ -290,18 +288,27 @@ def junction_probability(site: dict) -> float:
             feature, threshold, left, right = nodes[i]
             i = left if x[feature] <= threshold else right
         z += leaves[~i]
+    return z
+
+
+def _sigmoid(z: float) -> float:
     return 1 / (1 + math.exp(-max(-30.0, min(30.0, z))))
 
 
-def junction(site: dict, profile: str = "prose") -> Decision:
+def junction_probability(site: dict) -> float:
+    """Boosted trees over ``junction_features``: the chance the junction carries an ezāfe."""
+    return _sigmoid(_boosted(junction_model(), junction_features(site)))
+
+
+def junction(site: dict, profile: str = "prose", probability=junction_probability) -> Decision:
     """Does the junction carry an ezāfe? ``ezafe``, ``none`` or ``abstain``.
 
     None across punctuation, before a participle's auxiliary or شده، after a head
     that takes none (همیشه، چگونه، از جمله، شده), in a reduplication (تکه تکه),
     before a connector, a preposition, a copula or a verb, and before a plural ها or
     a می written apart. In profile ``verse`` the metre's none stands (``metre``).
-    Before a pronoun, a participle or any other content word, ``junction_probability``
-    decides.
+    Before a pronoun, a participle or any other content word, ``probability`` decides
+    (``junction_probability`` unless given).
     """
     if profile not in ("prose", "verse"):
         raise ValueError(f"unknown profile {profile!r}")
@@ -329,7 +336,7 @@ def junction(site: dict, profile: str = "prose") -> Decision:
     if bare(nxt) in ("می", "نمی") and text[site["neutral_next_span"][1]:].lstrip()[:1].isalpha():
         return Decision("none", "verb_prefix")
     if cls in ("pronoun", "participle_reading", "content_unknown"):
-        return Decision("ezafe" if junction_probability(site) >= 0.5 else "none", "model")
+        return Decision("ezafe" if probability(site) >= 0.5 else "none", "model")
     return Decision("abstain", "unknown")
 
 
@@ -360,13 +367,13 @@ class Junction:
     reason: str
 
 
-def junctions(text: str, profile: str = "prose", metre: str | None = None) -> list[Junction]:
+def junctions(text: str, profile: str = "prose", metre: str | None = None, probability=junction_probability) -> list[Junction]:
     """Every silent-ه junction in ``text``: ``ezafe``, ``none`` or ``abstain``, and why.
     A written mark is judged by ``written``, an unmarked junction by ``junction``;
     ``metre`` is the poem's, for profile ``verse``."""
     out = []
     for site in sites({"text": text, "metre": metre}):
-        d = written(site) if site["marked"] else junction(site, profile)
+        d = written(site) if site["marked"] else junction(site, profile, probability)
         out.append(Junction(site["head"], text[slice(*site["next_span"])], (site["head_span"][0], site["next_span"][1]),
                             site["observed_mark_class"], "none" if d.label == "not_ezafe" else d.label, d.reason))
     return out
@@ -393,6 +400,11 @@ def heh_tables():
     return ({r[0]: tuple(map(int, r[1:])) for r in rows("ezafe-heh-words.tsv")},
             {(r[0], r[1]): tuple(map(int, r[2:])) for r in rows("ezafe-heh-pairs.tsv")},
             {(r[0], r[1]): tuple(map(int, r[2:])) for r in rows("ezafe-heh-left.tsv")})
+
+
+@lru_cache(maxsize=1)
+def heh_label_model() -> dict:
+    return json.loads((orthography.DATA / "ezafe-heh-labels-trees.json").read_text(encoding="utf-8"))
 
 
 @lru_cache(maxsize=1)
@@ -495,18 +507,23 @@ def informality(text: str) -> float:
     return sum(values) / len(values) if values else 0.0
 
 
-def heh(text: str, edited_floor: float = 0.9) -> list[Heh]:
+def heh_probabilities(found: list[dict]) -> list[float]:
+    """The boosted trees in ``heh_probability``, corrected by trees trained on hand labels."""
+    model = heh_label_model()
+    return [_sigmoid(math.log(s["features"]["shipped"] / (1 - s["features"]["shipped"])) + _boosted(model, s["features"]))
+            for s in found]
+
+
+def heh(text: str, threshold: float = 0.9, probabilities=heh_probabilities) -> list[Heh]:
     """Each word ending in ه before another word, and whether that ه is an ezāfe written as ه. ``verdict`` is
-    ``wrong`` when it is, with ``form`` the pair with a kasra (ی after ا and و); ``confidence`` is the
-    model's probability of that verdict, not a calibrated guarantee. Outside informal text the flagging
-    threshold is ``edited_floor``; otherwise 0.5. Verbs and Arabic passages are not sites."""
-    if not 0.5 <= edited_floor < 1:
-        raise ValueError("edited_floor must be at least 0.5 and below 1")
+    ``wrong`` when the probability reaches ``threshold``, with ``form`` the pair with a kasra (ی after ا and
+    و); ``confidence`` is the model's probability of that verdict, not a calibrated guarantee. Verbs and
+    Arabic passages are not sites. ``probabilities`` scores the sites (``heh_probabilities`` unless given)."""
+    if not 0 < threshold < 1:
+        raise ValueError("threshold must be between 0 and 1")
     tokens = list(HEH_TOKEN.finditer(text))
     passages = arabic_detector().detect(text)
-    register = informality(text)
-    threshold = 0.5 if register > 1 else edited_floor
-    out = []
+    found = []
     for i, token in enumerate(tokens[:-1]):
         head, nxt = token.group(), tokens[i + 1]
         plain_head = bare(head)
@@ -516,10 +533,21 @@ def heh(text: str, edited_floor: float = 0.9) -> list[Heh]:
         before = tokens[i - 1].group() if i and text[tokens[i - 1].end():token.start()].isspace() else None
         after, gap = (tokens[i + 2].group(), text[nxt.end():tokens[i + 2].start()]) if i + 2 < len(tokens) else (None, " ")
         plain = tuple(re.sub(f"[{MARKS}]", "", w) if w else w for w in (head, nxt.group(), before, after))
-        p = heh_probability(heh_features(*plain, gap), plain)
+        f = heh_features(*plain, gap)
+        first = min(max(heh_probability(f, plain), 1e-6), 1 - 1e-6)
+        start = max(0, token.start() - 40)
+        window = text[start:nxt.end() + 40]
+        f |= {"shipped": first, "register": informality(window), "n_words": sum(
+            any(c.isalpha() for c in re.sub(f"[{MARKS}]", "", w.group())) for w in HEH_TOKEN.finditer(window))}
+        found.append({"window": window, "head_span": (token.start() - start, token.end() - start),
+                      "next_span": (nxt.start() - start, nxt.end() - start), "features": f, "token": token, "next": nxt})
+    out = []
+    for s, p in zip(found, probabilities(found)):
+        token, nxt = s["token"], s["next"]
+        head, plain_head = token.group(), bare(token.group())
         stem = re.sub(f"ه[{MARKS}]*$", "", head).rstrip("ِ")
         wrong = p >= threshold
         form = (stem + ("ی" if plain_head[-2] in "اوآ" else "ِ") if wrong else head) + " " + nxt.group()
         out.append(Heh(head, nxt.group(), (token.start(), nxt.end()), "wrong" if wrong else "right", form,
-                       round(p if wrong else 1 - p, 3), p, threshold, round(register, 3)))
+                       round(p if wrong else 1 - p, 3), p, threshold, round(s["features"]["register"], 3)))
     return out

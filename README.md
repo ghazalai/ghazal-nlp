@@ -339,31 +339,50 @@ pair rewritten with a kasra) or belongs there (`right`: خونه، خوبه، پ
 
 It's 700 boosted trees over corpus counts of the two words (how edited text
 spells the word, how often the pair is written bare or with a kasra, what
-follows each) and the words around. They trained on kasras rewritten as ه and
-on 1,162 labelled sites, and assume the ه is an ezāfe at 2.5% of sites, which I
-haven't verified.
+follows each) and the words around, trained on kasras rewritten as ه. Another 300
+trees, trained on 13,203 sites labelled by hand, correct them; they also see how
+informal the 40 characters on either side read (`informality`). The labels are
+mine and AI models': Claude's, and Claude Opus's and GPT's where both agreed.
 
-It flags a site at probability 0.9, or 0.5 if the whole text reads as informal:
-`informality(text)` is the mean log ratio of how often its words appear in spoken
-and edited text, and above 1 is informal. `edited_floor=0.5` turns the higher bar
-off. It still misses plenty, including the first example above.
+It flags a site at probability 0.9; `threshold` changes that. On 726 labelled
+sites from about 217,000 in spoken text, blogs, web, news, books and verse,
+picked across the range of scores and weighted back, under five folds:
 
-On 300 labelled sites from tweets and YouTube comments, weighted to how often
-each kind occurs (95% intervals), where a word's own ه followed by an ezāfe counts as
-no error:
+| | precision | lower 95% bound | share of the errors flagged |
+|---|---:|---:|---:|
+| threshold 0.9 | 1.00 | 0.88 | 0.15 |
+| threshold 0.8 | 0.92 | 0.81 | 0.22 |
+| the opt-in model below, 0.9 | 0.97 | 0.91 | 0.44 |
+| the opt-in model below, 0.8 | 0.90 | 0.84 | 0.55 |
+| 0.5.0 | 0.55 | | 0.18 |
 
-| precision | recall | average precision |
-|---:|---:|---:|
-| 0.92 [0.79, 1.00] | 0.36 [0.26, 0.48] | 0.72 [0.62, 0.82] |
-
-I built on these sites, so this isn't a clean test, and the final test is still
-to come. On a newer sample across spoken text, blogs, web, news, books and verse, the
-higher bar removed 66 of 71 false flags and 8 of 17 real ones. Too few real errors
-turned up there to give a precision or recall for the wider population.
+The ezāfe written as ه is rare there, 0.24% of sites. The share is an upper
+bound: among the lowest-scored sites I found none in 200, which doesn't rule out
+a few. It still misses plenty, including the first example above.
 
 ```sh
 ghazal-nlp ezafe-heh "اسمه من علیه"
 ```
+
+### `neural`: the opt-in model
+
+One TookaBERT fine-tuned for both decisions: first on 1,050,349 sites (kasras
+rewritten as ه, and junctions labelled by Hazm's tagger), then on the hand
+labels. For `heh`, trees over the same features correct its scores. It needs
+torch and transformers (`pip install ghazal-nlp[neural]`) and the model's folder,
+which I'll publish after a legal review.
+
+```python
+from ghazal_nlp.neural import Ezafe
+model = Ezafe("path/to/model")
+model.junctions("نامه را نوشتم و خانه زیبا بود")
+model.heh("دیواره اتاقه من", threshold=0.9)
+```
+
+`junctions` keeps the rules and puts the model where the trees would decide. On
+the unwritten ezāfe it's no better than the trees: 90.5% on the prose labels and
+93.3% on the random sample under five folds, against 91.6% and 91.9%. On the
+ezāfe written as ه it finds about three times as many (table above).
 
 ### The Tajik Shāhnāme as gold
 
