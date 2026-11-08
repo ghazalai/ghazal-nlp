@@ -270,13 +270,22 @@ for j in ezafe.junctions("نامه را نوشتم و خانه زیبا بود")
     print(j.head, j.mark, j.label, j.reason)
 ```
 
+`junction` starts with rules for where there's no ezāfe: across punctuation,
+before a verb, a copula, a connector or a preposition, before a plural ها or a
+می written apart, and after heads that take none (همیشه، چگونه). The rest,
+mostly a content word next, go to 150 small boosted trees over corpus counts:
+how often the pair turns up, how often writers who mark the ezāfe mark it on
+that pair, what usually follows the next word, and the words around. They
+trained on 269,349 junctions from the corpus's Starter tables labelled by Hazm's
+tagger and 1,257 labelled by hand, mine and those Claude Opus and GPT agreed on.
+
 `junction` has two profiles. `prose`, the default, is the one above. `verse`
-keeps the rules for where there's no ezāfe, then lets the metre decide: it scans
-the line once with the junction read as an ezāfe and once without, and takes
-whichever needs fewer licences. Give it the poem's metre when you know it;
-otherwise it takes the metre most of the text's hemistichs scan cheapest in, if
-there are two or more and 40% of them agree. Without an agreed metre it
-abstains; a tie within an agreed metre still gives none. I give it the whole poem.
+scans the line once with the junction read as an ezāfe and once without, and
+takes whichever needs fewer licences. Where the metre says none, or can't
+choose, it's none; where it says ezāfe, or there's no metre, the prose trees
+decide. Give it the poem's metre when you know it; otherwise it takes the metre
+most of the text's hemistichs scan cheapest in, if there are two or more and 40%
+of them agree. I give it the whole poem.
 
 ```python
 ezafe.junctions("فرستاده شاه را پیش خواند", profile="verse",
@@ -288,23 +297,27 @@ I check it on labelled sites and on SentenceBench and HomoRich pronunciations:
 | | sites | agree | always the commoner label |
 |---|---:|---:|---:|
 | `written`, dev | 102 | 100 (98%) | 88.2% |
-| `written`, frozen lab 1 | 78 | 73 (93.6%) | 87.2% |
-| `written`, batch 2 | 48 | 46 (95.8%) | 95.8% |
+| `written`, first test | 78 | 73 (93.6%) | 87.2% |
+| `written`, second test | 48 | 46 (95.8%) | 95.8% |
 | `written`, SentenceBench | 14 | 13 (93%) | 100% |
 | `written`, HomoRich | 2,724 | 98.5% | 98.9% |
-| `junction`, dev | 128 | 111 (87%) | 61.7% |
-| `junction`, lab batch 1 | 43 | 37 (86%) | 86.0% |
-| `junction`, clean batch 2 | 100 | 73 (73%) | 76.0% |
-| `junction`, SentenceBench | 132 | 104 (79%) | 76.5% |
-| `junction`, HomoRich | 58,947 | 81.4% | 73.6% |
+| `junction`, prose, 5 folds | 524 | 480 (91.6%) | 66.8% |
+| `junction`, prose, random sample, 5 folds | 149 | 137 (91.9%) | 73.2% |
+| `junction`, verse | 252 | 238 (94.4%) | 91.3% |
+| `junction`, SentenceBench | 132 | 116 (88%) | 76.5% |
+| `junction`, HomoRich | 58,947 | 89.8% | 73.6% |
 
-The dev sites (`data/ezafe-*-dev.jsonl`) were labelled while the rules were
-written. Batch 1 (`data/ezafe-lab-1.jsonl`) counts as dev for `junction`, since I
-fixed it after looking. Batch 2 was the only clean test of `junction`, and now
-it's used up too. `written` beats always saying ezāfe on batch 1 and ties on
-batch 2. `junction` doesn't beat always saying none on batch 2: it finds 23 of 24
-ezāfes but adds 26 that aren't there, because without a noun and adjective lexicon
-it treats any word it can't place as a noun. HomoRich's ezāfe marks were added
+The `written` dev sites (`data/ezafe-written-dev.jsonl`) were labelled while I
+wrote the rules, and I changed the rules after looking at the first test
+(`data/ezafe-lab-1.jsonl`), so only the second is clean. `written` beats always
+saying ezāfe on the first and ties on the second.
+
+Every hand label I have for `junction` is in its training now, so its rows are
+cross-validated: the trees are retrained five times, each time without a fifth of
+the documents, and scored on that fifth. The 524 are my prose labels, many picked
+where the old rules were unsure; 149 of them are a random sample of unmarked
+junctions from the Starter tables. I set the verse rule on the 252 Ganjoor
+junctions, so that row isn't a clean test. HomoRich's ezāfe marks were added
 automatically (a POS tagger and a dictionary, per its paper), and about 40% of its
 sentences GPT-4o wrote, so its rows measure agreement with that tagging, not with people.
 
@@ -366,29 +379,28 @@ kept.
 | `vowels`, one reading: it fits | 5,499 | 87.6% | |
 | `vowels`, several: the commonest fits | 6,689 | 59.4% | a random one 46.1% |
 | `vowels`, several: one of them fits | 6,689 | 95.5% | |
-| `ezafe.junction`, prose | 561 | 54.7% | always none 90.6% |
+| `ezafe.junction`, prose | 561 | 71.8% | always none 90.6% |
 | `ezafe.junction`, verse, the metre given | 561 | 96.4% | always none 90.6% |
 | `ezafe.written`, marked sites | 51 | 96.1% | always ezāfe 96.1% |
 
 The vowels are the Tajik edition's (یَکی، سَر، و read u), and Tajik doesn't
 tell i from ī or u from ū. The prose profile fails on the verse: a silent-ه
 head before a noun with no ezāfe is the usual case there (همه کوه، تیره خاک),
-and it finds one at 252 of 508 such junctions. I tuned the verse profile on the
+and it finds one at 152 of 508 such junctions. I tuned the verse profile on the
 other four fifths of the poems (11,417 sites), where it gets 97.1% against 90.5%
 for always none. In this metre an ezāfe after a silent ه is always long, so the
 verse profile doesn't count lengthening it as a licence.
 
-I also labelled 252 unmarked junctions from Ganjoor, the whole poem given as the
-text. Agreement is on the sites where it answers, the baseline on the same sites.
+The 252 Ganjoor junctions above, the whole poem given as the text:
 
-| | sites | answered | agree | always none |
-|---|---:|---:|---:|---:|
-| classical sources | 58 | 56 | 55 (98.2%) | 91.1% |
-| modern verse | 194 | 165 | 153 (92.7%) | 95.8% |
+| | sites | agree | always none |
+|---|---:|---:|---:|
+| classical sources | 58 | 56 (96.6%) | 91.4% |
+| modern verse | 194 | 182 (93.8%) | 91.2% |
 
-On modern verse it doesn't help: 7 ezāfes that aren't there, and 2 of the 7 real
-ones it answers on. It abstains on the other 10 real ones. Nimaic verse keeps a foot but
-not a line length, so some poems still agree on the wrong classical metre.
+On modern verse it finds 10 of the 17 real ezāfes and adds 5 that aren't there.
+Nimaic verse keeps a foot but not a line length, so some poems agree on the wrong
+classical metre, and there the trees decide.
 
 ```sh
 ghazal-nlp shahnameh-eval
@@ -507,7 +519,8 @@ normalize.profile("ckb", "document")                 # "arab": the steps a corpu
 
 The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0, except the files
 that quote Wikipedia or Wikisource, which are CC BY-SA 4.0 (`data/LICENSE`
-lists them); each TSV's header says where it comes from. `data/normalize` holds
+lists them); each TSV's header says where it comes from. `ezafe-junction-counts.tsv.gz`
+and `ezafe-junction-trees.json` are `junction`'s counts and trees. `data/normalize` holds
 the normalizer's tables as the corpus has them, counted on the corpus. Ganjoor,
 the treebanks, SentenceBench, HomoRich, UniMorph, PerSpellData and
 Ganjoor-Rhythm-Bench are only read for testing and aren't included.

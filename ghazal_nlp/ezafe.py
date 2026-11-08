@@ -9,6 +9,7 @@ an ezāfe, and ``junction`` whether an unmarked junction carries one.
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import math
@@ -210,16 +211,97 @@ def metre(site: dict) -> str | None:
     return None if cost[0] == cost[1] else "ezafe" if cost[0] < cost[1] else "none"
 
 
+PLURAL = frozenset("ها های هایی هایم هایت هایش هایمان هایتان هایشان".split())
+NEAR = re.compile(r"[\wً-ٰٟ‌]+|[^\w\s]")
+QUANTITY = frozenset("یک دو سه چهار پنج شش هفت هشت نه ده صد هزار چند".split())
+DETERMINER = frozenset("این آن هر همین همان یه هیچ".split())
+
+
+@lru_cache(maxsize=1)
+def junction_counts() -> dict:
+    out = {"pair": {}, "next": {}, "head": {}, "joined": {}}
+    with gzip.open(orthography.DATA / "ezafe-junction-counts.tsv.gz", "rt", encoding="utf-8") as f:
+        for line in f:
+            if not line.startswith("#"):
+                kind, *rest = line.rstrip("\n").split("\t")
+                two = kind in ("pair", "joined")
+                out[kind][tuple(rest[:2]) if two else rest[0]] = tuple(map(int, rest[2 if two else 1:]))
+    return out
+
+
+@lru_cache(maxsize=1)
+def junction_model() -> dict:
+    return json.loads((orthography.DATA / "ezafe-junction-trees.json").read_text(encoding="utf-8"))
+
+
+def _near_class(word: str) -> str:
+    return "end" if not word else "punct" if not any(c.isalpha() for c in word) else word_class(word)
+
+
+def junction_features(site: dict) -> dict[str, float]:
+    """What the corpus counts say about the pair, the next word and the head, how writers who mark the ezāfe
+    write the pair, and the classes of the words around."""
+    text, (h0, h1), (n0, n1) = site["neutralized_text"], site["neutral_head_span"], site["neutral_next_span"]
+    head, nxt = bare(text[h0:h1]).replace(ZWNJ, ""), bare(text[n0:n1])
+    before = NEAR.findall(text[max(0, h0 - 100):h0])[-1:]
+    before = bare(before[0]) if before else ""
+    tail = text[n1:n1 + 100]
+    found = NEAR.match(tail.lstrip())
+    after = found.group() if found else ""
+    gap = tail[:len(tail) - len(tail.lstrip())]
+    hard = not after or "\n" in gap or not any(c.isalpha() for c in after)
+    after = bare(after)
+    counts = junction_counts()
+    p = counts["pair"].get((head, nxt), (0,) * 8)
+    seen = p[0] + p[2] + p[4] + p[6]
+    f = {}
+    for k, band in enumerate(("few", "none", "low", "high")):
+        f[f"pair_{band}_n"] = math.log1p(p[2 * k])
+        f[f"pair_{band}_rate"] = (p[2 * k + 1] + 0.1) / (p[2 * k] + 1)
+    f["pair_marking_rate"] = (p[3] + p[5] + p[7] + 0.1) / (p[2] + p[4] + p[6] + 1)
+    f["pair_n"] = math.log1p(seen)
+    h = counts["head"].get(head, (0,) * 3)
+    f["head_n"], f["head_rate"], f["head_number_rate"] = math.log1p(h[0]), (h[1] + .1) / (h[0] + 1), (h[2] + .1) / (h[0] + 1)
+    n = counts["next"].get(nxt, (0,) * 7)
+    f["next_n"] = math.log1p(n[0])
+    for k, name in enumerate(("marked", "verb", "copula", "end", "function", "participle"), 1):
+        f[f"next_{name}_rate"] = (n[k] + .1) / (n[0] + 1)
+    j = counts["joined"].get((head, nxt), (0,))[0]
+    f["joined_n"], f["joined_share"] = math.log1p(j), (j + .1) / (j + seen + 1)
+    for side, w in (("next", nxt), ("before", before), ("after", after)):
+        f[f"{side}_{_near_class(w)}"] = 1.0
+    f["before_number"] = float(before in QUANTITY or before.isdigit() or any("۰" <= c <= "۹" for c in before))
+    f["before_determiner"] = float(before in DETERMINER)
+    f["after_hard"] = float(hard)
+    f["next_len"] = len(nxt)
+    f["next_b"] = float(nxt.startswith("ب") and len(nxt) > 3)
+    f["register"] = informality(text[max(0, h0 - 300):n1 + 300])
+    return f
+
+
+def junction_probability(site: dict) -> float:
+    """Boosted trees over ``junction_features``: the chance the junction carries an ezāfe."""
+    model, f = junction_model(), junction_features(site)
+    x = [f.get(name, 0.0) for name in model["features"]]
+    z = 0.0
+    for nodes, leaves in model["trees"]:
+        i = 0 if nodes else -1
+        while i >= 0:
+            feature, threshold, left, right = nodes[i]
+            i = left if x[feature] <= threshold else right
+        z += leaves[~i]
+    return 1 / (1 + math.exp(-max(-30.0, min(30.0, z))))
+
+
 def junction(site: dict, profile: str = "prose") -> Decision:
     """Does the junction carry an ezāfe? ``ezafe``, ``none`` or ``abstain``.
 
     None across punctuation, before a participle's auxiliary or شده، after a head
     that takes none (همیشه، چگونه، از جمله، شده), in a reduplication (تکه تکه),
-    and before a connector, a preposition, a copula or a verb. Otherwise, in
-    profile ``prose``, ezāfe before a pronoun, a participle or any other content
-    word. The last is a stand-in for a noun and adjective lexicon, not a claim
-    that a word the verb analyser does not know is nominal. In profile ``verse``
-    the metre decides (``metre``); without an agreed metre it abstains.
+    before a connector, a preposition, a copula or a verb, and before a plural ها or
+    a می written apart. In profile ``verse`` the metre's none stands (``metre``).
+    Before a pronoun, a participle or any other content word, ``junction_probability``
+    decides.
     """
     if profile not in ("prose", "verse"):
         raise ValueError(f"unknown profile {profile!r}")
@@ -240,12 +322,14 @@ def junction(site: dict, profile: str = "prose") -> Decision:
     if cls == "participle_reading" and after and (
             bare(after[2]) in PARTICIPLE_AUXILIARIES or verb.constructions(readings(nxt), readings(after[2]), separator=after[1])):
         return Decision("none", "participle_auxiliary")
-    if profile == "verse":
-        if not (site.get("metre") or poem_metre(text)):
-            return Decision("abstain", "no_metre")
-        return Decision(m, "metre") if (m := metre(site)) else Decision("none", "default")
+    if profile == "verse" and (site.get("metre") or poem_metre(text)) and (m := metre(site)) != "ezafe":
+        return Decision("none", "metre" if m else "default")
+    if bare(nxt) in PLURAL:
+        return Decision("none", "plural")
+    if bare(nxt) in ("می", "نمی") and text[site["neutral_next_span"][1]:].lstrip()[:1].isalpha():
+        return Decision("none", "verb_prefix")
     if cls in ("pronoun", "participle_reading", "content_unknown"):
-        return Decision("ezafe", cls)
+        return Decision("ezafe" if junction_probability(site) >= 0.5 else "none", "model")
     return Decision("abstain", "unknown")
 
 

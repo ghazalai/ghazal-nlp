@@ -24,7 +24,7 @@ def site(text, head, nxt):
 def test_every_spelling_neutralises_to_one_junction(text, mark):
     row, = ezafe.sites(segment(text))
     assert (row["neutralized_text"], row["observed_mark_class"], row["original_junction"]) == ("خانه من", mark, text[:-2])
-    assert ezafe.junction(row) == ezafe.Decision("ezafe", "pronoun")
+    assert ezafe.junction(row) == ezafe.Decision("ezafe", "model")
 
 
 def test_offsets_address_the_original_text():
@@ -93,8 +93,8 @@ def test_the_development_rulings():
     junctions = [json.loads(line) for line in open(DATA / "ezafe-junctions-dev.jsonl", encoding="utf-8")]
     assert ezafe.score(written, ezafe.written, "blind")["agree"] == 96
     assert ezafe.score(written, ezafe.written, "revised")["agree"] == 100
-    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 113
-    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 111
+    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 114
+    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 114
 
 
 def test_junctions_in_plain_text():
@@ -113,7 +113,7 @@ def test_the_verse_profile_reads_the_metre():
     metre = "فعولن فعولن فعولن فعل (متقارب مثمن محذوف یا وزن شاهنامه)"
     found = [(j.label, j.reason) for t in ("فرستاده شاه را پیش خواند", "از اندیشه دل دور کن تا توان", "خانه زیبا")
              for j in ezafe.junctions(t, "verse", metre)]
-    assert found == [("ezafe", "metre"), ("none", "metre"), ("none", "default")]
+    assert found == [("ezafe", "model"), ("none", "metre"), ("none", "default")]
     with pytest.raises(ValueError):
         ezafe.junction(next(ezafe.sites(segment("خانه زیبا"))), "poetry")
 
@@ -155,5 +155,6 @@ def test_register_floor_is_per_text():
     assert next(h for h in ezafe.heh(text) if h.first == "اسمه").threshold == .5
 
 
-def test_verse_abstains_without_metre():
-    assert ezafe.junction(next(ezafe.sites(segment("خانه زیبا"))), "verse") == ezafe.Decision("abstain", "no_metre")
+def test_verse_without_metre_reads_as_prose():
+    row = next(ezafe.sites(segment("خانه زیبا")))
+    assert ezafe.junction(row, "verse") == ezafe.junction(row)
