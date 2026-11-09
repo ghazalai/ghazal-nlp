@@ -59,6 +59,7 @@ def quran_gap(text: str) -> bool:
                for c in text)
 
 
+@lru_cache(maxsize=32768)
 def fold_word(word: str) -> str:
     """A lossy comparison key, never returned as text."""
     word = unicodedata.normalize("NFC", word)
@@ -93,9 +94,13 @@ class ArabicDetector:
                                   for f in (_rows("arabic-formulae.tsv") if formulae is None else formulae))
         self.titles = [tuple(fold_word(w) for w in t.split()) for t in TITLES]
         self.longest = max((len(f.split()) for f in self.formulae), default=2)
+        self.phrase_starts = frozenset(f.split()[0] for f in self.formulae if f)
 
     def _features(self, token):
-        raw = token[0]
+        return self._word_features(token[0])
+
+    @lru_cache(maxsize=32768)
+    def _word_features(self, raw):
         word = fold_word(raw)
         bare = word[1:] if word.startswith(("و", "ف")) and len(word) > 3 else word
         article = word.startswith("ال") and len(word) > 3 and word not in self.persian
@@ -129,8 +134,12 @@ class ArabicDetector:
         tokens = list(TOKEN.finditer(text))
         words = [fold_word(t[0]) for t in tokens]
         candidates = []
+        starts = {title[0]: [] for title in self.titles}
+        for i, word in enumerate(words):
+            if word in starts:
+                starts[word].append(i)
         for title in self.titles:
-            for i in range(len(tokens) - len(title) + 1):
+            for i in starts[title[0]]:
                 end = i + len(title)
                 if tuple(words[i:end]) == title and not any(
                         GAP.search(text[tokens[k].end():tokens[k + 1].start()]) for k in range(i, end - 1)):
@@ -172,6 +181,9 @@ class ArabicDetector:
     def _phrases(self, text, tokens, words):
         found, i = [], 0
         while i < len(tokens) - 1:
+            if words[i] not in BEFORE_ARTICLE and words[i] not in self.phrase_starts:
+                i += 1
+                continue
             for n in range(min(self.longest, len(tokens) - i), 1, -1):
                 # علی is also the name, so a Persian ال word after it stays Persian (علی الهام).
                 article = (n == 2 and words[i] in BEFORE_ARTICLE and words[i + 1].startswith("ال")
@@ -227,12 +239,10 @@ class QuranIndex:
         tokens = list(TOKEN.finditer(text))
         keyed = [(i, k) for i, t in enumerate(tokens) if (k := self.key(t[0]))]
         keys = [k for _, k in keyed]
-        blocked = [(j, j + len(p)) for p in self.formulae if p
-                   for j in range(len(keys) - len(p) + 1) if tuple(keys[j:j + len(p)]) == p]
         candidates: dict[tuple[int, int], set[str]] = {}
         n = self.min_content
-        for j in range(len(keys)):
-            for vi, offset in self.index.get(tuple(keys[j:j + n]), ()):
+        for j, gram in enumerate(zip(*(keys[k:] for k in range(n)))):
+            for vi, offset in self.index.get(gram, ()):
                 verse, ref = self.verses[vi]
                 end = j + n
                 while (end < len(keys) and offset + end - j < len(verse)
@@ -240,10 +250,14 @@ class QuranIndex:
                        and not quran_gap(text[tokens[keyed[end - 1][0]].end():tokens[keyed[end][0]].start()])):
                     end += 1
                 candidates.setdefault((j, end), set()).add(ref)
-            for size in (2, 3):
-                refs = self.short.get(tuple(keys[j:j + size]))
-                if refs and j + size <= len(keys):
+        for size in (2, 3) if self.short else ():
+            for j, gram in enumerate(zip(*(keys[k:] for k in range(size)))):
+                if refs := self.short.get(gram):
                     candidates.setdefault((j, j + size), set()).update(refs)
+        if not candidates:
+            return []
+        blocked = [(j, j + len(p)) for p in self.formulae if p
+                   for j in range(len(keys) - len(p) + 1) if tuple(keys[j:j + len(p)]) == p]
         found = []
         for (j, end), refs in sorted(candidates.items(), key=lambda x: (x[0][0], -x[0][1])):
             if any(a <= j and end <= b for a, b in blocked):

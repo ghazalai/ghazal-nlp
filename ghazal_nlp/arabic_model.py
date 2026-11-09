@@ -45,12 +45,11 @@ class WordModel:
                 float(any(c in word for c in 'پچژگ')), float('ة' in word),
                 float('‌' in raw), min(12, len(word)) / 6]
 
-    def features(self, text):
+    def features(self, text, *, strict=False, rules=None):
         tokens = list(TOKEN.finditer(text))
-        base = [self.lexical(t[0]) for t in tokens]
         breaks = [True] + [boundary(text[a.end():b.start()])
                            for a, b in zip(tokens, tokens[1:])] + [True]
-        rules = detector().detect(text)
+        rules = detector().detect(text) if rules is None else rules
         rule = [0] * len(tokens)
         j = 0
         for i, t in enumerate(tokens):
@@ -58,8 +57,12 @@ class WordModel:
                 j += 1
             if j < len(rules) and rules[j].start <= t.start() < rules[j].end:
                 rule[i] = 1 if rules[j].kind == 'phrase' else 2
+        base = [self.lexical(t[0]) for t in tokens] if not strict or any(rule) else []
         feats = []
         for i, t in enumerate(tokens):
+            if strict and not rule[i]:
+                feats.append(None)
+                continue
             row = list(base[i])
             for offset in (-2, -1, 1, 2):
                 k = i + offset
@@ -94,20 +97,20 @@ class WordModel:
         exact = quran.detect(text) if quran is not None else []
         return self._words(text, exact, threshold, strict)
 
-    def _words(self, text, exact, threshold, strict):
+    def _words(self, text, exact, threshold, strict, *, spans_only=False, rules=None):
         if threshold is None:
             threshold = self.data.get('strict_threshold', .995) if strict else self.threshold
         if not 0 <= threshold <= 1:
             raise ValueError('threshold must lie in [0, 1]')
-        tokens, feats, breaks = self.features(text)
+        tokens, feats, breaks = self.features(text, strict=spans_only and strict, rules=rules)
         out, j = [], 0
         for t, row in zip(tokens, feats):
             while j < len(exact) and exact[j].end <= t.start():
                 j += 1
             match = exact[j] if j < len(exact) and exact[j].start <= t.start() < exact[j].end else None
-            p = self.probability(row)
+            p = self.probability(row) if row is not None else 0.0
             out.append(ArabicWord(t.start(), t.end(), 1.0 if match else p,
-                                  bool(match) or (p >= threshold and (not strict or row[25] > 0)),
+                                  bool(match) or (row is not None and p >= threshold and (not strict or row[25] > 0)),
                                   'quran' if match else None,
                                   match.quran_refs if match else (),
                                   (match.start, match.end) if match else None))
@@ -122,7 +125,13 @@ class WordModel:
 
     def detect(self, text, *, quran=None, verse=False, threshold=None, strict=False):
         exact = quran.detect(text) if quran is not None else []
-        words = self._words(text, exact, threshold, strict)
+        rules = detector().detect(text) if strict else None
+        if strict and not rules:
+            cutoff = self.data.get('strict_threshold', .995) if threshold is None else threshold
+            if not 0 <= cutoff <= 1:
+                raise ValueError('threshold must lie in [0, 1]')
+            return exact
+        words = self._words(text, exact, threshold, strict, spans_only=True, rules=rules)
         found, run = list(exact), []
 
         def emit():
