@@ -310,6 +310,11 @@ class Analyzer:
                     return None
                 if tense == "present" and mood in ("subjunctive", "imperative") and polarity == "pos":
                     form = form.removeprefix(SUBJ)
+                    stem = self.stems.by_infinitive[base].present[0]
+                    if stem.startswith("آ"):
+                        form = "آ" + form[2:]
+                    elif stem.startswith("ا") and not stem.startswith("ای"):
+                        form = "ا" + form[1:]
                 return preverb + form
             return None
         cell = (person, number)

@@ -95,3 +95,26 @@
 وا	گذاشتن	8	2
 وا	گزاردن	1	1
 وا	گشتن	5	4
+# Coverage additions: Dehkhoda compound infinitives; base stems from verb-stems.tsv.
+# Wiktionary via Kaikki also checks فروماندن and بازشناختن; CC BY-SA 4.0.
+# New rows contain only the attested preverb/base pair; no historical-corpus counts.
+وا	بستن
+بر	آشفتن
+فرو	ماندن
+بر	افراشتن
+در	افکندن
+در	بردن
+وا	رستن
+بر	ساختن
+فرو	نشستن
+باز	نشستن
+فرو	بردن
+باز	شناختن
+بر	فکندن
+باز	آوردن
+بر	نوشتن
+باز	ستاندن
+فرو	افتادن
+فرو	فرستادن
+فرا	ستاندن
+فرو	خفتن

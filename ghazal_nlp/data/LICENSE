@@ -16,3 +16,12 @@ documents, each under the licence in its own `license` field: CC BY-SA 4.0
 (Wikimedia text; its authors are in the history of each document's url), CC0 1.0
 (Common Voice) or public domain (Ganjoor poems whose poets died long ago).
 corpus-sample.json is its manifest, with the full attribution statement.
+
+verb-stems.tsv and verb-preverbs.tsv include lexical facts checked against
+English Wiktionary (Wiktionary contributors, via the Kaikki Persian extract)
+and are distributed under CC BY-SA 4.0:
+https://creativecommons.org/licenses/by-sa/4.0/
+https://en.wiktionary.org/
+https://kaikki.org/dictionary/Persian/
+Dehkhoda infinitive entries were also consulted for stem facts; no dictionary
+definitions or corpus passages are reproduced in these tables.

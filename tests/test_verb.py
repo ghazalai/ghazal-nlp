@@ -31,7 +31,7 @@ def test_what_it_refuses():
     assert A.analyze("").abstention == "empty"
     assert A.analyze("می‌توان").readings and A.analyze("نمی‌توان").readings
     assert not A.analyze("توان").readings and not A.analyze("می‌نوش").readings
-    assert not A.analyze("می‌آرد").readings and not A.analyze("آرد").readings and "آوردن" in lemmas("می‌آورد")
+    assert all("آوردن" in lemmas(t) for t in ("می‌آرد", "آرد", "می‌آورد"))
     for form, lemma in (("می‌باید", "بایستن"), ("می‌نهد", "نهادن"), ("می‌بارد", "باریدن"), ("می‌چکد", "چکیدن")):
         assert lemma in lemmas(form)
 
@@ -49,6 +49,11 @@ def test_what_it_refuses():
     ("بازگشتن", dict(mood="subjunctive", polarity="neg"), "بازنگردد"),
     ("برداشتن", dict(mood="imperative", person=2), "بردار"),
     ("کردن", dict(tense="past", aspect="imperfective_perfect", person=1), "می‌کرده‌ام"),
+    ("برآمدن", dict(mood="imperative", person=2), "برآ"),
+    ("برآمدن", dict(mood="subjunctive", number="plur"), "برآیند"),
+    ("برآوردن", dict(mood="imperative", person=2), "برآور"),
+    ("بازایستادن", dict(mood="imperative", person=2), "بازایست"),
+    ("بازیافتن", dict(mood="imperative", person=2), "بازیاب"),
 ])
 def test_conjugation_round_trips(infinitive, kwargs, expected):
     assert A.conjugate(infinitive, **kwargs) == expected
@@ -114,7 +119,8 @@ def test_prefixed_alternates_and_nominal_homographs(token, lemma):
 
 def test_alternates_need_a_prefix():
     simple = Analyzer(preverbs=())
-    assert not simple.analyze("یای").readings and not simple.analyze("فتند").readings
+    assert not simple.analyze("یای").readings
+    assert {r.lemma for r in simple.analyze("فتند").readings} == {"فتادن"}
     assert all(simple.analyze(t).readings for t in ("نیای", "نفتند", "گویید", "هستم"))
     assert Analyzer(Stems([Verb("test", ("test-past",), ("یا",))]), preverbs=()).analyze("یای").readings
 
@@ -216,14 +222,15 @@ def test_construction_limits():
     assert (r.polarity, r.person, r.number, r.components[0].lemma, r.components[1].lemma) == ("neg", 1, "plur", "خواستن", "رفتن")
     r, = constructions(A.analyze("نرفته"), A.analyze("نباشد"))
     assert r.component_polarities == ("neg", "neg")
-    for text in ("خانه است", "رفته مردم", "خواهد رفتند", "خواهد برفت", "می‌خواهد رفت", "خواهد نرفت", "خواسته رفت", "فرونشسته بود"):
+    assert any(r.lemma == "فرونشستن" for r in constructions(A.analyze("فرونشسته"), A.analyze("بود")))
+    for text in ("خانه است", "رفته مردم", "خواهد رفتند", "خواهد برفت", "می‌خواهد رفت", "خواهد نرفت", "خواسته رفت"):
         assert not constructions(*(A.analyze(t) for t in text.split()))
     for separator in ("", "، ", ". ", " و "):
         assert not constructions(A.analyze("رفته"), A.analyze("بود"), separator=separator)
 
 
 def test_inventory():
-    assert len(A.stems) == 251 and "برداشتن" not in A.stems.by_infinitive
+    assert len(A.stems) == 311 and "برداشتن" not in A.stems.by_infinitive
     r = Reading("رفت", "رفتن", "رفت", "past", "past", "perfective", "indicative", 3, "sing", "pos")
     assert r.features() == "Tense=Past|Aspect=Perf|Mood=Indicative|Person=3|Number=Sing|Polarity=Pos"
 
@@ -277,3 +284,69 @@ def test_colloquial(form, lemma, mood, person, number):
 def test_colloquial_only_when_formal_fails():
     assert not any("colloquial" in r.rules for r in A.analyze("می‌رود").readings)
     assert not A.analyze("یاد").readings and not A.analyze("یار").readings
+
+
+COVERAGE_VERBS = """
+انجامیدن کندن گستردن زادن نهفتن سودن آشفتن آرامیدن آرمیدن شکافتن شکافیدن ستیزیدن چاپیدن
+هراسیدن لنگیدن دوشیدن لرزاندن چرخاندن تکاندن تکانیدن سگالیدن سزیدن شایستن شاییدن پژمردن
+افسردن آگندن سرشتن سفتن فتادن اوفتادن افراشتن گماردن گذاردن دراندن درانیدن شوراندن
+نمایاندن گستراندن چشاندن ریسیدن آغشتن خمیدن گاییدن ریدن ماسیدن تراویدن آغازیدن آکندن آختن
+رشتن مانستن شیفتن تاباندن روفتن گریاندن جهاندن فرهیختن انباشتن برشتن
+برافراشتن برآشفتن فرونشستن بازشناختن بازنشستن وابستن وارستن فروماندن برساختن برنوشتن
+بازستاندن فروفرستادن برفکندن فروبردن فراستاندن بازآوردن فروخفتن درافکندن فروافتادن دربردن
+""".split()
+
+
+@pytest.mark.parametrize("infinitive", COVERAGE_VERBS)
+def test_coverage_round_trips(infinitive):
+    for tense, mood, aspect in (("present", "indicative", None), ("present", "subjunctive", None),
+                                ("present", "imperative", None), ("past", "indicative", None),
+                                ("past", "indicative", "imperfective"), ("past", "indicative", "imperfective_perfect")):
+        for person in (1, 2, 3):
+            if mood == "imperative" and person != 2:
+                continue
+            for number in ("sing", "plur"):
+                for polarity in ("pos", "neg"):
+                    form = A.conjugate(infinitive, tense=tense, mood=mood, aspect=aspect,
+                                       person=person, number=number, polarity=polarity)
+                    assert form is not None
+                    assert any((r.lemma, r.tense, r.mood, r.person, r.number, r.polarity)
+                               == (infinitive, tense, mood, person, number, polarity)
+                               and (aspect is None or r.aspect == aspect) for r in A.analyze(form).readings)
+
+
+@pytest.mark.parametrize("infinitive,stem", [
+    ("برآشفتن", "برآشوب"), ("برافراشتن", "برافراز"), ("درافکندن", "درافکن"),
+    ("بازآوردن", "بازآور"), ("فروافتادن", "فروافت"),
+])
+@pytest.mark.parametrize("mood,person,number,ending", [
+    ("subjunctive", 1, "sing", "م"), ("subjunctive", 2, "sing", "ی"), ("subjunctive", 3, "sing", "د"),
+    ("subjunctive", 1, "plur", "یم"), ("subjunctive", 2, "plur", "ید"), ("subjunctive", 3, "plur", "ند"),
+    ("imperative", 2, "sing", ""), ("imperative", 2, "plur", "ید"),
+])
+def test_preverb_generation_without_epenthesis(infinitive, stem, mood, person, number, ending):
+    form = A.conjugate(infinitive, mood=mood, person=person, number=number)
+    assert form == stem + ending
+    assert any((r.lemma, r.tense, r.mood, r.person, r.number, r.polarity)
+               == (infinitive, "present", mood, person, number, "pos") for r in A.analyze(form).readings)
+
+
+@pytest.mark.parametrize("token,lemma", [
+    ("می‌انجامد", "انجامیدن"), ("میانجامد", "انجامیدن"), ("بینجامد", "انجامیدن"),
+    ("نینجامید", "انجامیدن"), ("انجامی", "انجامیدن"), ("آرد", "آوردن"), ("نیارد", "آوردن"),
+    ("گستردند", "گستردن"), ("نهنبند", "نهفتن"), ("سریشند", "سرشتن"), ("سایند", "سودن"),
+    ("برآشوب", "برآشفتن"), ("برافراز", "برافراشتن"), ("درافکن", "درافکندن"),
+    ("بازآور", "بازآوردن"), ("فروافتد", "فروافتادن"), ("بازنشناختند", "بازشناختن"),
+    ("فرونمی‌نشیند", "فرونشستن"), ("نمی‌فرونشیند", "فرونشستن"),
+    ("می‌گراید", "گراییدن"), ("نپذیرفتند", "پذیرفتن"),
+])
+def test_coverage_readings(token, lemma):
+    assert lemma in lemmas(token)
+
+
+def test_coverage_keeps_ambiguity_and_limits():
+    assert {"کردن", "کندن"} <= lemmas("می‌کند")
+    assert {"ماندن", "مانستن"} <= lemmas("ماند")
+    assert A.analyze("بینجامید").readings and all(r.tense == "present" for r in A.analyze("بینجامید").readings)
+    for token in ("کتاب", "گندم", "می‌کتابد", "تولیدند", "انجامده", "انجامیدندند", "انجام می‌دهد", "کار می‌کند"):
+        assert not A.analyze(token).readings

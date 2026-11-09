@@ -3,8 +3,13 @@
 # دستور خطّ فارسی، صص ۳۸–۳۹); other alternates are listed (بنداز، میفتد).
 # Sources: the standard paradigm tables; John Mace, Persian Grammar, Appendix I;
 # and the class rules (ـیدن، ـاندن، ـودن، ـاختن/ـیختن/ـوختن) with their exceptions.
-# Each stem was checked against a corpus for present forms its past stem can't make.
-# Left out: آر for آوردن (آرد is flour); بایدن، درایدن، زدیدن، گرودن (not verbs).
+# Coverage entries have dictionary-checked stems and attested corpus inflections.
+# Literary آر for آوردن is retained despite the noun homograph آرد.
+# Coverage additions: Dehkhoda infinitive entries and English Wiktionary via
+# Kaikki Persian; stem pairs checked against entries and inflected tokens in
+# at least two unreserved corpus kinds (news, Wikipedia, books, verse, social).
+# Wiktionary contributors, https://en.wiktionary.org/ ; CC BY-SA 4.0.
+# Dehkhoda: https://dehkhoda.ut.ac.ir/ ; lexical facts only, no definitions.
 بودن	بود	باش|هست
 شدن	شد	شو
 کردن	کرد	کن
@@ -17,7 +22,7 @@
 خواستن	خواست	خواه
 توانستن	توانست	توان
 گرفتن	گرفت	گیر
-آوردن	آورد	آور
+آوردن	آورد	آور|آر
 یافتن	یافت	یاب
 دانستن	دانست	دان
 زدن	زد	زن
@@ -256,3 +261,63 @@
 هشتن	هشت	هل
 ستردن	سترد	ستر
 آزردن	آزرد	آزار
+شایستن	شایست	شای
+شاییدن	شایید	شای
+جهاندن	جهاند	جهان
+رشتن	رشت	ریس|رز
+سودن	سود	سای|ساو
+زادن	زاد	زای
+گستردن	گسترد	گستر
+فتادن	فتاد	فت
+نهفتن	نهفت	نهنب
+کندن	کند	کن
+اوفتادن	اوفتاد	اوفت
+انباشتن	انباشت	انبار|انباز
+آشفتن	آشفت	آشوب
+سزیدن	سزید	سز
+شیفتن	شیفت	شیب
+آرامیدن	آرامید	آرام
+سرشتن	سرشت	سرش|سریش
+انجامیدن	انجامید	انجام
+افسردن	افسرد	افسر
+سفتن	سفت	سنب
+خمیدن	خمید	خم
+شکافتن	شکافت	شکاف
+پژمردن	پژمرد	پژمر
+آگندن	آگند	آگن
+چرخاندن	چرخاند	چرخان
+مانستن	مانست	مان
+شکافیدن	شکافید	شکاف
+آکندن	آکند	آکن
+درانیدن	درانید	دران
+ستیزیدن	ستیزید	ستیز
+دراندن	دراند	دران
+تکاندن	تکاند	تکان
+تکانیدن	تکانید	تکان
+چاپیدن	چاپید	چاپ
+روفتن	روفت	روب
+هراسیدن	هراسید	هراس
+لنگیدن	لنگید	لنگ
+دوشیدن	دوشید	دوش
+آرمیدن	آرمید	آرم
+افراشتن	افراشت	افراز
+آغشتن	آغشت	آغار
+لرزاندن	لرزاند	لرزان
+برشتن	برشت	بریز|برز
+آغازیدن	آغازید	آغاز
+آختن	آخت	آز
+سگالیدن	سگالید	سگال
+گذاردن	گذارد	گذار
+نمایاندن	نمایاند	نمایان
+چشاندن	چشاند	چشان
+گماردن	گمارد	گمار
+ریسیدن	ریسید	ریس
+ریدن	رید	رین
+گریاندن	گریاند	گریان
+تاباندن	تاباند	تابان
+تراویدن	تراوید	تراو
+فرهیختن	فرهیخت	فرهنج
+گاییدن	گایید	گای
+ماسیدن	ماسید	ماس
+شوراندن	شوراند	شوران
+گستراندن	گستراند	گستران
