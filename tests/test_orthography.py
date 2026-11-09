@@ -65,7 +65,7 @@ def test_the_page_is_inside_the_book(rule_id):
 
 def test_pack_ids_are_unique():
     ids = [r["id"] for p in RULES.glob("*.toml") for r in tomllib.loads(p.read_text(encoding="utf-8"))["rule"]]
-    assert len(ids) == len(set(ids)) == 68
+    assert len(ids) == len(set(ids)) == 75
 
 
 @pytest.mark.parametrize("overrides,message", [
@@ -113,7 +113,7 @@ def test_tokens_keep_zwnj_and_findings_point_into_the_text():
     assert [t.text for t in tokenize(f"بزرگ{ZWNJ}تر است")] == [f"بزرگ{ZWNJ}تر", "است"]
     text = f"کتاب ها را می{ZWNJ}خوانم"
     analysis = rulebase("academy").check(text)
-    assert analysis.findings and analysis.rulebase_version == "0.3.1"
+    assert analysis.findings and analysis.rulebase_version == "0.6.0"
     assert all(text[slice(*f.span)] == f.text and BOOK in f.citation for f in analysis.findings)
 
 
@@ -321,3 +321,145 @@ def test_digits_and_letters_respect_the_line():
     assert ghazal("version 3.2") == []
     assert ghazal("سال 1402") == [("ghazal.persian_digits", "1402", "۱۴۰۲", "house")]
     assert ghazal("ئەو لە کوردستانە دەژی\nكتاب") == [("ghazal.persian_letters", "كتاب", "کتاب", "violation")]
+
+
+def test_ambiguous_prefix_and_royal_title():
+    assert not found("academy.bi_prefix", "بی شروعی هیجان‌انگیز")
+    for style in ("academy", "ghazal"):
+        assert not [f for f in rulebase(style).check("احمد شاه نامه نوشت").findings if f.text == "شاه نامه"]
+
+
+def test_teh_marbuta_skips_the_arabic_api_spans(monkeypatch):
+    from ghazal_nlp import arabic
+    for style, rid, phrase in (("ghazal", "ghazal.teh_marbuta", "توسعة اقتصادی"),
+                               ("academy", "academy.taa_marbuta_word_final", "سورة")):
+        text = phrase + "، " + phrase
+        span = (0, len(phrase.split()[0]))
+        monkeypatch.setattr(arabic.detector(), "detect", lambda _: [arabic.ArabicSpan(len(phrase)+2, len(text), ("test",))])
+        rule = rulebase(style).by_id(rid)
+        got, skipped = rule.scan(text)
+        assert [f.span for f in got] == [span]
+        assert [a.reason for a in skipped] == ["arabic_span"]
+        assert [f.span for f in rulebase(style).check(text).findings if f.rule_id == rid] == [span]
+
+
+def test_suffixes_and_prefixes_next_to_punctuation():
+    for text, suggestion in (("کتاب ها،", "کتاب‌ها"), ("میرود؛", "می‌رود"), ("رفته اند؟", "رفته‌اند")):
+        assert suggestion in [f.suggestion for f in rulebase().check(text).findings]
+    assert [t.text for t in tokenize("کتاب،قلم")] == ["کتاب", "قلم"]
+
+
+def test_repairs_never_add_a_zwnj_after_a_non_joining_letter():
+    for text, suggestion in (("دیدار ها", "دیدارها"), ("نیرو های", "نیروهای")):
+        assert suggestion in [f.suggestion for f in rulebase().check(text).findings]
+        assert not any("ر‌" in (f.suggestion or "") or "و‌" in (f.suggestion or "")
+                       for f in rulebase().check(text).findings)
+    assert not found("academy.comparative_tar", "زیباتر")
+
+
+def test_joined_words_preserve_offsets_and_abstain_on_names():
+    rule = rulebase().by_id("ghazal.joined_words")
+    for text in ("محمدرضا", "کارکرد", "123تلاشکردند", "abcتلاشکردند", "آقای تلاشکردند", "#تلاشکردند", "زندگی‌است"):
+        assert not rule.scan(text)[0]
+    text = "او تلاشکردند، نوشت"
+    got, _ = rule.scan(text)
+    assert [(text[slice(*f.span)], f.suggestion) for f in got] == [("تلاشکردند", "تلاش کردند")]
+
+
+def test_copula_solid_uses_the_silent_he_inventory():
+    rule = rulebase().by_id("ghazal.copula_solid")
+    assert not rule.scan("ابهام الهام اتهام خسته‌ام آگاهاند پرهام")[0]
+    assert [f.suggestion for f in rule.scan("خستهام رفتهاند")[0]] == ["خسته‌ام", "رفته‌اند"]
+
+
+def test_split_table_carries_the_required_count_evidence():
+    from ghazal_nlp.orthography import DATA
+    for line in (DATA / "orthography-splits.tsv").read_text().splitlines():
+        if line.startswith("#"):
+            continue
+        wrong, right, joined, first, second, sources = line.split("\t")
+        counts = [int(s.split(":")[1]) for s in sources.split(";")]
+        assert len(right.split()) == 2 and right.replace(" ", "").replace("‌", "") == wrong
+        assert int(joined) <= 2 and min(int(first), int(second)) >= 100
+        assert sum(counts) >= max(30, 100 * int(joined)) and sum(n >= 5 for n in counts) >= 2
+
+
+def test_derived_count_licences_and_sources_are_explicit():
+    from ghazal_nlp.orthography import DATA
+    licence = (DATA / "LICENSE").read_text()
+    exception = licence[licence.index("orthography-splits.tsv and orthography-copula.tsv"):]
+    assert "licensed under CC BY-SA 4.0" in exception
+    for name in ("orthography-splits.tsv", "orthography-copula.tsv"):
+        header = "\n".join(l for l in (DATA / name).read_text().splitlines() if l.startswith("#"))
+        assert "Licence: CC BY-SA 4.0" in header
+        for source in ("fawiki", "mizan", "irib-news", "blogfa", "books", "persian-tweets-2024", "ganjoor"):
+            assert source in header
+        if name == "orthography-splits.tsv":
+            assert all(source in header for source in ("verb-stems.tsv", "verb-preverbs.tsv", "verb-colloquial.tsv"))
+    assert "orthography-silent-he.tsv" in header
+
+
+@pytest.mark.parametrize("host", ["دل‌بسته", "خانه‌ام", "بی‌خبر", "رفت‌و‌آمد"])
+def test_copula_space_preserves_the_complete_host(host):
+    text = "او «" + host + "‌است»."
+    findings, _ = rulebase().by_id("ghazal.copula_apart").scan(text)
+    assert [(f.text, f.suggestion, text[slice(*f.span)]) for f in findings] == [(host + "‌است", host + " است", host + "‌است")]
+    assert not rulebase().by_id("ghazal.copula_apart").scan("مدت‌ه‌است ه‌است")[0]
+
+
+@pytest.mark.parametrize("text", ["بی دلیل آوردن، حکم داد.", "بی دلیل روشن حکم داد.", "بی خبر کردن او رفت.", "بی دلیل\nآوردن حکم داد."])
+def test_bi_can_govern_a_phrase_even_with_an_approved_host(text):
+    got, skipped = scan("academy.bi_prefix", text)
+    assert not got and skipped[0].reason == "possible_prepositional_phrase"
+    assert suggestions("academy.bi_prefix", "بی دلیل بود.") == ["بی‌دلیل"]
+
+
+@pytest.mark.parametrize("gap", ["\n", " \r\n  ", " "])
+def test_royal_name_protection_crosses_one_line_wrap(gap):
+    for style in ("academy", "ghazal"):
+        assert not [f for f in rulebase(style).check("احمد" + gap + "شاه نامه نوشت.").findings if f.text == "شاه نامه"]
+    for text in ("احمد.\nشاه نامه خوانده شد.", "احمد\n\nشاه نامه خوانده شد.", "«شاه نامه» خوانده شد."):
+        assert suggestions("academy.pseudo_suffix_lexicalised", text) == ["شاهنامه"]
+    assert not closed("شاه\nنامه", entries={"شاه نامه": "شاهنامه"})
+
+
+@pytest.mark.parametrize("text,right", [("دُرّ ها", "دُرّها"), ("نیروِ ها", "نیروِها"), ("کتابِ ها", "کتابِ‌ها")])
+def test_affix_join_looks_past_marks_and_preserves_them(text, right):
+    assert suggestions("academy.plural_ha", text) == [right]
+    if "‌" not in right:
+        assert not found("academy.plural_ha", right)
+
+
+def test_splitting_preserves_existing_internal_separators(monkeypatch):
+    from ghazal_nlp import orthography as o
+    monkeypatch.setattr(o, "closed_list", lambda _: {"باخانهام": "با خانه‌ام"})
+    detector = o.JoinedWords("test", "orthography", "unused")
+    for text, expected in (("باخانه‌ام", "با خانه‌ام"), ("باخانهام", "با خانهام")):
+        findings = list(detector.scan(text, tokenize(text)))
+        assert [f.suggestion for f in findings] == [expected]
+    assert list(detector.scan("با‌خانه‌ام", tokenize("با‌خانه‌ام"))) == []
+
+
+def test_new_boundary_rules_keep_accepted_forms_and_offsets():
+    for rid, text, expected in (("function_splits", "بهروش", "به روش"),
+                                 ("content_splits", "آخرینلحظه", "آخرین لحظه"),
+                                 ("he_endings", "برنامهای", "برنامه‌ای")):
+        rule = rulebase().by_id("ghazal." + rid)
+        full = "«" + text + "»"
+        got, _ = rule.scan(full)
+        assert [(f.text, f.suggestion, full[slice(*f.span)]) for f in got] == [(text, expected, text)]
+        assert not rule.scan(expected)[0]
+        assert not rule.scan("محمدرضا abc" + text + " " + text + "2")[0]
+
+
+def test_new_count_tables_declare_only_their_inputs():
+    from ghazal_nlp.orthography import DATA
+    licence = (DATA / "LICENSE").read_text()
+    for name in ("function-splits", "content-splits", "he-endings"):
+        path = DATA / ("orthography-" + name + ".tsv")
+        assert path.name in licence
+        header = "\n".join(l for l in path.read_text().splitlines() if l.startswith("#"))
+        assert "Licence: CC BY-SA 4.0" in header
+        assert ("ud-seraji" in header) == (name != "he-endings")
+        for source in ("fawiki", "mizan", "irib-news", "blogfa", "books", "persian-tweets-2024", "ganjoor"):
+            assert source in header

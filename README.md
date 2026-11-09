@@ -427,18 +427,13 @@ ghazal-nlp shahnameh-eval
 
 ### `orthography`: spelling rules
 
-Two styles. `academy` is the Persian Academy's دستور خطّ فارسی, each rule
-citing its page. `ghazal` is my house style: I treat the Academy as evidence,
-not authority. It adopts the Academy rules careful writers actually follow,
-and where they don't, it goes with what careful contemporary writing does.
-
-Every rule is a TOML record (`rules/`) with the registers it applies to,
-correct examples it must not flag and wrong ones it must. A rule that fails
-its own examples doesn't load. When a rule can't decide, it abstains and
-says why (a ZWNJ before ای is only suggested once the word's final ه is known
-to be silent). In `ghazal`, a finding is either a `violation` (something no
-careful writer does: Arabic ي, a full space before ها) or `house` (both
-spellings are fine, here's the house one).
+Two styles: `ghazal`, my house spelling, and `academy`, the Academy's دستور خطّ
+فارسی with a page for each rule. A finding is a `violation` (no careful writer
+does it: Arabic ي, a space before ها, می written apart), `house` (both are
+fine, here's mine) or `advisory` (a likely error I'm less sure of, shown only
+with `min_confidence="low"`). Every rule is a TOML record in `rules/` with the
+registers it applies to and examples it must and must not flag; a case it
+can't decide is left alone.
 
 ```python
 from ghazal_nlp import orthography
@@ -453,39 +448,37 @@ Where the two styles differ:
 |---|---|---|
 | ezāfe after silent ه | خانهٔ / خانۀ; خانه‌ی is wrong | خانه‌ی; خانهٔ and خانۀ are fine |
 | plural and comparative | ZWNJ, joined allowed | ZWNJ (house); joined is fine |
-| compounds (پایان‌نامه، بین‌المللی) | its printed lists | joined where careful writers mostly join them, in at least two kinds of source (`data/ghazal-compounds.tsv`); `house`, since the spaced form is in use too |
-| pairs written both ways (آنها/آن‌ها) | its printed lists | what careful writers write more, pair by pair (`data/ghazal-house-forms.tsv`) |
+| compounds (پایان‌نامه، بین‌المللی) | its printed lists | two-part joins where careful writers mostly join them (house); three parts stay apart |
 | tanvin (واقعاً) | required | left as written |
 | preferred spellings (اطاق/اتاق) | the Academy's pick | both fine |
 | می before a verb | ZWNJ; spaced form only | ZWNJ; spaced or joined, checked by `verb` |
+| two words run together (خواهندکرد) | not covered | `advisory` |
 | digits, «», …, Latin , ; ? | not covered | Persian digits, « », …, ، ؛ ؟ |
 
-The silent-ه list (`data/orthography-silent-he.tsv`, 1,253 words) comes from
-how each word's own spellings treat the ه (خانه‌ای vs گرهی).
+Arabic and names keep their ة; ة written for the ezāfe becomes ه‌ی (توسعة
+اقتصادی → توسعه‌ی اقتصادی).
+
+Tested by me on 386 findings from fresh text (news, Wikipedia, social media,
+books, blogs), judged blind before seeing the suggestion and weighted to how
+often each finding occurs. A finding counts only if my correction is exactly
+its suggestion: `violation` 97.6%, `house` 92.8%, `advisory` 56% (19 findings).
 
 On [PerSpellData](https://github.com/rominaoji/PerSpellData)'s word-boundary
-errors, the sentence pairs that differ only in where a space or ZWNJ goes. A
-finding counts only if it changes nothing but separators. `exact` needs the
-same separator as the correct side; `apart` only whether the letters are kept
-apart, since PerSpellData often has a space where the house has ZWNJ (شده اند،
-می روم).
+pairs, `exact` needs the same separator as the correct side, `apart` only that
+the letters are kept apart (PerSpellData often has a space where I write ZWNJ):
 
-| Virastman logs, 127,120 pairs, 138,503 edits | `ghazal` | `academy` |
+| `ghazal` | precision, exact / apart | recall, exact / apart |
 |---|---:|---:|
-| changes proposed | 24,132 | 15,883 |
-| precision, exact / apart | 19.3% / 73.0% | 17.9% / 42.6% |
-| recall, exact / apart | 3.4% / 4.3% | 2.1% / 2.2% |
-| missing ZWNJ (میروم), recall | 30.8% | 16.6% |
-
-Recall is low because 83% of the edits split two words written together
-(تلاشکردند), which no rule looks for.
+| Virastman, 95,353 pairs | 21.0% / 73.8% | 3.7% / 4.7% |
+| … with advisories | 37.4% / 77.8% | 8.6% / 9.6% |
+| the rest, 56,916 pairs | 47.0% / 77.4% | 9.4% / 9.5% |
 
 ```sh
 ghazal-nlp check "آنها کتاب ها را میخوانند"
-ghazal-nlp check --style academy "آنها کتاب ها را میخوانند"
+ghazal-nlp check --style academy --min-confidence low "..."
 ghazal-nlp rules [--style academy]
 ghazal-nlp verify
-ghazal-nlp orthography-eval wrong_virastman.txt correct_virastman.txt [--style academy]
+ghazal-nlp orthography-eval wrong_virastman.txt correct_virastman.txt
 ```
 
 ### `arabic`: Arabic inside Persian

@@ -12,6 +12,17 @@ def test_orthography_eval(tmp_path):
     assert r["pairs"] == 2 and r["edits"] == 3
     assert r["precision"]["exact"] == 1.0 and r["recall"]["exact"] == round(2 / 3, 4)
     assert r["recall_by_edit"]["space>none"]["exact"] == 0.0
+    assert sum(v["counts"]["changes"] for v in r["by_rule"].values()) == r["changes"]
+    assert r["by_rule"]["ghazal.mi_prefix"]["counts"]["exact_edit"] == 1
+
+
+def test_orthography_predictions_keep_first_rule_and_letter_offsets():
+    text = "کتاب ها و میخوانم"
+    base = orthography.rulebase()
+    got = orthography_eval.predictions(text, base, ("formal_written",))
+    assert orthography_eval.changes(text, base, ("formal_written",)) == {i: v[:2] for i, v in got.items()}
+    assert got[4] == ("‌", "violation", "ghazal.plural_space")
+    assert got[9] == ("‌", "violation", "ghazal.mi_prefix")
 
 
 def test_unimorph(tmp_path):

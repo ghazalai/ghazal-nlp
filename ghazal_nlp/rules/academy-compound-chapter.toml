@@ -197,6 +197,7 @@ detector.entries."بخش نامه" = "بخشنامه"
 detector.entries."دانش نامه" = "دانشنامه"
 detector.entries."سال نامه" = "سالنامه"
 detector.entries."شاه نامه" = "شاهنامه"
+detector.ambiguous_after_word = ["شاه نامه"]
 detector.entries."فصل نامه" = "فصلنامه"
 detector.entries."قطع نامه" = "قطعنامه"
 detector.entries."قول نامه" = "قولنامه"
@@ -213,7 +214,7 @@ detector.entries."فصل\u200cنامه" = "فصلنامه"
 detector.entries."قطع\u200cنامه" = "قطعنامه"
 detector.entries."قول\u200cنامه" = "قولنامه"
 detector.entries."ماه\u200cنامه" = "ماهنامه"
-examples.ok = ["کتابخانه", "شاهنامه", "آیین\u200cنامه", "زاد\u200cگاه"]
+examples.ok = ["کتابخانه", "شاهنامه", "آیین\u200cنامه", "زاد\u200cگاه", "احمد شاه نامه نوشت"]
 examples.violations = [
   { text = "کتاب خانه", expect = "کتابخانه" },
   { text = "قطع\u200cنامه", expect = "قطعنامه" },

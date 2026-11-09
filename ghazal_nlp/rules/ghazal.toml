@@ -12,6 +12,41 @@ adopts = [
 ]
 
 [[rule]]
+id = "ghazal.joined_words"
+layer = "orthography"
+title.fa = "دو کلمهٔ چسبیده"
+statement.fa = "دو کلمهٔ مستقل با فاصله نوشته می‌شوند. فقط صورت‌های کم‌کاربردی بررسی می‌شوند که هر دو جزء و جفت جدانوشته در چند نوع متن رایج باشند."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "Ghazal corpus word and pair counts"
+source.evidence = "orthography-splits.tsv: corpus rows, held-out documents excluded; each part >=100, joined <=2, pair >=30 and >=100*joined, pair >=5 in two source kinds; finite verb and restricted non-name first part"
+academy.position = "right"
+academy.rule = "academy.compound_verb_full_space"
+detector.type = "joined_words"
+detector.file = "orthography-splits.tsv"
+examples.ok = ["تلاش کردند", "کارکرد", "محمدرضا", "تلاشکردند2", "abcتلاشکردند", "آقای تلاشکردند"]
+examples.violations = [{ text = "تلاشکردند", expect = "تلاش کردند" }]
+
+[[rule]]
+id = "ghazal.copula_solid"
+layer = "orthography"
+title.fa = "نیم‌فاصله پیش از فعل پی‌بستی"
+statement.fa = "«ام، ایم، اید، اند» پس از ه غیرملفوظ نیم‌فاصله می‌گیرند. تنها واژه‌هایی بررسی می‌شوند که ه پایانی‌شان غیرملفوظ شناخته شده باشد."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.page = "42–43"
+source.evidence = "orthography-copula.tsv: attested ZWNJ forms in two source kinds; rare solid forms only, excluding homographs such as پرهام"
+academy.position = "right"
+academy.rule = "academy.copula_after_silent_he"
+detector.type = "closed_list"
+detector.file = "orthography-copula.tsv"
+examples.ok = ["خسته‌ام", "ابهام", "الهام", "اتهام", "آگاهاند", "پرهام"]
+examples.violations = [{ text = "خستهام", expect = "خسته‌ام" }, { text = "رفتهاند", expect = "رفته‌اند" }]
+
+[[rule]]
 id = "ghazal.persian_letters"
 layer = "orthography"
 title.fa = "ی و ک فارسی"
@@ -25,7 +60,7 @@ source.evidence = "ي and ك in 43% of web documents; a line in another Arabic-s
 academy.position = "right"
 academy.rule = "academy.persian_letters"
 detector.type = "pattern"
-detector.pattern = "[\\w\u064b-ْٰ\u0654ٕ\u200c]*[يىۍكڪھہە][\\w\u064b-ْٰ\u0654ٕ\u200c]*"
+detector.pattern = "(?<![\\w\u064b-ْٰ\u0654ٕ\u200c])[\\w\u064b-ْٰ\u0654ٕ\u200c]*[يىۍكڪھہە][\\w\u064b-ْٰ\u0654ٕ\u200c]*"
 detector.kind = "non_persian_letter"
 detector.translate = { "ي" = "ی", "ى" = "ی", "ۍ" = "ی", "ك" = "ک", "ڪ" = "ک", "ھ" = "ه", "ہ" = "ه", "ە" = "ه" }
 detector.lines = "persian_script"
@@ -48,13 +83,14 @@ source.work = "ghazal house style"
 source.evidence = "the hamza letter for the ezāfe mark is a typing error, not a convention"
 academy.position = "unspecified"
 detector.type = "pattern"
-detector.pattern = "([\\w\u200c]*ه)ء(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
+detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*ه)ء(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
 detector.kind = "hamza_letter_for_ezafe"
 detector.repair = "\\1\u200cی"
 examples.ok = ["خانه\u0654 من", "جزء", "خانه\u200cی من"]
 examples.violations = [
   { text = "خانهء من", expect = "خانه\u200cی" },
 ]
+detector.context = "ezafe"
 
 [[rule]]
 id = "ghazal.arabic_digits"
@@ -82,7 +118,7 @@ id = "ghazal.zwnj_stand_in"
 layer = "orthography"
 title.fa = "نویسه\u200cی نامرئی به\u200cجای نیم\u200cفاصله"
 title.en = "An invisible character standing in for a ZWNJ"
-statement.fa = "نشانه\u200cی جهت، فاصله\u200cی صفر، نرم\u200cخط یا BOM میان دو حرف به\u200cجای نیم\u200cفاصله نوشته شده است."
+statement.fa = "نویسهٔ نامرئی میان دو حرف فقط با مرز روشنِ پیشوند، پسوند یا فعل اصلاح می‌شود. خوانش نامطمئن می‌ماند."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
@@ -90,36 +126,32 @@ source.work = "ghazal house style"
 source.evidence = "these come from keyboards and converters that lack a ZWNJ"
 academy.position = "unspecified"
 detector.type = "pattern"
-detector.pattern = "(?<=[ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])[\u200e\u200f\u061c\u200b\u00ad\ufeff¬\u009d]+(?=[ـ\u200c\u200d\u200e\u200f\u061c\u200b\u00ad\ufeff¬\u009d]*(?!ـ)[ء-يٮ-ۓە])"
+detector.pattern = "(?<=[ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])[\u200e\u200f\u061c\u200b\u00ad\ufeff¬\u009d]++(?=[ـ\u200c\u200d\u200e\u200f\u061c\u200b\u00ad\ufeff¬\u009d]*(?!ـ)[ء-يٮ-ۓە])"
 detector.kind = "stand_in_for_zwnj"
 detector.repair = "\u200c"
-examples.ok = ["حمل\u200cونقل"]
-examples.violations = [
-  { text = "حمل\u200bونقل", expect = "\u200c" },
-  { text = "می\u200fرود", expect = "\u200c" },
-]
+examples.ok = ["کتاب‌ها", "حمل​ونقل", "سان‎فرانسیسکو", "دکتر‎حسن"]
+examples.violations = [{ text = "می‏رود", expect = "‌" }, { text = "نوشته‎است", expect = " " }, { text = "او‎است", expect = " " }, { text = "کتاب‎‌ها", expect = "" }, { text = "طغرا­نویسی", expect = "" }]
+detector.context = "stand_in"
 
 [[rule]]
 id = "ghazal.invisible_controls"
 layer = "orthography"
 title.fa = "نویسه\u200cهای کنترلی نامرئی"
 title.en = "Invisible control characters"
-statement.fa = "نشانه\u200cهای جهت، فاصله\u200cی صفر، نرم\u200cخط و BOM بیرون از کلمه حذف می\u200cشوند."
+statement.fa = "نشانه‌های جهت در مرز جمله و در متن دوزبانه می‌مانند؛ نویسهٔ اضافی کنار نیم‌فاصله و فاصلهٔ صفر حذف می‌شود."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial", "verse", "classical"]
 source.work = "ghazal house style"
-source.evidence = "they change nothing a reader sees and break search"
+source.evidence = "Preserve directional layout; remove only duplicate separators and stray zero-width spaces, soft hyphens or BOMs."
 academy.position = "unspecified"
 detector.type = "pattern"
-detector.pattern = "(?<![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])[\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]+|[\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]+(?![\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]*[ء-يٮ-ۓە])"
+detector.pattern = "(?<![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])[\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]+|[\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]++(?![\u200b\u200e\u200f‪-‮⁦-⁩\u00ad\ufeff\u061c]*[ء-يٮ-ۓە])"
 detector.kind = "invisible_control"
 detector.repair = ""
-examples.ok = ["متن"]
-examples.violations = [
-  { text = "\u200fمتن", expect = "" },
-  { text = "متن\ufeff", expect = "" },
-]
+examples.ok = ["متن", "‏متن", "C++‎، زبان برنامه‌نویسی"]
+examples.violations = [{ text = "متن﻿", expect = "" }, { text = "نقاشی‎‌های او", expect = "" }]
+detector.context = "controls"
 
 [[rule]]
 id = "ghazal.redundant_zwnj"
@@ -134,7 +166,7 @@ source.work = "ghazal house style"
 source.evidence = "after ا د ذ ر ز ژ و the letters are already apart (p. 23 of the Academy's book)"
 academy.position = "right"
 detector.type = "pattern"
-detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]*[اآأإدذرزژوؤء][\u064b-ْٰ\u0654ٕ]{0,2})\u200c+(?=[ء-يٮ-ۓە])|([\\w\u064b-ْٰ\u0654ٕ\u200c]*[\\w\u064b-ْٰ\u0654ٕ])\u200c+(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])(?![ \\t]+(?:ها|های|هایی|تر|ترین|تری)(?![\\w\u200c]))"
+detector.pattern = "(?<![\\w\u064b-ْٰ\u0654ٕ])([\\w\u064b-ْٰ\u0654ٕ]*[اآأإدذرزژوؤء][\u064b-ْٰ\u0654ٕ]{0,2})\u200c+(?=[ء-يٮ-ۓە])|(?<![\\w\u064b-ْٰ\u0654ٕ\u200c])([\\w\u064b-ْٰ\u0654ٕ\u200c]*[\\w\u064b-ْٰ\u0654ٕ])\u200c+(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])(?![ \\t]+(?:ها|های|هایی|تر|ترین|تری)(?![\\w\u200c]))"
 detector.kind = "redundant_zwnj"
 detector.repair = "\\1\\2"
 examples.ok = ["کتاب\u200cها", "خانه\u200cای", "دیدارها", "رایج\u200c ترین"]
@@ -143,6 +175,7 @@ examples.violations = [
   { text = "نیرو\u200cهای", expect = "نیرو" },
   { text = "کتاب\u200c خوب", expect = "کتاب" },
 ]
+detector.context = "redundant"
 
 [[rule]]
 id = "ghazal.tatweel"
@@ -157,7 +190,7 @@ source.work = "ghazal house style"
 source.evidence = "a tatweel between two letters is decoration; one standing alone is a dash (تهران ـ ایرنا)"
 academy.position = "unspecified"
 detector.type = "pattern"
-detector.pattern = "(?:(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ]{2}))ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])|ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])(?=[ء-يٮ-ۓە])"
+detector.pattern = "(?:(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ])|(?<=[بپتثجچحخسشصضطظعغفقکگلمنهیئكيىڪھہەۍة][\u064b-ْٰ\u0654ٕ]{2}))ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])|(?<!ـ)ـ+(?![ـؐ-ؚ\u064b-ٰٟۖ-ۭ])(?=[ء-يٮ-ۓە])"
 detector.kind = "tatweel"
 detector.repair = ""
 detector.severity = "house"
@@ -203,11 +236,10 @@ detector.type = "pattern"
 detector.pattern = "(?<=[ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ\u200c]) *[,;?]+(?![A-Za-z])"
 detector.kind = "latin_punctuation"
 detector.translate = { "," = "،", ";" = "؛", "?" = "؟" }
-examples.ok = ["کتاب، قلم", "Python, Java", "چرا؟"]
-examples.violations = [
-  { text = "کتاب, قلم", expect = "،" },
-  { text = "چرا?", expect = "؟" },
-]
+examples.ok = ["کتاب، قلم", "Python, Java", "چرا؟", "سلام ;-)", "منبع در Latin reference, Persian عنوان, 2020"]
+examples.violations = [{ text = "کتاب, قلم", expect = "،" }, { text = "چرا?", expect = "؟" }, { text = "کتاب ,قلم", expect = "، " }]
+detector.context = "latin"
+detector.lines = "persian"
 
 [[rule]]
 id = "ghazal.punctuation_spacing"
@@ -247,31 +279,30 @@ detector.type = "pattern"
 detector.pattern = "[،؛؟!](?=[ء-ی])"
 detector.kind = "no_space_after_punctuation"
 detector.repair = "\\g<0> "
-examples.ok = ["سلام، خوبی؟", "چرا؟"]
-examples.violations = [
-  { text = "سلام،خوبی", expect = "، " },
-]
+examples.ok = ["سلام، خوبی؟", "چرا؟", "`سلام،خوبی`", "https://example.org/سلام،خوبی"]
+examples.violations = [{ text = "سلام،خوبی", expect = "، " }]
+detector.context = "punctuation"
+detector.lines = "persian"
 
 [[rule]]
 id = "ghazal.mi_prefix"
 layer = "orthography"
 title.fa = "نیم\u200cفاصله\u200cی «می» و «نمی»"
 title.en = "می and نمی take a ZWNJ before a verb"
-statement.fa = "«می» و «نمی» پیش از فعل با نیم\u200cفاصله نوشته می\u200cشوند، چه جدا نوشته شده باشند چه چسبیده؛ فقط وقتی تحلیل\u200cگر فعل آن را فعل بشناسد."
+statement.fa = "«می» و «نمی» پیش از فعل نیم‌فاصله می‌گیرند. صورت چسبیده فقط با شاهد پیکره و تحلیل فعل اصلاح می‌شود؛ نام‌ها و صورت‌های مبهم می‌مانند."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial"]
 source.work = "ghazal house style"
-source.evidence = "careful writers write the ZWNJ; the verb analyser leaves میدان، میوه and می (wine) alone"
+source.evidence = "Finite-verb analysis; solid forms also need dominant canonical spelling in two source kinds (orthography-mi-forms.tsv)."
 academy.position = "right"
 academy.rule = "academy.mi_prefix"
 detector.type = "verb_prefix"
 detector.exceptions = "ghazal-mi-words.tsv"
-examples.ok = ["می\u200cرود", "میدان", "میوه", "میدانی", "می ناب"]
-examples.violations = [
-  { text = "میرود", expect = "می\u200cرود" },
-  { text = "نمی گوید", expect = "نمی\u200cگوید" },
-]
+examples.ok = ["می‌رود", "میدان", "میوه", "میدانی", "می ناب", "میلان"]
+examples.violations = [{ text = "میرود", expect = "می‌رود" }, { text = "نمی گوید", expect = "نمی‌گوید" }, { text = "می كنند", expect = "می‌کنند" }]
+detector.solid_file = "orthography-mi-forms.tsv"
+detector.names_file = "orthography-context-names.tsv"
 
 [[rule]]
 id = "ghazal.plural_space"
@@ -314,10 +345,11 @@ source.evidence = "a stratified sample of contemporary Persian: آن\u200cها 1
 academy.position = "varies"
 detector.type = "closed_list"
 detector.file = "ghazal-house-forms.tsv"
+detector.ambiguous_after_word = ["شاه نامه"]
 detector.kind = "house_spelling"
 detector.severity = "house"
 detector.note = "both spellings are correct; this is the house one"
-examples.ok = ["آن\u200cها", "کتاب\u200cها"]
+examples.ok = ["آن\u200cها", "کتاب\u200cها", "احمد شاه نامه نوشت"]
 examples.violations = [
   { text = "آنها", expect = "آن\u200cها" },
   { text = "بزرگترین", expect = "بزرگ\u200cترین" },
@@ -339,9 +371,10 @@ source.evidence = "a stratified sample of contemporary Persian: joined 60% or mo
 academy.position = "varies"
 detector.type = "closed_list"
 detector.file = "ghazal-compounds.tsv"
+detector.ambiguous_after_word = ["شاه نامه"]
 detector.kind = "spaced_compound"
 detector.severity = "house"
-examples.ok = ["پایان\u200cنامه", "بین\u200cالمللی", "در حالی که", "از این رو", "دست به دست", "هر از گاهی"]
+examples.ok = ["پایان\u200cنامه", "بین\u200cالمللی", "در حالی که", "از این رو", "دست به دست", "هر از گاهی", "احمد شاه نامه نوشت"]
 examples.violations = [
   { text = "پایان نامه", expect = "پایان\u200cنامه" },
   { text = "بین المللی", expect = "بین\u200cالمللی" },
@@ -361,7 +394,7 @@ source.work = "ghazal house style"
 source.evidence = "a lone ی is not a word; the mark needs a ZWNJ to stay with the ه"
 academy.position = "wrong"
 detector.type = "pattern"
-detector.pattern = "([\\w\u200c]*ه) ی(?![\\w\u200c])"
+detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*ه) ی(?![\\w\u200c])"
 detector.kind = "space_where_zwnj"
 detector.repair = "\\1\u200cی"
 examples.ok = ["خانه\u200cی من", "خانه یا باغ"]
@@ -383,7 +416,7 @@ source.evidence = "ه\u200cی survives every keyboard and copy-paste; ه\u0654 a
 academy.position = "wrong"
 academy.rule = "academy.ezafe_after_silent_he"
 detector.type = "pattern"
-detector.pattern = "([\\w\u200c]*)(?:ۀ|ه\u0654)(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
+detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*)(?:ۀ|ه\u0654)(?![ء-يٮ-ۓە\u064b-ْٰ\u0654ٕ])"
 detector.kind = "house_spelling"
 detector.repair = "\\1ه\u200cی"
 detector.severity = "house"
@@ -407,37 +440,36 @@ source.work = "ghazal house style"
 source.evidence = "careful writers write است apart; pp. 42–43 of the Academy's book agree"
 academy.position = "right"
 detector.type = "pattern"
-detector.pattern = "([\\w\u064b-ْٰ\u0654ٕ]+)\u200c(است)(?![\\w\u064b-ْٰ\u0654ٕ\u200c])"
+detector.pattern = "(?<![\\w\u064b-ْٰ\u0654ٕ\u200c])([\\w\u064b-ْٰ\u0654ٕ]{2,}(?:\u200c[\\w\u064b-ْٰ\u0654ٕ]+)*)(?<!\u200cه)\u200c(است)(?![\\w\u064b-ْٰ\u0654ٕ\u200c])"
 detector.kind = "house_spelling"
 detector.repair = "\\1 \\2"
 detector.severity = "house"
-examples.ok = ["خانه است"]
+examples.ok = ["خانه است", "مدت‌ه‌است", "علاقه ه‌است"]
 examples.violations = [
   { text = "خانه\u200cاست", expect = "خانه است" },
+  { text = "دل‌بسته‌است", expect = "دل‌بسته است" },
+  { text = "خانه‌ام‌است", expect = "خانه‌ام است" },
 ]
 
 [[rule]]
 id = "ghazal.teh_marbuta"
+skip_arabic = true
 layer = "orthography"
-title.fa = "«ة» در واژه\u200cهای فارسی\u200cشده"
-title.en = "ة in a word Persian spells with ه or ت"
-statement.fa = "واژه\u200cهایی که فارسی با «ه» یا «ت» می\u200cنویسد (سوره، رحمت) با «ة» نوشته نمی\u200cشوند. «ة» در عبارت عربی («رحمة الله») می\u200cماند."
+title.fa = "«ة» در بافت فارسی"
+title.en = "Teh marbuta in a Persian reading"
+statement.fa = "«ة» در نام و عبارت عربی می‌ماند. در خوانش روشن فارسی، «توسعة اقتصادی» به «توسعه‌ی اقتصادی» تبدیل می‌شود؛ اضافه نباید بیفتد."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial"]
 source.work = "ghazal house style"
-source.evidence = "1,580 words where the Persian spelling wins 10 to 1 in a 2026 corpus"
+source.evidence = "Legacy spelling candidates and silent-he inventory, UD name veto, Arabic API spans and local Persian syntax; uncertain readings abstain."
 academy.position = "right"
 academy.rule = "academy.taa_marbuta_word_final"
-detector.type = "closed_list"
+examples.ok = ["سوره", "سورة", "جهة", "رحمة الله", "هذه سورة من القرآن", "حمزة بن عبدالله", "قناة فلسطين", "جمع عقدة است"]
+examples.violations = [{ text = "توسعة اقتصادی", expect = "توسعه‌ی" }, { text = "این سورة را بخوان", expect = "سوره" }]
+detector.type = "teh_marbuta"
 detector.file = "ghazal-teh-marbuta.tsv"
-detector.abstain_before = "ال"
-detector.kind = "teh_marbuta"
-examples.ok = ["سوره", "رحمة الله"]
-examples.violations = [
-  { text = "سورة", expect = "سوره" },
-  { text = "جهة", expect = "جهت" },
-]
+detector.names_file = "orthography-context-names.tsv"
 
 [[rule]]
 id = "ghazal.persian_digits"
@@ -473,17 +505,16 @@ kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial"]
 source.work = "ghazal house style"
-source.evidence = "« » and \" \" are both common; « » is the house one"
+source.evidence = "House preference for bounded Persian quotations; Latin pairs, tanvin substitutes, Arabic and uncertain long quotes abstain."
 academy.position = "unspecified"
 detector.type = "pattern"
-detector.pattern = "[\"“]([^\"“”\\n]*[ء-يٮ-ۓە][^\"“”\\n]*)[\"”]"
+detector.pattern = "(?<![\\w‌\\\\])[\"“]([^\"“”\\n]{1,200})[\"”]"
 detector.kind = "house_spelling"
 detector.repair = "«\\1»"
 detector.severity = "house"
-examples.ok = ["«سلام»", "\"hello\""]
-examples.violations = [
-  { text = "\"سلام\"", expect = "«سلام»" },
-]
+examples.ok = ["«سلام»", "\"hello\"", "\"O\" و \"H\"", "مثلا\" این را مجددا\" بنویس", "\"العطاء لا يكون عن خوف\""]
+examples.violations = [{ text = "\"سلام\"", expect = "«سلام»" }, { text = "\" سلام \"گفت", expect = "«سلام» " }]
+detector.context = "quotes"
 
 [[rule]]
 id = "ghazal.ellipsis"
@@ -512,7 +543,7 @@ id = "ghazal.joined_always"
 layer = "orthography"
 title.fa = "واژه\u200cهایی که همیشه پیوسته\u200cاند"
 title.en = "Words nobody writes apart"
-statement.fa = "«بنابراین» را کسی جدا نمی\u200cنویسد."
+statement.fa = "«بنابراین» در معنی «پس» پیوسته است. «بنا بر این گزارش» و «بنا بر این بود» عبارت دیگری‌اند."
 kind = "prescriptive"
 status = "active"
 scope.registers = ["formal_written", "technical", "colloquial"]
@@ -523,7 +554,6 @@ detector.type = "closed_list"
 detector.entries."بنا بر این" = "بنابراین"
 detector.entries."بنا براین" = "بنابراین"
 detector.kind = "spaced_compound"
-examples.ok = ["بنابراین"]
-examples.violations = [
-  { text = "بنا بر این", expect = "بنابراین" },
-]
+examples.ok = ["بنابراین", "بنا بر این گزارش", "بنا بر این بود که بروند"]
+examples.violations = [{ text = "بنا بر این", expect = "بنابراین" }, { text = "بنا بر این رفتیم", expect = "بنابراین" }]
+detector.abstain_before_words = ["اساس", "شیوه", "تفسیر", "گزارش", "نظر", "نظریه", "فرض", "قاعده", "اصل", "دلیل", "مبنا", "معیار", "استدلال", "بود", "است", "باشد", "بوده", "شد"]

@@ -1,0 +1,54 @@
+[[rule]]
+id = "ghazal.function_splits"
+layer = "orthography"
+title.fa = "فاصله میان کلمه و حرف یا ضمیر مستقل"
+statement.fa = "کلمه‌های مستقل جدا نوشته می‌شوند. فقط جفت‌های رایج در دو نوع متن بررسی می‌شوند که صورت چسبیده‌شان در پیکره دیده نشده و جزء اسمی‌شان اسم خاص شناخته نشده باشد."
+kind = "prescriptive"
+status = "active"
+severity = "advisory"
+confidence = "low"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "Ghazal corpus counts and UD Persian common-word tags"
+source.evidence = "orthography-function-splits.tsv: both parts >=100, joined=0, spaced pair >=30 and >=5 in two kinds; UD train-only common forms with no PROPN reading"
+academy.position = "right"
+detector.type = "joined_words"
+detector.file = "orthography-function-splits.tsv"
+detector.severity = "advisory"
+detector.confidence = "low"
+examples.ok = ["به روش", "محمدرضا", "بهدار", "زورو", "آقای بهروش", "بهروش2", "abcبهروش"]
+examples.violations = [{ text = "بهروش", expect = "به روش" }]
+notes = "Advisory only: real-text development exposed names, contractions and valid compounds. Corpus rarity alone does not establish a spelling error."
+
+[[rule]]
+id = "ghazal.content_splits"
+layer = "orthography"
+title.fa = "فاصله میان دو کلمهٔ مستقل"
+statement.fa = "دو کلمهٔ مستقل با فاصله نوشته می‌شوند. صورت چسبیده باید نادر و هر دو جزء و جفت جدانوشته در چند نوع متن رایج باشند؛ صورت‌های مبهم بررسی نمی‌شوند."
+kind = "prescriptive"
+status = "retired"
+scope.registers = ["formal_written", "technical", "colloquial"]
+source.work = "Ghazal corpus counts and UD Persian common-word tags"
+source.evidence = "orthography-content-splits.tsv: parts >=100, joined <=2, pair >=30 and >=100*joined, >=5 in two kinds; common non-name UD training vocabulary"
+academy.position = "right"
+detector.type = "joined_words"
+detector.file = "orthography-content-splits.tsv"
+examples.ok = ["آخرین لحظه", "محمدرضا", "سلامالله", "منای", "کارکرد", "آخرینلحظه2"]
+examples.violations = [{ text = "آخرینلحظه", expect = "آخرین لحظه" }]
+notes = "Off: real-text development exposed names, contractions and valid compounds. Corpus rarity alone does not establish a spelling error."
+
+[[rule]]
+id = "ghazal.he_endings"
+layer = "orthography"
+title.fa = "نیم‌فاصله پس از ه غیرملفوظ"
+statement.fa = "پس از ه غیرملفوظ، ای و پی‌بست‌ها با نیم‌فاصله می‌آیند. فقط صورت‌هایی بررسی می‌شوند که املای نیم‌فاصله‌دارشان در دو نوع متن رایج و صورت چسبیده‌شان نادر باشد."
+kind = "prescriptive"
+status = "active"
+scope.registers = ["formal_written", "technical"]
+source.work = "Ghazal corpus spellings and the silent-he inventory"
+source.evidence = "orthography-he-endings.tsv: canonical >=30 and >=100*other, other <=2, >=5 canonical in two kinds; proven silent he only"
+academy.position = "right"
+academy.rule = "academy.ya_nakare_after_silent_he"
+detector.type = "closed_list"
+detector.file = "orthography-he-endings.tsv"
+examples.ok = ["برنامه‌ای", "الهام", "ابهام", "پرهام"]
+examples.violations = [{ text = "برنامهای", expect = "برنامه‌ای" }]

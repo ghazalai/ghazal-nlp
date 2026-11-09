@@ -11,28 +11,31 @@ from __future__ import annotations
 
 import re
 import tomllib
+import unicodedata
+from bisect import bisect_left
 from collections import Counter
 from dataclasses import dataclass, field, replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Iterable, Iterator, Sequence
 
-from . import verb
+from . import arabic, verb
 
-RULEBASE_VERSION = "0.3.1"
+RULEBASE_VERSION = "0.6.0"
 RULES = Path(__file__).parent / "rules"
 DATA = Path(__file__).parent / "data"
 
 ZWNJ = "‌"
-# One Persian word: \w misses the harakat, hence the Arabic block; ZWNJ and ZWJ
+# One Persian word: \w misses the harakat; ZWNJ and ZWJ
 # join a word only between two word characters.
-WORD = re.compile(r"[\w؀-ۿ](?:[\w؀-ۿ‌‍]*[\w؀-ۿ])?")
+WORD = re.compile(r"[\wً-ٰٟ](?:[\wً-ٰٟ‌‍]*[\wً-ٰٟ])?")
 PERSIAN = re.compile(r"^[ء-ۿ‌]+$")
 SPACES = re.compile(r"^[ \t\xa0]+$")
-# Persian punctuation sits in the Arabic block, so «واقعا،» is one word.
+ADJACENT = re.compile(r"(?:[ \t\xa0]+|[ \t\xa0]*\r?\n[ \t\xa0]*)\Z")
 EDGE_PUNCTUATION = "،؛؟؍؞٪٫٬٭۔"
 # Letters that do not join the next one: after them a compound needs no ZWNJ (p. 23).
 NON_JOINING = frozenset("اآأإدذرزژوؤءةى")
+LETTER_FOLD = str.maketrans({"ي": "ی", "ى": "ی", "ك": "ک"})
 # A line in another Arabic-script language: a letter Persian lacks, or a Kurdish spelling.
 OTHER_SCRIPT = re.compile(r"[ڵڕۆێڤۊٹڈڑںےۓټډړږښګڼېڻڦڄڃڇڍڊڌڎڏۈۋ]|(?<![^\s«(\"'])ئ|وو|یەک|ەکان|ەکە|(?<!\S)لە(?!\S)")
 ARABIC_LETTER = re.compile(r"[\u0621-\u064a\u066e-\u06d3\u06d5]")
@@ -50,6 +53,7 @@ KINDS = frozenset({"prescriptive", "descriptive", "contested"})
 REGISTERS = frozenset({"formal_written", "colloquial", "verse", "classical", "technical"})
 RUNNING = frozenset({"active", "contested"})
 CONFIDENCE = {"low": 0, "medium": 1, "high": 2}
+SEVERITIES = frozenset({"violation", "advisory", "house"})
 
 
 @lru_cache(maxsize=1)
@@ -133,6 +137,7 @@ class AffixZwnj:
     solid_hosts: str | None = None
     free_form: bool = False
     skip_verbs: bool = False
+    phrase_guard: bool = False
     min_host: int = 3
     space_severity: str = "violation"
     solid_severity: str = "advisory"
@@ -153,8 +158,9 @@ class AffixZwnj:
 
     def _scan_space(self, text, tokens):
         suffix = self.position == "suffix"
+        forms = self.forms
         for i, token in enumerate(tokens):
-            if token.text not in self.forms:
+            if token.text not in forms:
                 continue
             j = i - 1 if suffix else i + 1
             if not 0 <= j < len(tokens):
@@ -165,14 +171,16 @@ class AffixZwnj:
             if host.bare in self.host_exceptions:
                 continue
             span = (min(host.start, token.start), max(host.end, token.end))
-            if not PERSIAN.match(host.text) or len(host.bare) < self.min_host:
+            if self.phrase_guard and j + 1 < len(tokens) and ADJACENT.fullmatch(text[host.end:tokens[j + 1].start]) and _phrase_cue(tokens[j + 1].bare):
+                yield Abstention(self.rule_id, "possible_prepositional_phrase", span, text[span[0]:span[1]])
+            elif not PERSIAN.match(host.text) or len(host.bare) < self.min_host:
                 yield Abstention(self.rule_id, "host_too_short_or_not_persian", span, text[span[0]:span[1]])
             elif self.require_host_in is not None and host.bare not in self.require_host_in:
                 yield Abstention(self.rule_id, "host_not_in_compound_lexicon", span, text[span[0]:span[1]])
             else:
                 yield Finding(
                     self.rule_id, self.layer, "space_where_zwnj", span, text[span[0]:span[1]],
-                    host.text + ZWNJ + token.text if suffix else token.text + ZWNJ + host.text,
+                    _join(host.text, token.text) if suffix else _join(token.text, host.text),
                     self.space_severity, "medium" if self.free_form else "high",
                     note=f"«{self.affix}» also occurs as a free word; the reading is not certain"
                     if self.free_form else None,
@@ -180,11 +188,12 @@ class AffixZwnj:
 
     def _scan_solid(self, tokens):
         hosts = closed_list(self.solid_hosts) if self.solid_hosts else None
+        forms = self.forms
         for token in tokens:
             if ZWNJ in token.text:
                 continue
             word = token.text
-            for form in self.forms:
+            for form in forms:
                 if self.position == "suffix":
                     if not word.endswith(form):
                         continue
@@ -193,6 +202,8 @@ class AffixZwnj:
                     continue
                 else:
                     host = word[len(form):]
+                if _last_base(host if self.position == "suffix" else form) in NON_JOINING:
+                    break
                 if host and not self._exempt(word) and not (self.skip_verbs and verb.analyzer().analyze(word).readings):
                     if len(host) < self.min_host or not PERSIAN.match(host):
                         yield Abstention(self.rule_id, "host_too_short_to_decide", (token.start, token.end), word)
@@ -201,7 +212,7 @@ class AffixZwnj:
                     else:
                         yield Finding(
                             self.rule_id, self.layer, "solid_where_zwnj", (token.start, token.end), word,
-                            host + ZWNJ + form if self.position == "suffix" else form + ZWNJ + host,
+                            _join(host, form) if self.position == "suffix" else _join(form, host),
                             self.solid_severity, "medium",
                             note="exception lexicon is incomplete until فرهنگ املایی خطّ فارسی is acquired",
                         )
@@ -210,7 +221,7 @@ class AffixZwnj:
 
 @dataclass(frozen=True, slots=True)
 class Pattern:
-    """A regex, for what is decidable from characters alone. ``repair`` is a
+    """A regex repair, optionally gated by local spelling context. ``repair`` is a
     ``re.sub`` template, or ``translate`` maps characters of the match;
     ``lines`` keeps only the lines a ``LINES`` test accepts."""
 
@@ -224,31 +235,122 @@ class Pattern:
     severity: str = "violation"
     confidence: str = "high"
     note: str | None = None
+    context: str | None = None
 
     def __post_init__(self):
         if self.lines is not None and self.lines not in LINES:
             raise TypeError(f"unknown lines test {self.lines!r}")
+        if self.context not in {None, "silent_plural", "ezafe", "stand_in", "controls", "redundant", "latin", "punctuation", "quotes"}:
+            raise TypeError(f"unknown pattern context {self.context!r}")
 
     def _suggest(self, m: re.Match) -> str | None:
         if self.translate is not None:
             return m.group().translate(str.maketrans(self.translate))
         return m.expand(self.repair) if self.repair is not None else None
 
-    def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding]:
+    def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding | Abstention]:
         start = 0
+        starts, ends = _opaque_spans(text) if self.context else ((), ())
         for line in text.split("\n") if self.lines else [text]:
             if not self.lines or LINES[self.lines](line):
                 for m in re.finditer(self.pattern, line):
+                    j = bisect_left(starts, start + m.end())
+                    if j and ends[j - 1] > start + m.start():
+                        continue
+                    repair = self._suggest(m)
+                    if self.context:
+                        repair = _context_repair(self.context, m, repair)
+                        if repair is None:
+                            yield Abstention(self.rule_id, "context_uncertain", (start + m.start(), start + m.end()), m.group())
+                            continue
                     yield Finding(self.rule_id, self.layer, self.kind, (start + m.start(), start + m.end()), m.group(),
-                                  self._suggest(m), self.severity, self.confidence, note=self.note)
+                                  repair, self.severity, self.confidence, note=self.note)
             start += len(line) + 1
+
+
+def _opaque_spans(text):
+    spans = [(m.start(), m.end()) for m in re.finditer(
+        r"(?:https?://|www\.)[^\s<>]+|(?<![\w.+-])[\w.+-]+@[\w.-]+\.\w+|`[^`\n]*`|<[^<>\n]+>", text)]
+    pos = 0
+    blocks = re.compile(r"```|<(math|code|pre)\b[^<>]*>")
+    while m := blocks.search(text, pos):
+        start, end = m.start(), m.end()
+        close = "```" if m[1] is None else f"</{m[1]}>"
+        found = text.find(close, end)
+        pos = len(text) if found < 0 else found + len(close)
+        spans.append((start, pos))
+    starts, ends = [], []
+    for a, b in sorted(spans):
+        starts.append(a); ends.append(max(b, ends[-1] if ends else 0))
+    return starts, ends
+
+
+def _fa(text):
+    return text.translate(LETTER_FOLD)
+
+
+def _fa_letter(char):
+    return bool(char and char.isalpha() and ARABIC_LETTER.fullmatch(char))
+
+
+def _looks_arabic(text):
+    words = re.findall(r"\w+", text)
+    cues = {"في", "على", "إلى", "عن", "لا", "هذا", "هذه", "الذي", "التي", "أن", "إن", "هو", "هي", "نحن", "ليس"}
+    return bool(set(words) & {"في", "على", "إلى", "هذا", "هذه", "الذي", "التي"}) or sum(
+        w in cues or (w.startswith("ال") and len(w) > 3) for w in words) >= 2
+
+
+def _context_repair(context, m, repair):
+    text, a, b = m.string, m.start(), m.end()
+    after = text[b:b + 1]
+    if context in {"silent_plural", "ezafe"}:
+        return _fa(repair) if is_silent_he(_fa(m[1])) is True else None
+    if context == "controls":
+        if set(m.group()) <= {"\u200b", "\xad", "\ufeff"} or text[a-1:a] == ZWNJ or after == ZWNJ:
+            return ""
+        return None
+    if context == "redundant":
+        if after and unicodedata.category(after) == "Cf" and after != ZWNJ:
+            return None
+        return repair + " " if after and (after.isalnum() and not _fa_letter(after) or after in "([{«") else repair
+    if context == "stand_in":
+        if text[a-1:a] == ZWNJ or after == ZWNJ:
+            return ""
+        left = re.search(r"[\w‌]+$", text[max(0, a-80):a])
+        right = re.match(r"[\w‌]+", text[b:b+80])
+        if not left or not right:
+            return None
+        left, right = _fa(left[0]), _fa(right[0])
+        if right == "است":
+            return " "
+        if _last_base(left) in NON_JOINING and set(m.group()) == {"\xad"}:
+            return ""
+        if left in {"می", "نمی"} and verb.analyzer().analyze(left + ZWNJ + right).readings:
+            return ZWNJ
+        if re.fullmatch(r"ها(?:ی(?:ی|م|ت|ش|مان|تان|شان)?|ست)?", right):
+            return "" if _last_base(left) in NON_JOINING else ZWNJ
+        if right in {"ای", "ام", "ات", "اش", "ایم", "اید", "اند", "مان", "تان", "شان"} and is_silent_he(left):
+            return ZWNJ
+        return None
+    if context == "latin":
+        if re.match(r"[-^]?[)(DPp]", text[b:b+2]):
+            return None
+        return repair.lstrip() + (" " if _fa_letter(after) else "")
+    if context == "punctuation":
+        return repair if _fa_letter(after) else None
+    if context == "quotes":
+        body = m[1].strip()
+        if not ARABIC_LETTER.search(body) or _looks_arabic(body):
+            return None
+        return "«" + body + "»" + (" " if _fa_letter(after) else "")
+    return repair
 
 
 SPELLINGS = {"spaced": " ", "zwnj": ZWNJ, "solid": ""}
 
 
 def _spell(first: str, second: str, form: str) -> str:
-    if form == "zwnj" and first[-1] in NON_JOINING:
+    if form == "zwnj" and _last_base(first) in NON_JOINING:
         form = "solid"
     return first + SPELLINGS[form] + second
 
@@ -307,6 +409,8 @@ class ClosedList:
     abstain_on: frozenset[str] = frozenset()
     abstain_reason: str = "the standard makes this one sense-dependent"
     abstain_before: str | None = None
+    ambiguous_after_word: frozenset[str] = frozenset()
+    abstain_before_words: frozenset[str] = frozenset()
     kind: str = "non_standard_form"
     severity: str = "violation"
     confidence: str = "high"
@@ -328,7 +432,12 @@ class ClosedList:
                     continue
                 span = (cores[i][1], cores[last][2])
                 found = text[span[0]:span[1]]
-                if self.abstain_before and last + 1 < len(tokens) and cores[last + 1][0].startswith(self.abstain_before):
+                if " ".join(parts) in self.ambiguous_after_word and i and ADJACENT.fullmatch(text[cores[i - 1][2]:span[0]]):
+                    yield Abstention(self.rule_id, "preceding_word_may_be_a_name", span, found)
+                elif (last + 1 < len(tokens) and cores[last + 1][0] in self.abstain_before_words and
+                      ADJACENT.fullmatch(text[span[1]:cores[last + 1][1]])):
+                    yield Abstention(self.rule_id, "literal_prepositional_phrase", span, found)
+                elif self.abstain_before and last + 1 < len(tokens) and cores[last + 1][0].startswith(self.abstain_before):
                     yield Abstention(self.rule_id, f"before {self.abstain_before}", span, found)
                 elif repair is None:
                     yield Abstention(self.rule_id, self.abstain_reason, span, found)
@@ -367,6 +476,8 @@ class Enclitic:
     severity: str = "violation"
     confidence: str = "high"
     note: str | None = None
+    hosts_file: str | None = None
+    names_file: str | None = None
 
     def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding | Abstention]:
         for i, (token, clitic) in enumerate(zip(tokens, tokens[1:])):
@@ -374,7 +485,7 @@ class Enclitic:
                 continue
             if i + 2 < len(tokens) and tokens[i + 2].bare in self.not_before:
                 continue
-            host = token.bare
+            host = _fa(token.bare)
             span = (token.start, clitic.end)
             found = text[span[0]:span[1]]
             if not host or host[-1] not in self.hosts:
@@ -386,13 +497,31 @@ class Enclitic:
             if gate:
                 yield gate
                 continue
-            yield Finding(self.rule_id, self.layer, self.kind, span, found, token.text + ZWNJ + clitic.text,
+            plural = _fa(token.text).endswith(ZWNJ + "های")
+            if self.names_file and host in closed_list(self.names_file):
+                yield Abstention(self.rule_id, "possible_name", span, found)
+                continue
+            if self.hosts_file and not plural and _fa(token.text) not in closed_list(self.hosts_file):
+                yield Abstention(self.rule_id, "clitic_host_not_attested", span, found)
+                continue
+            repair = token.text + clitic.text.removeprefix("ا") if plural else _join(token.text, clitic.text)
+            yield Finding(self.rule_id, self.layer, self.kind, span, found, _fa(repair),
                           self.severity, self.confidence, note=self.note)
 
 
+def _last_base(word: str) -> str:
+    return next((c for c in reversed(word) if c not in (ZWNJ, "‍") and not unicodedata.combining(c)), "")
+
+
+def _phrase_cue(word: str) -> bool:
+    if word in {"و", "یا", "که", "اما", "ولی", "نیز", "هم"}:
+        return False
+    analyzer = verb.analyzer()
+    return word in analyzer.stems.by_infinitive or not any(r.person is not None for r in analyzer.analyze(word).readings)
+
+
 def _join(host: str, second: str) -> str:
-    bare = host.replace(ZWNJ, "")
-    return host + second if bare and bare[-1] in NON_JOINING else host + ZWNJ + second
+    return host + second if _last_base(host) in NON_JOINING else host + ZWNJ + second
 
 
 @dataclass(frozen=True, slots=True)
@@ -456,6 +585,8 @@ class VerbPrefix:
     severity: str = "violation"
     confidence: str = "high"
     note: str | None = None
+    solid_file: str | None = None
+    names_file: str | None = None
 
     def _skip(self) -> frozenset[str]:
         if isinstance(self.exceptions, str):
@@ -465,14 +596,19 @@ class VerbPrefix:
     def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding]:
         skip = self._skip()
         for i, token in enumerate(tokens):
-            if token.text in self.prefixes and i + 1 < len(tokens) and SPACES.match(text[token.end:tokens[i + 1].start]):
-                body, span = tokens[i + 1].text, (token.start, tokens[i + 1].end)
-                prefix = token.text
-            elif ZWNJ not in token.text and token.text not in skip:
-                prefix = next((p for p in self.prefixes if token.text.startswith(p)), None)
+            word = _fa(token.text)
+            if self.names_file and word not in self.prefixes and word in closed_list(self.names_file):
+                continue
+            if word in self.prefixes and i + 1 < len(tokens) and SPACES.match(text[token.end:tokens[i + 1].start]):
+                body, span = _fa(tokens[i + 1].text), (token.start, tokens[i + 1].end)
+                prefix = word
+            elif ZWNJ not in word and word not in skip:
+                if self.solid_file and word not in closed_list(self.solid_file):
+                    continue
+                prefix = next((p for p in self.prefixes if word.startswith(p)), None)
                 if prefix is None:
                     continue
-                body, span = token.text[len(prefix):], (token.start, token.end)
+                body, span = word[len(prefix):], (token.start, token.end)
             else:
                 continue
             joined = prefix + ZWNJ + body
@@ -481,7 +617,72 @@ class VerbPrefix:
                               self.severity, self.confidence, note=self.note)
 
 
+@dataclass(frozen=True, slots=True)
+class TehMarbuta:
+    rule_id: str
+    layer: str
+    file: str
+    names_file: str
+
+    def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding]:
+        words, names = closed_list(self.file), closed_list(self.names_file)
+        for i, token in enumerate(tokens[:-1]):
+            repair = words.get(_fa(token.text))
+            if not repair or repair in names or is_silent_he(repair) is not True:
+                continue
+            following = tokens[i + 1]
+            if not ADJACENT.fullmatch(text[token.end:following.start].replace(ZWNJ, "")):
+                continue
+            near = {t.bare for t in tokens[max(0, i-2):i+2]}
+            if near & {"بن", "ابن", "بنت", "ابو", "أبو", "جمع", "مفرد", "نام", "لفظ"}:
+                continue
+            if _looks_arabic(text[max(0, token.start-80):following.end+80]):
+                continue
+            next_word = _fa(following.bare)
+            if next_word in {"را", "است", "بود", "نیست"}:
+                pass
+            elif (next_word.startswith("ال") or next_word in {"و", "یا", "اما", "که"} or
+                  any(r.person is not None for r in verb.analyzer().analyze(next_word).readings)):
+                continue
+            elif not any(c in "پچژگکی" for c in token.text + following.text):
+                continue
+            else:
+                repair += ZWNJ + "ی"
+            yield Finding(self.rule_id, self.layer, "teh_marbuta", (token.start, token.end), token.text, repair)
+
+
+@dataclass(frozen=True, slots=True)
+class JoinedWords:
+    rule_id: str
+    layer: str
+    file: str
+    severity: str = "violation"
+    confidence: str = "high"
+
+    def scan(self, text: str, tokens: Sequence[Token]) -> Iterator[Finding | Abstention]:
+        table = closed_list(self.file)
+        for i, token in enumerate(tokens):
+            repair = table.get(token.bare)
+            if repair is None:
+                continue
+            boundary = len(repair.split()[0].replace(ZWNJ, ""))
+            letters = [j for j, c in enumerate(token.text) if c != ZWNJ]
+            if token.text[letters[boundary] - 1] == ZWNJ:
+                continue
+            cut = letters[boundary]
+            repair = token.text[:cut] + " " + token.text[cut:]
+            span = (token.start, token.end)
+            if ((token.start and text[token.start - 1] in "@#_") or
+                    (i and tokens[i - 1].text in {"آقای", "خانم", "دکتر", "مهندس", "نام", "نامش", "شرکت", "مؤسسه"})):
+                yield Abstention(self.rule_id, "possible_name", span, token.text)
+            else:
+                yield Finding(self.rule_id, self.layer, "joined_words", span, token.text, repair,
+                              self.severity, self.confidence)
+
+
 DETECTORS = {"affix_zwnj": AffixZwnj, "closed_list": ClosedList, "compound": Compound,
+             "teh_marbuta": TehMarbuta,
+             "joined_words": JoinedWords,
              "enclitic": Enclitic, "pattern": Pattern, "verb_prefix": VerbPrefix}
 
 
@@ -512,6 +713,14 @@ class Example:
     expect: str | None = None
 
 
+def _arabic_spans(text):
+    starts, ends = [], []
+    for span in sorted(arabic.detector().detect(text), key=lambda s: s.start):
+        starts.append(span.start)
+        ends.append(max(span.end, ends[-1] if ends else 0))
+    return starts, ends
+
+
 @dataclass(frozen=True)
 class Rule:
     id: str
@@ -530,6 +739,7 @@ class Rule:
     notes: str | None = None
     disputes: tuple[dict[str, str], ...] = ()
     academy: dict[str, str] | None = None
+    skip_arabic: bool = False
 
     @property
     def style(self) -> str:
@@ -551,11 +761,18 @@ class Rule:
     def applies_in(self, registers: Iterable[str]) -> bool:
         return bool(set(self.registers) & set(registers))
 
-    def scan(self, text: str) -> tuple[list[Finding], list[Abstention]]:
+    def scan(self, text: str, tokens=None, arabic_spans=None) -> tuple[list[Finding], list[Abstention]]:
         findings, abstentions = [], []
         if self.detector is not None:
             citation = self.source.citation()
-            for r in self.detector.scan(text, tokenize(text)):
+            if self.skip_arabic and arabic_spans is None:
+                arabic_spans = _arabic_spans(text)
+            starts, ends = arabic_spans or ((), ())
+            for r in self.detector.scan(text, tokenize(text) if tokens is None else tokens):
+                j = bisect_left(starts, r.span[1]) if self.skip_arabic else 0
+                if j and ends[j - 1] > r.span[0]:
+                    abstentions.append(Abstention(self.id, "arabic_span", r.span, r.text))
+                    continue
                 if isinstance(r, Abstention):
                     abstentions.append(r)
                 else:
@@ -633,7 +850,7 @@ def parse_rule(record: dict) -> Rule:
         registers, Source(**{k: str(v) if k == "page" else v for k, v in source.items()}), ok, bad,
         _detector(spec, rule_id, record["layer"]) if spec else None,
         record.get("severity", "violation"), record.get("confidence", "high"), record.get("notes"),
-        tuple(record.get("disputes") or ()), academy,
+        tuple(record.get("disputes") or ()), academy, record.get("skip_arabic", False),
     )
 
 
@@ -707,17 +924,22 @@ class RuleBase:
         }
 
     def check(self, text: str, *, registers: Sequence[str] = ("formal_written",),
-              min_confidence: str = "medium") -> Check:
+              min_confidence: str = "medium", severities: Sequence[str] | None = None) -> Check:
         if min_confidence not in CONFIDENCE:
             raise ValueError(f"min_confidence is one of {sorted(CONFIDENCE)}")
         if unknown := set(registers) - REGISTERS:
             raise ValueError(f"unknown registers {sorted(unknown)}")
+        selected = SEVERITIES if severities is None else frozenset(severities)
+        if unknown := selected - SEVERITIES:
+            raise ValueError(f"unknown severities {sorted(unknown)}")
         floor = CONFIDENCE[min_confidence]
         rules = self.for_registers(registers)
         findings, abstentions = [], []
+        tokens = tokenize(text)
+        arabic_spans = _arabic_spans(text) if "ة" in text and any(r.skip_arabic for r in rules) else ((), ())
         for rule in rules:
-            got, skipped = rule.scan(text)
-            findings += [f for f in got if CONFIDENCE.get(f.confidence, 0) >= floor]
+            got, skipped = rule.scan(text, tokens, arabic_spans)
+            findings += [f for f in got if CONFIDENCE.get(f.confidence, 0) >= floor and f.severity in selected]
             abstentions += skipped
         rank = {"violation": 0, "advisory": 1, "house": 2}
         findings.sort(key=lambda f: (f.span, f.suggestion or "", rank.get(f.severity, 3)))

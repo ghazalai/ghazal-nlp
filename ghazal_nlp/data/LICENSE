@@ -33,3 +33,33 @@ https://en.wiktionary.org/
 https://kaikki.org/dictionary/Persian/
 Dehkhoda infinitive entries were also consulted for stem facts; no dictionary
 definitions or corpus passages are reproduced in these tables.
+
+orthography-splits.tsv and orthography-copula.tsv are licensed under CC BY-SA 4.0
+instead of the default above. Both contain word forms and
+counts from rows of the Ghazal Corpus ingestion (2026-11-09),
+not passages. Sources: Persian Wikipedia (CC BY-SA 4.0), Mizan parallel
+corpus (CC BY 4.0 dataset), IRIB news, Blogfa, Ganjoor, the books collection
+and persian-tweets-2024. The latter five have no licence recorded in the
+ingestion; their text is not redistributed. No Tanzil or Sokhan dictionary
+material is used. Count selection and thresholds are in each file's header.
+orthography-splits.tsv uses the package's verb-stems.tsv, verb-preverbs.tsv
+and verb-colloquial.tsv for its finite-verb gate; their inherited sources
+include standard paradigms and John Mace's Persian Grammar, Appendix I.
+The corpus behind the legacy preverb counts is unspecified.
+
+orthography-function-splits.tsv, orthography-content-splits.tsv,
+and orthography-he-endings.tsv are also licensed
+under CC BY-SA 4.0 instead of the default. All three use counts from fawiki,
+mizan, irib-news, blogfa, books, persian-tweets-2024 and ganjoor. The first
+two also use common-word/name evidence from the training splits of UD
+Persian Seraji and PerDT (CC BY-SA 4.0 datasets). orthography-he-endings.tsv
+and orthography-copula.tsv use the existing orthography-silent-he.tsv as
+a candidate gate; that legacy file records 2026 corpus spelling counts
+without a complete source list. Each file's header identifies its inputs.
+
+orthography-mi-forms.tsv and orthography-clitic-hosts.tsv are licensed under
+CC BY-SA 4.0. Both use word-form counts from fawiki, mizan,
+irib-news, blogfa, books, persian-tweets-2024 and ganjoor rows, with the
+source licences listed above. No development or test sentences supply counts.
+orthography-context-names.tsv is licensed under CC BY-SA 4.0 and uses only
+training rows from UD Persian Seraji and PerDT (CC BY-SA 4.0).

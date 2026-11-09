@@ -165,7 +165,9 @@ examples.violations = [
   { text = "زندگی اش", expect = "زندگی\u200cاش" },
   { text = "کشتی شان", expect = "کشتی\u200cشان" },
 ]
-notes = "The و row (رادیوام) isn't checked, as in academy.copula_after_vowel_host."
+notes = "Only attested clitic hosts; plural های takes the clitic directly. Unknown names abstain."
+detector.hosts_file = "orthography-clitic-hosts.tsv"
+detector.names_file = "orthography-context-names.tsv"
 
 [[rule]]
 id = "academy.ya_nakare_after_silent_he"

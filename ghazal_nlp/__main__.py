@@ -136,7 +136,7 @@ def rules(a):
 
 def check(a):
     analysis = orthography.rulebase(a.style).check("\n".join(lines(a)), registers=tuple(a.register or ["formal_written"]),
-                                                   min_confidence=a.min_confidence)
+                                                   min_confidence=a.min_confidence, severities=a.severity)
     if a.json:
         return dump(analysis)
     for x in analysis.findings:
@@ -243,6 +243,7 @@ def main() -> None:
     c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
     c.add_argument("--register", action="append", choices=registers, help="formal_written when none")
     c.add_argument("--min-confidence", default="medium", choices=["low", "medium", "high"])
+    c.add_argument("--severity", action="append", choices=sorted(orthography.SEVERITIES), help="all severities when none; repeat to combine")
     c.add_argument("--abstentions", action="store_true", help="also what the rules declined to judge")
     c.add_argument("--json", action="store_true")
     command("verify", verify, "run every rule against its own examples")

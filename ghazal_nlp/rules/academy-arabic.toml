@@ -5,7 +5,7 @@
 #   ISBN 978-622-5305-22-9
 #   sha256 6071a6fe7572dfb6b8211033bba82436d59bbe8ec3c1f81312de6b76ef90603e
 #
-# Quoted Quran and Arabic keep their own spelling (p. 21); a detector can't see a quotation.
+# Quoted Quran and Arabic keep their own spelling (p. 21).
 # ZWNJ (U+200C) is written \u200c.
 
 [[rule]]
@@ -121,6 +121,7 @@ notes = "Only the four words the book names: یی isn't ئی in general (روی�
 
 [[rule]]
 id = "academy.taa_marbuta_word_final"
+skip_arabic = true
 layer = "orthography"
 title.fa = "«ة» در پایان واژه\u200cهای برگرفته از عربی"
 title.en = "A word-final ة is written ت or ه in Persian"
@@ -152,12 +153,12 @@ detector.kind = "arabic_taa_marbuta"
 detector.severity = "violation"
 detector.confidence = "medium"
 detector.note = "write ت if it is pronounced, ه if it is not — the standard does not let the detector choose"
-examples.ok = ["رحمت خدا", "علاقه", "دایرةالمعارف", "تذکرة الاولیاء"]
+examples.ok = ["رحمت خدا", "علاقه", "دایرةالمعارف", "تذکرة الاولیاء", "هذه سورة من القرآن"]
 examples.violations = [
   { text = "رحمة" },
   { text = "معاویة" },
 ]
-notes = "No repair: ت or ه depends on whether the ة is pronounced. Word-final only, and not before ال (تذکرة الاولیاء). Medium confidence because quoted Arabic keeps its ة (p. 21); most findings are quoted Arabic and Arabic names."
+notes = "No repair: ت or ه depends on pronunciation. Word-final only, not before ال (تذکرة الاولیاء), and outside spans returned by arabic.detector().detect (p. 21). Arabic the detector misses can still be flagged."
 
 [[rule]]
 id = "academy.tanvin_nasb_mandatory"

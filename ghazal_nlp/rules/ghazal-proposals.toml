@@ -1,0 +1,31 @@
+[[rule]]
+id = "ghazal.bi_solid"
+layer = "orthography"
+title.fa = "نیم‌فاصله پس از پیشوند بی"
+statement.fa = "بی در نقش پیشوند نیم‌فاصله می‌گیرد؛ بی پیش از یک گروه اسمی جدا می‌ماند. صورت‌های واژگانی‌شده مانند بیمار و بیچاره جدا نمی‌شوند."
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.page = "39"
+academy.position = "right"
+academy.rule = "academy.bi_prefix"
+examples.ok = ["بی‌حوصله", "بیچاره", "بیمار", "بی شروعی هیجان‌انگیز"]
+examples.violations = [{ text = "بیحوصله", expect = "بی‌حوصله" }]
+notes = "Not active: needs a count-backed word list that excludes names and lexicalised words; no general prefix split."
+
+[[rule]]
+id = "ghazal.comparative_space"
+layer = "orthography"
+title.fa = "فاصلهٔ کامل پیش از تر و ترین"
+statement.fa = "تر و ترین در نقش پسوند به واژه می‌پیوندند. تر به معنی خیس کلمه‌ای مستقل است. صورت پیوستهٔ پسوند نیز درست است."
+kind = "prescriptive"
+status = "proposed"
+scope.registers = ["formal_written", "technical"]
+source.work = "دستور خطّ فارسی (ویراست جدید)"
+source.page = "40"
+academy.position = "right"
+academy.rule = "academy.comparative_tar"
+examples.ok = ["بزرگ‌تر", "بزرگتر", "چوب تر", "بهتر", "زیباتر"]
+examples.violations = [{ text = "مهم ترین", expect = "مهم‌ترین" }, { text = "بزرگ تر", expect = "بزرگ‌تر" }]
+notes = "Not active: تر needs its adjective reading distinguished from wet. A closed adjective list and a separate ترین detector can be evaluated next; joined forms remain house suggestions."

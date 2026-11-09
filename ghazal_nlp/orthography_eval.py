@@ -49,22 +49,30 @@ def pairs(wrong: Path, correct: Path):
 
 def changes(text: str, base: RuleBase, registers) -> dict[int, tuple[str, str]]:
     """{letter index: (proposed separator, severity)} from the separator-only findings."""
+    return {i: (sep, severity) for i, (sep, severity, _) in predictions(text, base, registers).items()}
+
+
+def predictions(text: str, base: RuleBase, registers) -> dict[int, tuple[str, str, str]]:
+    """As changes, retaining the rule that wins each gap."""
     out = {}
+    offsets = [0]
+    for c in text:
+        offsets.append(offsets[-1] + (c not in SEPARATORS))
     for f in base.check(text, registers=registers).findings:
         a, b = f.span
         if f.suggestion is None or bare(f.suggestion) != bare(text[a:b]) or not bare(text[a:b]):
             continue
-        first = len(bare(text[:a]))
+        first = offsets[a]
         for k, (old, new) in enumerate(zip(gaps(text[a:b]), gaps(f.suggestion))):
             if k and old != new:
-                out.setdefault(first + k, (new, f.severity))
+                out.setdefault(first + k, (new, f.severity, f.rule_id))
     return out
 
 
 def evaluate(files, base: RuleBase, registers=("formal_written",), limit: int | None = None) -> dict:
     report = {}
     for wrong, correct in files:
-        t, by_kind, by_severity = Counter(), Counter(), Counter()
+        t, by_kind, by_severity, by_rule = Counter(), Counter(), Counter(), Counter()
         for n, (w, c) in enumerate(pairs(wrong, correct)):
             if limit and n == limit:
                 break
@@ -73,8 +81,11 @@ def evaluate(files, base: RuleBase, registers=("formal_written",), limit: int | 
             t["gaps"] += len(gw) - 1
             edits = {i for i in range(1, len(gw)) if gw[i] != gc[i]}
             t["edits"] += len(edits)
-            mine = changes(w, base, registers)
-            t["changes_on_correct"] += len(changes(c, base, registers))
+            mine = predictions(w, base, registers)
+            correct_predictions = predictions(c, base, registers)
+            t["changes_on_correct"] += len(correct_predictions)
+            for _, _, rule_id in correct_predictions.values():
+                by_rule[rule_id, "changes_on_correct"] += 1
             for i in edits:
                 kind = f"{NAMES.get(gw[i], 'mixed')}>{NAMES.get(gc[i], 'mixed')}"
                 by_kind[kind, "edits"] += 1
@@ -82,13 +93,16 @@ def evaluate(files, base: RuleBase, registers=("formal_written",), limit: int | 
                     by_kind[kind, "exact"] += 1
                 if i in mine and bool(mine[i][0]) == bool(gc[i]):
                     by_kind[kind, "apart"] += 1
-            for i, (sep, severity) in mine.items():
+            for i, (sep, severity, rule_id) in mine.items():
                 t["changes"] += 1
+                by_rule[rule_id, "changes"] += 1
                 by_severity[severity, "changes"] += 1
                 for name, ok in (("exact", sep == gc[i]), ("apart", bool(sep) == bool(gc[i]))):
                     t[name] += ok
                     by_severity[severity, name] += ok
                     t[f"{name}_edit"] += ok and i in edits
+                    by_rule[rule_id, name] += ok
+                    by_rule[rule_id, f"{name}_edit"] += ok and i in edits
             t["sentences_fixed"] += mine.keys() == edits and all(mine[i][0] == gc[i] for i in edits)
         ratio = lambda a, b: round(a / b, 4) if b else 0.0
         report[Path(wrong).name] = {
@@ -98,6 +112,12 @@ def evaluate(files, base: RuleBase, registers=("formal_written",), limit: int | 
             "recall": {"exact": ratio(t["exact_edit"], t["edits"]), "apart": ratio(t["apart_edit"], t["edits"])},
             "sentences_fixed": ratio(t["sentences_fixed"], t["pairs"]),
             "changes_on_correct": t["changes_on_correct"],
+            "counts": dict(t),
+            "by_rule": {r: {"counts": {k: by_rule[r, k] for k in
+                                     ("changes", "exact", "apart", "exact_edit", "apart_edit", "changes_on_correct")},
+                            "precision": {k: ratio(by_rule[r, k], by_rule[r, "changes"]) for k in ("exact", "apart")},
+                            "recall": {k: ratio(by_rule[r, k + "_edit"], t["edits"]) for k in ("exact", "apart")}}
+                        for r in sorted({r.id for r in base.for_registers(registers)})},
             "by_severity": {s: {"changes": by_severity[s, "changes"],
                                 "exact": ratio(by_severity[s, "exact"], by_severity[s, "changes"]),
                                 "apart": ratio(by_severity[s, "apart"], by_severity[s, "changes"])}

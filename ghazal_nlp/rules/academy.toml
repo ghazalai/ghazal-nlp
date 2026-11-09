@@ -65,6 +65,8 @@ source.locator = "بند «بی» و تبصرهٔ آن"
 source.retrieved = "2026-08-04"
 detector.type = "affix_zwnj"
 detector.affix = "بی"
+detector.phrase_guard = true
+detector.require_host_in = ["تردید", "شک", "حوصله", "فایده", "دلیل", "نظیر", "رحم", "خبر", "اعتنا", "قرار", "گناه"]
 detector.position = "prefix"
 detector.detect_space = true
 detector.detect_solid = true
@@ -79,12 +81,12 @@ detector.lexical_exceptions = [
   "بیدرفش", "بیمار", "بیست", "بیرون", "بیان", "بیدار", "بیشه", "بینی", "بیضه", "بینش", "بیشتر",
   "بیمه", "بیضی", "بیابان", "بیعت", "بیت", "بینا", "بیوه", "بیل", "بیش", "بیگاه",
 ]
-examples.ok = ["بی\u200cتردید", "بیچاره", "بیمار", "بیستم", "بیایند", "بیاموزند"]
+examples.ok = ["بی\u200cتردید", "بیچاره", "بیمار", "بیستم", "بیایند", "بیاموزند", "بی شروعی هیجان‌انگیز", "بی هیچ چشمداشتی", "بی اجازه من", "بی دلیل آوردن، حکم داد.", "بی دلیل روشن حکم داد."]
 examples.violations = [
   { text = "بی تردید", expect = "بی\u200cتردید" },
   { text = "بیحوصله", expect = "بی\u200cحوصله" },
 ]
-notes = "بیهوده and بیگانه are listed because the book treats them as simple words. Medium confidence on spaces: the preposition بی (بی هیچ چشمداشتی) is right with a space."
+notes = "بیهوده and بیگانه are listed because the book treats them as simple words. Space detection uses a small explicit host list; an unknown phrase (بی شروعی هیجان‌انگیز) abstains. This is a limit of the detector, not a change to the book's rule."
 
 [[rule]]
 id = "academy.ham_prefix"
@@ -247,17 +249,20 @@ source.page = 41
 source.locator = "تبصرهٔ «ها»، بند ۵"
 source.retrieved = "2026-08-04"
 detector.type = "pattern"
-detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*(?<!ا)ه)ها(?![\\w\u200c])"
+detector.pattern = "(?<![\\w\u200c])([\\w\u200c]*(?<!ا)ه)(ها(?:ی(?:ی|م|ت|ش|مان|تان|شان)?|ست)?)(?![\\w\u200c])"
 detector.kind = "solid_where_zwnj_required"
-detector.repair = "\\1\u200cها"
+detector.repair = "\\1\u200c\\2"
 detector.severity = "violation"
 detector.confidence = "high"
 examples.ok = ["خانه\u200cها", "میوه\u200cها", "کتاب\u200cها"]
 examples.violations = [
   { text = "خانهها", expect = "خانه\u200cها" },
   { text = "میوهها", expect = "میوه\u200cها" },
+  { text = "خانههای", expect = "خانه\u200cهای" },
+  { text = "نامههایمان", expect = "نامه\u200cهایمان" },
 ]
 notes = "Also fires after a pronounced ه that follows a joining letter (فقیه\u200cها), which the book separates too."
+detector.context = "silent_plural"
 
 [[rule]]
 id = "academy.plural_ha_mandatory_separation"
