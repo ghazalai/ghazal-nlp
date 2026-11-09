@@ -5,8 +5,8 @@ to SentenceBench's (/ → a, a → A, $ → S, c → C, @ → ?).
 
 Words are paired inside a sentence by their consonants. A vowel reading fits
 when the pronunciation has the vowels it marks; letters it leaves unmarked fit
-anything. The vowel lexicon is Ganjoor's, so this is verse readings on modern
-prose.
+anything. Coverage uses pairs whose bare spelling fits the pronunciation;
+unseen words are counted separately from words with one or several readings.
 """
 
 from __future__ import annotations
@@ -16,15 +16,16 @@ import random
 import re
 from collections import Counter
 from difflib import SequenceMatcher
+from functools import lru_cache
 from pathlib import Path
 
 from . import ezafe, vowels
+from .vowel_align import CONSONANTS, align_sound
 
 WORD = re.compile(r"[ء-ۓً-ْٰٔ‌]+")
 MARKS = re.compile("[ً-ْٰٔ]")
-CONSONANTS = dict(zip("بپتطثسصجچحهخدذزضظرژشغقفکگلمن", "bpttsssjChhxdzzzzrZSqqfkglmn"))
 SHORT = {"َ": "[aA]", "ِ": "[ei]", "ُ": "[ou]", "ْ": ""}
-HOMORICH = str.maketrans({"/": "a", "a": "A", "$": "S", "c": "C", "@": "?"})
+HOMORICH = str.maketrans({"/": "a", "a": "A", "$": "S", "c": "C", "@": "?", ";": "Z"})
 EZAFE = re.compile(r"-y?e$")
 
 
@@ -65,10 +66,13 @@ def words(sentence: str, sounds: list[str]):
     return [(w.group(), s) for w, s in aligned(sentence, sounds)]
 
 
+@lru_cache(maxsize=65536)
 def pattern(form: str) -> re.Pattern:
     slots, out = vowels.slots(form), []
     for i, (ch, marks) in enumerate(slots):
         vowel = next((SHORT[m] for m in marks if m in SHORT), None)
+        if "َ" in marks and i + 1 < len(slots) and slots[i + 1][0] in "وی" and not set(slots[i + 1][1]) - {"ْ"}:
+            vowel = "(?:[aA]|o)" if slots[i + 1][0] == "و" else "(?:[aA]|e)"
         if ch == "ا":
             base, vowel = ("\\??", vowel if vowel is not None else "[aeoA]?") if i == 0 else ("A?", vowel or "")
         elif ch == "آ":
@@ -95,9 +99,24 @@ def fits(form: str, sound: str) -> bool:
     return bool(pattern(form).fullmatch(bare_sound(sound)))
 
 
-def evaluate(path: Path, seed: int = 0) -> dict:
+def vowel_form(word: str, sound: str) -> str | None:
+    """SentenceBench phones to the shared canonical vowel representation."""
+    return align_sound(word, bare_sound(sound))
+
+
+def vowel_alignment(sentence: str, sounds: list[str]):
+    """Conservative (word match, marked form) pairs, excluding repeated sound ambiguities."""
+    groups = {}
+    for sound in sounds:
+        groups.setdefault(skel_sound(sound), set()).add(sound)
+    for match, sound in aligned(sentence, sounds):
+        if len(groups[skel_sound(sound)]) == 1 and (form := vowel_form(match.group(), sound)) is not None:
+            yield match, form
+
+
+def evaluate(path: Path, seed: int = 0, lexicon=None, vowels_only: bool = False) -> dict:
     t, confusion = Counter(), {"written": Counter(), "junction": Counter()}
-    lexicon, rng = vowels.lexicon(), random.Random(seed)
+    lexicon, rng = vowels.lexicon() if lexicon is None else lexicon, random.Random(seed)
     for sentence, sounds, homograph, said in rows(path):
         alignment = aligned(sentence, sounds)
         pairs = [(w.group(), s) for w, s in alignment]
@@ -108,7 +127,11 @@ def evaluate(path: Path, seed: int = 0) -> dict:
         t["ezafe"] += sum(bool(EZAFE.search(s)) for _, s in pairs)
         for word, sound in pairs:
             entry = lexicon.lookup(word)
-            if not entry or not fits(vowels.skeleton(MARKS.sub("", word)), sound):
+            if not fits(vowels.skeleton(MARKS.sub("", word)), sound):
+                continue
+            t["eligible"] += 1
+            if not entry:
+                t["unseen"] += 1
                 continue
             ok = [fits(r.form, sound) for r in entry.readings]
             for kind in ("settled" if entry.settled else "ambiguous",) + (("homograph",) if MARKS.sub("", word) == homograph else ()):
@@ -116,7 +139,7 @@ def evaluate(path: Path, seed: int = 0) -> dict:
                 t[f"{kind}_top"] += ok[0]
                 t[f"{kind}_any"] += any(ok)
                 t[f"{kind}_random"] += ok[rng.randrange(len(ok))]
-        for site in ezafe.sites({"text": sentence}):
+        for site in (() if vowels_only else ezafe.sites({"text": sentence})):
             sound = by_start.get(site["head_span"][0])
             if sound is None:
                 continue
@@ -127,6 +150,9 @@ def evaluate(path: Path, seed: int = 0) -> dict:
                 confusion["written"][f"{gold}->{'none' if d == 'not_ezafe' else d}"] += 1
     rate = lambda a, b: round(t[a] / t[b], 4) if t[b] else 0.0
     report = {"sentences": t["sentences"], "words_paired": rate("paired", "words"), "ezafe_rate": rate("ezafe", "paired"),
+              "eligible_words": t["eligible"], "unseen_words": t["unseen"],
+              "coverage": 1 - t["unseen"] / t["eligible"] if t["eligible"] else 0.0,
+              "vowel_counts": dict(t),
               "vowels": {k: {"words": t[k], "top_reading_fits": rate(f"{k}_top", k), "some_reading_fits": rate(f"{k}_any", k),
                              "random_reading_fits": rate(f"{k}_random", k)} for k in ("settled", "ambiguous", "homograph")}}
     for which, c in confusion.items():

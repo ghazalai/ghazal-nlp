@@ -43,6 +43,7 @@ def test_canonicalisation():
     assert canonicalize("مسا" + HAMZA + "له") == "مسأله"
     assert canonicalize(KASRA) == KASRA and canonicalize(ZWNJ) == ZWNJ
     assert canonicalize("شا" + ZWNJ + HAMZA + "ن" + KASRA) == "شأ" + ZWNJ + "ن" + KASRA
+    assert canonicalize("بِیْن") == "بَیْن" and canonicalize("دُوْر") == "دَوْر" and canonicalize("بُود") == "بُود"
 
 
 @pytest.mark.parametrize("token", [
@@ -113,6 +114,7 @@ def test_the_lexicon_round_trips(small, tmp_path):
 
 def test_the_shipped_lexicon():
     lex = vowels.lexicon()
-    assert not lex["گل"].settled and not lex["شکر"].settled and lex["گل"].ezafe > 0
-    assert len(lex.settled()) / len(lex) > 0.85
+    assert any(e.ambiguous() and e.ezafe > 0 for e in lex.values())
+    assert all(r.sources and r.count == sum(r.sources.values()) and skeleton(r.form) == e.skeleton
+               for e in lex.values() for r in e.readings)
     assert "# source: Ganjoor" in (vowels.DATA / "vowels-lexicon.tsv").read_text(encoding="utf-8")

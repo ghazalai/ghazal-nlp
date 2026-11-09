@@ -44,6 +44,7 @@ def test_g2p_eval(tmp_path):
     assert r["words_paired"] == round(6 / 7, 4) and r["ezafe_junction"]["sites"] == 2
     assert r["ezafe_junction"]["confusion"] == {"ezafe->ezafe": 1, "none->none": 1}
     assert g2p_eval.fits("گُل", "gol") and not g2p_eval.fits("گِل", "gol") and g2p_eval.fits("خُوبی", "xubi")
+    assert g2p_eval.fits("مَوْرِد", "mored") and g2p_eval.fits("بَیْن", "beyn") and g2p_eval.fits("بَیْن", "bayn")
     assert g2p_eval.words("کتابِ من", ["ketAb-e", "man"]) == [("کتابِ", "ketAb-e"), ("من", "man")]
 
 

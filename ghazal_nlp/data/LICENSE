@@ -63,3 +63,71 @@ irib-news, blogfa, books, persian-tweets-2024 and ganjoor rows, with the
 source licences listed above. No development or test sentences supply counts.
 orthography-context-names.tsv is licensed under CC BY-SA 4.0 and uses only
 training rows from UD Persian Seraji and PerDT (CC BY-SA 4.0).
+
+vowels-lexicon.tsv, vowels-model.json.gz, vowels-sources.json,
+vowels-review.tsv and vowels-attribution.jsonl.gz are combined CC BY-SA 4.0
+derivatives. They contain word forms, counts, parameters and attribution
+metadata, with no definitions, sentences or poem passages. Underlying CC0 and
+public-domain contributions retain those terms. The attribution manifest
+identifies contributing document IDs, Wikimedia history URLs and revision IDs
+where available, and exact input snapshots by filename, byte size and SHA-256.
+Shared input files are counted once in that manifest.
+
+Sources: Ganjoor historical verse (local licence unstated), DehkhodaProject
+(CC0, https://github.com/DehkhodaProject/DehkhodaProject), Steingass's 1892
+dictionary (public domain, https://dsal.uchicago.edu/dictionaries/steingass/;
+digital transcription MIT, notice below), English Wiktionary via Kaikki
+(https://kaikki.org/dictionary/Persian/), Persian and Tajik Wiktionary, Persian
+Wikipedia, Wikisource, Wikibooks, Wikiquote and Wikivoyage (CC BY-SA 4.0),
+Persian Wikinews (CC BY 2.5), Common Voice (CC0), HomoRich-G2P-Persian
+(CC0, https://huggingface.co/datasets/MahtaFetrat/HomoRich-G2P-Persian;
+recommended training split only), Hedayat stories and Mohl's Shahnameh edition
+(public-domain works; digital witness licences unstated), non-Sokhan Naskban
+and reference OCR editions (printed edition licences unstated), and Mizan
+(CC BY 4.0 compilation; underlying translations separately protected).
+
+OCR editions and Mizan contribute extracted lexical facts only. This licence
+covers the combined derivative where applicable; it does not relicense the
+underlying books, translations or digital witnesses. Their individual source
+IDs and licence descriptions remain in vowels-sources.json. Sokhan, Tanzil and
+Tashkeela are excluded. Public benchmark text is used only to exclude training
+sentence matches and to measure the finished artifacts; no benchmark labels
+enter training or calibration. Dictionary headword overlap is expected.
+
+Steingass digital transcription: steingass-scraper, snapshot d2fd36bf577b.
+MIT License
+Copyright (c) 2024 T. S. Beers
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+vowels-context.json.gz is also CC BY-SA 4.0. It holds word forms, counts and
+context parameters from HomoRich training, Ganjoor editorial marks, Hedayat
+stories, Persian Wikisource and Wikipedia. Reviewed lexical sense families
+are included as word facts. The fallback uses the word lexicon listed above;
+its separately calibrated scores are stored without a second copy of the lexicon.
+Controlled grammar training/calibration examples are original CC0 material;
+only their derived parameters are included. Biological compound readings are
+normalized during training; public benchmark reference phonemes are unchanged.
+Its provenance object names source snapshots, licences and the lexical input hash.
+No sentences or poem passages are included. SentenceBench and HomoRich test
+are exclusion and measurement inputs only. Held-out documents, development
+documents and matching public sentences are excluded from training. Dictionary
+headword exclusions apply at dictionary entry reads; they do not remove that
+word's independent corpus evidence. Authored evaluation sentences supply no
+training or calibration labels.

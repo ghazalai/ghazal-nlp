@@ -1,0 +1,1377 @@
+{
+  "sources": {
+    "books": {
+      "licence": "Public-domain Hedayat works; digital witness licence unstated",
+      "register": "modern prose",
+      "rows": 30,
+      "retained_segments": 451,
+      "attempts": 183,
+      "accepted": 182,
+      "rejected": 1,
+      "forms": 127,
+      "alignment_failure_rate": 0.00546448087431694,
+      "words": 124,
+      "new_words_over_ganjoor": 26,
+      "inputs": [
+        "150cfc1cfc316abd859336c668815bad0a47d69c0733d654adf32821a2b7b446"
+      ],
+      "input_bytes": 472604
+    },
+    "common-voice": {
+      "licence": "CC0-1.0",
+      "register": "modern prose",
+      "rows": 42223,
+      "retained_segments": 622,
+      "attempts": 606,
+      "accepted": 606,
+      "excluded_benchmark_documents": 46,
+      "excluded_benchmark_segments": 5,
+      "forms": 378,
+      "alignment_failure_rate": 0.0,
+      "words": 376,
+      "new_words_over_ganjoor": 226,
+      "inputs": [
+        "023a3c7c9efacd8280b1af45f32b5781733e7664d9811b24a89e220fb0d4625c",
+        "f8fa7a61ee2d61e9aaf0c9763cb1470741f1443fe1ab6cedaf747730c04f6502",
+        "20a3faf3f5f0ebd8b5c5aeeace14b50b78379441784f21aa86698dd1aeb3150f",
+        "fd0d3f50686d58a1c58968da78dd609a4cc352003618d801b3c6f9bca9b945f9",
+        "240d1bee1ce07ea47dc2b0c4b2437931cece7e1960928e5672fd7cbca53cc720",
+        "2704b34c861fdfd02ba69bf6d528a06f1c95b543e453029b8cc6377bbf5cb50e",
+        "75ce850a8e254aa1e6afc5db08e67d25c09d1ddc4dc2ae527ff03125fe2ac16c",
+        "6bb707d3c3edd18bf17a992db0213f7640a09f77e6076d0f8f28f544c9d8f046",
+        "397a92bdaaa2e1b2e7cdf765e3f152f670d79b9541379455529c77b32c7daa1f",
+        "564f7860c7bd981c193303bc181aa4dfc735d397f92dfa9b3baf08da0211d70e",
+        "b46163d93d7699e3f5e467b72f1392d5d5129a0c46eee35fd0528f088285cd0c",
+        "05436da3b6445106b6f0f3fa463279e77c6d4f604eb0b022f8b133124f1a88de",
+        "9795119f8c55dbd6b2f8804175524e1923bf43215aad8cf5af8415aab2fc9084",
+        "a8d0529a6baa32d520d4a198cd9ca2ae0ff69a27ea0b6f48b0182bdc93f35158",
+        "0a24c2e92cebebdd81681c6625e90486ff0d36e534148b479fc95ad72769392d",
+        "b5ccfae48fbf61e9bba6f1347ed73d3a1821a42f5b1ef53389dcc3fbe90c9d8c",
+        "6472d379ea727bbcaab46024dff703464d560202e1d20b9ea6b6510a0c0fe8d6",
+        "3b34f7cce367373986e589db0de4a4627c6da66fb2eea441452e4ea69a510146",
+        "00bbcdaf1251d25c29bc4c13b61c8bac6e54714efe7804af168f835c6febb431",
+        "123a92df942df18a706c42d151b02525983c3400a96cdd0fec0a18be14ee8b71",
+        "62b3f150b9a092cb6aed5f56a86b917cc5c31a3f51626c214491f21aefe86504"
+      ],
+      "input_bytes": 1001785
+    },
+    "dehkhoda": {
+      "licence": "CC0",
+      "register": "classical dictionary",
+      "rows": 302698,
+      "attempts": 202836,
+      "accepted": 100510,
+      "rejected": 102326,
+      "forms": 72385,
+      "alignment_failure_rate": 0.5044765229052042,
+      "words": 64702,
+      "new_words_over_ganjoor": 59209,
+      "inputs": [
+        "e9d3a5d34542a1fac4f8a99ee510745ad6e0561b76419bb381e0ad635b5fd20d"
+      ],
+      "input_bytes": 141483080
+    },
+    "dehkhoda-arabic": {
+      "licence": "CC0",
+      "register": "Arabic dictionary entry",
+      "attempts": 79898,
+      "accepted": 52324,
+      "rejected": 27574,
+      "forms": 50481,
+      "alignment_failure_rate": 0.3451150216526071,
+      "words": 42705,
+      "new_words_over_ganjoor": 38064,
+      "inputs": [
+        "e9d3a5d34542a1fac4f8a99ee510745ad6e0561b76419bb381e0ad635b5fd20d"
+      ],
+      "input_bytes": 141483080
+    },
+    "fawiki": {
+      "licence": "CC BY-SA 4.0",
+      "register": "modern prose",
+      "rows": 2599875,
+      "retained_segments": 716705,
+      "attempts": 739111,
+      "accepted": 734634,
+      "excluded_benchmark_segments": 1055,
+      "rejected": 4477,
+      "excluded_benchmark_documents": 25,
+      "forms": 121767,
+      "alignment_failure_rate": 0.006057276917810721,
+      "words": 95431,
+      "new_words_over_ganjoor": 82543,
+      "inputs": [
+        "7f2fe67175ea201e296e7b23a36cc99896343b96aeedb2e61ea871c1e620f375"
+      ],
+      "input_bytes": 1870631294
+    },
+    "fawikibooks": {
+      "licence": "CC BY-SA 4.0",
+      "register": "modern prose",
+      "rows": 3609,
+      "retained_segments": 13898,
+      "attempts": 16986,
+      "rejected": 41,
+      "accepted": 16945,
+      "excluded_benchmark_segments": 41,
+      "forms": 4068,
+      "alignment_failure_rate": 0.0024137525020605202,
+      "words": 3638,
+      "new_words_over_ganjoor": 2095,
+      "inputs": [
+        "01a39f73f960bb2760c06212fae373fc1f5d2cc433c47eba1a46de1cfc7e3793"
+      ],
+      "input_bytes": 10426218
+    },
+    "fawikinews": {
+      "licence": "CC BY 2.5",
+      "register": "modern prose",
+      "rows": 2323,
+      "retained_segments": 283,
+      "attempts": 250,
+      "accepted": 249,
+      "rejected": 1,
+      "forms": 127,
+      "alignment_failure_rate": 0.004,
+      "words": 124,
+      "new_words_over_ganjoor": 47,
+      "inputs": [
+        "debef42343ed9ebe22f809898d136b6c247b31b3fc1d5b5879933b56e1030306"
+      ],
+      "input_bytes": 3115833
+    },
+    "fawikiquote": {
+      "licence": "CC BY-SA 4.0",
+      "register": "modern prose",
+      "rows": 13375,
+      "retained_segments": 19022,
+      "attempts": 19778,
+      "accepted": 19765,
+      "rejected": 13,
+      "excluded_benchmark_segments": 55,
+      "forms": 6689,
+      "alignment_failure_rate": 0.0006572959854383659,
+      "words": 5756,
+      "new_words_over_ganjoor": 2948,
+      "inputs": [
+        "07810d81420eaafc7b3b843924503befe590b6f4fddbcfc29d0f9a6d23244bac"
+      ],
+      "input_bytes": 13953057
+    },
+    "fawikisource": {
+      "licence": "CC BY-SA 4.0",
+      "register": "mixed",
+      "rows": 31701,
+      "retained_segments": 58940,
+      "attempts": 134831,
+      "accepted": 134681,
+      "excluded_benchmark_segments": 3741,
+      "rejected": 150,
+      "excluded_benchmark_documents": 7,
+      "forms": 31730,
+      "alignment_failure_rate": 0.0011125038010546535,
+      "words": 24920,
+      "new_words_over_ganjoor": 13430,
+      "inputs": [
+        "48713ee90e9c9f6ecb717d3af2dd601691e81a4b1376c85221cce8f7cde7939d"
+      ],
+      "input_bytes": 67028393
+    },
+    "fawikivoyage": {
+      "licence": "CC BY-SA 4.0",
+      "register": "modern prose",
+      "rows": 7881,
+      "retained_segments": 1733,
+      "attempts": 1929,
+      "accepted": 1925,
+      "rejected": 4,
+      "excluded_benchmark_segments": 8,
+      "forms": 941,
+      "alignment_failure_rate": 0.002073613271124935,
+      "words": 906,
+      "new_words_over_ganjoor": 560,
+      "inputs": [
+        "dd5f9ee2e52ec7c744c0f6ad1fae282d5b98e1109a8151f444a8786a4323a110"
+      ],
+      "input_bytes": 6126007
+    },
+    "fawiktionary": {
+      "licence": "CC BY-SA 4.0",
+      "register": "Persian dictionary sections",
+      "rows": 117363,
+      "retained_segments": 50912,
+      "attempts": 8975,
+      "accepted": 8764,
+      "rejected": 211,
+      "excluded_benchmark_segments": 75,
+      "forms": 7083,
+      "alignment_failure_rate": 0.02350974930362117,
+      "words": 6153,
+      "new_words_over_ganjoor": 4369,
+      "inputs": [
+        "b6ac4153e1f80ba07ca22641134f3de482cf02d6b985ecbc54d907f856e3e95e"
+      ],
+      "input_bytes": 23562315
+    },
+    "ganjoor": {
+      "licence": "Licence unstated; historical verse; word counts only",
+      "register": "classical verse",
+      "rows": 108927,
+      "retained_segments": 2609027,
+      "attempts": 484180,
+      "accepted": 484088,
+      "excluded_benchmark_segments": 23743,
+      "rejected": 92,
+      "excluded_benchmark_documents": 216,
+      "forms": 74813,
+      "alignment_failure_rate": 0.0001900119790160684,
+      "words": 49906,
+      "new_words_over_ganjoor": 0,
+      "inputs": [
+        "08ab33c38074deff1c0c0afb92926c3719a045977a0927865393ef9580eddeff",
+        "4cbcfe2718fce3eae1c0b60a1b502c89ff77e9b7593f7f11b6364f877fc0344b"
+      ],
+      "input_bytes": 68205712
+    },
+    "ganjoor-poems": {
+      "licence": "Licence unstated; historical verse; word counts only",
+      "register": "classical verse",
+      "rows": 4510,
+      "retained_segments": 70470,
+      "attempts": 2487,
+      "accepted": 2487,
+      "excluded_benchmark_segments": 363,
+      "forms": 1687,
+      "alignment_failure_rate": 0.0,
+      "words": 1497,
+      "new_words_over_ganjoor": 0,
+      "inputs": [
+        "62c4ff418492c33fb7e53edc0f79fcac418a4d1a2fbac43ce0483edc48213c94",
+        "b937a75fa2891ed21abefcb96857b19496b9b5e269672e1a6225cb6e21fcf0f8",
+        "576ce56ec4752950432777aa5c35580b54b323c5ea471338b6438216c77aa68c",
+        "6e7ce7da897b10d755ee0d1ca5268847ec9c606be7c7bb4cbba77919e7bc61dd",
+        "06e13e97a40ed934229596de3b29c7d92d6f0554229ed12cbd9de5ff8808a0f3",
+        "c9f06a77220b864896f7b5d24ea045fe807f6aec21f1cf908bdaeb9df6aadf4f",
+        "2e609437eeb3ac8628a67c8b7e5cd802cf788bd9c9419928fc60cd7ffb693944",
+        "fd794506910f556cd24ddcb19cfeace0e087845b54eecf95c29ed60dd6b6b835",
+        "d6aa55613f144b827f7bbdd8050ef1f8b6c47d5577668d08a2ef87d8c9b57c18",
+        "7e95b03876ac679b91738787a154c0f8da997dfa8cdf95ee459be0e4ac98c8e4",
+        "169a47c94eb90403c7ffb3796322b12fb2797432aa1592a51f09852a5a001144",
+        "66a551fc2475765dad3f9e66a060deae8789cbe6ce8e80c41af61e635e44a7d9",
+        "c1c7150c3238663159c6ce89ac717f27eb74da269a66a02887a856bd87f558bc",
+        "44d3922bfd8f24395f4fda5469b3494b7407b2eb4f0212e6c96f5931c19705eb",
+        "c72811b3bf433a788612775a04cb7e413fd77fa576bab39e7998ebdf652c8be3",
+        "3acc126790396c8ec6ca9a092464c7959aed6626947328c548dbed88c2c1bd5e",
+        "e93d83dc8a19f0c5e58d65e1194b4ac8042fd69ef07ccbad77a4a1e16b371436",
+        "28ef905750406f33b1c7e7ee53f018f25d3571da51707266456067e9064ab1a2",
+        "95a23b138e15a981e622b9e936afe0a9912bde826e67aa99fbb0eed8c0a78255",
+        "dd86b252d858a809db89346c46476efd4f7148af1dcf6afbf3df5707061acf91",
+        "5ed89de57348fa98e287ce21525ba53e92930ede0e8886aa4e36a8083e5dc7ad",
+        "5ae8369aab07d451b346ae423fa987a43f2b9d051b23a67d34552ef1b2fc7aa1",
+        "30e73760f4b0f4675a6aa1be95edfd299cb1e0271d567699127deb927efde32e",
+        "788152b61007b38d0f1486a62f15ffc333d1ab51263d490228d8bf45a8d5bba2",
+        "443fe29234c1ada83584b9fa55c8058ea4f61cb6df9ae0a855add8c66342c6a4",
+        "e6a5b8e58d10c13036d9cf5ac71d4d1f0e8cb523a6f0a4de9de55068c645510c",
+        "2507f1739560e046562c9ceeec9975d818b2e29296c70a51767507c96dab823e",
+        "6b139bb5cf9515b830f057c2dcceea1d031091ca6db1acb1804b6917170cc344",
+        "b859317bf54b94fc587bfcd3639ad184adb1a7aef6c89108bad4f3d4747f74ca",
+        "83ae236a1b8bb0d5cacfd8ac61a8a410594feca339979ca5e95bfd12c639b63c"
+      ],
+      "input_bytes": 336435463
+    },
+    "homorich-train": {
+      "licence": "CC0",
+      "register": "modern prose and speech",
+      "rows": 506586,
+      "input_words": 5093317,
+      "paired_words": 4430089,
+      "ambiguous_sentence_pairs": 15537,
+      "excluded_benchmark_documents": 26115,
+      "attempts": 4414552,
+      "rejected": 132413,
+      "accepted": 4282139,
+      "unique_pairs": 75450,
+      "forms": 50084,
+      "alignment_failure_rate": 0.029994663105112365,
+      "words": 42925,
+      "new_words_over_ganjoor": 36666,
+      "inputs": [
+        "dfff7621876a2e335e065d80744b8ea2e839d309efb120bf0665c3f666231e03"
+      ],
+      "input_bytes": 128405209
+    },
+    "kaikki-classical": {
+      "licence": "CC BY-SA 4.0",
+      "register": "classical",
+      "rows": 11480,
+      "attempts": 11480,
+      "accepted": 8751,
+      "rejected": 2729,
+      "forms": 7473,
+      "alignment_failure_rate": 0.2377177700348432,
+      "words": 6984,
+      "new_words_over_ganjoor": 4266,
+      "inputs": [
+        "e148779c4276fa8187407340c590885350518540b19467f2c2e12509d8ccd97d"
+      ],
+      "input_bytes": 10897395
+    },
+    "kaikki-dari": {
+      "licence": "CC BY-SA 4.0",
+      "register": "dari",
+      "rows": 24748,
+      "attempts": 24748,
+      "accepted": 7834,
+      "rejected": 16914,
+      "forms": 4979,
+      "alignment_failure_rate": 0.6834491676095038,
+      "words": 4659,
+      "new_words_over_ganjoor": 2684,
+      "inputs": [
+        "e148779c4276fa8187407340c590885350518540b19467f2c2e12509d8ccd97d"
+      ],
+      "input_bytes": 10897395
+    },
+    "kaikki-iran": {
+      "licence": "CC BY-SA 4.0",
+      "register": "iran",
+      "rows": 13063,
+      "attempts": 13063,
+      "accepted": 5114,
+      "rejected": 7949,
+      "forms": 4323,
+      "alignment_failure_rate": 0.6085125928194136,
+      "words": 4075,
+      "new_words_over_ganjoor": 2424,
+      "inputs": [
+        "e148779c4276fa8187407340c590885350518540b19467f2c2e12509d8ccd97d"
+      ],
+      "input_bytes": 10897395
+    },
+    "kaikki-tajik": {
+      "licence": "CC BY-SA 4.0",
+      "register": "tajik",
+      "rows": 11240,
+      "attempts": 11240,
+      "accepted": 2615,
+      "rejected": 8625,
+      "forms": 2273,
+      "alignment_failure_rate": 0.7673487544483986,
+      "words": 2105,
+      "new_words_over_ganjoor": 919,
+      "inputs": [
+        "e148779c4276fa8187407340c590885350518540b19467f2c2e12509d8ccd97d"
+      ],
+      "input_bytes": 10897395
+    },
+    "kaikki-unspecified": {
+      "licence": "CC BY-SA 4.0",
+      "register": "unspecified",
+      "rows": 938,
+      "attempts": 938,
+      "accepted": 372,
+      "rejected": 566,
+      "forms": 325,
+      "alignment_failure_rate": 0.603411513859275,
+      "words": 301,
+      "new_words_over_ganjoor": 216,
+      "inputs": [
+        "e148779c4276fa8187407340c590885350518540b19467f2c2e12509d8ccd97d"
+      ],
+      "input_bytes": 10897395
+    },
+    "mizan": {
+      "licence": "CC BY 4.0 compilation; underlying translations separately protected; word facts only",
+      "register": "modern prose",
+      "rows": 862036,
+      "retained_segments": 31231,
+      "attempts": 31532,
+      "accepted": 31529,
+      "excluded_benchmark_documents": 23,
+      "rejected": 3,
+      "excluded_benchmark_segments": 5,
+      "forms": 1940,
+      "alignment_failure_rate": 9.514144361283775e-05,
+      "words": 1754,
+      "new_words_over_ganjoor": 873,
+      "inputs": [
+        "912d5f8c318ca054b2427e20c2046db77233780e9fc2c8122ea89a3fc784f55a"
+      ],
+      "input_bytes": 64246868
+    },
+    "naskban-ocr": {
+      "licence": "Public-domain Mohl edition; digital witness licence unstated",
+      "register": "classical verse",
+      "rows": 2333,
+      "excluded_benchmark_segments": 10658,
+      "retained_segments": 2228,
+      "attempts": 1263,
+      "accepted": 1263,
+      "excluded_benchmark_documents": 2,
+      "forms": 640,
+      "alignment_failure_rate": 0.0,
+      "words": 574,
+      "new_words_over_ganjoor": 247,
+      "inputs": [
+        "8ee35ba53eb0c0de60db4d19c68bdf1e9e4b632535ac5af767b7729655381429",
+        "d96ec6ccad020a6668942dcac925aebb065b2c1b02ff5761d0a2f03d75bbe5c9",
+        "3da5164b7326a6fe004fd5772b14378024d5ead387601c58c2f3cc333b6b25ee",
+        "6d3d5b51b051e7c6d7218358eda4ecf67f0f7c644cf817e933b96874c37189b5"
+      ],
+      "input_bytes": 1638083
+    },
+    "naskban-ocr-31322": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 338,
+      "retained_segments": 12,
+      "attempts": 19,
+      "accepted": 19,
+      "excluded_benchmark_segments": 285,
+      "excluded_benchmark_documents": 2,
+      "forms": 15,
+      "alignment_failure_rate": 0.0,
+      "words": 15,
+      "new_words_over_ganjoor": 3,
+      "inputs": [
+        "eed0a3b10aa4cc8811b39d1ab9a3c1589a7bba0c35169370c537ba51c4831d69"
+      ],
+      "input_bytes": 439087
+    },
+    "naskban-ocr-31323": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 415,
+      "excluded_benchmark_segments": 441,
+      "retained_segments": 27,
+      "attempts": 42,
+      "accepted": 42,
+      "forms": 28,
+      "alignment_failure_rate": 0.0,
+      "words": 28,
+      "new_words_over_ganjoor": 5,
+      "inputs": [
+        "740ac61eea35aef8b9f6b04dd8bd57ca7f68a99d3a9f2b31c74bf4a767b33e29"
+      ],
+      "input_bytes": 615729
+    },
+    "naskban-ocr-31324": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 364,
+      "excluded_benchmark_segments": 625,
+      "retained_segments": 68,
+      "attempts": 82,
+      "accepted": 82,
+      "forms": 56,
+      "alignment_failure_rate": 0.0,
+      "words": 54,
+      "new_words_over_ganjoor": 17,
+      "inputs": [
+        "5727eb6fed78e71565e49536300a9fe0bab2b5a01c529366d765f4b6477b42cc"
+      ],
+      "input_bytes": 427335
+    },
+    "naskban-ocr-31325": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 346,
+      "excluded_benchmark_segments": 553,
+      "retained_segments": 103,
+      "attempts": 46,
+      "accepted": 46,
+      "forms": 28,
+      "alignment_failure_rate": 0.0,
+      "words": 28,
+      "new_words_over_ganjoor": 4,
+      "inputs": [
+        "797fad10848ae4ecd5ed586321fc41b35bda997cc3fc5164ddb67fc00fd2f944"
+      ],
+      "input_bytes": 422636
+    },
+    "naskban-ocr-31326": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 509,
+      "excluded_benchmark_segments": 534,
+      "retained_segments": 209,
+      "excluded_benchmark_documents": 1,
+      "attempts": 1,
+      "accepted": 1,
+      "forms": 1,
+      "alignment_failure_rate": 0.0,
+      "words": 1,
+      "new_words_over_ganjoor": 0,
+      "inputs": [
+        "d4cfa8da1dcea74b6d74921681da973971741ea0b4a40116e690eb1d316a388f"
+      ],
+      "input_bytes": 630956
+    },
+    "naskban-ocr-31327": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 525,
+      "excluded_benchmark_segments": 639,
+      "retained_segments": 172,
+      "attempts": 19,
+      "accepted": 19,
+      "forms": 19,
+      "alignment_failure_rate": 0.0,
+      "words": 18,
+      "new_words_over_ganjoor": 2,
+      "inputs": [
+        "7c7a58ee67db288286c1a293dffc24f27d25ea87fcdb1af15f5218a65780895a"
+      ],
+      "input_bytes": 704065
+    },
+    "naskban-ocr-41420": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 546,
+      "excluded_benchmark_segments": 296,
+      "excluded_benchmark_documents": 1,
+      "retained_segments": 194,
+      "attempts": 2,
+      "accepted": 2,
+      "forms": 1,
+      "alignment_failure_rate": 0.0,
+      "words": 1,
+      "new_words_over_ganjoor": 0,
+      "inputs": [
+        "d02fec5375b170f0b41933db8cbce2c6c1aa83c4fcf1d053eb58425ef2be1e30"
+      ],
+      "input_bytes": 757617
+    },
+    "naskban-ocr-41421": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical verse, modern edition; OCR",
+      "rows": 408,
+      "excluded_benchmark_segments": 527,
+      "retained_segments": 97,
+      "attempts": 12,
+      "accepted": 12,
+      "forms": 10,
+      "alignment_failure_rate": 0.0,
+      "words": 10,
+      "new_words_over_ganjoor": 4,
+      "inputs": [
+        "708839b8a05898e0b34c82adb0fcffdca239ac45c470a7f20135f0d68bd8779a"
+      ],
+      "input_bytes": 598876
+    },
+    "naskban-ocr-42067": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "classical dictionary; OCR",
+      "rows": 899,
+      "retained_segments": 32,
+      "attempts": 32,
+      "accepted": 32,
+      "excluded_benchmark_segments": 26,
+      "forms": 27,
+      "alignment_failure_rate": 0.0,
+      "words": 27,
+      "new_words_over_ganjoor": 17,
+      "inputs": [
+        "4f93a1774a448526934ca48d60689506e3c5630c167893b740b2a0f46dbcb043"
+      ],
+      "input_bytes": 1750318
+    },
+    "references-ocr-ayin-negaresh-va-virayesh-anvari": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 117,
+      "retained_segments": 152,
+      "attempts": 202,
+      "accepted": 202,
+      "forms": 106,
+      "alignment_failure_rate": 0.0,
+      "words": 104,
+      "new_words_over_ganjoor": 25,
+      "inputs": [
+        "ae305ac0f87d07e89db5b760e16acc18d993c7c56ab64de3eff0fd114b9ab457"
+      ],
+      "input_bytes": 123430
+    },
+    "references-ocr-dastur-zaban-farsi-emruz-arjang": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 159,
+      "retained_segments": 250,
+      "attempts": 315,
+      "accepted": 315,
+      "excluded_benchmark_segments": 1,
+      "forms": 115,
+      "alignment_failure_rate": 0.0,
+      "words": 112,
+      "new_words_over_ganjoor": 31,
+      "inputs": [
+        "93a875a57a52ba11a4dbceb41ba5cf0cfdb283ac53f81380bc5a1a0b06446fd0"
+      ],
+      "input_bytes": 93604
+    },
+    "references-ocr-dastur-zaban-farsi-panj-ostad": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 258,
+      "retained_segments": 65,
+      "attempts": 96,
+      "accepted": 96,
+      "forms": 77,
+      "alignment_failure_rate": 0.0,
+      "words": 76,
+      "new_words_over_ganjoor": 39,
+      "inputs": [
+        "60cab7b47fe1642a429d62c0c69e5424130a43bf61bde7e2dc58099ca107a75a"
+      ],
+      "input_bytes": 149420
+    },
+    "references-ocr-farhang-emlaei-1394": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 28274,
+      "retained_segments": 2394,
+      "attempts": 2571,
+      "accepted": 2571,
+      "excluded_benchmark_documents": 5,
+      "forms": 1502,
+      "alignment_failure_rate": 0.0,
+      "words": 1401,
+      "new_words_over_ganjoor": 879,
+      "inputs": [
+        "5f6be23b99c1795b2b14bb15d43268a4db12563baf0b1bb2b2b54c9884fe987f"
+      ],
+      "input_bytes": 829086
+    },
+    "references-ocr-farhang-moin-j1": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 15921,
+      "excluded_benchmark_documents": 1,
+      "retained_segments": 934,
+      "attempts": 1001,
+      "accepted": 1001,
+      "forms": 182,
+      "alignment_failure_rate": 0.0,
+      "words": 175,
+      "new_words_over_ganjoor": 55,
+      "inputs": [
+        "4bd3b9d156793ee99f81f251837138fd1925cc7b7fe4a0c81b1da106d2c9a2ce"
+      ],
+      "input_bytes": 1966133
+    },
+    "references-ocr-farhang-moin-j2": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 12168,
+      "retained_segments": 1334,
+      "attempts": 1458,
+      "accepted": 1458,
+      "forms": 168,
+      "alignment_failure_rate": 0.0,
+      "words": 167,
+      "new_words_over_ganjoor": 59,
+      "inputs": [
+        "92771235e3264b97f89cc7fd214e6fe41c085956cd43a3710255f76f367da96f"
+      ],
+      "input_bytes": 1775997
+    },
+    "references-ocr-ghalat-nanevisim-najafi": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 1112,
+      "retained_segments": 1577,
+      "attempts": 2255,
+      "accepted": 2255,
+      "excluded_benchmark_segments": 6,
+      "forms": 885,
+      "alignment_failure_rate": 0.0,
+      "words": 760,
+      "new_words_over_ganjoor": 353,
+      "inputs": [
+        "134f77dbb841ed368bc1754de721492839ab1c879cd02032911c6a95d0594d2c"
+      ],
+      "input_bytes": 385541
+    },
+    "references-ocr-persian-grammar-reference-revision-mace": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 192,
+      "retained_segments": 65,
+      "attempts": 79,
+      "accepted": 79,
+      "forms": 60,
+      "alignment_failure_rate": 0.0,
+      "words": 51,
+      "new_words_over_ganjoor": 12,
+      "inputs": [
+        "d7de65b470288e89e515e99ffabd073de3f169f29d1f637bc1230943cfb5c3a6"
+      ],
+      "input_bytes": 126661
+    },
+    "references-ocr-shalude-nahv-zaban-farsi": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 187,
+      "retained_segments": 137,
+      "attempts": 159,
+      "accepted": 159,
+      "forms": 59,
+      "alignment_failure_rate": 0.0,
+      "words": 55,
+      "new_words_over_ganjoor": 9,
+      "inputs": [
+        "4ef36725cd141c39ee543abb0ff6a5b9ad48df604d64cc044759059efe6225c1"
+      ],
+      "input_bytes": 153323
+    },
+    "references-ocr-tosif-sakhteman-dasturi-bateni": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 175,
+      "retained_segments": 146,
+      "attempts": 184,
+      "accepted": 184,
+      "forms": 59,
+      "alignment_failure_rate": 0.0,
+      "words": 57,
+      "new_words_over_ganjoor": 17,
+      "inputs": [
+        "c4eb41426e0b5e5e541f8bb1ec8ae59a381bd5977d6da29954748f60efa60dac"
+      ],
+      "input_bytes": 108730
+    },
+    "references-ocr-vazn-e-sheer-e-farsi-az-diruz-ta-emruz-1390": {
+      "licence": "Printed edition, licence unstated; word facts only",
+      "register": "modern reference/dictionary; OCR",
+      "rows": 282,
+      "retained_segments": 592,
+      "attempts": 1057,
+      "accepted": 1019,
+      "excluded_benchmark_segments": 2,
+      "rejected": 38,
+      "forms": 407,
+      "alignment_failure_rate": 0.03595080416272469,
+      "words": 385,
+      "new_words_over_ganjoor": 153,
+      "inputs": [
+        "78197b73618bea27cb0c3621bee3765c8e35259c35b5e29c4f1f17a1ea5ef104"
+      ],
+      "input_bytes": 204999
+    },
+    "steingass": {
+      "licence": "Public domain (1892); MIT digital transcription",
+      "register": "classical dictionary",
+      "rows": 61323,
+      "attempts": 67636,
+      "rejected": 35352,
+      "accepted": 32284,
+      "forms": 31640,
+      "alignment_failure_rate": 0.5226802294635993,
+      "words": 29704,
+      "new_words_over_ganjoor": 24137,
+      "inputs": [
+        "528f0a2b7978f1342e72cedc60d911b2f72f23cbe170962689b5b95e7ff239aa"
+      ],
+      "input_bytes": 9929360
+    },
+    "tgwiktionary": {
+      "licence": "CC BY-SA 4.0",
+      "register": "Tajik cognates; conservative vowel mapping",
+      "rows": 27831,
+      "attempts": 115,
+      "accepted": 64,
+      "rejected": 51,
+      "forms": 64,
+      "alignment_failure_rate": 0.4434782608695652,
+      "words": 64,
+      "new_words_over_ganjoor": 24,
+      "inputs": [
+        "e1446b3b5e0f13813228ab69dfbb7f20ca32149362dcd5118dac366a91ed9e2e"
+      ],
+      "input_bytes": 2832419
+    }
+  },
+  "attribution": "vowels-attribution.jsonl.gz",
+  "provenance": "Word forms, counts and parameters only. Held-out documents excluded; headword exclusions apply to dictionary entries only. Benchmark/development sentences excluded across every text source.",
+  "licence": "CC BY-SA 4.0 combined derivative; source rights retained",
+  "build": "41274a5404256e02266167e7e750ad2e7d5f03075d4e986f3efbe339a85bd949",
+  "inputs": {
+    "150cfc1cfc316abd859336c668815bad0a47d69c0733d654adf32821a2b7b446": {
+      "bytes": 472604,
+      "sha256": "150cfc1cfc316abd859336c668815bad0a47d69c0733d654adf32821a2b7b446",
+      "format": "parquet",
+      "file": "ingested/books/pdf.parquet"
+    },
+    "023a3c7c9efacd8280b1af45f32b5781733e7664d9811b24a89e220fb0d4625c": {
+      "bytes": 756391,
+      "sha256": "023a3c7c9efacd8280b1af45f32b5781733e7664d9811b24a89e220fb0d4625c",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentence-collector.txt.parquet"
+    },
+    "f8fa7a61ee2d61e9aaf0c9763cb1470741f1443fe1ab6cedaf747730c04f6502": {
+      "bytes": 21038,
+      "sha256": "f8fa7a61ee2d61e9aaf0c9763cb1470741f1443fe1ab6cedaf747730c04f6502",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences01.txt.parquet"
+    },
+    "20a3faf3f5f0ebd8b5c5aeeace14b50b78379441784f21aa86698dd1aeb3150f": {
+      "bytes": 11794,
+      "sha256": "20a3faf3f5f0ebd8b5c5aeeace14b50b78379441784f21aa86698dd1aeb3150f",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences02.txt.parquet"
+    },
+    "fd0d3f50686d58a1c58968da78dd609a4cc352003618d801b3c6f9bca9b945f9": {
+      "bytes": 11989,
+      "sha256": "fd0d3f50686d58a1c58968da78dd609a4cc352003618d801b3c6f9bca9b945f9",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences03.txt.parquet"
+    },
+    "240d1bee1ce07ea47dc2b0c4b2437931cece7e1960928e5672fd7cbca53cc720": {
+      "bytes": 9848,
+      "sha256": "240d1bee1ce07ea47dc2b0c4b2437931cece7e1960928e5672fd7cbca53cc720",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences04.txt.parquet"
+    },
+    "2704b34c861fdfd02ba69bf6d528a06f1c95b543e453029b8cc6377bbf5cb50e": {
+      "bytes": 11060,
+      "sha256": "2704b34c861fdfd02ba69bf6d528a06f1c95b543e453029b8cc6377bbf5cb50e",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences05.txt.parquet"
+    },
+    "75ce850a8e254aa1e6afc5db08e67d25c09d1ddc4dc2ae527ff03125fe2ac16c": {
+      "bytes": 9683,
+      "sha256": "75ce850a8e254aa1e6afc5db08e67d25c09d1ddc4dc2ae527ff03125fe2ac16c",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences06.txt.parquet"
+    },
+    "6bb707d3c3edd18bf17a992db0213f7640a09f77e6076d0f8f28f544c9d8f046": {
+      "bytes": 9401,
+      "sha256": "6bb707d3c3edd18bf17a992db0213f7640a09f77e6076d0f8f28f544c9d8f046",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences07.txt.parquet"
+    },
+    "397a92bdaaa2e1b2e7cdf765e3f152f670d79b9541379455529c77b32c7daa1f": {
+      "bytes": 9444,
+      "sha256": "397a92bdaaa2e1b2e7cdf765e3f152f670d79b9541379455529c77b32c7daa1f",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences08.txt.parquet"
+    },
+    "564f7860c7bd981c193303bc181aa4dfc735d397f92dfa9b3baf08da0211d70e": {
+      "bytes": 8894,
+      "sha256": "564f7860c7bd981c193303bc181aa4dfc735d397f92dfa9b3baf08da0211d70e",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences09.txt.parquet"
+    },
+    "b46163d93d7699e3f5e467b72f1392d5d5129a0c46eee35fd0528f088285cd0c": {
+      "bytes": 8710,
+      "sha256": "b46163d93d7699e3f5e467b72f1392d5d5129a0c46eee35fd0528f088285cd0c",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences10.txt.parquet"
+    },
+    "05436da3b6445106b6f0f3fa463279e77c6d4f604eb0b022f8b133124f1a88de": {
+      "bytes": 10502,
+      "sha256": "05436da3b6445106b6f0f3fa463279e77c6d4f604eb0b022f8b133124f1a88de",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences11.txt.parquet"
+    },
+    "9795119f8c55dbd6b2f8804175524e1923bf43215aad8cf5af8415aab2fc9084": {
+      "bytes": 14778,
+      "sha256": "9795119f8c55dbd6b2f8804175524e1923bf43215aad8cf5af8415aab2fc9084",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences12.txt.parquet"
+    },
+    "a8d0529a6baa32d520d4a198cd9ca2ae0ff69a27ea0b6f48b0182bdc93f35158": {
+      "bytes": 12946,
+      "sha256": "a8d0529a6baa32d520d4a198cd9ca2ae0ff69a27ea0b6f48b0182bdc93f35158",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences13.txt.parquet"
+    },
+    "0a24c2e92cebebdd81681c6625e90486ff0d36e534148b479fc95ad72769392d": {
+      "bytes": 21112,
+      "sha256": "0a24c2e92cebebdd81681c6625e90486ff0d36e534148b479fc95ad72769392d",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences14.txt.parquet"
+    },
+    "b5ccfae48fbf61e9bba6f1347ed73d3a1821a42f5b1ef53389dcc3fbe90c9d8c": {
+      "bytes": 13860,
+      "sha256": "b5ccfae48fbf61e9bba6f1347ed73d3a1821a42f5b1ef53389dcc3fbe90c9d8c",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences15.txt.parquet"
+    },
+    "6472d379ea727bbcaab46024dff703464d560202e1d20b9ea6b6510a0c0fe8d6": {
+      "bytes": 10257,
+      "sha256": "6472d379ea727bbcaab46024dff703464d560202e1d20b9ea6b6510a0c0fe8d6",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences16.txt.parquet"
+    },
+    "3b34f7cce367373986e589db0de4a4627c6da66fb2eea441452e4ea69a510146": {
+      "bytes": 11832,
+      "sha256": "3b34f7cce367373986e589db0de4a4627c6da66fb2eea441452e4ea69a510146",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences17.txt.parquet"
+    },
+    "00bbcdaf1251d25c29bc4c13b61c8bac6e54714efe7804af168f835c6febb431": {
+      "bytes": 16390,
+      "sha256": "00bbcdaf1251d25c29bc4c13b61c8bac6e54714efe7804af168f835c6febb431",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences18.txt.parquet"
+    },
+    "123a92df942df18a706c42d151b02525983c3400a96cdd0fec0a18be14ee8b71": {
+      "bytes": 10659,
+      "sha256": "123a92df942df18a706c42d151b02525983c3400a96cdd0fec0a18be14ee8b71",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences19.txt.parquet"
+    },
+    "62b3f150b9a092cb6aed5f56a86b917cc5c31a3f51626c214491f21aefe86504": {
+      "bytes": 11197,
+      "sha256": "62b3f150b9a092cb6aed5f56a86b917cc5c31a3f51626c214491f21aefe86504",
+      "format": "parquet",
+      "file": "ingested/common-voice/raw/server/data/fa/sentences20.txt.parquet"
+    },
+    "e9d3a5d34542a1fac4f8a99ee510745ad6e0561b76419bb381e0ad635b5fd20d": {
+      "bytes": 141483080,
+      "sha256": "e9d3a5d34542a1fac4f8a99ee510745ad6e0561b76419bb381e0ad635b5fd20d",
+      "format": "parquet",
+      "file": "ingested/dehkhoda/dehkhoda.zip.parquet"
+    },
+    "7f2fe67175ea201e296e7b23a36cc99896343b96aeedb2e61ea871c1e620f375": {
+      "bytes": 1870631294,
+      "sha256": "7f2fe67175ea201e296e7b23a36cc99896343b96aeedb2e61ea871c1e620f375",
+      "format": "parquet",
+      "file": "ingested/fawiki/fawiki-20261001-pages-meta-current.xml.bz2.parquet"
+    },
+    "01a39f73f960bb2760c06212fae373fc1f5d2cc433c47eba1a46de1cfc7e3793": {
+      "bytes": 10426218,
+      "sha256": "01a39f73f960bb2760c06212fae373fc1f5d2cc433c47eba1a46de1cfc7e3793",
+      "format": "parquet",
+      "file": "ingested/fawikibooks/fawikibooks-latest-pages-meta-current.xml.bz2.parquet"
+    },
+    "debef42343ed9ebe22f809898d136b6c247b31b3fc1d5b5879933b56e1030306": {
+      "bytes": 3115833,
+      "sha256": "debef42343ed9ebe22f809898d136b6c247b31b3fc1d5b5879933b56e1030306",
+      "format": "parquet",
+      "file": "ingested/fawikinews/fawikinews-latest-pages-meta-current.xml.bz2.parquet"
+    },
+    "07810d81420eaafc7b3b843924503befe590b6f4fddbcfc29d0f9a6d23244bac": {
+      "bytes": 13953057,
+      "sha256": "07810d81420eaafc7b3b843924503befe590b6f4fddbcfc29d0f9a6d23244bac",
+      "format": "parquet",
+      "file": "ingested/fawikiquote/fawikiquote-latest-pages-meta-current.xml.bz2.parquet"
+    },
+    "48713ee90e9c9f6ecb717d3af2dd601691e81a4b1376c85221cce8f7cde7939d": {
+      "bytes": 67028393,
+      "sha256": "48713ee90e9c9f6ecb717d3af2dd601691e81a4b1376c85221cce8f7cde7939d",
+      "format": "parquet",
+      "file": "ingested/fawikisource/fawikisource-latest-pages-meta-current.xml.bz2.parquet"
+    },
+    "dd5f9ee2e52ec7c744c0f6ad1fae282d5b98e1109a8151f444a8786a4323a110": {
+      "bytes": 6126007,
+      "sha256": "dd5f9ee2e52ec7c744c0f6ad1fae282d5b98e1109a8151f444a8786a4323a110",
+      "format": "parquet",
+      "file": "ingested/fawikivoyage/fawikivoyage-latest-pages-meta-current.xml.bz2.parquet"
+    },
+    "62c4ff418492c33fb7e53edc0f79fcac418a4d1a2fbac43ce0483edc48213c94": {
+      "bytes": 1796246,
+      "sha256": "62c4ff418492c33fb7e53edc0f79fcac418a4d1a2fbac43ce0483edc48213c94",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-051417.jsonl.zst.parquet"
+    },
+    "b937a75fa2891ed21abefcb96857b19496b9b5e269672e1a6225cb6e21fcf0f8": {
+      "bytes": 4285703,
+      "sha256": "b937a75fa2891ed21abefcb96857b19496b9b5e269672e1a6225cb6e21fcf0f8",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-054255.jsonl.zst.parquet"
+    },
+    "576ce56ec4752950432777aa5c35580b54b323c5ea471338b6438216c77aa68c": {
+      "bytes": 27449571,
+      "sha256": "576ce56ec4752950432777aa5c35580b54b323c5ea471338b6438216c77aa68c",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-060720.jsonl.zst.parquet"
+    },
+    "6e7ce7da897b10d755ee0d1ca5268847ec9c606be7c7bb4cbba77919e7bc61dd": {
+      "bytes": 18818861,
+      "sha256": "6e7ce7da897b10d755ee0d1ca5268847ec9c606be7c7bb4cbba77919e7bc61dd",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-070332.jsonl.zst.parquet"
+    },
+    "06e13e97a40ed934229596de3b29c7d92d6f0554229ed12cbd9de5ff8808a0f3": {
+      "bytes": 11003832,
+      "sha256": "06e13e97a40ed934229596de3b29c7d92d6f0554229ed12cbd9de5ff8808a0f3",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-080300.jsonl.zst.parquet"
+    },
+    "c9f06a77220b864896f7b5d24ea045fe807f6aec21f1cf908bdaeb9df6aadf4f": {
+      "bytes": 8684203,
+      "sha256": "c9f06a77220b864896f7b5d24ea045fe807f6aec21f1cf908bdaeb9df6aadf4f",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-085558.jsonl.zst.parquet"
+    },
+    "2e609437eeb3ac8628a67c8b7e5cd802cf788bd9c9419928fc60cd7ffb693944": {
+      "bytes": 6644457,
+      "sha256": "2e609437eeb3ac8628a67c8b7e5cd802cf788bd9c9419928fc60cd7ffb693944",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-095005.jsonl.zst.parquet"
+    },
+    "fd794506910f556cd24ddcb19cfeace0e087845b54eecf95c29ed60dd6b6b835": {
+      "bytes": 13854155,
+      "sha256": "fd794506910f556cd24ddcb19cfeace0e087845b54eecf95c29ed60dd6b6b835",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-104236.jsonl.zst.parquet"
+    },
+    "d6aa55613f144b827f7bbdd8050ef1f8b6c47d5577668d08a2ef87d8c9b57c18": {
+      "bytes": 13840394,
+      "sha256": "d6aa55613f144b827f7bbdd8050ef1f8b6c47d5577668d08a2ef87d8c9b57c18",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-113432.jsonl.zst.parquet"
+    },
+    "7e95b03876ac679b91738787a154c0f8da997dfa8cdf95ee459be0e4ac98c8e4": {
+      "bytes": 11961599,
+      "sha256": "7e95b03876ac679b91738787a154c0f8da997dfa8cdf95ee459be0e4ac98c8e4",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-122936.jsonl.zst.parquet"
+    },
+    "169a47c94eb90403c7ffb3796322b12fb2797432aa1592a51f09852a5a001144": {
+      "bytes": 10701647,
+      "sha256": "169a47c94eb90403c7ffb3796322b12fb2797432aa1592a51f09852a5a001144",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-132420.jsonl.zst.parquet"
+    },
+    "66a551fc2475765dad3f9e66a060deae8789cbe6ce8e80c41af61e635e44a7d9": {
+      "bytes": 8399788,
+      "sha256": "66a551fc2475765dad3f9e66a060deae8789cbe6ce8e80c41af61e635e44a7d9",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-141637.jsonl.zst.parquet"
+    },
+    "c1c7150c3238663159c6ce89ac717f27eb74da269a66a02887a856bd87f558bc": {
+      "bytes": 16868692,
+      "sha256": "c1c7150c3238663159c6ce89ac717f27eb74da269a66a02887a856bd87f558bc",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-151017.jsonl.zst.parquet"
+    },
+    "44d3922bfd8f24395f4fda5469b3494b7407b2eb4f0212e6c96f5931c19705eb": {
+      "bytes": 20002990,
+      "sha256": "44d3922bfd8f24395f4fda5469b3494b7407b2eb4f0212e6c96f5931c19705eb",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-162817.jsonl.zst.parquet"
+    },
+    "c72811b3bf433a788612775a04cb7e413fd77fa576bab39e7998ebdf652c8be3": {
+      "bytes": 9921775,
+      "sha256": "c72811b3bf433a788612775a04cb7e413fd77fa576bab39e7998ebdf652c8be3",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-175047.jsonl.zst.parquet"
+    },
+    "3acc126790396c8ec6ca9a092464c7959aed6626947328c548dbed88c2c1bd5e": {
+      "bytes": 11574530,
+      "sha256": "3acc126790396c8ec6ca9a092464c7959aed6626947328c548dbed88c2c1bd5e",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-184208.jsonl.zst.parquet"
+    },
+    "e93d83dc8a19f0c5e58d65e1194b4ac8042fd69ef07ccbad77a4a1e16b371436": {
+      "bytes": 15605497,
+      "sha256": "e93d83dc8a19f0c5e58d65e1194b4ac8042fd69ef07ccbad77a4a1e16b371436",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-193310.jsonl.zst.parquet"
+    },
+    "28ef905750406f33b1c7e7ee53f018f25d3571da51707266456067e9064ab1a2": {
+      "bytes": 13131090,
+      "sha256": "28ef905750406f33b1c7e7ee53f018f25d3571da51707266456067e9064ab1a2",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-203035.jsonl.zst.parquet"
+    },
+    "95a23b138e15a981e622b9e936afe0a9912bde826e67aa99fbb0eed8c0a78255": {
+      "bytes": 7843079,
+      "sha256": "95a23b138e15a981e622b9e936afe0a9912bde826e67aa99fbb0eed8c0a78255",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-212247.jsonl.zst.parquet"
+    },
+    "dd86b252d858a809db89346c46476efd4f7148af1dcf6afbf3df5707061acf91": {
+      "bytes": 8315053,
+      "sha256": "dd86b252d858a809db89346c46476efd4f7148af1dcf6afbf3df5707061acf91",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261020-221314.jsonl.zst.parquet"
+    },
+    "5ed89de57348fa98e287ce21525ba53e92930ede0e8886aa4e36a8083e5dc7ad": {
+      "bytes": 5607219,
+      "sha256": "5ed89de57348fa98e287ce21525ba53e92930ede0e8886aa4e36a8083e5dc7ad",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-020832.jsonl.zst.parquet"
+    },
+    "5ae8369aab07d451b346ae423fa987a43f2b9d051b23a67d34552ef1b2fc7aa1": {
+      "bytes": 9959002,
+      "sha256": "5ae8369aab07d451b346ae423fa987a43f2b9d051b23a67d34552ef1b2fc7aa1",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-030121.jsonl.zst.parquet"
+    },
+    "30e73760f4b0f4675a6aa1be95edfd299cb1e0271d567699127deb927efde32e": {
+      "bytes": 10844429,
+      "sha256": "30e73760f4b0f4675a6aa1be95edfd299cb1e0271d567699127deb927efde32e",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-035158.jsonl.zst.parquet"
+    },
+    "788152b61007b38d0f1486a62f15ffc333d1ab51263d490228d8bf45a8d5bba2": {
+      "bytes": 11469570,
+      "sha256": "788152b61007b38d0f1486a62f15ffc333d1ab51263d490228d8bf45a8d5bba2",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-044203.jsonl.zst.parquet"
+    },
+    "443fe29234c1ada83584b9fa55c8058ea4f61cb6df9ae0a855add8c66342c6a4": {
+      "bytes": 12879305,
+      "sha256": "443fe29234c1ada83584b9fa55c8058ea4f61cb6df9ae0a855add8c66342c6a4",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-053414.jsonl.zst.parquet"
+    },
+    "e6a5b8e58d10c13036d9cf5ac71d4d1f0e8cb523a6f0a4de9de55068c645510c": {
+      "bytes": 10795357,
+      "sha256": "e6a5b8e58d10c13036d9cf5ac71d4d1f0e8cb523a6f0a4de9de55068c645510c",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-062509.jsonl.zst.parquet"
+    },
+    "2507f1739560e046562c9ceeec9975d818b2e29296c70a51767507c96dab823e": {
+      "bytes": 8258697,
+      "sha256": "2507f1739560e046562c9ceeec9975d818b2e29296c70a51767507c96dab823e",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-071535.jsonl.zst.parquet"
+    },
+    "6b139bb5cf9515b830f057c2dcceea1d031091ca6db1acb1804b6917170cc344": {
+      "bytes": 10122928,
+      "sha256": "6b139bb5cf9515b830f057c2dcceea1d031091ca6db1acb1804b6917170cc344",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-080746.jsonl.zst.parquet"
+    },
+    "b859317bf54b94fc587bfcd3639ad184adb1a7aef6c89108bad4f3d4747f74ca": {
+      "bytes": 11375444,
+      "sha256": "b859317bf54b94fc587bfcd3639ad184adb1a7aef6c89108bad4f3d4747f74ca",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-085809.jsonl.zst.parquet"
+    },
+    "83ae236a1b8bb0d5cacfd8ac61a8a410594feca339979ca5e95bfd12c639b63c": {
+      "bytes": 4420350,
+      "sha256": "83ae236a1b8bb0d5cacfd8ac61a8a410594feca339979ca5e95bfd12c639b63c",
+      "format": "parquet",
+      "file": "ingested/ganjoor-poems/pages/20261022-094738.jsonl.zst.parquet"
+    },
+    "08ab33c38074deff1c0c0afb92926c3719a045977a0927865393ef9580eddeff": {
+      "bytes": 2419551,
+      "sha256": "08ab33c38074deff1c0c0afb92926c3719a045977a0927865393ef9580eddeff",
+      "format": "parquet",
+      "file": "ingested/ganjoor/api/2026-08-03.parquet"
+    },
+    "4cbcfe2718fce3eae1c0b60a1b502c89ff77e9b7593f7f11b6364f877fc0344b": {
+      "bytes": 65786161,
+      "sha256": "4cbcfe2718fce3eae1c0b60a1b502c89ff77e9b7593f7f11b6364f877fc0344b",
+      "format": "parquet",
+      "file": "ingested/ganjoor/desktop/v3.0/ganjoor-db-14030706.zip.parquet"
+    },
+    "e148779c4276fa8187407340c590885350518540b19467f2c2e12509d8ccd97d": {
+      "bytes": 10897395,
+      "sha256": "e148779c4276fa8187407340c590885350518540b19467f2c2e12509d8ccd97d",
+      "format": "parquet",
+      "file": "ingested/kaikki/kaikki.org-dictionary-Persian.jsonl.parquet"
+    },
+    "912d5f8c318ca054b2427e20c2046db77233780e9fc2c8122ea89a3fc784f55a": {
+      "bytes": 64246868,
+      "sha256": "912d5f8c318ca054b2427e20c2046db77233780e9fc2c8122ea89a3fc784f55a",
+      "format": "parquet",
+      "file": "ingested/mizan/en-fa.txt.zip.parquet"
+    },
+    "eed0a3b10aa4cc8811b39d1ab9a3c1589a7bba0c35169370c537ba51c4831d69": {
+      "bytes": 439087,
+      "sha256": "eed0a3b10aa4cc8811b39d1ab9a3c1589a7bba0c35169370c537ba51c4831d69",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/31322.jsonl.parquet"
+    },
+    "740ac61eea35aef8b9f6b04dd8bd57ca7f68a99d3a9f2b31c74bf4a767b33e29": {
+      "bytes": 615729,
+      "sha256": "740ac61eea35aef8b9f6b04dd8bd57ca7f68a99d3a9f2b31c74bf4a767b33e29",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/31323.jsonl.parquet"
+    },
+    "5727eb6fed78e71565e49536300a9fe0bab2b5a01c529366d765f4b6477b42cc": {
+      "bytes": 427335,
+      "sha256": "5727eb6fed78e71565e49536300a9fe0bab2b5a01c529366d765f4b6477b42cc",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/31324.jsonl.parquet"
+    },
+    "797fad10848ae4ecd5ed586321fc41b35bda997cc3fc5164ddb67fc00fd2f944": {
+      "bytes": 422636,
+      "sha256": "797fad10848ae4ecd5ed586321fc41b35bda997cc3fc5164ddb67fc00fd2f944",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/31325.jsonl.parquet"
+    },
+    "d4cfa8da1dcea74b6d74921681da973971741ea0b4a40116e690eb1d316a388f": {
+      "bytes": 630956,
+      "sha256": "d4cfa8da1dcea74b6d74921681da973971741ea0b4a40116e690eb1d316a388f",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/31326.jsonl.parquet"
+    },
+    "7c7a58ee67db288286c1a293dffc24f27d25ea87fcdb1af15f5218a65780895a": {
+      "bytes": 704065,
+      "sha256": "7c7a58ee67db288286c1a293dffc24f27d25ea87fcdb1af15f5218a65780895a",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/31327.jsonl.parquet"
+    },
+    "8ee35ba53eb0c0de60db4d19c68bdf1e9e4b632535ac5af767b7729655381429": {
+      "bytes": 379009,
+      "sha256": "8ee35ba53eb0c0de60db4d19c68bdf1e9e4b632535ac5af767b7729655381429",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/37229.jsonl.parquet"
+    },
+    "d96ec6ccad020a6668942dcac925aebb065b2c1b02ff5761d0a2f03d75bbe5c9": {
+      "bytes": 398757,
+      "sha256": "d96ec6ccad020a6668942dcac925aebb065b2c1b02ff5761d0a2f03d75bbe5c9",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/37230.jsonl.parquet"
+    },
+    "3da5164b7326a6fe004fd5772b14378024d5ead387601c58c2f3cc333b6b25ee": {
+      "bytes": 413091,
+      "sha256": "3da5164b7326a6fe004fd5772b14378024d5ead387601c58c2f3cc333b6b25ee",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/37231.jsonl.parquet"
+    },
+    "6d3d5b51b051e7c6d7218358eda4ecf67f0f7c644cf817e933b96874c37189b5": {
+      "bytes": 447226,
+      "sha256": "6d3d5b51b051e7c6d7218358eda4ecf67f0f7c644cf817e933b96874c37189b5",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/37233.jsonl.parquet"
+    },
+    "d02fec5375b170f0b41933db8cbce2c6c1aa83c4fcf1d053eb58425ef2be1e30": {
+      "bytes": 757617,
+      "sha256": "d02fec5375b170f0b41933db8cbce2c6c1aa83c4fcf1d053eb58425ef2be1e30",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/41420.jsonl.parquet"
+    },
+    "708839b8a05898e0b34c82adb0fcffdca239ac45c470a7f20135f0d68bd8779a": {
+      "bytes": 598876,
+      "sha256": "708839b8a05898e0b34c82adb0fcffdca239ac45c470a7f20135f0d68bd8779a",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/41421.jsonl.parquet"
+    },
+    "4f93a1774a448526934ca48d60689506e3c5630c167893b740b2a0f46dbcb043": {
+      "bytes": 1750318,
+      "sha256": "4f93a1774a448526934ca48d60689506e3c5630c167893b740b2a0f46dbcb043",
+      "format": "parquet",
+      "file": "ingested/naskban-ocr/42067.jsonl.parquet"
+    },
+    "ae305ac0f87d07e89db5b760e16acc18d993c7c56ab64de3eff0fd114b9ab457": {
+      "bytes": 123430,
+      "sha256": "ae305ac0f87d07e89db5b760e16acc18d993c7c56ab64de3eff0fd114b9ab457",
+      "format": "parquet",
+      "file": "ingested/references-ocr/ayin-negaresh-va-virayesh-anvari.jsonl.parquet"
+    },
+    "93a875a57a52ba11a4dbceb41ba5cf0cfdb283ac53f81380bc5a1a0b06446fd0": {
+      "bytes": 93604,
+      "sha256": "93a875a57a52ba11a4dbceb41ba5cf0cfdb283ac53f81380bc5a1a0b06446fd0",
+      "format": "parquet",
+      "file": "ingested/references-ocr/dastur-zaban-farsi-emruz-arjang.jsonl.parquet"
+    },
+    "60cab7b47fe1642a429d62c0c69e5424130a43bf61bde7e2dc58099ca107a75a": {
+      "bytes": 149420,
+      "sha256": "60cab7b47fe1642a429d62c0c69e5424130a43bf61bde7e2dc58099ca107a75a",
+      "format": "parquet",
+      "file": "ingested/references-ocr/dastur-zaban-farsi-panj-ostad.jsonl.parquet"
+    },
+    "5f6be23b99c1795b2b14bb15d43268a4db12563baf0b1bb2b2b54c9884fe987f": {
+      "bytes": 829086,
+      "sha256": "5f6be23b99c1795b2b14bb15d43268a4db12563baf0b1bb2b2b54c9884fe987f",
+      "format": "parquet",
+      "file": "ingested/references-ocr/farhang-emlaei-1394.jsonl.parquet"
+    },
+    "4bd3b9d156793ee99f81f251837138fd1925cc7b7fe4a0c81b1da106d2c9a2ce": {
+      "bytes": 1966133,
+      "sha256": "4bd3b9d156793ee99f81f251837138fd1925cc7b7fe4a0c81b1da106d2c9a2ce",
+      "format": "parquet",
+      "file": "ingested/references-ocr/farhang-moin-j1.jsonl.parquet"
+    },
+    "92771235e3264b97f89cc7fd214e6fe41c085956cd43a3710255f76f367da96f": {
+      "bytes": 1775997,
+      "sha256": "92771235e3264b97f89cc7fd214e6fe41c085956cd43a3710255f76f367da96f",
+      "format": "parquet",
+      "file": "ingested/references-ocr/farhang-moin-j2.jsonl.parquet"
+    },
+    "134f77dbb841ed368bc1754de721492839ab1c879cd02032911c6a95d0594d2c": {
+      "bytes": 385541,
+      "sha256": "134f77dbb841ed368bc1754de721492839ab1c879cd02032911c6a95d0594d2c",
+      "format": "parquet",
+      "file": "ingested/references-ocr/ghalat-nanevisim-najafi.jsonl.parquet"
+    },
+    "d7de65b470288e89e515e99ffabd073de3f169f29d1f637bc1230943cfb5c3a6": {
+      "bytes": 126661,
+      "sha256": "d7de65b470288e89e515e99ffabd073de3f169f29d1f637bc1230943cfb5c3a6",
+      "format": "parquet",
+      "file": "ingested/references-ocr/persian-grammar-reference-revision-mace.jsonl.parquet"
+    },
+    "4ef36725cd141c39ee543abb0ff6a5b9ad48df604d64cc044759059efe6225c1": {
+      "bytes": 153323,
+      "sha256": "4ef36725cd141c39ee543abb0ff6a5b9ad48df604d64cc044759059efe6225c1",
+      "format": "parquet",
+      "file": "ingested/references-ocr/shalude-nahv-zaban-farsi.jsonl.parquet"
+    },
+    "c4eb41426e0b5e5e541f8bb1ec8ae59a381bd5977d6da29954748f60efa60dac": {
+      "bytes": 108730,
+      "sha256": "c4eb41426e0b5e5e541f8bb1ec8ae59a381bd5977d6da29954748f60efa60dac",
+      "format": "parquet",
+      "file": "ingested/references-ocr/tosif-sakhteman-dasturi-bateni.jsonl.parquet"
+    },
+    "78197b73618bea27cb0c3621bee3765c8e35259c35b5e29c4f1f17a1ea5ef104": {
+      "bytes": 204999,
+      "sha256": "78197b73618bea27cb0c3621bee3765c8e35259c35b5e29c4f1f17a1ea5ef104",
+      "format": "parquet",
+      "file": "ingested/references-ocr/vazn-e-sheer-e-farsi-az-diruz-ta-emruz-1390.jsonl.parquet"
+    },
+    "528f0a2b7978f1342e72cedc60d911b2f72f23cbe170962689b5b95e7ff239aa": {
+      "bytes": 9929360,
+      "sha256": "528f0a2b7978f1342e72cedc60d911b2f72f23cbe170962689b5b95e7ff239aa",
+      "format": "parquet",
+      "file": "ingested/steingass/steingass-scraper-d2fd36bf577b.tar.gz.parquet"
+    },
+    "e1446b3b5e0f13813228ab69dfbb7f20ca32149362dcd5118dac366a91ed9e2e": {
+      "bytes": 2832419,
+      "sha256": "e1446b3b5e0f13813228ab69dfbb7f20ca32149362dcd5118dac366a91ed9e2e",
+      "format": "parquet",
+      "file": "ingested/tgwiktionary/tgwiktionary-20261001-pages-meta-current.xml.bz2.parquet"
+    },
+    "b6ac4153e1f80ba07ca22641134f3de482cf02d6b985ecbc54d907f856e3e95e": {
+      "bytes": 23562315,
+      "sha256": "b6ac4153e1f80ba07ca22641134f3de482cf02d6b985ecbc54d907f856e3e95e",
+      "format": "xml.bz2",
+      "file": "raw/fawiktionary/fawiktionary-latest-pages-meta-current.xml.bz2"
+    },
+    "a34ef9080f6c2a8ad30ebcdfefe340421f5cf5d2f1745fd90dba26c402fa4ff7": {
+      "bytes": 23869020,
+      "sha256": "a34ef9080f6c2a8ad30ebcdfefe340421f5cf5d2f1745fd90dba26c402fa4ff7",
+      "format": "csv",
+      "file": "raw/homorich/2026-10-22/recommended_split/test_set.csv"
+    },
+    "11769fc13ffb9623ebb968032e88c03eb835161cc29f7d1629d531a1983d21bf": {
+      "bytes": 116780729,
+      "sha256": "11769fc13ffb9623ebb968032e88c03eb835161cc29f7d1629d531a1983d21bf",
+      "format": "csv",
+      "file": "raw/homorich/2026-11-09/augmented_data/PersianG2P.csv"
+    },
+    "36d45a87e7406c5c2c52210fcede2ae7d418fb5ee6fd011f68cc138f914345cd": {
+      "bytes": 67422075,
+      "sha256": "36d45a87e7406c5c2c52210fcede2ae7d418fb5ee6fd011f68cc138f914345cd",
+      "format": "csv",
+      "file": "raw/homorich/2026-11-09/augmented_data/PersianG2P_augmented.csv"
+    },
+    "dfff7621876a2e335e065d80744b8ea2e839d309efb120bf0665c3f666231e03": {
+      "bytes": 128405209,
+      "sha256": "dfff7621876a2e335e065d80744b8ea2e839d309efb120bf0665c3f666231e03",
+      "format": "csv",
+      "file": "raw/homorich/2026-11-09/recommended_split/train_set.csv"
+    },
+    "858e42f4e223ae68e9abe9cc79785b5d7fd2e87740ff4e468efb4a3540aabf5e": {
+      "bytes": 56026,
+      "sha256": "858e42f4e223ae68e9abe9cc79785b5d7fd2e87740ff4e468efb4a3540aabf5e",
+      "format": "csv",
+      "file": "raw/sentencebench/2026-10-22/SentenceBench.csv"
+    },
+    "b11f92d6eaeca1b0399e867e31e231627fa04447eb26d8970a70cca13be05dc4": {
+      "bytes": 15268432,
+      "sha256": "b11f92d6eaeca1b0399e867e31e231627fa04447eb26d8970a70cca13be05dc4",
+      "format": "gz",
+      "file": "raw/steingass/steingass-scraper-d2fd36bf577b.tar.gz"
+    }
+  },
+  "input_size_note": "Shared files identified by SHA-256; do not sum source-group input bytes."
+}

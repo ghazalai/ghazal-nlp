@@ -210,50 +210,50 @@ ghazal-nlp verb-eval <treebank>/*.conllu
 ghazal-nlp conjugate-eval <unimorph>/fas
 ```
 
-### `vowels`: the vowels editors write
+### `vowels`: readings and vowel marks
 
-Ganjoor's editors mark short vowels on the words they think need them. This
-lexicon groups every marked spelling of a word into readings: two spellings
-are different readings only if they put different vowels on the same letter.
-Marks on the last letter (ezāfe, Arabic case endings) are split off. A word
-nobody marked isn't in the lexicon, so missing means unknown, not unambiguous.
+Every reading of a word I could find, from editors' marks (Ganjoor, Wikipedia,
+Wikisource, books), dictionaries (Dehkhoda, Steingass, Wiktionary) and
+pronounced sentences (HomoRich's training part), with counts and sources for
+each. `choose` picks the reading a sentence needs; `mark` writes the vowels
+back, all it is sure of (`full`) or only those that tell a word from its
+homographs (`minimal`), keeping the spelling and spacing. It writes short
+vowels, distinguishing sukun, shadda and tanvin, without redundant marks for
+long vowels. In verse it can use the metre. Ezāfe is optional (`ezafe=True`).
 
 ```python
 from ghazal_nlp import vowels
-[(r.form, r.count) for r in vowels.lexicon().lookup("گل").readings]  # گِل 610, گُل 371, گَل 5
+vowels.lookup("گل")           # readings with counts and sources
+vowels.choose("گل در باغ رویید.")
+vowels.mark("ملک را به ملک بخشید.", mode="minimal")
 ```
 
-Over all of Ganjoor: 30,259 words have a reading, 2,557 of them more than one.
-Of 20.1M running words, 46.5% have more than one reading, 35.2% have one, and
-18.3% were never marked. The counts are of marked spellings, so they show how
-a word is read where an editor thought it was worth marking, not how often
-each reading occurs. `data/vowels-review.tsv` lists the words with more than
-one reading.
+Tested by me, with the vowels hidden first:
 
-Against full pronunciations of modern prose: [SentenceBench](https://huggingface.co/datasets/MahtaFetrat/SentenceBench)
-(400 sentences) and [HomoRich](https://huggingface.co/datasets/MahtaFetrat/HomoRich-G2P-Persian)'s
-test split (127,850 sentences on 285 homographs). A reading fits when the
-pronunciation has the vowels it marks.
+| | words | the commonest reading | `choose` |
+|---|---:|---:|---:|
+| HomoRich test, fixed homograph set | 66,108 | 57.0% | 95.7% |
+| … with no training sentence above 0.5 similarity | 56,914 | 57.0% | 95.4% |
+| … with no training sentence above 0.8 similarity | 65,656 | 57.0% | 95.7% |
+| SentenceBench, homographs | 164 | 46.9% | 84.1% |
+| 122 sentences I labelled, prose and verse | 143 | 49.6% | 76.9% |
+| Wikipedia prose dev: every editor's mark recovered | 7,758 | 54.8% | 58.8% |
+| Ganjoor, 1,891 dev poems: every editor's mark recovered | 21,885 | 73.9% | 72.6% |
+| 150 common homographs in held-out sentences (Wikipedia, blogs, news, poetry) | 297 | 36.0% | 93.6% |
 
-| | SentenceBench | HomoRich |
-|---|---:|---:|
-| words with one reading: it fits | 80.6% (618) | 82.2% (248,011) |
-| words with several: the commonest fits | 53.0% (1,014) | 53.9% (433,153) |
-| … one of them fits | 91.2% | 92.5% |
-| … a random one fits | 46.1% | 47.6% |
-| the homograph itself: the commonest fits | 42.7% (164) | 38.2% (65,955) |
-| … a random one fits | 35.4% | 39.3% |
+In the last row each sentence was read by two labellers who couldn't see each
+other's answers, and the commonest reading leaves out HomoRich's counts, which
+are balanced across readings by design.
 
-The readings are Ganjoor's, so a miss is often verse against prose (حَرَکت,
-نَمی, خَیلی). On the homographs the commonest reading is no better than a
-random one. The two sets aren't independent: 71 of SentenceBench's 88 Common
-Voice sentences and at least 45 of its 100 ManaTTS ones are in HomoRich word for
-word.
-
-```sh
-ghazal-nlp vowels-derive poems.jsonl --out ghazal_nlp/data
-ghazal-nlp g2p-eval SentenceBench.csv
-```
+`minimal` uses 106 reviewed homographs, a second reading with at least 5% of
+the lexical or context evidence, and calibrated confidence of 0.8. Function
+words ordinarily stay bare. On HomoRich, 96.3% of its marks on labelled
+homographs are right, and it marks 22.0% of their occurrences (121,928 located
+targets; 7,678 rows have no locatable target). On my labelled set these figures
+are 91.3% and 65.0%. Marks elsewhere earn no credit. In prose and poetry I can
+score only the slots the editors marked; unmarked slots are unknown. Modern
+prose and unfamiliar contexts remain weak, and on Ganjoor the commonest reading
+still wins.
 
 ### `ezafe`: the ezāfe after a silent ه
 
@@ -547,8 +547,10 @@ lists them); each TSV's header says where it comes from. `ezafe-junction-counts.
 and `ezafe-junction-trees.json` are `junction`'s counts and trees. `data/normalize` holds
 the normalizer's tables as the corpus has them, counted on the corpus.
 The Arabic model also derives statistics and parameters from Ganjoor and the
-sources listed in its provenance; it is CC BY-SA 4.0. The treebanks,
-SentenceBench, HomoRich, UniMorph, PerSpellData and
+sources listed in its provenance; it is CC BY-SA 4.0.
+The vowel tables and models are also CC BY-SA 4.0; HomoRich's recommended
+training split supplies word pronunciations and context labels. The treebanks,
+SentenceBench, UniMorph, PerSpellData and
 Ganjoor-Rhythm-Bench are only read for testing and aren't included.
 
 `data/corpus-sample.jsonl.gz` is the Ghazal Corpus 1.0.0 Sample, 500 documents
