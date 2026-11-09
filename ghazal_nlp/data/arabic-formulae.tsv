@@ -1,4 +1,5 @@
 # Arabic formulae and set phrases used inside Persian (بسم الله، علیه السلام، مع ذلک).
+# Source: ghazal-nlp 0.6.0's hand-written rule inventory; retained unchanged.
 # Each is found as a phrase, not a passage; a longer Arabic clause around it is a passage.
 بسم الله
 بسم الله الرحمن الرحیم

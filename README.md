@@ -490,23 +490,35 @@ ghazal-nlp orthography-eval wrong_virastman.txt correct_virastman.txt [--style a
 
 ### `arabic`: Arabic inside Persian
 
-Finds Arabic inside Persian text, conservatively, as two kinds of span. A
-`passage` is Arabic syntax: a shared word, a name or a ة isn't enough, and
-Persian words end a span. A `phrase` is a formula or set phrase (علیه السلام،
-مع ذلک) or a preposition or vocative before an Arabic article (فی الحال، ایها
-الامیر). Finding nothing means "don't know", not "no Arabic". A third, exact
-matcher finds Quran wording, given a copy of the text (Tanzil format).
+Finds Arabic inside Persian text: a probability for every word, and spans of
+Arabic syntax two words or longer (a Quran verse, a hadith, an Arabic
+hemistich, a formula like علیه السلام, a set phrase like فی الحال, a title).
+A loanword in Persian syntax is Persian however Arabic it looks (علم، ثلث،
+مع‌الوصف). Standard library only.
 
-Tested by me on spans and lines from Wikipedia, Wikisource and Ganjoor
-(`data/arabic-*-lab.jsonl`). Of 71 passages it found, 59 are Arabic with the
-right boundaries and 67 are Arabic (83% and 94%). Of 55 lines I marked as
-holding Arabic (two words or more), it finds something in 30, and in 1 of 27
-lines I marked as holding none (ایها القاضی). I added phrases after looking
-at those lines, so the line numbers are dev numbers.
+```python
+from ghazal_nlp import arabic
+
+arabic.spans("او گفت: «هذا هو الذی لم یکن له شریک» و رفت.")
+arabic.mask("علم و ثلث را به کار برد", strict=True)  # all False
+```
+
+`strict=True` is for a normalizer: a higher threshold, and the old rules have
+to agree. `quran=QuranIndex(paths)` adds exact Quran wording from a local
+Tanzil copy, which doesn't ship. `detector()` and the CLI are the old rules.
+
+Tested by me on 275 lines from six kinds of text (classical prose, verse, wiki,
+news, web, social), held out from everything the model was built on, and
+weighted to how often each kind of line occurs:
+
+| | word precision | word recall | lines with Arabic found | false alarms per 1,000 lines |
+|---|---:|---:|---:|---:|
+| rules (0.6.0) | 82% | 39% | 59% | 0.07 |
+| model | 85% | 62% | 72% | 0.65 |
+| strict, with the Quran index | 87% | 45% | 62% | 0.07 |
 
 ```sh
 ghazal-nlp arabic "چنانکه گفته‌اند الحمد لله رب العالمین و ..."
-ghazal-nlp arabic-eval
 ```
 
 ### `normalize`: the Ghazal Corpus normalizer
@@ -540,8 +552,10 @@ The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0, except the files
 that quote Wikipedia or Wikisource, which are CC BY-SA 4.0 (`data/LICENSE`
 lists them); each TSV's header says where it comes from. `ezafe-junction-counts.tsv.gz`
 and `ezafe-junction-trees.json` are `junction`'s counts and trees. `data/normalize` holds
-the normalizer's tables as the corpus has them, counted on the corpus. Ganjoor,
-the treebanks, SentenceBench, HomoRich, UniMorph, PerSpellData and
+the normalizer's tables as the corpus has them, counted on the corpus.
+The Arabic model also derives statistics and parameters from Ganjoor and the
+sources listed in its provenance; it is CC BY-SA 4.0. The treebanks,
+SentenceBench, HomoRich, UniMorph, PerSpellData and
 Ganjoor-Rhythm-Bench are only read for testing and aren't included.
 
 `data/corpus-sample.jsonl.gz` is the Ghazal Corpus 1.0.0 Sample, 500 documents

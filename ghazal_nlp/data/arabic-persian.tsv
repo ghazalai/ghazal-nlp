@@ -1,4 +1,6 @@
 # Persian words that start with ال, where ال isn't the Arabic article.
+# Source: ghazal-nlp 0.6.0's 2026 corpus counts; retained unchanged.
+# The original header does not identify the contributing corpus sources.
 # Each was seen in at least three clearly Persian lines of a 2026 corpus sample.
 # word	lines
 ال	8

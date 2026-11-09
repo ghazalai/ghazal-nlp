@@ -11,6 +11,14 @@ CC BY-SA 4.0 instead (https://creativecommons.org/licenses/by-sa/4.0/):
 ezafe-written-dev.jsonl, ezafe-junctions-dev.jsonl, ezafe-lab-1.jsonl,
 arabic-spans-lab.jsonl, arabic-lines-lab.jsonl, shahnameh-tajik-test.jsonl.
 
+arabic-model.json.gz is CC BY-SA 4.0: word and character statistics and model
+parameters, no source passages and no copy of the Quran. Built from arwikisource,
+arwikibooks, Aya, Ganjoor, fawikisource, Dehkhoda, books and fawiki; Quran
+wording found with Tanzil's text marked where Arabic is quoted; calibrated on
+lines from fawikisource, Naskban, books, Ganjoor, fawiki, fawikiquote, Tasnim,
+IRIB News, Mizan, HPLT, Virgool, Telegram channels. Its provenance field lists
+each source's recorded licence.
+
 corpus-sample.jsonl.gz is the Sample tier of the Ghazal Corpus 1.0.0, 500
 documents, each under the licence in its own `license` field: CC BY-SA 4.0
 (Wikimedia text; its authors are in the history of each document's url), CC0 1.0

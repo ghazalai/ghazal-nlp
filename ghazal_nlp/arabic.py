@@ -7,6 +7,9 @@ spans, and offsets index the original text. A phrase is a formula or set phrase
 (فی الحال، ایها الامیر). No span is an abstention, not a verdict that the text
 is Persian. Quran wording is a separate, exact path over copies the caller
 supplies.
+
+``words``, ``spans`` and ``mask`` use a silver-trained contextual model.
+``ArabicDetector`` and ``detector`` retain the original conservative rules.
 """
 
 from __future__ import annotations
@@ -20,7 +23,9 @@ from pathlib import Path
 DATA = Path(__file__).parent / "data"
 
 MARKS = re.compile(r"[ً-ٰٟۖ-ۭ]")
-TOKEN = re.compile(r"[ء-غف-ٰٟ-ۓۖ-ۭ‌‍]+")
+_LETTER = r"[ء-غف-يٮ-ٯٱ-ۓۺ-ۼۿ]"
+_TAIL = r"[ء-غف-يٮ-ٯٱ-ۓۺ-ۼۿـً-ٰٟۖ-ۭ]*"
+TOKEN = re.compile(_LETTER + _TAIL + r"(?:[‌‍][‌‍ً-ٰٟۖ-ۭ]*" + _LETTER + _TAIL + r")*")
 FOLD = str.maketrans({"ي": "ی", "ى": "ی", "ك": "ک", "أ": "ا", "إ": "ا", "ٱ": "ا"})
 PERSIAN = frozenset("را است این آن از که برای بود شد گفت کرده خود یک در نیست هستند"
                     " بودند باشد شود تا چون اگر مگر اما پس نیز چنین همچنین چرا چگونه"
@@ -46,13 +51,18 @@ TITLES = ("روضة الصفا", "نفحات الانس", "کتاب التوحی
           "آثار البلاد", "اخبار العباد", "عجائب المخلوقات", "غرائب الموجودات",
           "مفید العلوم", "مبید الهموم")
 GAP = re.compile(r'[\n,.!?؟،؛;:«»"()\[\]{}/\\–—=]|[A-Za-z0-9۰-۹٠-٩]|(?<!\S)-(?!\S)|-(?=ت[أا]لیف)')
-QURAN_GAP = re.compile(r'[\n,.!?؟،؛;:«»"()\[\]{}]|[A-Za-z0-9۰-۹٠-٩]')
+
+
+def quran_gap(text: str) -> bool:
+    """Only horizontal space, direction marks, slash and dash may separate words."""
+    return any(unicodedata.category(c) != 'Zs' and c not in '\t/—–-\u200e\u200f'
+               for c in text)
 
 
 def fold_word(word: str) -> str:
     """A lossy comparison key, never returned as text."""
     word = unicodedata.normalize("NFC", word)
-    return MARKS.sub("", word).translate(FOLD).replace("ـ", "").replace("‌", "")
+    return MARKS.sub("", word).translate(FOLD).replace("ـ", "").replace("‌", "").replace("‍", "")
 
 
 def _rows(name: str) -> list[str]:
@@ -187,13 +197,16 @@ class QuranIndex:
     """Maximal contiguous Quran wording, in copies given as ``sura|aya|text``
     lines (Tanzil's format). A match needs ``min_content`` words and lies within
     one verse; shorter verses abstain unless ``whole_short_verse``. A match
-    wholly inside a formula is dropped."""
+    wholly inside a formula is dropped. Exact means equality after folding
+    harakat and letter variants, never dropping conjunctions. ``exact=False``
+    restores the older conjunction-insensitive comparison."""
 
-    def __init__(self, paths, *, min_content=3, whole_short_verse=False, formulae=None):
+    def __init__(self, paths, *, min_content=3, whole_short_verse=False, formulae=None, exact=True):
         if min_content not in (3, 4):
             raise ValueError("min_content must be 3 or 4")
         self.min_content = min_content
-        self.formulae = tuple(tuple(k for w in TOKEN.findall(f) if (k := quran_key(w)))
+        self.key = fold_word if exact else quran_key
+        self.formulae = tuple(tuple(k for w in TOKEN.findall(f) if (k := self.key(w)))
                               for f in (_rows("arabic-formulae.tsv") if formulae is None else formulae))
         self.verses, self.index, self.short = [], {}, {}
         for path in paths:
@@ -202,7 +215,7 @@ class QuranIndex:
                     parts = line.rstrip().split("|", 2)
                     if len(parts) != 3 or not parts[0].isdigit():
                         continue
-                    keys = tuple(k for t in TOKEN.findall(parts[2]) if (k := quran_key(t)))
+                    keys = tuple(k for t in TOKEN.findall(parts[2]) if (k := self.key(t)))
                     ref = f"{parts[0]}:{parts[1]}"
                     for j in range(len(keys) - min_content + 1):
                         self.index.setdefault(keys[j:j + min_content], []).append((len(self.verses), j))
@@ -212,7 +225,7 @@ class QuranIndex:
 
     def detect(self, text: str) -> list[ArabicSpan]:
         tokens = list(TOKEN.finditer(text))
-        keyed = [(i, k) for i, t in enumerate(tokens) if (k := quran_key(t[0]))]
+        keyed = [(i, k) for i, t in enumerate(tokens) if (k := self.key(t[0]))]
         keys = [k for _, k in keyed]
         blocked = [(j, j + len(p)) for p in self.formulae if p
                    for j in range(len(keys) - len(p) + 1) if tuple(keys[j:j + len(p)]) == p]
@@ -222,7 +235,9 @@ class QuranIndex:
             for vi, offset in self.index.get(tuple(keys[j:j + n]), ()):
                 verse, ref = self.verses[vi]
                 end = j + n
-                while end < len(keys) and offset + end - j < len(verse) and keys[end] == verse[offset + end - j]:
+                while (end < len(keys) and offset + end - j < len(verse)
+                       and keys[end] == verse[offset + end - j]
+                       and not quran_gap(text[tokens[keyed[end - 1][0]].end():tokens[keyed[end][0]].start()])):
                     end += 1
                 candidates.setdefault((j, end), set()).add(ref)
             for size in (2, 3):
@@ -235,11 +250,11 @@ class QuranIndex:
                 continue
             a, b = keyed[j][0], keyed[end - 1][0]
             # Words must not leap across a sentence, heading or gloss.
-            if any(QURAN_GAP.search(text[tokens[k].end():tokens[k + 1].start()]) for k in range(a, b)):
+            if any(quran_gap(text[tokens[k].end():tokens[k + 1].start()]) for k in range(a, b)):
                 continue
             start, stop = tokens[a].start(), tokens[b].end()
             if not any(s.start <= start and stop <= s.end for s in found):
-                found.append(ArabicSpan(start, stop, ("quran_exact",), tuple(sorted(refs))))
+                found.append(ArabicSpan(start, stop, ("quran_exact",), tuple(sorted(refs)), "quran"))
         # On an overlap the longer verified interval wins; none is extended.
         selected = []
         for span in sorted(found, key=lambda s: (-(s.end - s.start), s.start)):
@@ -251,3 +266,27 @@ class QuranIndex:
 @lru_cache(maxsize=1)
 def detector() -> ArabicDetector:
     return ArabicDetector()
+
+
+def words(text: str, *, quran=None, threshold=None, strict=False):
+    """Word decisions and calibrated probabilities, with original offsets.
+
+    Tokens follow TOKEN (Arabic-script words, including internal ZWNJ); other
+    scripts, digits and punctuation are excluded. A silver-trained model is
+    calibrated on weighted, GPT-labeled development lines. Nonverified runs
+    shorter than two words abstain, regardless of probability. Strict mode
+    requires rule agreement and uses a higher default threshold.
+    """
+    from .arabic_model import model
+    return model().words(text, quran=quran, threshold=threshold, strict=strict)
+
+
+def spans(text: str, *, quran=None, strict=False, verse=False, threshold=None) -> list[ArabicSpan]:
+    """Model spans; strict=True uses the normalizer threshold. verse is metadata."""
+    from .arabic_model import model
+    return model().detect(text, quran=quran, verse=verse, threshold=threshold, strict=strict)
+
+
+def mask(text: str, *, quran=None, threshold=None, strict=False) -> list[bool]:
+    """One boolean per TOKEN match, in original order (punctuation excluded)."""
+    return [word.arabic for word in words(text, quran=quran, threshold=threshold, strict=strict)]
