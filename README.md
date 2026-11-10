@@ -36,31 +36,31 @@ metre labels. The held-out poems are a fixed fifth, chosen by poem id.
 
 | | rules only | with the weight lexicon |
 |---|---:|---:|
-| gold metre among the answers | 99.1% | 95.3% |
-| gold metre among the cheapest | 68.4% | 77.0% |
-| metres per hemistich | 2.19 | 1.44 |
-| poem gets exactly the gold metre | 92.5% | 95.9% |
-| abstained | 0.08% | 0.08% |
+| gold metre among the answers | 99.1% | 95.5% |
+| gold metre among the cheapest | 68.4% | 77.2% |
+| metres per hemistich | 2.19 | 1.43 |
+| poem gets exactly the gold metre | 92.5% | 96.2% |
+| abstained | 0.09% | 0.09% |
 
 The weight lexicon (`data/weights.tsv`) is learned from the labels of the
 other four fifths, so that column is supervised. The rules-only column isn't.
 With the editors' marks removed (`--stripped`), a poem gets exactly the gold
-metre 93.1% of the time with rules only and 96.0% with the lexicon.
+metre 92.9% of the time with rules only and 96.3% with the lexicon.
 Holding out whole poets instead of poems (`--by poet`, 2,000 poems by poets
-the lexicon never saw), that's 92.4% and 95.5%.
+the lexicon never saw), that's 92.1% and 96.0%.
 
-A few lines are enough for most poems. On 2,000 other held-out poems, reading only
-their opening lines, the exact metre comes out:
+A few lines are enough for most poems. On 2,000 other held-out poems (the next 2,000 in
+the same shuffle), reading only their opening lines, the exact metre comes out:
 
 | hemistichs given | 1 | 2 | 3 | 4 | 8 | whole poem |
 |---|---:|---:|---:|---:|---:|---:|
-| exact metre | 82.8% | 89.1% | 93.5% | 93.6% | 95.2% | 96.1% |
-| wrong | 17.2% | 10.9% | 6.5% | 6.4% | 4.8% | 3.9% |
+| exact metre | 82.1% | 90.4% | 92.9% | 93.8% | 95.5% | 96.0% |
+| wrong | 17.9% | 9.6% | 7.1% | 6.2% | 4.5% | 4.0% |
 
 On single couplets with no poem around them it's much weaker. On the 12,713
 couplets of [Ganjoor-Rhythm-Bench](https://huggingface.co/datasets/farbodbij/Ganjoor-Rhythm-Bench)
-(40 metres), the rules alone give exactly the gold metre for 50.7%. With the
-lexicon, on the 2,553 couplets from held-out poems, that's 70.0%.
+(40 metres), the rules alone give exactly the gold metre for 50.8%. With the
+lexicon, on the 2,553 couplets from held-out poems, that's 70.7%.
 
 On those couplets, next to [an XLM-R metre classifier](https://huggingface.co/katomyomachia/xlm-roberta-persian-meter)
 (35 metres, trained on Ganjoor hemistichs; its card reports 98% on a tenth of
@@ -68,12 +68,12 @@ its own data):
 
 | exact metre per couplet | couplets | XLM-R | `aruz` with the lexicon | always the commonest metre |
 |---|---:|---:|---:|---:|
-| all held-out | 2,553 | 61.9% | 70.0% | 4.0% |
-| metre the model knows | 2,204 | 71.6% | 73.6% | 4.6% |
-| … and no hemistich in its training data | 2,041 | 70.9% | 73.8% | 4.3% |
+| all held-out | 2,553 | 61.9% | 70.7% | 4.0% |
+| metre the model knows | 2,204 | 71.6% | 74.4% | 4.6% |
+| … and no hemistich in its training data | 2,041 | 70.9% | 74.5% | 4.3% |
 
-On lone couplets in its own metres `aruz` is about 2 points ahead, and across all
-metres about 8, since 13.7% of the couplets are in metres the classifier can't
+On lone couplets in its own metres `aruz` is about 3 points ahead, and across all
+metres about 9, since 13.7% of the couplets are in metres the classifier can't
 answer. The GPT2-fa classifier reported at 90.4%
 ([kasraSMD/Persian-Poetry-Rhythm-Detection](https://github.com/kasraSMD/Persian-Poetry-Rhythm-Detection))
 isn't here: its weights are behind a Google sign-in.
@@ -107,7 +107,8 @@ generous. Where `nearest` marked a break, it was on the changed word 45.5% of
 the time and within one word 79.8%. On the 11 lines of Shamisa's chapter tried,
 `sakta` lands on the word he names in 9. It marks 10.8% of Hafez's lines (4.0%
 heavy) and 18.0% of Masud Sa'd's (10.8% heavy). The direction agrees with
-Shamisa, but he finds only a few in Hafez, so it over-marks.
+Shamisa, but he finds only a few in Hafez, so it over-marks. This paragraph and
+the table above it were measured on 0.7.0.
 
 ```sh
 ghazal-nlp ganjoor <snapshot> > poems.jsonl

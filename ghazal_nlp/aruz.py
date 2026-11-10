@@ -367,13 +367,13 @@ def _mark_rules(skel: Skeleton) -> _MarkRules | None:
 
 
 def _moves(skel: Skeleton, i: int, devices: Devices):
-    """The syllables at ``i`` that the letters and the marks admit."""
+    """The syllables at ``i`` that the letters and the marks admit. ``skel`` is a
+    whole hemistich, and its last word has no word after it to take an unwritten ezāfe."""
     rules = _mark_rules(skel)
     for move in _syllables(skel, i, devices):
-        if rules is None:
-            yield move
-        else:
-            yield from rules.moves(i, *move, devices)
+        for weights, nxt, dev in [move] if rules is None else rules.moves(i, *move, devices):
+            if not (nxt == len(skel) and dev & EZAFE):
+                yield weights, nxt, dev
 
 
 def _glide_weights(devices: Devices) -> tuple[tuple[str, int], ...]:

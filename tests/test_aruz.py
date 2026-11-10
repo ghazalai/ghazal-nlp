@@ -356,6 +356,14 @@ def test_a_shortened_az_is_no_ezafe():
     assert ("u", ()) in moves
 
 
+def test_the_last_word_of_a_hemistich_takes_no_ezafe():
+    scan = aruz.scanner()
+    assert all("ezafe" not in r.syllables[-1].devices for r in scan.readings("این کوزه چو من عاشق زاری بوده‌ست"))
+    assert ("u", ("ezafe",)) in {(w, aruz.device_names(d)) for w, _, d in aruz._syllables(aruz.prepare("دل"), 1, Devices())}
+    quatrain = "این کوزه چو من عاشق زاری بوده‌ست\nدر بند سر زلف نگاری بوده‌ست\nاین دسته که بر گردن او می‌بینی\nدستی‌ست که بر گردن یاری بوده‌ست"
+    assert aruz.RUBAI in aruz.scan_poem(quatrain, scan).metres[0]
+
+
 def test_nearest_finds_the_break():
     scan, pattern = aruz.scanner(), "-u---u---u-"
     plain = scan.nearest("از جدایی‌ها حکایت می‌کند", pattern)
