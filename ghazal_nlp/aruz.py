@@ -53,6 +53,7 @@ LETTERS = CONSONANTS | {"ا", "آ"}
 FATHA, DAMMA, KASRA, SUKUN, SHADDA, HAMZA = "َ", "ُ", "ِ", "ْ", "ّ", "ٔ"
 ZWNJ = "‌"
 VOWELS = FATHA + DAMMA + KASRA
+TANWIN = re.compile("ا?([ًٌٍ])(ّ?)ا?")
 READABLE = frozenset(VOWELS + SUKUN + SHADDA + HAMZA)
 
 DEVICES = (
@@ -149,6 +150,7 @@ def prepare(line: str, *, marks: Marks | None = None) -> Skeleton:
     text = HONORIFIC.sub(" ", fold(line))
     if marks is not None:
         text = text.replace("ۀ", "ه" + HAMZA)
+        text = TANWIN.sub(lambda m: m[2] + VOWELS["ًٌٍ".index(m[1])] + "ن", text)
     text = text.translate(FOLD)
     kept: list[str] = []
     on: list[str] = []
@@ -407,6 +409,17 @@ def _from_onset(skel: Skeleton, start: int, word: int, devices: Devices, dev: in
         yield from _codas(skel, kind, after, word, dev | ndev, devices, bare=after == start)
 
 
+# Arabic words ending in a vowel, after which the article «ال» loses its alef (فی الحال، ایها السّاقی);
+# after a Persian word it keeps it (تا الان، با الهام).
+WASL = frozenset("فی علی الی حتی ایها ءیها هذا ذا ذی ذو انا انما اذا تعالی".split())
+
+
+def _wasl(skel: Skeleton, k: int, host: str) -> bool:
+    """Is ``k`` the alef of an article «ال» that drops after ``host``?"""
+    return (host in WASL and k + 3 < len(skel) and skel.initial[k] and skel.chars[k] == "ا" and skel.chars[k + 1] == "ل"
+            and skel.chars[k + 2] in CONSONANTS and skel.word[k + 3] == skel.word[k])
+
+
 def _codas(skel: Skeleton, kind: str, k: int, word: int, dev: int, devices: Devices, bare: bool = False):
     """Every (weight, next index, devices) the coda choices allow.
 
@@ -422,6 +435,8 @@ def _codas(skel: Skeleton, kind: str, k: int, word: int, dev: int, devices: Devi
     yield WEIGHT[kind, 0], k, dev | ezafe
     if open_final and devices.ezafe_long:
         yield LONG, k, dev | ezafe | EZAFE_LONG
+    if k < n and skel.word[k] != word and _wasl(skel, k, skel.words[word]):
+        yield LONG, k + 2, dev | (WRITTEN_GEMINATION if skel.marks and SHADDA in skel.marks[k + 2] else 0)
     for count in (1, 2):
         if not _is_coda(skel, k + count - 1, word):
             break
@@ -585,6 +600,8 @@ def _constrainable_words(skel: Skeleton, devices: Devices) -> list[bool]:
     words = skel.words
     ok = [True] * len(words)
     for w in range(len(words) - 1):
+        if words[w] in WASL and words[w + 1][:2] == "ال":
+            ok[w] = ok[w + 1] = False
         if not words[w] or not words[w + 1] or words[w][-1] not in CONSONANTS:
             continue
         nxt = words[w + 1]

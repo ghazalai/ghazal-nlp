@@ -217,6 +217,22 @@ def test_honorifics_are_not_read():
     assert scan.scan("وآنگهی کآن احمد (ص) پاکیزه صوت").metres == scan.scan("وآنگهی کآن احمد پاکیزه صوت").metres
 
 
+def test_the_article_drops_its_alef_after_a_vowel_and_tanwin_reads_an():
+    scan = aruz.scanner()
+    line = "اَلا یا اَیُّهَا السّاقی اَدِرْ کَأسَاً و ناوِلْها"
+    assert scan.scan(line).metres == scan.scan("الا یا ایها الساقی ادر کاسا و ناولها").metres == (HAZAJ,)
+    syllables = [s.letters for s in Scanner(lexicon=None).readings(line)[0].syllables]
+    assert syllables[5:8] == ["هاال", "سا", "قی"] and syllables[10:12] == ["کء", "سن"]
+    assert "".join(prepare("کَأسَاً رَحمةٌ سِرٌّ", marks=Marks()).chars) == "کءسنرحمهنسرن"
+
+    def dropped(line):
+        skel = prepare(line)
+        return [skel.words[skel.word[k]] for k in range(1, len(skel))
+                if skel.initial[k] and aruz._wasl(skel, k, skel.words[skel.word[k] - 1])]
+    assert dropped("فی الحال علی الصباح ایها السّاقی تعالی الله") == ["الحال", "الصباح", "الساقی", "الله"]
+    assert dropped("تا الان با الهام او البته یا الهی بیت الحرام") == []
+
+
 def test_vowel_licences_are_already_in_the_letters():
     assert {"-u-"} <= letter_readings("نگذرد") and "--" in letter_readings("نبود")
     assert "-u" in letter_readings("دلش") and "u-" in letter_readings("سوی")
@@ -312,7 +328,7 @@ def test_every_reading_realises_its_metre(full, name):
 
 def test_the_scanner_reaches_the_readings():
     rows = aruz_eval.load_readings(DATA / "readings-thiesen.tsv")
-    assert aruz_eval.score_readings(rows, Scanner())["reading_admitted"] == 506
+    assert aruz_eval.score_readings(rows, Scanner())["reading_admitted"] == 507
 
 
 def test_readings_lay_out_the_scan():

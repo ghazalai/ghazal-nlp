@@ -20,7 +20,9 @@ hemistich can be read several ways. The scanner tries those readings against
 metres, every other metre that fits along with the licences it needs (hamze
 elision, و read short, ابدال, an overlong syllable read long, …), or an
 abstention with a reason. Harakat, shadda, the ezāfe hamza and ZWNJ written by
-the editor are used as constraints. A poem gets the metre most of its lines
+the editor are used as constraints. After an Arabic word ending in a vowel, like
+ایها in «ایها السّاقی», «ال» loses its alef, and a tanwin the editor wrote reads
+as ن. A poem gets the metre most of its lines
 fit; among equals, the one with the lowest licence cost and more poems behind
 it, where each licence has its own cost, fitted on held-out poems that no number
 below uses. Honorifics like (ع) are left out of the scan.
@@ -38,32 +40,32 @@ metre labels. The held-out poems are a fixed fifth, chosen by poem id.
 
 | | rules only | with the weight lexicon |
 |---|---:|---:|
-| gold metre among the answers | 99.1% | 95.4% |
-| gold metre among the cheapest | 68.4% | 77.2% |
+| gold metre among the answers | 99.1% | 95.5% |
+| gold metre among the cheapest | 68.4% | 77.3% |
 | metres per hemistich | 2.19 | 1.43 |
-| poem gets exactly the gold metre | 93.4% | 96.4% |
+| poem gets exactly the gold metre | 93.5% | 96.4% |
 | abstained | 0.07% | 0.07% |
 
 The weight lexicon (`data/weights.tsv`) is learned from the labels of the
 other four fifths, so that column is supervised. The rules-only column isn't,
 apart from the 23 licence costs.
 With the editors' marks removed (`--stripped`), a poem gets exactly the gold
-metre 93.0% of the time with rules only and 96.5% with the lexicon.
+metre 93.2% of the time with rules only and 96.5% with the lexicon.
 Holding out whole poets instead of poems (`--by poet`, 2,000 poems by poets
-the lexicon never saw), that's 92.5% and 96.0%.
+the lexicon never saw), that's 92.7% and 96.0%.
 
 A few lines are enough for most poems. On 2,000 other held-out poems (the next 2,000 in
 the same shuffle), reading only their opening lines, the exact metre comes out:
 
 | hemistichs given | 1 | 2 | 3 | 4 | 8 | whole poem |
 |---|---:|---:|---:|---:|---:|---:|
-| exact metre | 84.0% | 91.6% | 93.6% | 94.6% | 95.7% | 96.1% |
-| wrong | 16.0% | 8.4% | 6.4% | 5.4% | 4.3% | 3.9% |
+| exact metre | 84.0% | 91.6% | 93.7% | 94.6% | 95.7% | 96.1% |
+| wrong | 16.0% | 8.4% | 6.3% | 5.4% | 4.3% | 3.9% |
 
 On single couplets with no poem around them it's much weaker. On the 12,713
 couplets of [Ganjoor-Rhythm-Bench](https://huggingface.co/datasets/farbodbij/Ganjoor-Rhythm-Bench)
 (40 metres), the rules alone give exactly the gold metre for 56.6%. With the
-lexicon, on the 2,553 couplets from held-out poems, that's 72.8%.
+lexicon, on the 2,553 couplets from held-out poems, that's 72.9%.
 
 On those couplets, next to [an XLM-R metre classifier](https://huggingface.co/katomyomachia/xlm-roberta-persian-meter)
 (35 metres, trained on Ganjoor hemistichs; its card reports 98% on a tenth of
@@ -71,9 +73,9 @@ its own data):
 
 | exact metre per couplet | couplets | XLM-R | `aruz` with the lexicon | always the commonest metre |
 |---|---:|---:|---:|---:|
-| all held-out | 2,553 | 61.9% | 72.8% | 4.0% |
-| metre the model knows | 2,204 | 71.6% | 76.5% | 4.6% |
-| … and no hemistich in its training data | 2,041 | 70.9% | 76.2% | 4.3% |
+| all held-out | 2,553 | 61.9% | 72.9% | 4.0% |
+| metre the model knows | 2,204 | 71.6% | 76.6% | 4.6% |
+| … and no hemistich in its training data | 2,041 | 70.9% | 76.3% | 4.3% |
 
 On lone couplets in its own metres `aruz` is about 5 points ahead, and across all
 metres about 11, since 13.7% of the couplets are in metres the classifier can't
@@ -82,7 +84,7 @@ answer. The GPT2-fa classifier reported at 90.4%
 isn't here: its weights are behind a Google sign-in.
 
 Thiesen's *Manual of Classical Persian Prosody* scans 513 hemistichs; the
-scanner reaches his exact weights for 506 of them.
+scanner reaches his exact weights for 507 of them.
 
 Where a line leaves the metre, `nearest` reads it in a given pattern with the
 fewest breaks and marks each one on its syllable. `sakta` marks where a line
