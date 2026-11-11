@@ -309,6 +309,7 @@ I check it on labelled sites and on SentenceBench and HomoRich pronunciations:
 | `written`, HomoRich | 2,724 | 98.5% | 98.9% |
 | `junction`, prose, 5 folds | 524 | 480 (91.6%) | 66.8% |
 | `junction`, prose, random sample, 5 folds | 149 | 137 (91.9%) | 73.2% |
+| `junction`, prose, held-out text | 300 | 90.1% | 69.4% |
 | `junction`, verse | 252 | 238 (94.4%) | 91.3% |
 | `junction`, SentenceBench | 132 | 116 (88%) | 76.5% |
 | `junction`, HomoRich | 58,947 | 89.8% | 73.6% |
@@ -318,14 +319,17 @@ wrote the rules, and I changed the rules after looking at the first test
 (`data/ezafe-lab-1.jsonl`), so only the second is clean. `written` beats always
 saying ezāfe on the first and ties on the second.
 
-Every hand label I have for `junction` is in its training now, so its rows are
-cross-validated: the trees are retrained five times, each time without a fifth of
-the documents, and scored on that fifth. The 524 are my prose labels, many picked
-where the old rules were unsure; 149 of them are a random sample of unmarked
-junctions from the Starter tables. I set the verse rule on the 252 Ganjoor
-junctions, so that row isn't a clean test. HomoRich's ezāfe marks were added
-automatically (a POS tagger and a dictionary, per its paper), and about 40% of its
-sentences GPT-4o wrote, so its rows measure agreement with that tagging, not with people.
+Every hand label I had for `junction` when I trained it is in its training, so
+those rows are cross-validated: the trees are retrained five times, each time
+without a fifth of the documents, and scored on that fifth. The held-out row is
+300 unmarked junctions from text I set aside before building any of this, labelled
+like `heh`'s test below and weighted back to that text. The 524 are my prose
+labels, many picked where the old rules were unsure; 149 of them are a random
+sample of unmarked junctions from the Starter tables. I set the verse rule on the
+252 Ganjoor junctions, so that row isn't a clean test. HomoRich's ezāfe marks were
+added automatically (a POS tagger and a dictionary, per its paper), and about 40%
+of its sentences GPT-4o wrote, so its rows measure agreement with that tagging,
+not with people.
 
 `sites()` only sees words on its list, which on samples from seven tables is
 54–67% of the ه-final words that aren't verbs.
@@ -350,21 +354,24 @@ trees, trained on 13,203 sites labelled by hand, correct them; they also see how
 informal the 40 characters on either side read (`informality`). The labels are
 mine and AI models': Claude's, and Claude Opus's and GPT's where both agreed.
 
-It flags a site at probability 0.9; `threshold` changes that. On 726 labelled
-sites from about 217,000 in spoken text, blogs, web, news, books and verse,
-picked across the range of scores and weighted back, under five folds:
+It flags a site at probability 0.9; `threshold` changes that. I tested it on
+text I set aside before building any of it: 1,431 sites from 110,770 in 70,087
+documents of spoken text, blogs, web, news, books and verse, drawn across the
+range of scores and weighted back. Claude Opus and Claude Fable labelled them
+blind, and I labelled every site either tool flags, every one they disagreed on
+and a sample of the rest, where their labels held.
 
-| | precision | lower 95% bound | share of the errors flagged |
+| | precision | 95% interval | share of the errors flagged |
 |---|---:|---:|---:|
-| threshold 0.9 | 1.00 | 0.88 | 0.15 |
-| threshold 0.8 | 0.92 | 0.81 | 0.22 |
-| the opt-in model below, 0.9 | 0.97 | 0.91 | 0.44 |
-| the opt-in model below, 0.8 | 0.90 | 0.84 | 0.55 |
-| 0.5.0 | 0.55 | | 0.18 |
+| threshold 0.9 | 0.98 | 0.95–1.00 | 0.18 |
+| threshold 0.8 | 0.95 | 0.92–0.98 | 0.26 |
+| the opt-in model below, 0.9 | 0.97 | 0.94–0.99 | 0.46 |
+| the opt-in model below, 0.8 | 0.95 | 0.92–0.97 | 0.54 |
+| 0.5.0 | 0.80 | 0.72–0.88 | 0.23 |
 
-The ezāfe written as ه is rare there, 0.24% of sites. The share is an upper
-bound: among the lowest-scored sites I found none in 200, which doesn't rule out
-a few. It still misses plenty, including the first example above.
+About one ه in 200 there is this ezāfe. The test ran on 0.6.0; this release
+flags the same sites, less one false alarm of the model's, a verb it now skips.
+It still misses plenty, including the first example above.
 
 ```sh
 ghazal-nlp ezafe-heh "اسمه من علیه"
@@ -386,9 +393,10 @@ model.heh("دیواره اتاقه من", threshold=0.9)
 ```
 
 `junctions` keeps the rules and puts the model where the trees would decide. On
-the unwritten ezāfe it's no better than the trees: 90.5% on the prose labels and
-93.3% on the random sample under five folds, against 91.6% and 91.9%. On the
-ezāfe written as ه it finds about three times as many (table above).
+the held-out text it's right on 96.2% (94–98%) of the unmarked junctions, the
+trees on 90.1% (87–93%); under five folds on the hand labels the two were level,
+90.5% and 93.3% against 91.6% and 91.9%. On the ezāfe written as ه it finds two
+and a half times as many at the same precision (table above).
 
 ### The Tajik Shāhnāme as gold
 
