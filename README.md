@@ -83,8 +83,8 @@ answer. The GPT2-fa classifier reported at 90.4%
 ([kasraSMD/Persian-Poetry-Rhythm-Detection](https://github.com/kasraSMD/Persian-Poetry-Rhythm-Detection))
 isn't here: its weights are behind a Google sign-in.
 
-Thiesen's *Manual of Classical Persian Prosody* scans 513 hemistichs; the
-scanner reaches his exact weights for 507 of them.
+Thiesen's *Manual of Classical Persian Prosody* scans 509 classical hemistichs; the
+scanner reaches his exact weights for 503 of them.
 
 Where a line leaves the metre, `nearest` reads it in a given pattern with the
 fewest breaks and marks each one on its syllable. `sakta` marks where a line
@@ -283,7 +283,7 @@ mostly a content word next, go to 150 small boosted trees over corpus counts:
 how often the pair turns up, how often writers who mark the ezāfe mark it on
 that pair, what usually follows the next word, and the words around. They
 trained on 269,349 junctions from the corpus's Starter tables labelled by Hazm's
-tagger and 1,257 labelled by hand, mine and those Claude Opus and GPT agreed on.
+tagger and 1,257 labelled by hand: 289 by me and 968 by Claude Opus.
 
 `junction` has two profiles. `prose`, the default, is the one above. `verse`
 scans the line once with the junction read as an ezāfe and once without, and
@@ -302,14 +302,14 @@ I check it on labelled sites and on SentenceBench and HomoRich pronunciations:
 
 | | sites | agree | always the commoner label |
 |---|---:|---:|---:|
-| `written`, dev | 102 | 100 (98%) | 88.2% |
-| `written`, first test | 78 | 73 (93.6%) | 87.2% |
+| `written`, dev | 92 | 91 (99%) | 89.1% |
+| `written`, first test | 61 | 57 (93.4%) | 85.2% |
 | `written`, second test | 48 | 46 (95.8%) | 95.8% |
 | `written`, SentenceBench | 14 | 13 (93%) | 100% |
 | `written`, HomoRich | 2,724 | 98.5% | 98.9% |
 | `junction`, prose, 5 folds | 524 | 480 (91.6%) | 66.8% |
 | `junction`, prose, random sample, 5 folds | 149 | 137 (91.9%) | 73.2% |
-| `junction`, prose, held-out text | 300 | 90.1% | 69.4% |
+| `junction`, prose, held-out text | 300 | 89.6% | 69.4% |
 | `junction`, verse | 252 | 238 (94.4%) | 91.3% |
 | `junction`, SentenceBench | 132 | 116 (88%) | 76.5% |
 | `junction`, HomoRich | 58,947 | 89.8% | 73.6% |
@@ -350,9 +350,9 @@ pair rewritten with a kasra) or belongs there (`right`: خونه، خوبه، پ
 It's 700 boosted trees over corpus counts of the two words (how edited text
 spells the word, how often the pair is written bare or with a kasra, what
 follows each) and the words around, trained on kasras rewritten as ه. Another 300
-trees, trained on 13,203 sites labelled by hand, correct them; they also see how
+trees, trained on 13,234 labelled sites, correct them; they also see how
 informal the 40 characters on either side read (`informality`). The labels are
-mine and AI models': Claude's, and Claude Opus's and GPT's where both agreed.
+mine (992) and Claude's.
 
 It flags a site at probability 0.9; `threshold` changes that. I tested it on
 text I set aside before building any of it: 1,431 sites from 110,770 in 70,087
@@ -363,14 +363,14 @@ and a sample of the rest, where their labels held.
 
 | | precision | 95% interval | share of the errors flagged |
 |---|---:|---:|---:|
-| threshold 0.9 | 0.98 | 0.95–1.00 | 0.18 |
-| threshold 0.8 | 0.95 | 0.92–0.98 | 0.26 |
+| threshold 0.9 | 0.97 | 0.94–1.00 | 0.19 |
+| threshold 0.8 | 0.94 | 0.90–0.97 | 0.27 |
 | the opt-in model below, 0.9 | 0.97 | 0.94–0.99 | 0.46 |
 | the opt-in model below, 0.8 | 0.95 | 0.92–0.97 | 0.54 |
 | 0.5.0 | 0.80 | 0.72–0.88 | 0.23 |
 
-About one ه in 200 there is this ezāfe. The test ran on 0.6.0; this release
-flags the same sites, less one false alarm of the model's, a verb it now skips.
+About one ه in 200 there is this ezāfe. The first two rows are this
+release; the model's rows were measured on 0.6.0.
 It still misses plenty, including the first example above.
 
 ```sh
@@ -394,7 +394,7 @@ model.heh("دیواره اتاقه من", threshold=0.9)
 
 `junctions` keeps the rules and puts the model where the trees would decide. On
 the held-out text it's right on 96.2% (94–98%) of the unmarked junctions, the
-trees on 90.1% (87–93%); under five folds on the hand labels the two were level,
+trees on 89.6% (86–93%); under five folds on the hand labels the two were level,
 90.5% and 93.3% against 91.6% and 91.9%. On the ezāfe written as ه it finds two
 and a half times as many at the same precision (table above).
 
@@ -521,8 +521,8 @@ weighted to how often each kind of line occurs:
 | | word precision | word recall | lines with Arabic found | false alarms per 1,000 lines |
 |---|---:|---:|---:|---:|
 | rules (0.6.0) | 82% | 39% | 59% | 0.07 |
-| model | 85% | 62% | 72% | 0.65 |
-| strict, with the Quran index | 87% | 45% | 62% | 0.07 |
+| model | 85% | 63% | 72% | 0.66 |
+| strict, with the Quran index | 86% | 45% | 62% | 0.07 |
 
 ```sh
 ghazal-nlp arabic "چنانکه گفته‌اند الحمد لله رب العالمین و ..."
@@ -556,7 +556,7 @@ normalize.profile("ckb", "document")                 # "arab": the steps a corpu
 ## Data
 
 The code is MIT. The data in `ghazal_nlp/data` is CC BY 4.0, except the files
-that quote Wikipedia or Wikisource, which are CC BY-SA 4.0 (`data/LICENSE`
+that quote Wikipedia, Wikisource or Ganjoor, which are CC BY-SA 4.0 (`data/LICENSE`
 lists them); each TSV's header says where it comes from. `ezafe-junction-counts.tsv.gz`
 and `ezafe-junction-trees.json` are `junction`'s counts and trees. `data/normalize` holds
 the normalizer's tables as the corpus has them, counted on the corpus.
@@ -577,7 +577,9 @@ from importlib.resources import files
 rows = [json.loads(line) for line in gzip.open(files("ghazal_nlp") / "data/corpus-sample.jsonl.gz")]
 ```
 
-The test data, one item per line (my labels, except the last):
+The test data, one item per line (my labels, except the last). Each quoted row
+names its page (`title`, `url`); the authors of a Wikipedia or Wikisource page
+are in that page's history:
 
 - `ezafe-written-dev.jsonl`, `ezafe-junctions-dev.jsonl` and `ezafe-lab-1.jsonl`:
   silent-ه junctions. The text around the junction with its mark removed

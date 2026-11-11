@@ -320,7 +320,7 @@ def test_the_reading_notation():
 @pytest.mark.parametrize("name", ["readings-thiesen.tsv"])
 def test_every_reading_realises_its_metre(full, name):
     rows = aruz_eval.load_readings(DATA / name)
-    assert len(rows) in (513, 34)
+    assert len(rows) in (509, 34)
     for row in rows:
         assert row["provenance"].startswith("thiesen-1982:p."), row["id"]
         assert any(realizes(weights_of(row["pronunciation"]), p) for p in full.label_patterns[row["metre"]]), row["id"]
@@ -328,7 +328,7 @@ def test_every_reading_realises_its_metre(full, name):
 
 def test_the_scanner_reaches_the_readings():
     rows = aruz_eval.load_readings(DATA / "readings-thiesen.tsv")
-    assert aruz_eval.score_readings(rows, Scanner())["reading_admitted"] == 507
+    assert aruz_eval.score_readings(rows, Scanner())["reading_admitted"] == 503
 
 
 def test_readings_lay_out_the_scan():

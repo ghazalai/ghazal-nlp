@@ -91,10 +91,10 @@ def test_only_the_neutral_text_is_read():
 def test_the_development_rulings():
     written = [json.loads(line) for line in open(DATA / "ezafe-written-dev.jsonl", encoding="utf-8")]
     junctions = [json.loads(line) for line in open(DATA / "ezafe-junctions-dev.jsonl", encoding="utf-8")]
-    assert ezafe.score(written, ezafe.written, "blind")["agree"] == 96
-    assert ezafe.score(written, ezafe.written, "revised")["agree"] == 100
-    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 114
-    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 114
+    assert ezafe.score(written, ezafe.written, "blind")["agree"] == 88
+    assert ezafe.score(written, ezafe.written, "revised")["agree"] == 91
+    assert ezafe.score(junctions, ezafe.junction, "blind")["agree"] == 107
+    assert ezafe.score(junctions, ezafe.junction, "revised")["agree"] == 107
 
 
 def test_junctions_in_plain_text():

@@ -287,7 +287,7 @@ def words(text: str, *, quran=None, threshold=None, strict=False):
 
     Tokens follow TOKEN (Arabic-script words, including internal ZWNJ); other
     scripts, digits and punctuation are excluded. A silver-trained model is
-    calibrated on weighted, GPT-labeled development lines. Nonverified runs
+    calibrated on weighted, labelled development lines. Nonverified runs
     shorter than two words abstain, regardless of probability. Strict mode
     requires rule agreement and uses a higher default threshold.
     """

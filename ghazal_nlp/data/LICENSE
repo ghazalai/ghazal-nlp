@@ -5,11 +5,26 @@ https://creativecommons.org/licenses/by/4.0/
 Copyright (c) 2026 Ali Julaee Rad. Each file's header names what it was
 derived from.
 
-These files quote text from Wikipedia and Wikisource, or are derived from the
-Tajik Shahnameh corpus (ArabovMK/shahnameh-tajik-corpus), and are licensed under
-CC BY-SA 4.0 instead (https://creativecommons.org/licenses/by-sa/4.0/):
+These files quote text from Wikipedia, Wikisource and Ganjoor, or are derived
+from the Tajik Shahnameh corpus (ArabovMK/shahnameh-tajik-corpus), and are
+licensed under CC BY-SA 4.0 instead (https://creativecommons.org/licenses/by-sa/4.0/):
 ezafe-written-dev.jsonl, ezafe-junctions-dev.jsonl, ezafe-lab-1.jsonl,
 arabic-spans-lab.jsonl, arabic-lines-lab.jsonl, shahnameh-tajik-test.jsonl.
+Each quoted row gives its page's title and url; the authors of a Wikipedia or
+Wikisource page are in that page's history. Changes: a short passage is cut
+from the page, markup removed, and in the ezafe files the mark under test
+removed. The Wikisource and Ganjoor passages are from laws, parliamentary
+records and works whose authors died by 1955.
+
+ezafe-heh-pairs.tsv, ezafe-heh-left.tsv and ezafe-heh-words.tsv hold word and
+word-pair counts, not passages. Their sources (social media, comments, forums,
+news sites, FineWeb2, Persian Wikipedia and Wikibooks) are named in each header;
+most state no licence and none of their text is redistributed. Hashtags and
+long numbers are left out.
+
+ezafe-junction-counts.tsv.gz is CC BY-SA 4.0: word and word-pair counts from
+Persian Wikipedia, Wikibooks, Wikivoyage and Wiktionary (CC BY-SA 4.0), Ganjoor
+and Common Voice (CC0).
 
 arabic-model.json.gz is CC BY-SA 4.0: word and character statistics and model
 parameters, no source passages and no copy of the Quran. Built from arwikisource,
@@ -74,9 +89,13 @@ where available, and exact input snapshots by filename, byte size and SHA-256.
 Shared input files are counted once in that manifest.
 
 Sources: Ganjoor historical verse (local licence unstated), DehkhodaProject
-(CC0, https://github.com/DehkhodaProject/DehkhodaProject), Steingass's 1892
-dictionary (public domain, https://dsal.uchicago.edu/dictionaries/steingass/;
-digital transcription MIT, notice below), English Wiktionary via Kaikki
+(the scraper's release is CC0; rights in the dictionary itself are not
+established, and only headwords and their readings are used,
+https://github.com/DehkhodaProject/DehkhodaProject), Steingass's 1892
+dictionary (public domain; read from the Digital Dictionaries of South Asia
+edition, https://dsal.uchicago.edu/dictionaries/steingass/, which is offered
+under CC BY-NC-ND 2.0, through the steingass-scraper database, whose code
+licence is below; only headwords and their readings are used), English Wiktionary via Kaikki
 (https://kaikki.org/dictionary/Persian/), Persian and Tajik Wiktionary, Persian
 Wikipedia, Wikisource, Wikibooks, Wikiquote and Wikivoyage (CC BY-SA 4.0),
 Persian Wikinews (CC BY 2.5), Common Voice (CC0), HomoRich-G2P-Persian
