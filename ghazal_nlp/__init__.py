@@ -2,7 +2,7 @@
 
 import importlib
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 __all__ = ["arabic", "aruz", "ezafe", "normalize", "orthography", "verb", "vowels"]
 
 

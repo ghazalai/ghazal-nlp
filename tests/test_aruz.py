@@ -198,9 +198,23 @@ def test_votes_and_winners(monkeypatch):
     assert aruz.winners({rubai: 10, dobeyti: 10}, costs, 10) == [dobeyti]
     assert aruz.winners({rubai: 4, dobeyti: 4}, costs, 4) == [rubai]
     assert aruz.winners({rubai: 10, dobeyti: 9}, costs, 10) == [rubai]
-    line = Scansion("x", metres=("a",), licences=1, candidates=(("a", 1), ("b", 2), ("c", 9)))
+    line = Scansion("x", metres=("a",), licences=1, candidates=(("a", 1), ("b", 2), ("c", 9)),
+                    costs=(("a", 0.6), ("b", 3.2), ("c", 1.0)))
     monkeypatch.setattr(aruz, "VOTE_MARGIN", 1)
-    assert aruz.votes(line) == [("a", 1), ("b", 2)]
+    assert aruz.votes(line) == [("a", 0.6), ("b", 3.2)]
+
+
+def test_licences_are_weighed_by_how_often_poets_take_them():
+    scan = aruz.scanner()
+    assert aruz.scan_poem("تهی شد ز کینه سر کینه دار", scan).metres == (SHAHNAMEH.replace(")", " یا وزن شاهنامه)"),)
+    assert aruz.scan_poem("لعبت بازی پس این پرده هست", scan).metres == ("مفتعلن مفتعلن فاعلن (سریع مطوی مکشوف)",)
+    assert aruz.rank_cost(aruz.OVERLONG) > aruz.rank_cost(aruz.EBDAL) > 0 > aruz.rank_cost(aruz.ELIDE)
+
+
+def test_honorifics_are_not_read():
+    scan = aruz.scanner()
+    assert scan.scan("تو دیدی چه کردند با مرتضی (ع)").metres == scan.scan("تو دیدی چه کردند با مرتضی").metres
+    assert scan.scan("وآنگهی کآن احمد (ص) پاکیزه صوت").metres == scan.scan("وآنگهی کآن احمد پاکیزه صوت").metres
 
 
 def test_vowel_licences_are_already_in_the_letters():

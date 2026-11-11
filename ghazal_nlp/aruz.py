@@ -45,6 +45,7 @@ def pattern_for_label(label: str) -> str | None:
 
 FOLD = str.maketrans("يىﻯكةۀئؤأإٱ", "یییکههءءءاا")
 STRIP = re.compile("[ً-ٰ٘ۖ-ۭـ​-‏﻿]")
+HONORIFIC = re.compile(r"\((?:ع|ص|س|ره|رض|عج)\)")
 WORD = re.compile(r"[^\s .,،؛؟!:;«»\"'()\[\]{}\-–—ـ/\\|*_+=]+")
 CONSONANTS = set("بپتثجچحخدذرزژسشصضطظعغفقکگلمنهویء")
 LETTERS = CONSONANTS | {"ا", "آ"}
@@ -69,6 +70,17 @@ DEVICES = (
 # editor's own marks, not licences.
 FREE = FINAL | ELIDE | VAV | XVA | WRITTEN_GEMINATION | WRITTEN_EZAFE | NASAL
 COST = [(mask & ~FREE).bit_count() for mask in range(1 << 23)]
+# What a licence costs when metres are ranked, fitted on held-out Ganjoor poems no
+# published number uses; below zero, the reading that takes it is more often the poet's.
+RANK_COST = {SHORTEN: 1.6, ELIDE: -0.4, GLIDE: 1.2, TASHDID: 1.5, XVA: -0.6, FINAL: 0.2, OVERLONG: 2.4,
+             VAV: -0.5, EBDAL: 0.9, INITIAL: 1.7, EZAFE: 0.6, WRITTEN_GEMINATION: -0.2, EZAFE_LONG: 0.9,
+             WRITTEN_EZAFE: -0.3, AST: 0.5, NASAL: -0.4, NUN_COUNTED: 0.6, FINAL_E: 2.0, CHO_LONG: 1.3,
+             ALEF_SHORT: 1.1, FUSED: 1.0, JOINED_VAV: 1.1, R_DOUBLED: 1.5}
+
+
+@lru_cache(maxsize=None)
+def rank_cost(mask: int) -> float:
+    return sum(cost for bit, cost in RANK_COST.items() if mask & bit)
 
 
 def device_names(mask: int) -> tuple[str, ...]:
@@ -134,7 +146,7 @@ def _kept_marks(raw: str, ch: str, initial: bool, final: bool, word: str, sel: M
 
 def prepare(line: str, *, marks: Marks | None = None) -> Skeleton:
     """Fold, strip and split a line; with ``marks``, keep them beside the letters."""
-    text = fold(line)
+    text = HONORIFIC.sub(" ", fold(line))
     if marks is not None:
         text = text.replace("ۀ", "ه" + HAMZA)
     text = text.translate(FOLD)
@@ -672,7 +684,8 @@ class WeightLexicon:
 @dataclass(frozen=True, slots=True)
 class Scansion:
     """One hemistich: the cheapest metres, or an abstention. ``candidates`` holds
-    every admitted metre with its licence cost; ``gated`` says the lexicon was used."""
+    every admitted metre with its licence cost, ``costs`` the same with its ranking
+    cost (``RANK_COST``); ``gated`` says the lexicon was used."""
 
     line: str
     metres: tuple[str, ...] = ()
@@ -683,6 +696,7 @@ class Scansion:
     candidates: tuple[tuple[str, int], ...] = ()
     abstention: str | None = None
     gated: bool = False
+    costs: tuple[tuple[str, float], ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -785,20 +799,22 @@ class Scanner:
         if not hits:
             return Scansion(line, abstention=self._why_not(skel))
         cheapest = min(hit[0] for hit in hits.values())
-        labels, weights, patterns, candidates, mask = [], [], [], {}, 0
+        labels, weights, patterns, candidates, costs, mask = [], [], [], {}, {}, 0
         for index in sorted(hits, key=lambda k: (hits[k][0], self.trie.patterns[k])):
-            cost, realized, used, _ = hits[index]
+            cost, realized, used, _, rank = hits[index]
             pattern = self.trie.patterns[index]
             found = self.inventory.pattern_labels[pattern]
             for label in found:
                 candidates.setdefault(label, cost)
+                costs.setdefault(label, rank)
             if cost == cheapest:
                 patterns.append(pattern)
                 weights.append(realized)
                 mask |= used
                 labels.extend(found)
         return Scansion(line, tuple(dict.fromkeys(labels)), tuple(patterns), tuple(weights[:self.max_weights]),
-                        device_names(mask), cheapest, tuple(candidates.items()), gated=gate is not None)
+                        device_names(mask), cheapest, tuple(candidates.items()), gated=gate is not None,
+                        costs=tuple(costs.items()))
 
     def readings(self, line: str) -> tuple[Reading, ...]:
         """Every admitted pattern read syllable by syllable, cheapest first; empty
@@ -810,7 +826,7 @@ class Scanner:
         hits, _ = self._hits(skel, trace=True)
         found = []
         for index in sorted(hits, key=lambda k: (hits[k][0], self.trie.patterns[k])):
-            cost, realized, used, trail = hits[index]
+            cost, realized, used, trail, _ = hits[index]
             pattern = self.trie.patterns[index]
             found.append(Reading(tuple(self.inventory.pattern_labels[pattern]), pattern, realized, cost,
                                  device_names(used), _syllables_of(skel, trail)))
@@ -902,11 +918,11 @@ class Scanner:
         return gate if covered else None
 
     def _search(self, skel: Skeleton, gate, trace: bool = False) -> dict[int, tuple]:
-        """Pattern index → (licences, weights, devices, trail) of its cheapest reading;
-        the trail, kept only when ``trace``, is what ``readings`` lays out."""
+        """Pattern index → (licences, weights, devices, trail, ranking cost) of its cheapest
+        reading; the trail, kept only when ``trace``, is what ``readings`` lays out."""
         trie, devices, n = self.trie, self.devices, len(skel)
         frontier: list[dict[int, tuple]] = [{} for _ in range(n + 1)]
-        frontier[0][0] = (0, "", 0, None)
+        frontier[0][0] = (0, "", 0, None, 0)
         hits: dict[int, tuple] = {}
 
         def offer(store, node, path):
@@ -919,12 +935,12 @@ class Scanner:
             if not nodes:
                 continue
             if _glide(skel, i, devices):
-                for node, (cost, sofar, mask, trail) in list(nodes.items()):
+                for node, (cost, sofar, mask, trail, rank) in list(nodes.items()):
                     for weight, dev in _glide_weights(devices):
                         landed = trie.walk(node, weight)
                         if landed is not None:
                             offer(nodes, landed, (cost + COST[dev], sofar + weight, mask | dev,
-                                                           (trail, i, i, weight, dev) if trace else None))
+                                                  (trail, i, i, weight, dev) if trace else None, rank + rank_cost(dev)))
             if trie.caesura and i and skel.word[i] != skel.word[i - 1]:
                 for node, path in list(nodes.items()):
                     half = trie.children[node].get(CAESURA)
@@ -936,11 +952,11 @@ class Scanner:
                     continue
                 for realized, licence in _pattern_slots(weights, i, devices):
                     extra = COST[dev] + COST[licence]
-                    for node, (cost, sofar, mask, trail) in nodes.items():
+                    for node, (cost, sofar, mask, trail, rank) in nodes.items():
                         if licence and _slot_blocked(licence, trie.depth[node], devices):
                             continue
                         path = (cost + extra, sofar + realized, mask | dev | licence,
-                                (trail, i, nxt, realized, dev | licence) if trace else None)
+                                (trail, i, nxt, realized, dev | licence) if trace else None, rank + rank_cost(dev | licence))
                         landed = trie.walk(node, realized)
                         if landed is not None:
                             offer(frontier[nxt], landed, path)
@@ -954,7 +970,8 @@ class Scanner:
                         for ch, child in trie.children[node].items():
                             if trie.terminal[child] is not None and child != landed:
                                 offer(hits, trie.terminal[child], (path[0], sofar + ch, path[2] | FINAL,
-                                                                   (trail, i, nxt, ch, dev | licence | FINAL) if trace else None))
+                                                                   (trail, i, nxt, ch, dev | licence | FINAL) if trace else None,
+                                                                   rank + rank_cost(dev | licence | FINAL)))
         for node, path in frontier[n].items():
             if trie.terminal[node] is not None:
                 offer(hits, trie.terminal[node], path)
@@ -986,7 +1003,7 @@ def scanner(lexicon: bool = True) -> Scanner:
 
 
 MAX_LINES = 40
-PRIOR_WEIGHT = 1.5  # licences one power of ten of poems is worth
+PRIOR_WEIGHT = 2.1  # ranking cost one power of ten of poems is worth
 VOTE_MARGIN = 6  # a line votes for every metre within this many licences of its cheapest
 
 
@@ -997,13 +1014,14 @@ def hemistichs(text: str) -> list[str]:
     return [line for line in lines if sum(c in LETTERS for c in line) >= 6]
 
 
-def votes(scansion: Scansion) -> list[tuple[str, int]]:
-    ceiling = scansion.licences + VOTE_MARGIN
-    return [(metre, cost) for metre, cost in scansion.candidates if cost <= ceiling]
+def votes(scansion: Scansion) -> list[tuple[str, float]]:
+    """Each metre within ``VOTE_MARGIN`` licences of the cheapest, with its ranking cost."""
+    ceiling, costs = scansion.licences + VOTE_MARGIN, dict(scansion.costs)
+    return [(metre, costs[metre]) for metre, licences in scansion.candidates if licences <= ceiling]
 
 
 def winners(votes: Counter, costs: Counter, hemistich_count: int, poems: dict[str, int] | None = None) -> list[str]:
-    """Most votes, then fewest licences less how common the metre is (``poems``);
+    """Most votes, then the lowest ranking cost less how common the metre is (``poems``);
     past a quatrain the robāʿī loses ties, since its many shapes almost always
     find a cheaper reading."""
     def rank(m):
@@ -1027,7 +1045,7 @@ class PoemScansion:
 def scan_poem(text: str, scan: Scanner | None = None, *, max_lines: int = MAX_LINES) -> PoemScansion:
     """A poem's metre: the one most of its hemistichs admit."""
     scan = scan or scanner()
-    tally, costs, reasons = Counter(), Counter(), Counter()
+    tally, costs, licences, reasons = Counter(), Counter(), Counter(), Counter()
     scanned = 0
     lines = hemistichs(text)
     for line in lines[:max_lines]:
@@ -1036,13 +1054,15 @@ def scan_poem(text: str, scan: Scanner | None = None, *, max_lines: int = MAX_LI
             reasons[s.abstention] += 1
             continue
         scanned += 1
+        found = dict(s.candidates)
         for metre, cost in votes(s):
             tally[metre] += 1
             costs[metre] += cost
+            licences[metre] += found[metre]
     if not tally:
         return PoemScansion(lines=scanned, abstained=reasons.total(), abstentions=tuple(reasons.most_common()))
     best = winners(tally, costs, len(lines), scan.inventory.poems)
-    return PoemScansion(tuple(best), tally[best[0]], scanned, reasons.total(), costs[best[0]],
+    return PoemScansion(tuple(best), tally[best[0]], scanned, reasons.total(), licences[best[0]],
                         tuple(reasons.most_common()))
 
 
