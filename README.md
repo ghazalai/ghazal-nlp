@@ -242,7 +242,7 @@ Tested by me, with the vowels hidden first:
 | … with no training sentence above 0.5 similarity | 56,914 | 57.0% | 95.4% |
 | … with no training sentence above 0.8 similarity | 65,656 | 57.0% | 95.7% |
 | SentenceBench, homographs | 164 | 46.9% | 84.1% |
-| 122 sentences I labelled, prose and verse | 143 | 49.6% | 76.9% |
+| 122 sentences I labelled, prose and verse | 143 | 51.7% | 76.2% |
 | Wikipedia prose dev: every editor's mark recovered | 7,758 | 54.8% | 58.8% |
 | Ganjoor, 1,891 dev poems: every editor's mark recovered | 21,885 | 73.9% | 72.6% |
 | 150 common homographs in held-out sentences (Wikipedia, blogs, news, poetry) | 297 | 36.0% | 93.6% |
@@ -251,12 +251,12 @@ In the last row each sentence was read by two labellers who couldn't see each
 other's answers, and the commonest reading leaves out HomoRich's counts, which
 are balanced across readings by design.
 
-`minimal` uses 106 reviewed homographs, a second reading with at least 5% of
+`minimal` uses 181 reviewed homographs, a second reading with at least 5% of
 the lexical or context evidence, and calibrated confidence of 0.8. Function
-words ordinarily stay bare. On HomoRich, 96.3% of its marks on labelled
-homographs are right, and it marks 22.0% of their occurrences (121,928 located
+words ordinarily stay bare. On HomoRich, 96.1% of its marks on labelled
+homographs are right, and it marks 38.8% of their occurrences (121,928 located
 targets; 7,678 rows have no locatable target). On my labelled set these figures
-are 91.3% and 65.0%. Marks elsewhere earn no credit. In prose and poetry I can
+are 90.2% and 57.3%. Marks elsewhere earn no credit. In prose and poetry I can
 score only the slots the editors marked; unmarked slots are unknown. Modern
 prose and unfamiliar contexts remain weak, and on Ganjoor the commonest reading
 still wins.

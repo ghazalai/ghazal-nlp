@@ -84,7 +84,7 @@ def test_real_function_word_sentences_stay_unmarked():
 
 
 def test_ethnic_coordination_and_biological_compounds():
-    assert v.mark('او از کرد و ترک بود') == 'او از کُرد و تُرک بود'
+    assert v.mark('او از کرد و ترک بود') == 'او از کرد و تُرک بود'
     choice=v.choose('کرم ابریشم پیله می‌سازد')[0]
     assert c.signature(choice.form)==c.signature('کِرْم')
     assert v.mark('کرم ابریشم پیله می‌سازد')=='کِرم ابریشم پیله می‌سازد'
