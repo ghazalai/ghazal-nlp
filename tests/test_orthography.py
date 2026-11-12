@@ -307,6 +307,12 @@ def test_house_spellings_are_suggestions_not_errors():
     assert [f[3] for f in ghazal("كتاب")] == ["violation"]
 
 
+def test_a_misspelt_pair_is_not_a_house_form():
+    for text in ("قانون گزاری", "سرمایه گزاری", "خدمت گذاری", "برمی خواست"):
+        assert ghazal(text) == []
+    assert ghazal("قانون گذاری") == [("ghazal.compounds", "قانون گذاری", f"قانون{ZWNJ}گذاری", "house")]
+
+
 def test_the_verb_analyser_decides_mi():
     assert ghazal("میرود") == [("ghazal.mi_prefix", "میرود", f"می{ZWNJ}رود", "violation")]
     for text in ("میدان", "میوه", "میدانی", "می ناب", "میراث"):

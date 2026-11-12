@@ -4,6 +4,7 @@
 # stratum writes it at least 10% of the time; the house one is what the strata
 # prefer on average. Plurals and comparatives keep the ZWNJ. evidence: per stratum,
 # how often the pair is written spaced/with a ZWNJ/solid.
+# A pair that is another pair misspelt is left out (قانون گزاری for قانون گذاری).
 # Ali's rulings override the counts: ستاره‌دار; یکدست, and «یک دست» is left alone as it can mean one hand.
 # first	second	house	others	evidence
 آئین	های	zwnj	solid	wikipedia 3/13/1; state media 0/5/0
@@ -2519,7 +2520,6 @@
 خدای	نکرده	spaced	zwnj	wikipedia 31/6/0; state media 5/0/0; literature 26/0/0; historical 67/1/0
 خدشه	دار	zwnj	spaced	wikipedia 15/23/0; state media 4/26/0; literature 10/11/0; edited prose 4/1/0; historical 4/1/0
 خدمت	های	zwnj	solid	wikipedia 0/6/0; state media 0/5/0; historical 0/5/16
-خدمت	گذاری	zwnj	solid,spaced	wikipedia 1/6/4; literature 5/0/1; historical 1/3/33
 خدمت	گزار	solid	spaced	wikipedia 0/0/53; state media 0/0/48; literature 23/2/2; historical 2/2/54
 خدمت	گزاران	solid	zwnj	wikipedia 0/3/19; state media 0/1/60; literature 0/0/11; historical 0/11/64
 خدمت	گزاری	solid	spaced	wikipedia 0/1/22; state media 3/3/84; literature 25/1/10; edited prose 0/2/3; historical 1/7/91
@@ -3961,7 +3961,6 @@
 سرقت	های	zwnj	solid	wikipedia 3/3/1; state media 2/57/0
 سرمایه	گذاریها	zwnj	spaced	wikipedia 11/0/0; historical 1/5/0
 سرمایه	گذاریهای	zwnj	spaced	wikipedia 8/0/0; historical 1/48/0
-سرمایه	گزاری	zwnj	spaced	wikipedia 9/4/0; historical 2/5/0
 سرمتن	ها	zwnj	solid	wikipedia 0/8/0
 سرمتی	ها	zwnj	solid	wikipedia 0/5/0
 سرمربی	گری	solid	spaced,zwnj	wikipedia 9/8/46; state media 0/0/8; edited prose 0/3/2
@@ -5375,7 +5374,6 @@
 قانون	گذاران	solid	zwnj	wikipedia 2/10/14; state media 0/7/8
 قانون	گذاری	zwnj	solid	wikipedia 21/67/45; state media 0/27/12; literature 9/0/4; edited prose 0/10/4; historical 17/24/578
 قانون	گرایی	zwnj	solid	wikipedia 2/11/5
-قانون	گزاری	solid	spaced,zwnj	wikipedia 0/6/8; literature 9/0/0; historical 8/1/10
 قاچاقچی	ها	zwnj	solid	wikipedia 0/6/0
 قایق	رانی	solid	zwnj	wikipedia 4/10/44; state media 0/1/29; literature 0/9/26; edited prose 2/7/1
 قایق	ها	zwnj	solid	wikipedia 4/22/2; state media 0/5/0; literature 0/98/2; historical 0/2/12
