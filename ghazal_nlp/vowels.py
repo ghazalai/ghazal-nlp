@@ -12,9 +12,11 @@ a reading without marks when all vowels are already written as letters.
 from __future__ import annotations
 
 import json
+import marshal
 import re
 import unicodedata
 from collections import Counter
+from collections.abc import MutableMapping
 from dataclasses import dataclass, field
 from datetime import date
 from functools import lru_cache
@@ -35,6 +37,7 @@ HARAKAT = VOWELS | {SHADDA}
 MARKS = "\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06ed\u08d3-\u08ff"
 TOKEN = re.compile(rf"(?:[^\W_]|[{MARKS}{ZWNJ}{ZWJ}{TATWEEL}])+")
 PERSIAN = re.compile("[ؠ-يٮ-ۿ]")
+_PLAIN_WORD = re.compile("[بپتطثسصجچحهخدذزضظرژشغقفکگلمناآویعءئأإؤة]+(?:‌[بپتطثسصجچحهخدذزضظرژشغقفکگلمناآویعءئأإؤة]+)*")
 MARKS_AFTER_CONTROL = re.compile(rf"([{ZWNJ}{ZWJ}]+)([{MARKS}]+)")
 DIPHTHONG = re.compile(rf"(?:{KASRA}(?=(?:{SHADDA})?یْ)|{DAMMA}(?=(?:{SHADDA})?وْ))")
 
@@ -210,11 +213,65 @@ class Entry:
         return sum(r.count >= min_evidence for r in self.readings) > 1
 
 
-class Lexicon(dict):
+class Lexicon(MutableMapping):
     """Skeleton to Entry, for words with attested vowel or pronunciation evidence."""
 
+    def __init__(self, *args, **kwargs):
+        self._entries = dict(*args, **kwargs)
+        self._get = self._entries.__getitem__
+
+    def __getitem__(self, key):
+        return self._get(key)
+
+    def get(self, key, default=None):
+        try:
+            return self._get(key)
+        except KeyError:
+            return default
+
+    def __iter__(self):
+        return iter(self._entries)
+
+    def __len__(self):
+        return len(self._entries)
+
+    def __contains__(self, key):
+        return key in self._entries
+
+    def _mutable(self):
+        if not isinstance(self._entries, dict):
+            self._entries = dict(self.items())
+            self._get = self._entries.__getitem__
+
+    def __setitem__(self, key, value):
+        self._mutable()
+        self._entries[key] = value
+
+    def __delitem__(self, key):
+        self._mutable()
+        del self._entries[key]
+
+    def copy(self):
+        return dict(self.items())
+
+    def clear(self):
+        self._entries = {}
+        self._get = self._entries.__getitem__
+
+    def popitem(self):
+        self._mutable()
+        return self._entries.popitem()
+
+    @classmethod
+    def fromkeys(cls, keys, value=None):
+        return cls(dict.fromkeys(keys, value))
+
+    def __repr__(self):
+        return repr(dict(self.items()))
+
     def lookup(self, token: str) -> Entry | None:
-        return self.get(skeleton(split_terminal(canonicalize(fold(token)))[0]))
+        key = token if _PLAIN_WORD.fullmatch(token) else skeleton(split_terminal(canonicalize(fold(token)))[0])
+        return self.get(key)
 
     def settled(self) -> list[Entry]:
         return [e for e in self.values() if e.settled]
@@ -224,15 +281,38 @@ class Lexicon(dict):
 
     @classmethod
     def load(cls, path: Path = DATA / "vowels-lexicon.tsv") -> Lexicon:
-        readings, totals = {}, {}
+        from ._vowel_tables import PackedMap
+        rows = PackedMap(marshal.loads)
+        previous, pending, totals = None, [], ()
+
+        def store(key):
+            old = rows.get(key)
+            records = old[0] + pending if old else pending
+            rows.add(key, marshal.dumps((records, *totals)))
+
         with path.open(encoding="utf-8") as f:
             for line in f:
                 if line.strip() and not line.startswith("#"):
                     key, form, count, variants, *rest = line.rstrip("\n").split("\t")
+                    if previous is not None and key != previous:
+                        store(previous)
+                        pending.clear()
+                    previous = key
                     provenance = json.loads(rest[3]) if len(rest) > 3 else {}
-                    readings.setdefault(key, []).append(Reading(form, int(count), int(variants), provenance))
-                    totals[key] = tuple(map(int, rest[:3]))
-        return cls({key: Entry(key, tuple(r), *totals[key]) for key, r in readings.items()})
+                    pending.append((form, int(count), int(variants), provenance))
+                    totals = tuple(map(int, rest[:3]))
+        if previous is not None:
+            store(previous)
+        lex = cls()
+        lex._entries = rows
+
+        @lru_cache(maxsize=2048)
+        def entry(key):
+            readings, marked, total, ezafe = rows[key]
+            return Entry(key, tuple(Reading(*r) for r in readings), marked, total, ezafe)
+
+        lex._get = entry
+        return lex
 
 
 @lru_cache(maxsize=1)
@@ -438,8 +518,9 @@ def source_info() -> dict:
 @lru_cache(maxsize=1)
 def _model() -> dict:
     import gzip
+    from ._vowel_tables import load_letters
     with gzip.open(DATA / "vowels-model.json.gz", "rt", encoding="utf-8") as f:
-        return json.load(f)
+        return load_letters(f)
 
 
 def letter_context(word: str, i: int, radius: int) -> str:

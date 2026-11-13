@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import gzip
-import json
 import math
 import unicodedata
 from dataclasses import dataclass
@@ -108,8 +107,9 @@ def compatible(form: str, marked: str, written=False) -> bool:
 
 @lru_cache(maxsize=1)
 def model() -> dict:
+    from ._vowel_tables import load_context
     with gzip.open(v.DATA / "vowels-context.json.gz", "rt", encoding="utf-8") as f:
-        return json.load(f)
+        return load_context(f)
 
 
 @lru_cache(maxsize=16)
