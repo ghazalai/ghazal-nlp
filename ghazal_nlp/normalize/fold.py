@@ -16,8 +16,8 @@ SPACE = re.compile("[\u00a0\u2000-\u200a\u202f\u205f\u3000]")
 STAND_IN = "\u200e\u200f\u061c\u200b\u00ad\ufeff\u00ac\u009d"
 MARK_IN_WORD = re.compile(f"[{STAND_IN}](?<=[{LETTER}{MARK}{HAMZA}][{STAND_IN}])[{STAND_IN}]*(?=[ـ{ZWNJ}{ZWJ}{STAND_IN}]*(?!ـ)[{LETTER}])")
 INVISIBLE = re.compile(r"[\u200b\u200e\u200f\u202a-\u202e\u2066-\u2069\u00ad\ufeff\u061c]")
-JOINERS = f"[{ZWNJ}{ZWJ}]*{ZWJ}[{ZWNJ}{ZWJ}]*"
-ARABIC_ZWJ = re.compile(f"(?<=[{LETTER}{MARK}{HAMZA}]){JOINERS}|{JOINERS}(?=[{LETTER}])")
+JOINER_RUN = re.compile(f"[{ZWNJ}{ZWJ}]+")
+BEFORE_JOINERS = re.compile(f"[{LETTER}{MARK}{HAMZA}]")
 ZWNJ_RUN = re.compile(f"{ZWNJ}+")
 JOINED = re.compile(f"[{JOINER}ـ][{MARK}{HAMZA}]{{0,2}}$")
 NEXT_LETTER = re.compile(f"[{LETTER}]")
@@ -70,10 +70,16 @@ def _zwnj(m):
 # ZWNJ is a dash and stays: تهران ـ ایرنا, جناغی‌ـ ترقوه‌ای; one carrying a mark is its seat). A direction mark, ZWSP,
 # soft hyphen, BOM or ¬ between two letters stood for a ZWNJ (حمل‌ونقل), so it becomes one. What comes together
 # recomposes (و‌ٔ → ؤ).
+def _arabic_zwj(m):
+    text, start = m.string, m.start()
+    beside = start and BEFORE_JOINERS.match(text, start - 1) or NEXT_LETTER.match(text, m.end())
+    return m[0].replace(ZWJ, "") if beside and ZWJ in m[0] else m[0]
+
+
 def invisibles(text):
     text = INVISIBLE.sub("", MARK_IN_WORD.sub(ZWNJ, text))
     if ZWJ in text:
-        text = ARABIC_ZWJ.sub(lambda m: m[0].replace(ZWJ, ""), text)
+        text = JOINER_RUN.sub(_arabic_zwj, text)
     text = ZWNJ_RUN.sub(_zwnj, text)
     if "ـ" in text:
         text = TATWEEL.sub("", text)

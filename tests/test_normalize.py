@@ -1,4 +1,5 @@
 import itertools
+import time
 
 import pytest
 
@@ -209,3 +210,9 @@ def test_not_equivalent(a, b):
 @pytest.mark.parametrize("text", ["خانهٔ پدری و کتابها", "قیمت 20% و 1404", 'گفت "سلام" و...', "هیچ وقت آنها را", "بزرگترین"])
 def test_house_idempotent(text):
     assert house(house(text)) == house(text)
+
+
+def test_long_joiner_run_is_fast():
+    began = time.perf_counter()
+    normalize("\u200d" * 20000 + "x")
+    assert time.perf_counter() - began < 1
