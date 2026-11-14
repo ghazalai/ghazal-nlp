@@ -65,6 +65,12 @@ def test_markdown_offsets_and_skips(monkeypatch, capsys, tmp_path):
                        "text": "کتاب ها", "suggestions": ["کتاب‌ها"], "severity": "error"}
 
 
+@pytest.mark.parametrize("text", ["---\r\ntitle: کتاب ها\r\n---\r\n", "    کتاب ها\n\nمتن", "<script>\nکتاب ها\n</script>\n"])
+def test_markdown_leaves_front_matter_indented_code_and_raw_html(monkeypatch, capsys, text):
+    status, out, _ = run(monkeypatch, capsys, "check", "--format", "markdown", "--json", text=text)
+    assert status == 0 and not json.loads(out)["findings"]
+
+
 def test_files_stdin_and_explicit_format(monkeypatch, capsys, tmp_path):
     path = tmp_path / "notes.markdown"
     path.write_text("`کتاب ها`", encoding="utf-8")

@@ -1,9 +1,10 @@
 import re
 
 
-FRONT = re.compile(r"\A---[ \t]*\n.*?\n(?:---|\.\.\.)[ \t]*(?:\n|\Z)", re.S)
+FRONT = re.compile(r"\A---[ \t]*\r?\n.*?\n(?:---|\.\.\.)[ \t]*(?:\r?\n|\Z)", re.S)
 FENCE = re.compile(r" {0,3}(`{3,}|~{3,})")
-COMMENT = re.compile(r"<!--.*?-->", re.S)
+COMMENT = re.compile(r"<!--.*?-->|<(script|style|pre|textarea)\b.*?</\1[ \t]*>", re.S | re.I)
+INDENTED = re.compile(r" {4}|\t")
 WHOLE = re.compile(r" {0,3}(?:([-*_])(?:[ \t]*\1){2,}|=+|\[[^\]^\n][^\]\n]*\]:[ \t]*\S.*)[ \t]*")
 DELIMITER = re.compile(r" {0,3}\|?[ \t]*+:?-+:?[ \t]*+(?:\|[ \t]*+:?-+:?[ \t]*+)*\|?[ \t]*+")
 MARKS = re.compile(r"[ \t]*+(?:>[ \t]?)*[ \t]*(?:(#{1,6})|[-*+]|\d{1,9}[.)])(?=[ \t]|$)(?:[ \t]+\[[ xX]\](?=[ \t]))?[ \t]*|[ \t]*(?:>[ \t]?)*[ \t]*")
@@ -30,7 +31,7 @@ def masks(text):
     for line in text.split("\n"):
         lines.append((at, line))
         at += len(line) + 1
-    fence = None
+    fence, code, blank = None, False, True
     for s, line in lines:
         if fence or (m := FENCE.match(line)):
             drop(s, min(s + len(line) + 1, len(text)))
@@ -38,6 +39,12 @@ def masks(text):
                 fence = m[1]
             elif line.strip().startswith(fence) and not line.strip().strip(fence[0]):
                 fence = None
+            code, blank = False, False
+            continue
+        code = bool(INDENTED.match(line)) and (code or blank) or code and not line.strip()
+        if code:
+            drop(s, min(s + len(line) + 1, len(text)))
+        blank = not line.strip()
     for m in COMMENT.finditer(text):
         drop(*m.span())
     table = False
