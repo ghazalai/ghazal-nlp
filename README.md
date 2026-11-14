@@ -10,6 +10,31 @@ ghazal-nlp conjugate گفتن --tense past --aspect imperfective --person 1 --nu
 ghazal-nlp check "آنها کتاب ها را میخوانند"
 ```
 
+## For agents
+
+I check spacing, half-spaces, punctuation, Arabic letters and digits with the package's rules. It runs offline, without a key. I ship no spelling tables; the [hosted API](https://ghazalai.ir/docs/) adds spelling checks, spoken-form suggestions and consistency checks.
+
+For a pre-commit gate, save this as `.git/hooks/pre-commit` and run `chmod +x .git/hooks/pre-commit`:
+
+```sh
+#!/bin/sh
+exec ghazal-nlp check --file notes.md --json
+```
+
+Run the same command in CI. Repeat `--file` for more files; `--file -` reads stdin. Exit status is `0` below `--fail-on`, `1` at or above it, and `2` for a usage or file error. The default threshold is `error`; `--fail-on style` includes advice and style too.
+
+Markdown files (`.md`, `.markdown`, or `--format markdown`) keep code, URLs, HTML tags, front matter and markup out of the check. Visible link labels stay prose. Offsets count Unicode code points in the original file, end exclusive.
+
+`ghazal-nlp fix --file notes.md` prints the corrected text; `--write` saves it. Only errors with one suggestion are applied. Check again to review what remains. Every result command takes `--json`; check and fix return one JSON object per file.
+
+For a local MCP client:
+
+```json
+{"mcpServers":{"ghazal":{"command":"ghazal-nlp","args":["mcp"]}}}
+```
+
+Use `tools/list` for the supported fields. The local tools need no network or key and have no spelling tables. MCP verse answers give metre; use `rhyme --form` for rhyme. The hosted API also provides verse confidence and rhyme inference.
+
 ## Tools
 
 ### `aruz`: classical metre

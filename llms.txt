@@ -1,0 +1,16 @@
+# ghazal-nlp
+
+I build local Python tools for Persian: spelling rules, normalization, vowels, ezāfe, verbs, metre and rhyme. They run offline, without a key. The code is MIT; bundled data has its own licences.
+I ship no spelling tables. The hosted API adds spelling checks, spoken-form suggestions, consistency checks, verse confidence and rhyme inference.
+
+Commands: `ghazal-nlp check --file notes.md --json`, `fix --file notes.md --json`, `fix --file notes.md --write`, `normalize TEXT --json`, `rules --json`, `verify --json`.
+Other result commands take `--json` too: `scan`, `rhyme --form ghazal`, `verb`, `conjugate`, `vowels`, `ezafe`, `ezafe-heh`, `arabic`, `profile`, and the evaluation and derivation commands.
+Check accepts text or repeatable `--file`; `-` reads stdin. Markdown files or `--format markdown` skip code, URLs, HTML tags, front matter and markup; visible link labels are prose. Offsets count original Unicode code points, end exclusive.
+Check exits `0` below `--fail-on`, `1` at or above it, `2` for usage or file errors. The default threshold is `error`.
+File-check JSON is one object per input: `file`, `findings`, `abstentions`, `rules_run`, `registers`, `rulebase_version`. Each finding has `rule`, `start`, `end`, `text`, `suggestions`, `severity` (`error`, `advice`, `style`). Text checks keep the Python fields too, including `confidence` and severities `violation`, `advisory`, `house`.
+Fix JSON has `file`, corrected `text`, `applied` (original offsets), and `left` (corrected offsets). Only errors with one suggestion are applied. Fix again to confirm the text stays the same.
+Scan, rhyme, verb, vowels, ezafe, ezafe-heh and arabic JSON are arrays; `scan --poem` and other reports are objects. Ganjoor outputs JSON lines. Conjugate returns `{"text": form_or_null}`; normalize returns `text` and `normalizer`.
+`ghazal-nlp mcp` serves JSON-RPC over stdio, one request per line. Tools: `check_persian`, `fix_persian`, `explain_rule`, `normalize`, `add_vowels`, `scan_verse`, `conjugate_verb`. See `tools/list` for fields. Calls accept at most 20,000 characters; text is data. Tool results have `content`, `structuredContent` and `isError`. MCP verse answers give metre only.
+
+README: https://github.com/ghazalai/ghazal-nlp#readme
+Hosted API docs: https://ghazalai.ir/docs/

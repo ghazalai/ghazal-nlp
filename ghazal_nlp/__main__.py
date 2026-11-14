@@ -1,15 +1,16 @@
 import argparse
 import json
 import sys
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict
 from pathlib import Path
 
 from . import arabic, arabic_eval, aruz, aruz_eval, ezafe, ganjoor, orthography, rhyme, rhyme_eval, verb, verb_eval, vowels
+from . import checking, gate, normalize
 from . import aruz_baselines, g2p_eval, orthography_eval, shahnameh_eval
 
 
 def dump(result) -> None:
-    print(json.dumps(asdict(result) if is_dataclass(result) else result, ensure_ascii=False, indent=2))
+    print(json.dumps(result, default=asdict, ensure_ascii=False, indent=2))
 
 
 def lines(a) -> list[str]:
@@ -18,7 +19,7 @@ def lines(a) -> list[str]:
 
 def snapshot(a):
     if not (a.snapshot / "cat").is_dir():
-        sys.exit(f"ghazal-nlp: {a.snapshot} is not a Ganjoor API snapshot (no cat/ folder)")
+        raise ValueError(f"{a.snapshot} has no cat/ folder; pass a Ganjoor API snapshot")
     for poem in ganjoor.poems(a.snapshot):
         print(json.dumps(poem, ensure_ascii=False))
 
@@ -28,11 +29,11 @@ def scan(a):
     if a.poem:
         result = aruz.scan_poem("\n".join(lines(a)), scanner)
         return dump(result) if a.json else print(" | ".join(result.metres) or "abstains", f"· {result.support} of {result.lines} hemistichs")
-    for line in aruz.hemistichs("\n".join(lines(a))):
-        s = scanner.scan(line)
-        if a.json:
-            dump(s)
-            continue
+    scans = [scanner.scan(line) for line in aruz.hemistichs("\n".join(lines(a)))]
+    if a.json:
+        return dump(scans)
+    for s in scans:
+        line = s.line
         print(line, "\n  ", " | ".join(s.metres) or f"abstains: {s.abstention}")
         if s.metres:
             print("  ", " ".join(s.weights), "·", ", ".join(s.devices) or "no licences")
@@ -56,10 +57,11 @@ def aruz_derive(a):
 
 
 def rhymes(a):
-    for r in rhyme.scan(lines(a), a.form):
-        if a.json:
-            dump(r)
-        elif r.abstention:
+    results = rhyme.scan(lines(a), a.form)
+    if a.json:
+        return dump(results)
+    for r in results:
+        if r.abstention:
             print("abstains:", r.abstention)
         else:
             print(f"qafiya {r.qafiya} · radif {r.radif or '—'} · rhyme words {'، '.join(r.words)}"
@@ -68,11 +70,11 @@ def rhymes(a):
 
 
 def analyse(a):
-    for token in " ".join(lines(a)).split():
-        result = verb.analyzer().analyze(token)
-        if a.json:
-            dump(result)
-            continue
+    results = [verb.analyzer().analyze(token) for token in " ".join(lines(a)).split()]
+    if a.json:
+        return dump(results)
+    for result in results:
+        token = result.token
         print(token)
         for r in result.readings:
             print("  ", r.lemma, r.features(), "·", ", ".join(r.rules) or "inflection")
@@ -81,15 +83,19 @@ def analyse(a):
 
 
 def conjugate(a):
-    print(verb.analyzer().conjugate(a.infinitive, tense=a.tense, mood=a.mood, person=a.person, number=a.number,
-                                    polarity=a.polarity, aspect=a.aspect) or "no such form")
+    form = verb.analyzer().conjugate(a.infinitive, tense=a.tense, mood=a.mood, person=a.person, number=a.number,
+                                     polarity=a.polarity, aspect=a.aspect)
+    dump({"text": form}) if a.json else print(form or "no such form; use verb to check the infinitive")
 
 
 def vocalize(a):
     lex = vowels.lexicon()
-    for token in vowels.tokens("\n".join(lines(a))):
-        e = lex.lookup(token)
-        print(token, "unattested" if e is None else " / ".join(f"{r.form}={r.count}" for r in e.readings), sep="\t")
+    entries = [{"text": token, "readings": list(e.readings) if (e := lex.lookup(token)) else []}
+               for token in vowels.tokens("\n".join(lines(a)))]
+    if a.json:
+        return dump(entries)
+    for e in entries:
+        print(e["text"], " / ".join(f"{r.form}={r.count}" for r in e["readings"]) or "unattested", sep="\t")
 
 
 def vowels_derive(a):
@@ -99,15 +105,23 @@ def vowels_derive(a):
 
 
 def junctions(a):
+    results = []
     for text in ["\n".join(lines(a))] if a.profile == "verse" else lines(a):
-        for j in ezafe.junctions(text, a.profile, a.metre):
-            print(text[slice(*j.span)], j.mark, j.label, j.reason, sep="\t")
+        found = ezafe.junctions(text, a.profile, a.metre)
+        results.extend(found)
+        if not a.json:
+            for j in found:
+                print(text[slice(*j.span)], j.mark, j.label, j.reason, sep="\t")
+    if a.json:
+        dump(results)
 
 
 def heh(a):
-    for line in lines(a):
-        for h in ezafe.heh(line):
-            dump(h) if a.json else print(f"{h.first} {h.second}", h.verdict, h.form, h.confidence, sep="\t")
+    results = [h for line in lines(a) for h in ezafe.heh(line)]
+    if a.json:
+        return dump(results)
+    for h in results:
+        print(f"{h.first} {h.second}", h.verdict, h.form, h.confidence, sep="\t")
 
 
 def ezafe_scores(a):
@@ -134,24 +148,12 @@ def rules(a):
     print(f"recorded {s['recorded']} · executable {s['executable']} · running {s['running']}")
 
 
-def check(a):
-    analysis = orthography.rulebase(a.style).check("\n".join(lines(a)), registers=tuple(a.register or ["formal_written"]),
-                                                   min_confidence=a.min_confidence, severities=a.severity)
-    if a.json:
-        return dump(analysis)
-    for x in analysis.findings:
-        print(x.rule_id + (" (contested)" if x.contested else ""), x.severity, x.text, x.suggestion or "—",
-              x.citation, sep="\t")
-    for x in analysis.abstentions if a.abstentions else ():
-        print(x.rule_id, x.text, f"abstains: {x.reason}", sep="\t")
-
-
 def verify(a):
     try:
         base = orthography.RuleBase.load()
     except orthography.RuleError as e:
-        sys.exit(f"rule base failed verification\n{e}")
-    print(f"{len(base.rules)} rules pass their own examples")
+        raise ValueError("rule base failed verification; check the installed rule files") from e
+    dump({"rules": len(base.rules), "verified": True}) if a.json else print(f"{len(base.rules)} rules pass their own examples")
 
 
 def profile(a):
@@ -169,13 +171,20 @@ def passages(a):
         print(s.start, s.end, text[s.start:s.end], ",".join(s.reason + s.quran_refs), sep="\t")
 
 
+class Parser(argparse.ArgumentParser):
+    def error(self, message):
+        self.exit(2, f"ghazal-nlp: {' '.join(message.splitlines())}; run {self.prog} --help\n")
+
+
 def main() -> None:
-    p = argparse.ArgumentParser(prog="ghazal-nlp")
+    p = Parser(prog="ghazal-nlp", description="Local tools for Persian. No network or key; no hosted spelling tables.")
     sub = p.add_subparsers(dest="command", required=True)
 
     def command(name, run, help):
         c = sub.add_parser(name, help=help)
         c.set_defaults(run=run)
+        if name != "mcp":
+            c.add_argument("--json", action="store_true", help="print results as JSON")
         return c
 
     c = command("scan", scan, "the metre of hemistichs, or of a whole poem")
@@ -183,7 +192,6 @@ def main() -> None:
     c.add_argument("--poem", action="store_true", help="one metre for all the lines")
     c.add_argument("--no-lexicon", action="store_true", help="the unsupervised scanner")
     c.add_argument("--stripped", action="store_true", help="ignore the editor's marks")
-    c.add_argument("--json", action="store_true")
     c = command("ganjoor", snapshot, "poems from a Ganjoor API snapshot, as JSON lines")
     c.add_argument("snapshot", type=Path)
     c = command("aruz-eval", aruz_scores, "score the scanner on the Ganjoor gold set and the reading sets")
@@ -201,7 +209,6 @@ def main() -> None:
     c = command("rhyme", rhymes, "the rhyme letters and radif of a poem, one hemistich per line")
     c.add_argument("text", nargs="*")
     c.add_argument("--form", required=True, choices=rhyme.FORMS)
-    c.add_argument("--json", action="store_true")
     c = command("rhyme-eval", lambda a: dump(rhyme_eval.evaluate(a.gold, a.split, misses=a.misses)),
                 "score the rhyme finder against Ganjoor's rhyme letters")
     c.add_argument("gold", type=Path, help="the output of `ganjoor`")
@@ -209,12 +216,11 @@ def main() -> None:
     c.add_argument("--misses", type=int, default=0, help="show this many disagreements")
     c = command("verb", analyse, "every reading of verb tokens")
     c.add_argument("text", nargs="*")
-    c.add_argument("--json", action="store_true")
     c = command("conjugate", conjugate, "one form of a verb")
     c.add_argument("infinitive")
     c.add_argument("--tense", default="present", choices=["present", "past"])
     c.add_argument("--mood", default="indicative", choices=["indicative", "subjunctive", "imperative"])
-    c.add_argument("--person", type=int, default=3)
+    c.add_argument("--person", type=int, choices=[1, 2, 3], default=3)
     c.add_argument("--number", default="sing", choices=["sing", "plur"])
     c.add_argument("--polarity", default="pos", choices=["pos", "neg"])
     c.add_argument("--aspect", choices=["imperfective", "imperfective_perfect"])
@@ -233,19 +239,29 @@ def main() -> None:
     command("ezafe-eval", ezafe_scores, "score the ezāfe classifiers on my labels")
     c = command("ezafe-heh", heh, "each word ending in ه before another, and whether the ه is an ezāfe written as ه")
     c.add_argument("text", nargs="*")
-    c.add_argument("--json", action="store_true")
     registers = sorted(orthography.REGISTERS)
     c = command("rules", rules, "the spelling rules: what is recorded, what runs")
     c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
-    c.add_argument("--json", action="store_true")
-    c = command("check", check, "check text against the spelling rules")
+    for name in ("check", "fix"):
+        c = command(name, gate.run, "check local rules" if name == "check" else "apply errors with one suggestion")
+        c.add_argument("text", nargs="*")
+        c.add_argument("--file", action="append", help="UTF-8 file; repeat for more files; - reads stdin")
+        c.add_argument("--format", choices=["text", "markdown"], help="Markdown for .md and .markdown files by default")
+        c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
+        c.add_argument("--register", action="append", choices=registers, help="formal_written when none")
+        c.add_argument("--min-confidence", default="medium", choices=["low", "medium", "high"])
+        c.add_argument("--severity", action="append", choices=sorted(orthography.SEVERITIES), help="filter rule severities; repeat to combine")
+        if name == "check":
+            c.add_argument("--fail-on", default="error", choices=list(checking.LEVEL), help="exit 1 at this severity or higher")
+            c.add_argument("--abstentions", action="store_true", help="also what the rules declined to judge")
+        else:
+            c.add_argument("--write", action="store_true", help="write each file in place")
+    c = command("normalize", lambda a: dump({"text": normalize.normalize("\n".join(lines(a)), a.verse), "normalizer": normalize.VERSION})
+                if a.json else print(normalize.normalize("\n".join(lines(a)), a.verse)), "normalize text for storage or comparison")
     c.add_argument("text", nargs="*")
-    c.add_argument("--style", default="ghazal", choices=orthography.STYLES)
-    c.add_argument("--register", action="append", choices=registers, help="formal_written when none")
-    c.add_argument("--min-confidence", default="medium", choices=["low", "medium", "high"])
-    c.add_argument("--severity", action="append", choices=sorted(orthography.SEVERITIES), help="all severities when none; repeat to combine")
-    c.add_argument("--abstentions", action="store_true", help="also what the rules declined to judge")
-    c.add_argument("--json", action="store_true")
+    c.add_argument("--verse", action="store_true", help="keep vocative ای apart")
+    from .mcp import serve
+    command("mcp", lambda a: serve(), "serve local MCP tools over stdio; no network or key")
     command("verify", verify, "run every rule against its own examples")
     c = command("profile", profile, "rule coverage over a file or a directory of .txt files")
     c.add_argument("path", type=Path)
@@ -255,7 +271,6 @@ def main() -> None:
     c.add_argument("text", nargs="*")
     c.add_argument("--quran", type=Path, action="append", default=[], help="a Tanzil copy, sura|aya|text lines")
     command("arabic-eval", lambda a: dump(arabic_eval.evaluate()), "score the Arabic detector on my labels")
-    c.add_argument("--json", action="store_true")
     c = command("aruz-baselines", lambda a: dump(aruz_baselines.compare(a.bench, a.predictions, aruz.scanner())),
                 "the scanner next to other metre classifiers on Ganjoor-Rhythm-Bench's held-out couplets")
     c.add_argument("bench", type=Path, help="Ganjoor-Rhythm-Bench's benchmark.jsonl")
@@ -276,9 +291,12 @@ def main() -> None:
             "score vowels and ezafe against the Tajik Shahnameh")
     a = p.parse_args()
     try:
-        a.run(a)
-    except OSError as e:
-        sys.exit(f"ghazal-nlp: {e}")
+        status = a.run(a)
+    except (OSError, UnicodeError, ValueError) as e:
+        message = " ".join(str(e).splitlines())
+        p.exit(2, f"ghazal-nlp: {message}; check the input and run ghazal-nlp {a.command} --help\n")
+    if type(status) is int and status:
+        sys.exit(status)
 
 
 if __name__ == "__main__":
